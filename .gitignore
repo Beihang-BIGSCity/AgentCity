@@ -1,0 +1,7 @@
+__pycache__/
+/data/
+/documentation/
+/repos/
+/tests/
+raw_data/
+cache/

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repository Guidelines Agent Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <h1>LibCity Agent</h1>
+        <p>
+          Monitor the Claude-driven automation that scouts papers, ports models
+          into LibCity, validates runs, and reports metrics—styled in the spirit
+          of the LibCity landing page.
+        </p>
+        <div class="hero__cta">
+          <a class="btn" href="../claude_client.py">View Pipeline Script</a>
+          <a class="btn btn--secondary" href="../AGENTS.md">Contributor Guide</a>
+        </div>
+      </div>
+      <div class="hero__badge">
+        <span class="badge">Autonomous Workflow</span>
+        <span class="subtext">2025 Editions: ICLR · ICML · NeurIPS · KDD · ICDE</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel" id="search-panel">
+        <div class="panel__header">
+          <h2>文献搜索 & 下载</h2>
+          <p>输入关键词，筛选最新的交通预测论文并直接打开对应 PDF。</p>
+        </div>
+        <form id="search-form" class="search-form">
+          <input
+            type="text"
+            id="keyword-input"
+            name="keyword"
+            placeholder="例如：graph transformer, PEMS, diffusion"
+            autocomplete="off"
+          />
+          <button type="submit" class="btn">搜索并下载</button>
+          <button type="button" class="btn btn--ghost" id="reset-search">重置</button>
+        </form>
+        <div id="search-results" class="grid"></div>
+      </section>
+
+      <section class="panel" id="migration-panel">
+        <div class="panel__header">
+          <h2>模型迁移批处理</h2>
+          <p>
+            在下载的论文中勾选目标，导出迁移计划，并回看每个模型在 LibCity
+            验证时的指标或报错。
+          </p>
+        </div>
+        <div class="migration-controls">
+          <div class="selection-block">
+            <h3>选择论文</h3>
+            <p>仅展示已成功保存 PDF 的论文。</p>
+            <div id="migration-selection" class="selection-list"></div>
+          </div>
+          <div class="action-block">
+            <button type="button" class="btn" id="start-migration">
+              启动迁移
+            </button>
+            <button type="button" class="btn" id="export-plan">
+              导出迁移计划
+            </button>
+            <p class="helper-text">
+              生成的 JSON 包含仓库与模型，可直接交由管线执行：
+              <code>python claude_client.py</code>
+            </p>
+          </div>
+        </div>
+        <div id="migration-feedback" class="grid"></div>
+      </section>
+
+      <section class="panel" id="job-panel">
+        <div class="panel__header">
+          <h2>任务队列</h2>
+          <p>实时关注文献搜索与模型迁移的运行状态。</p>
+        </div>
+        <div id="job-grid" class="grid"></div>
+      </section>
+
+      <section class="panel" id="stage-panel">
+        <div class="panel__header">
+          <h2>Stage Timeline</h2>
+          <p>Each block reflects a pipeline stage and its most recent transcript.</p>
+        </div>
+        <div id="stage-grid" class="grid"></div>
+      </section>
+
+      <section class="panel" id="article-panel">
+        <div class="panel__header">
+          <h2>Archived Articles</h2>
+          <p>Saved PDFs and metadata gathered by the catalog_article tool.</p>
+        </div>
+        <div id="article-grid" class="grid"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Data sources refresh automatically after every run. Serve this folder via
+        <code>python -m http.server</code> to load local JSON from
+        <code>data/</code>.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
