@@ -38,22 +38,21 @@ def build_migration_prompt(context: AgentContext) -> str:
         {selection_lines}
 
         Tasks:
-        - Clone every listed repository (or as many as feasible) and port their traffic-speed models into LibCity
+        - Clone every listed repository (or as many as feasible) and port their models into LibCity
           at {context.repo_path}. Keep the upstream repo history intact and always clone into the project-level
           ./repos directory (e.g., ./repos/<model-name>) before wiring adapters/configs back into LibCity.
         - Align data ingestion: verify _init signatures, forward inputs, and dataset schemas. Create dataset subclasses
           or converters when shapes differ.
+        - Modify config files to match LibCity's conventions, such as task_config.json. Ensure hyperparameters, data paths, and training loops
         - Store automation helpers (e.g., prompt templates, config generators) in this agent project instead of scattering scripts.
-        - Document all touched LibCity files and reference directories such as {context.model_path}. Produce only
+        - Document all touched LibCity files and the ./repos/<model-name> directory. Produce only
           a concise summary markdown and save it below ./documentation (one file per migration).
-        - Update config files so every new model can be trained via LibCity CLI with minimal switches. Place new or
-          updated automated tests exclusively under ./tests (use pytest-style modules).
+        - Test the migrated models with LibCity's existing training and evaluation scripts.
 
         Reference (truncated LibCity documentation):
         {doc_excerpt}
 
-        Output: actionable checklist detailing edits, file paths, required summary file names under ./documentation,
-        and pytest targets under ./tests—no other artifacts.
+        Output: actionable checklist detailing edits, file paths, required summary file names under ./documentation.
         """
     ).strip()
 

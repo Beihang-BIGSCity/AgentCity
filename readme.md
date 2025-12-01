@@ -7,6 +7,7 @@
 5. GriddedTNP
 6. EAC
 7. SRSNet
+8. ST-SSDL
 
 **在LibCity仓库的`/model/traffic_speed_prediction`目录下**
 

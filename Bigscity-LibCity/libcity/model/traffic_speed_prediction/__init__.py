@@ -32,6 +32,7 @@ from libcity.model.traffic_speed_prediction.RSTIB import RSTIB
 from libcity.model.traffic_speed_prediction.GriddedTNP import GriddedTNP
 from libcity.model.traffic_speed_prediction.EAC import EAC
 from libcity.model.traffic_speed_prediction.SRSNet import SRSNet
+from libcity.model.traffic_speed_prediction.STSSDL import STSSDL
 
 __all__ = [
     "DCRNN",
@@ -68,4 +69,5 @@ __all__ = [
     "GriddedTNP",
     "EAC",
     "SRSNet",
+    "STSSDL",
 ]
