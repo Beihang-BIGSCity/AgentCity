@@ -21,6 +21,7 @@ packaging==25.0
 pandas==2.3.3
 protobuf==6.33.1
 ptflops==0.7.5
+pytest==8.3.4
 pydantic==2.12.5
 pytorch_influence_functions==0.1.1
 ray==2.24.0

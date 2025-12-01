@@ -4,7 +4,7 @@ import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import Any, Dict, List
 import warnings
 import requests
 from claude_agent_sdk import tool
@@ -14,6 +14,14 @@ from agents.core.orchestrator import AgentOrchestrator  # noqa: E501
 from agents.migration import MigrationCatalog, create_migration_stage_callback
 from agents.migration.runtime import get_active_paper
 from agents.migration.storage import MigrationResultStore
+from agents.migration.tuning import (
+    ensure_search_space,
+    is_libcity_tuning_allowed,
+    run_custom_grid_search,
+    run_libcity_tuning,
+    write_params_file,
+)
+from agents.migration.utils import extract_standard_metrics
 
 paths = AppPaths()
 paths.ensure()
@@ -29,6 +37,38 @@ migration_store = MigrationResultStore(
     root=paths.root, base_dir=paths.run_dir / "migrations", index_path=MIGRATION_RESULTS_PATH
 )
 stage_callback = create_migration_stage_callback(migration_catalog)
+
+
+def _as_bool(value, default: bool | None = None) -> bool | None:
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"1", "true", "yes", "on"}:
+            return True
+        if lowered in {"0", "false", "no", "off"}:
+            return False
+    return bool(value)
+
+
+def _as_int(value, default: int | None = None) -> int | None:
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _resolve_project_path(path_value: str | None) -> Path | None:
+    if not path_value:
+        return None
+    candidate = Path(path_value)
+    if not candidate.is_absolute():
+        candidate = paths.root / candidate
+    return candidate
 
 
 def _append_article_record(record: dict) -> None:
@@ -52,18 +92,6 @@ def _append_article_record(record: dict) -> None:
     ARTICLE_CATALOG_PATH.write_text(
         json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-
-
-def _extract_metrics(stdout: str) -> dict:
-    metrics = {}
-    if not stdout:
-        return metrics
-    for key in ("masked_mae", "masked_mape", "masked_mase"):
-        pattern = rf"{key}\s*[:=]\s*([0-9.]+)"
-        match = re.search(pattern, stdout, flags=re.IGNORECASE)
-        if match:
-            metrics[key.lower()] = float(match.group(1))
-    return metrics
 
 
 @tool(
@@ -213,7 +241,7 @@ async def test_migration(args):
                 stderr,
             ]
         )
-    metrics = _extract_metrics(stdout)
+    metrics = extract_standard_metrics(stdout)
     active_paper = get_active_paper() or {}
     paper_info = {
         "title": active_paper.get("title") or args.get("paper_title") or model_name,
@@ -241,6 +269,175 @@ async def test_migration(args):
             {
                 "type": "text",
                 "text": output,
+            }
+        ]
+    }
+
+
+@tool(
+    "tune_migration_model",
+    "Hyperparameter tuning for migrated LibCity models",
+    {
+        "model_name": str,
+        "dataset": str,
+        "config_file": str,
+        "task": str,
+        "params_file": str,
+        "search_space": dict,
+        "hyper_algo": str,
+        "max_evals": int,
+        "max_trials": int,
+        "saved_model": bool,
+        "train": bool,
+        "extra_cli_args": dict,
+    },
+)
+async def tune_migration_model(args):
+    model_name = args.get("model_name")
+    if not model_name:
+        return {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "tune_migration_model failed: provide model_name",
+                }
+            ]
+        }
+
+    dataset = args.get("dataset", "PEMSD8")
+    task = args.get("task", "traffic_state_pred")
+    config_file = args.get("config_file")
+    hyper_algo = args.get("hyper_algo")
+    raw_search_space = args.get("search_space")
+    if not isinstance(raw_search_space, dict):
+        raw_search_space = None
+    search_space = ensure_search_space(raw_search_space)
+    params_file_arg = _resolve_project_path(args.get("params_file"))
+    max_evals = _as_int(args.get("max_evals"))
+    max_trials = _as_int(args.get("max_trials"))
+    if max_evals is not None and max_evals <= 0:
+        max_evals = None
+    if max_trials is not None and max_trials <= 0:
+        max_trials = None
+    saved_model = _as_bool(args.get("saved_model"))
+    train_flag = _as_bool(args.get("train"))
+    extra_cli_args = args.get("extra_cli_args")
+    cli_args: Dict[str, Any] = extra_cli_args if isinstance(extra_cli_args, dict) else {}
+    repo_dir = Path("Bigscity-LibCity")
+
+    libcity_env_enabled = is_libcity_tuning_allowed()
+    result: Dict[str, Any] | None = None
+    libcity_attempted = False
+    libcity_failure = ""
+    libcity_result: Dict[str, Any] | None = None
+
+    if libcity_env_enabled:
+        libcity_attempted = True
+        try:
+            params_file = (
+                params_file_arg if params_file_arg and params_file_arg.exists() else write_params_file(paths.run_dir, search_space)
+            )
+            libcity_result = run_libcity_tuning(
+                repo_dir=repo_dir,
+                run_dir=paths.run_dir,
+                model_name=model_name,
+                dataset_name=dataset,
+                params_file=params_file,
+                task=task,
+                config_file=config_file,
+                hyper_algo=hyper_algo,
+                max_evals=max_evals,
+                saved_model=saved_model,
+                train=train_flag,
+                extra_cli_args=cli_args,
+            )
+            if libcity_result.get("status") == "success":
+                result = libcity_result
+            else:
+                libcity_failure = f"LibCity tuner returned {libcity_result.get('status')}"
+        except Exception as exc:
+            libcity_failure = f"LibCity tuner failed: {exc}"
+
+    if result is None:
+        try:
+            result = run_custom_grid_search(
+                repo_dir=repo_dir,
+                model_name=model_name,
+                dataset_name=dataset,
+                search_space=search_space,
+                task=task,
+                config_file=config_file,
+                max_trials=max_trials,
+            )
+        except Exception as exc:
+            return {
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"tune_migration_model encountered an error: {exc}",
+                    }
+                ]
+            }
+
+    metrics = result.get("best_metrics") or {}
+    paper = get_active_paper() or {}
+    paper_info = {
+        "title": paper.get("title") or args.get("paper_title") or model_name,
+        "conference": paper.get("conference") or args.get("conference") or "N/A",
+        "repo_url": paper.get("repo_url") or "",
+        "pdf_path": paper.get("pdf_path") or "",
+        "model_name": paper.get("model_name") or model_name,
+    }
+    tuning_payload: Dict[str, Any] = {
+        "strategy": result.get("strategy"),
+        "best_params": result.get("best_params", {}),
+        "artifacts": result.get("artifacts") or {},
+    }
+    if result.get("trials"):
+        tuning_payload["trials"] = result["trials"]
+
+    migration_store.record_run(
+        paper_info,
+        {
+            "model_name": model_name,
+            "dataset": dataset,
+            "paper_title": paper_info["title"],
+            "conference": paper_info["conference"],
+            "status": result.get("status", "error"),
+            "stdout": (result.get("stdout") or "").strip(),
+            "stderr": (result.get("stderr") or "").strip(),
+            "metrics": metrics,
+            "tuning": tuning_payload,
+            "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        },
+    )
+
+    summary_lines = [
+        f"Tuning strategy: {result.get('strategy')}",
+        f"Status: {result.get('status')}",
+    ]
+    if result.get("strategy") == "libcity":
+        summary_lines.append("LibCity run_hyper.py executed successfully.")
+    elif libcity_attempted:
+        if libcity_failure:
+            summary_lines.append(f"LibCity run_hyper.py skipped: {libcity_failure}. Used custom grid search instead.")
+    elif not libcity_env_enabled:
+        summary_lines.append("LibCity run_hyper.py disabled by environment; used custom grid search.")
+    if result.get("best_params"):
+        summary_lines.append(f"Best parameters: {json.dumps(result['best_params'], ensure_ascii=False)}")
+    if metrics:
+        metric_text = ", ".join(f"{key}: {value:.4f}" for key, value in metrics.items())
+        summary_lines.append(f"Best metrics: {metric_text}")
+    artifacts = result.get("artifacts") or {}
+    if artifacts.get("hyper_result"):
+        summary_lines.append(f"Hyper-result saved to: {artifacts['hyper_result']}")
+    if result.get("trials"):
+        summary_lines.append(f"Trials run: {len(result['trials'])}")
+    return {
+        "content": [
+            {
+                "type": "text",
+                "text": "\n".join(summary_lines),
             }
         ]
     }

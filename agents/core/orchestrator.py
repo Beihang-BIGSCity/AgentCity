@@ -38,9 +38,10 @@ class AgentOrchestrator:
                 "Grep",
                 "Glob",
                 #"WebSearch",
-                "google_search_arxiv_id"
+                "google_search_arxiv_id",
                 "catalog_article",
                 "test_migration",
+                "tune_migration_model",
             ],
             permission_mode="bypassPermissions",
         )

@@ -98,6 +98,9 @@ def build_metrics_prompt(context: AgentContext) -> str:
         - Report masked_mae, masked_mape, masked_mase for each migrationred model. Include dataset name and config file.
         - Compare observed metrics with values mentioned in the previously downloaded papers. Analyze deltas and reasons
           (data preprocessing, hyperparameters, missing features, etc.).
+        - Run `tune_migration_model` so it automatically tries LibCity's ./Bigscity-LibCity/run_hyper.py when the migrated
+          model supports it (falling back to the built-in grid search otherwise); summarize the search space, best parameters,
+          and where logs/results were saved.
         - If results diverge significantly, outline corrective steps or retry plans.
         - Summarize everything in markdown with a comparison table and recommended follow-up experiments.
         """

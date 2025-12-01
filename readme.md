@@ -10,6 +10,10 @@
 
 **在LibCity仓库的`/model/traffic_speed_prediction`目录下**
 
+## 环境变量设置
+
+`export ANTHROPIC_BASE_URL=""`
+`export ANTHROPIC_API_KEY=""`
 
 ## 运行
 
