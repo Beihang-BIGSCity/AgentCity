@@ -9,7 +9,7 @@ from agents.literature.workflow import get_literature_workflow
 from agents.migration.runtime import clear_active_paper, set_active_paper
 from agents.migration.workflow import get_migration_workflow
 
-from .config import AppPaths, build_default_context
+from .config import AppPaths, build_default_context, resolve_year_filter
 from .pipeline import AgentPipeline
 from .storage import StageStorage
 from .types import WorkflowDefinition
@@ -52,6 +52,8 @@ class AgentOrchestrator:
         *,
         search_terms: List[str] | None = None,
         selected_papers: List[dict] | None = None,
+        year_filter: str | None = None,
+        conference_filters: List[str] | None = None,
         preserve_stage_log: bool = False,
     ) -> None:
         workflows = self._materialize_workflows(workflow_names)
@@ -62,6 +64,20 @@ class AgentOrchestrator:
             context = build_default_context(self.paths)
             context.search_terms = list(search_terms or [])
             context.selected_papers = list(selected_papers or [])
+            normalized_year, year_label, year_value = resolve_year_filter(year_filter)
+            context.search_year_mode = normalized_year
+            context.search_year_label = f"{year_label}{f'（{year_value}）' if year_value else ''}".strip()
+            context.search_year_value = year_value
+            conference_list = [
+                entry.strip()
+                for entry in (conference_filters or [])
+                if isinstance(entry, str) and entry.strip()
+            ]
+            if conference_list:
+                context.conferences = conference_list
+                context.search_conference_filters = conference_list
+            else:
+                context.search_conference_filters = []
 
             storage = StageStorage(self.paths.stage_log)
             if not preserve_stage_log:
@@ -81,8 +97,19 @@ class AgentOrchestrator:
     async def run_full_pipeline(self) -> None:
         await self.run_workflows(["literature", "migration"])
 
-    async def run_literature(self, search_terms: List[str]) -> None:
-        await self.run_workflows(["literature"], search_terms=search_terms)
+    async def run_literature(
+        self,
+        search_terms: List[str],
+        *,
+        year_filter: str | None = None,
+        conference_filters: List[str] | None = None,
+    ) -> None:
+        await self.run_workflows(
+            ["literature"],
+            search_terms=search_terms,
+            year_filter=year_filter,
+            conference_filters=conference_filters,
+        )
 
     async def run_migration(self, selected_papers: List[dict]) -> None:
         await self.run_migration_sequence(selected_papers)

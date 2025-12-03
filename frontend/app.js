@@ -1,7 +1,233 @@
 const API_BASE = "../api";
 
+const TRANSLATIONS = {
+  en: {
+    "lang.toggle": "English / 中文",
+    "hero.title": "LibCity Agent",
+    "hero.description":
+      "Monitor the Claude-driven automation that scouts papers, ports models into LibCity, validates runs, and reports metrics—styled in the spirit of the LibCity landing page.",
+    "hero.subtitle":
+      "Autonomous pipelines cover literature searches, model migrations, and verification with full transparency.",
+    "hero.cta.script": "View Pipeline Script",
+    "hero.cta.guide": "Contributor Guide",
+    "hero.badge": "Autonomous Workflow",
+    "hero.badge_subtext": "2025 Editions: ICLR · ICML · NeurIPS · KDD · ICDE",
+    "search.title": "Literature Search & Downloads",
+    "search.description":
+      "Enter keywords to surface the latest traffic-forecasting papers. Use the filters to scope the PaSa agent by year and conference.",
+    "search.keywords.label": "Keywords",
+    "search.keywords.placeholder": "e.g. graph transformer, PEMS, diffusion",
+    "search.year.label": "Year",
+    "search.year.this": "This Year",
+    "search.year.last": "Last Year",
+    "search.year.all": "All",
+    "search.conference.label": "Conference (Customizable)",
+    "search.conference.placeholder": "e.g. ICLR, ICML, NeurIPS",
+    "search.actions.submit": "Search & Download",
+    "search.actions.reset": "Reset",
+    "migration.title": "Migration Batch Runner",
+    "migration.description":
+      "Select any downloaded paper with code, export a migration plan, and review LibCity verification outputs.",
+    "migration.selection.title": "Select Papers",
+    "migration.selection.description":
+      "Only papers with an archived PDF and repository are listed here.",
+    "migration.actions.start": "Start Migration",
+    "migration.actions.export": "Export Plan",
+    "migration.helper":
+      "The exported JSON includes repository + model metadata and can be passed to <code>python claude_client.py</code>.",
+    "jobs.title": "Job Queue",
+    "jobs.description": "Monitor literature-search and migration jobs in real time.",
+    "stage.title": "Stage Timeline",
+    "stage.description":
+      "Each block reflects a pipeline stage and highlights the latest transcript snippets.",
+    "articles.title": "Archived Articles",
+    "articles.description":
+      "Browse every saved PDF and metadata entry captured by the catalog_article tool.",
+    "footer.note":
+      "Data sources refresh automatically after every run. Serve this folder via <code>python -m http.server</code> to load local JSON from <code>data/</code>.",
+    "stages.empty": "No pipeline run recorded yet.",
+    "stages.stage_id": "Stage ID: {{id}}",
+    "stages.summary_fallback":
+      "Stage completed without textual summary. Check raw transcript below.",
+    "stages.transcript_label": "Transcript ({{count}} messages)",
+    "stages.no_snippets": "No text snippets captured.",
+    "articles.empty": "No articles cataloged yet. Run the pipeline to populate this grid.",
+    "articles.datasets": "Datasets: {{value}}",
+    "articles.datasets.unknown": "Unknown",
+    "articles.model": "Model: {{value}}",
+    "articles.model.pending": "Model: Pending catalog update",
+    "articles.repo.link": "Repository",
+    "articles.repo.missing": "No repository shared",
+    "articles.pdf.local": "Open PDF",
+    "articles.pdf.remote": "View PDF Online",
+    "articles.pdf.missing": "PDF not saved yet",
+    "articles.notes.missing": "No additional notes.",
+    "labels.untitled": "Untitled",
+    "labels.na": "N/A",
+    "search.no_results": "No papers matched the filters. Try different keywords.",
+    "search.no_summary": "No summary yet. Open the PDF below for more details.",
+    "search.repo.available": "GitHub: repository provided",
+    "search.repo.missing": "GitHub: not available yet",
+    "search.pdf.download": "Download PDF",
+    "search.pdf.online": "View PDF Online",
+    "search.pdf.missing_btn": "PDF not saved",
+    "search.repo.button": "Open Repository",
+    "search.repo.button_missing": "No repository",
+    "search.added": "Added",
+    "search.add_to_migration": "Add to migration list",
+    "selection.empty":
+      "No papers currently satisfy “PDF saved + GitHub available”. Run a literature job first.",
+    "selection.model_missing": "Model not specified",
+    "migration.feedback.none_selected":
+      "Selected papers have no migration summaries yet. Run the migration stage and refresh.",
+    "migration.feedback.none_available":
+      "No migration summaries recorded. Execute a migration workflow to populate this feed.",
+    "migration.feedback.model": "Model: {{value}}",
+    "migration.feedback.open_repo": "Open Repository",
+    "migration.feedback.no_repo": "No repository",
+    "migration.feedback.view_pdf": "View PDF",
+    "migration.feedback.view_summary": "View Summary",
+    "migration.feedback.summary_missing": "Summary not generated",
+    "migration.feedback.summary_empty":
+      "No summary excerpt available yet. Re-run the migration stage for a fresh summary.",
+    "migration.feedback.updated": "Last updated: {{value}}",
+    "jobs.empty": "No jobs yet. Submit a literature search or migration run to see status here.",
+    "jobs.time.created": "Created",
+    "jobs.time.started": "Started",
+    "jobs.time.finished": "Finished",
+    "jobs.meta.paper": "Paper: {{value}}",
+    "jobs.meta.model": "Model: {{value}}",
+    "jobs.meta.error": "Error: {{value}}",
+    "jobs.status.running": "Running",
+    "jobs.status.succeeded": "Completed",
+    "jobs.status.failed": "Failed",
+    "jobs.status.pending": "Queued",
+    "alerts.loading": "Processing...",
+    "alerts.submit_literature_loading": "Submitting...",
+    "alerts.start_migration_loading": "Launching...",
+    "alerts.literature_failed": "Failed to submit literature search job",
+    "alerts.migration_failed": "Failed to submit migration job",
+    "alerts.no_selection": "Select at least one paper before starting a migration.",
+    "alerts.export_no_selection": "Select at least one paper before exporting the migration plan.",
+    "alerts.migration_started_single": "Started 1 migration job.",
+    "alerts.migration_started_multi": "Started {{count}} migration jobs.",
+    "errors.dashboard_load": "Failed to load dashboard data",
+    "search.reset": "Reset",
+    "jobs.form.paper_meta": "Paper:",
+    "jobs.form.model_meta": "Model:",
+    "jobs.form.error_label": "Error:",
+    "alerts.submit_required": "Please enter at least one keyword.",
+    "export.download": "Download migration plan JSON",
+  },
+  zh: {
+    "lang.toggle": "中文 / English",
+    "hero.title": "LibCity Agent",
+    "hero.description":
+      "监控 Claude 驱动的自动化流程，覆盖论文检索、模型迁移、指标验证与报告，整体风格与 LibCity 官网保持一致。",
+    "hero.subtitle":
+      "通过智能代理完成论文扫描、模型迁移、参数验证，流程可追溯、结果可复现。",
+    "hero.cta.script": "查看运行脚本",
+    "hero.cta.guide": "贡献者指南",
+    "hero.badge": "全自动工作流",
+    "hero.badge_subtext": "2025 重点会议：ICLR · ICML · NeurIPS · KDD · ICDE",
+    "search.title": "文献搜索 & 下载",
+    "search.description":
+      "输入关键词即可筛选最新的交通预测论文，并可限制年份与会议；PaSa 代理将自动搜索并保存结果。",
+    "search.keywords.label": "关键词",
+    "search.keywords.placeholder": "例如：graph transformer, PEMS, diffusion",
+    "search.year.label": "年份",
+    "search.year.this": "今年",
+    "search.year.last": "去年",
+    "search.year.all": "全部",
+    "search.conference.label": "会议（可自定义）",
+    "search.conference.placeholder": "例如：ICLR, ICML, NeurIPS",
+    "search.actions.submit": "搜索并下载",
+    "search.actions.reset": "重置",
+    "migration.title": "模型迁移批处理",
+    "migration.description":
+      "从已下载的论文中选择目标，导出迁移计划，并查看 LibCity 验证日志与指标。",
+    "migration.selection.title": "选择论文",
+    "migration.selection.description": "仅展示已保存 PDF 且提供 GitHub 仓库的论文。",
+    "migration.actions.start": "启动迁移",
+    "migration.actions.export": "导出迁移计划",
+    "migration.helper":
+      "导出的 JSON 包含仓库与模型信息，可直接交由 <code>python claude_client.py</code> 执行。",
+    "jobs.title": "任务队列",
+    "jobs.description": "实时关注文献搜索和模型迁移任务的状态。",
+    "stage.title": "阶段时间线",
+    "stage.description": "展示各阶段概览与最新对话片段，便于追踪自动化过程。",
+    "articles.title": "论文归档",
+    "articles.description": "查看 catalog_article 工具保存的全部 PDF 与元信息记录。",
+    "footer.note":
+      "每次运行结束后数据都会自动刷新。可通过 <code>python -m http.server</code> 直接预览 <code>data/</code> 中的 JSON。",
+    "stages.empty": "当前暂无运行记录，执行一次自动化管线即可生成。",
+    "stages.stage_id": "阶段 ID：{{id}}",
+    "stages.summary_fallback": "该阶段未生成文本摘要，可展开下方对话记录查看。",
+    "stages.transcript_label": "对话记录（{{count}} 条消息）",
+    "stages.no_snippets": "暂无文本片段。",
+    "articles.empty": "还没有论文被收录，先运行一次文献搜索吧。",
+    "articles.datasets": "数据集：{{value}}",
+    "articles.datasets.unknown": "未提供",
+    "articles.model": "模型：{{value}}",
+    "articles.model.pending": "模型：等待 catalog 更新",
+    "articles.repo.link": "打开仓库",
+    "articles.repo.missing": "尚未提供仓库链接",
+    "articles.pdf.local": "打开本地 PDF",
+    "articles.pdf.remote": "在线查看 PDF",
+    "articles.pdf.missing": "PDF 尚未保存",
+    "articles.notes.missing": "暂无补充说明。",
+    "labels.untitled": "未命名",
+    "labels.na": "暂无",
+    "search.no_results": "未找到匹配的论文，请尝试其他关键词。",
+    "search.no_summary": "暂无摘要，可通过下方 PDF 了解详情。",
+    "search.repo.available": "GitHub：已提供仓库链接",
+    "search.repo.missing": "GitHub：尚未收录",
+    "search.pdf.download": "下载 PDF",
+    "search.pdf.online": "在线查看 PDF",
+    "search.pdf.missing_btn": "PDF 未保存",
+    "search.repo.button": "打开仓库",
+    "search.repo.button_missing": "暂无仓库",
+    "search.added": "已添加",
+    "search.add_to_migration": "加入迁移列表",
+    "selection.empty": "暂无满足“已保存 PDF 且提供 GitHub 仓库”的论文，请先运行文献搜索。",
+    "selection.model_missing": "未指定模型",
+    "migration.feedback.none_selected": "所选论文尚未生成迁移 Summary，运行迁移阶段后刷新即可。",
+    "migration.feedback.none_available": "还没有迁移 Summary，执行一次模型迁移即可查看。",
+    "migration.feedback.model": "模型：{{value}}",
+    "migration.feedback.open_repo": "打开仓库",
+    "migration.feedback.no_repo": "暂无仓库",
+    "migration.feedback.view_pdf": "查看 PDF",
+    "migration.feedback.view_summary": "查看 Summary",
+    "migration.feedback.summary_missing": "Summary 未生成",
+    "migration.feedback.summary_empty": "暂无 Summary 内容，可重新运行迁移阶段生成。",
+    "migration.feedback.updated": "最近更新：{{value}}",
+    "jobs.empty": "暂无任务，提交文献搜索或模型迁移以查看状态。",
+    "jobs.time.created": "创建",
+    "jobs.time.started": "开始",
+    "jobs.time.finished": "结束",
+    "jobs.meta.paper": "论文：{{value}}",
+    "jobs.meta.model": "模型：{{value}}",
+    "jobs.meta.error": "错误：{{value}}",
+    "jobs.status.running": "运行中",
+    "jobs.status.succeeded": "完成",
+    "jobs.status.failed": "失败",
+    "jobs.status.pending": "排队中",
+    "alerts.loading": "处理中...",
+    "alerts.submit_literature_loading": "提交中...",
+    "alerts.start_migration_loading": "启动中...",
+    "alerts.literature_failed": "提交文献搜索任务失败",
+    "alerts.migration_failed": "提交模型迁移任务失败",
+    "alerts.no_selection": "请选择至少一篇论文再启动迁移任务。",
+    "alerts.export_no_selection": "请选择至少一篇论文再导出迁移计划。",
+    "alerts.migration_started_single": "已启动 1 个迁移任务。",
+    "alerts.migration_started_multi": "已启动 {{count}} 个迁移任务。",
+    "errors.dashboard_load": "加载仪表盘数据失败",
+  },
+};
+
 const state = {
   stages: [],
+  stagePayload: { stages: [] },
   articles: [],
   migrationCatalog: [],
   migrationLookup: new Map(),
@@ -10,6 +236,48 @@ const state = {
   completedJobs: new Set(),
   jobPoller: null,
 };
+
+let currentLanguage = localStorage.getItem("appLanguage") || "zh";
+
+function t(key, vars = {}) {
+  const catalog = TRANSLATIONS[currentLanguage] || {};
+  const template = catalog[key] ?? key;
+  return template.replace(/\{\{(\w+)\}\}/g, (_, token) =>
+    vars[token] !== undefined ? vars[token] : ""
+  );
+}
+
+function updateStaticText() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.dataset.i18n;
+    if (!key) return;
+    if (element.dataset.i18nHtml === "true") {
+      element.innerHTML = t(key);
+    } else {
+      element.textContent = t(key);
+    }
+    if (element.dataset.originalText !== undefined) {
+      element.dataset.originalText = element.textContent;
+    }
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    const key = element.dataset.i18nPlaceholder;
+    if (!key) return;
+    element.placeholder = t(key);
+  });
+}
+
+function setLanguage(lang) {
+  currentLanguage = lang === "en" ? "en" : "zh";
+  localStorage.setItem("appLanguage", currentLanguage);
+  document.body.dataset.lang = currentLanguage;
+  updateStaticText();
+  refreshAllViews();
+}
+
+function toggleLanguage() {
+  setLanguage(currentLanguage === "en" ? "zh" : "en");
+}
 
 async function fetchJSON(path, options = {}) {
   const requestOptions = { ...options };
@@ -28,7 +296,7 @@ async function fetchJSON(path, options = {}) {
   return response.status === 204 ? null : await response.json();
 }
 
-function setButtonLoading(button, isLoading, loadingText = "处理中...") {
+function setButtonLoading(button, isLoading, loadingText = t("alerts.loading")) {
   if (!button) return;
   if (!button.dataset.originalText) {
     button.dataset.originalText = button.textContent;
@@ -128,8 +396,7 @@ function renderStages(stagePayload) {
     : [];
 
   if (stages.length === 0) {
-    container.innerHTML =
-      '<div class="empty-state">No pipeline run recorded yet.</div>';
+    container.innerHTML = `<div class="empty-state">${t("stages.empty")}</div>`;
     return;
   }
 
@@ -144,16 +411,17 @@ function renderStages(stagePayload) {
 
     const subLabel = document.createElement("p");
     subLabel.className = "card__meta";
-    subLabel.textContent = `Stage ID: ${stage.key}`;
+    subLabel.textContent = t("stages.stage_id", { id: stage.key });
 
     const summary = document.createElement("p");
     summary.className = "card__summary";
     summary.textContent =
-      stage.summary?.trim() ||
-      "Stage completed without textual summary. Check raw transcript below.";
+      stage.summary?.trim() || t("stages.summary_fallback");
 
     const transcript = document.createElement("details");
-    transcript.innerHTML = `<summary>Transcript (${stage.messages.length} messages)</summary>`;
+    transcript.innerHTML = `<summary>${t("stages.transcript_label", {
+      count: stage.messages.length,
+    })}</summary>`;
 
     const list = document.createElement("ul");
     const snippets = stage.messages
@@ -161,7 +429,7 @@ function renderStages(stagePayload) {
       .slice(-3);
     if (snippets.length === 0) {
       const item = document.createElement("li");
-      item.textContent = "No text snippets captured.";
+      item.textContent = t("stages.no_snippets");
       list.appendChild(item);
     } else {
       snippets.forEach((chunk) => {
@@ -183,8 +451,7 @@ function renderStages(stagePayload) {
 function renderArticles(articles) {
   const container = document.getElementById("article-grid");
   if (!Array.isArray(articles) || articles.length === 0) {
-    container.innerHTML =
-      '<div class="empty-state">No articles cataloged yet. Run the pipeline to populate this grid.</div>';
+    container.innerHTML = `<div class="empty-state">${t("articles.empty")}</div>`;
     return;
   }
 
@@ -197,28 +464,33 @@ function renderArticles(articles) {
     const localPdf = hasSavedPdf(article);
 
     const header = document.createElement("h3");
-    header.innerHTML = `<span>${article.title || "Untitled"}</span><span class="tag">${article.conference ||
-      "N/A"}</span>`;
+    header.innerHTML = `<span>${article.title || t("labels.untitled")}</span><span class="tag">${article.conference ||
+      t("labels.na")}</span>`;
 
     const meta = document.createElement("p");
     meta.className = "card__meta";
-    meta.textContent = `Datasets: ${article.datasets || "Unknown"}`;
+    const datasetValue = Array.isArray(article.datasets)
+      ? article.datasets.join(", ")
+      : article.datasets || "";
+    meta.textContent = t("articles.datasets", {
+      value: datasetValue || t("articles.datasets.unknown"),
+    });
 
     const modelMeta = document.createElement("p");
     modelMeta.className = "card__meta";
     modelMeta.textContent = article.model_name
-      ? `Model: ${article.model_name}`
-      : "Model: Pending catalog update";
+      ? t("articles.model", { value: article.model_name })
+      : t("articles.model.pending");
 
     const repoLink = document.createElement("a");
     repoLink.className = "article-link";
     if (repoUrl) {
       repoLink.href = repoUrl;
-      repoLink.textContent = "Repository";
+      repoLink.textContent = t("articles.repo.link");
       repoLink.target = "_blank";
       repoLink.rel = "noreferrer";
     } else {
-      repoLink.textContent = "No repository shared";
+      repoLink.textContent = t("articles.repo.missing");
       repoLink.classList.add("card__meta");
     }
 
@@ -226,19 +498,21 @@ function renderArticles(articles) {
     pdfLink.className = "article-link";
     if (pdfHref) {
       pdfLink.href = pdfHref;
-      pdfLink.textContent = localPdf ? "Open PDF" : "View PDF Online";
+      pdfLink.textContent = localPdf
+        ? t("articles.pdf.local")
+        : t("articles.pdf.remote");
       pdfLink.target = "_blank";
       if (/^https?:\/\//i.test(pdfHref)) {
         pdfLink.rel = "noreferrer";
       }
     } else {
-      pdfLink.textContent = "PDF not saved yet";
+      pdfLink.textContent = t("articles.pdf.missing");
       pdfLink.classList.add("card__meta");
     }
 
     const notes = document.createElement("p");
     notes.className = "card__summary";
-    notes.textContent = article.notes || "No additional notes.";
+    notes.textContent = article.notes || t("articles.notes.missing");
 
     card.appendChild(header);
     card.appendChild(meta);
@@ -266,8 +540,7 @@ function filterArticlesByKeywords(keywords) {
 function renderSearchResults(results) {
   const container = document.getElementById("search-results");
   if (!Array.isArray(results) || results.length === 0) {
-    container.innerHTML =
-      '<div class="empty-state">未找到匹配的论文，请尝试不同的关键词。</div>';
+    container.innerHTML = `<div class="empty-state">${t("search.no_results")}</div>`;
     return;
   }
 
@@ -276,14 +549,13 @@ function renderSearchResults(results) {
     const card = document.createElement("article");
     card.className = "card";
     const header = document.createElement("h3");
-    header.innerHTML = `<span>${article.title || "Untitled"}</span><span class="tag">${article.conference ||
-      "N/A"}</span>`;
+    header.innerHTML = `<span>${article.title || t("labels.untitled")}</span><span class="tag">${article.conference ||
+      t("labels.na")}</span>`;
 
     const excerpt = document.createElement("p");
     excerpt.className = "card__summary";
     excerpt.textContent =
-      truncateText(article.notes) ||
-      "暂无摘要，可通过下方 PDF 了解详细内容。";
+      truncateText(article.notes) || t("search.no_summary");
 
     const repoUrl = getRepoUrl(article);
     const pdfHref = getPdfHref(article);
@@ -291,8 +563,8 @@ function renderSearchResults(results) {
     const repoStatus = document.createElement("p");
     repoStatus.className = "card__meta repo-status";
     repoStatus.textContent = repoUrl
-      ? "GitHub：已提供仓库链接"
-      : "GitHub：尚未收录";
+      ? t("search.repo.available")
+      : t("search.repo.missing");
 
     const actionRow = document.createElement("div");
     actionRow.className = "card__actions";
@@ -302,12 +574,14 @@ function renderSearchResults(results) {
     if (pdfHref) {
       pdfBtn.href = pdfHref;
       pdfBtn.target = "_blank";
-      pdfBtn.textContent = localPdf ? "下载 PDF" : "查看在线 PDF";
+      pdfBtn.textContent = localPdf
+        ? t("search.pdf.download")
+        : t("search.pdf.online");
       if (/^https?:\/\//i.test(pdfHref)) {
         pdfBtn.rel = "noreferrer";
       }
     } else {
-      pdfBtn.textContent = "PDF 未保存";
+      pdfBtn.textContent = t("search.pdf.missing_btn");
       pdfBtn.classList.add("btn--disabled");
     }
 
@@ -317,9 +591,9 @@ function renderSearchResults(results) {
       repoBtn.href = repoUrl;
       repoBtn.target = "_blank";
       repoBtn.rel = "noreferrer";
-      repoBtn.textContent = "打开仓库";
+      repoBtn.textContent = t("search.repo.button");
     } else {
-      repoBtn.textContent = "暂无仓库";
+      repoBtn.textContent = t("search.repo.button_missing");
       repoBtn.classList.add("btn--disabled");
     }
 
@@ -328,7 +602,9 @@ function renderSearchResults(results) {
     addBtn.className = "btn btn--inline btn--ghost";
     const articleId = getArticleId(article);
     const alreadySelected = state.selectedPapers.has(articleId);
-    addBtn.textContent = alreadySelected ? "已添加" : "加入迁移列表";
+    addBtn.textContent = alreadySelected
+      ? t("search.added")
+      : t("search.add_to_migration");
     addBtn.disabled = alreadySelected;
     addBtn.addEventListener("click", () => {
       state.selectedPapers.add(articleId);
@@ -356,8 +632,7 @@ function renderMigrationSelection() {
   );
 
   if (eligible.length === 0) {
-    container.innerHTML =
-      '<div class="empty-state">暂无满足“已保存 PDF 且提供 GitHub 仓库”的论文。</div>';
+    container.innerHTML = `<div class="empty-state">${t("selection.empty")}</div>`;
     return;
   }
 
@@ -389,7 +664,8 @@ function renderMigrationSelection() {
 
     const labelText = document.createElement("span");
     labelText.innerHTML = `<strong>${article.title ||
-      "Untitled"}</strong><small>${article.model_name || "未指定模型"}</small>`;
+      t("labels.untitled")}</strong><small>${article.model_name ||
+      t("selection.model_missing")}</small>`;
 
     wrapper.appendChild(checkbox);
     wrapper.appendChild(labelText);
@@ -438,8 +714,8 @@ function renderMigrationFeedback() {
   if (filtered.length === 0) {
     container.innerHTML =
       state.selectedPapers.size > 0
-        ? '<div class="empty-state">所选论文尚未生成迁移 Summary，运行管线后刷新即可。</div>'
-        : '<div class="empty-state">暂无迁移 Summary，执行一次模型迁移阶段后查看。</div>';
+        ? `<div class="empty-state">${t("migration.feedback.none_selected")}</div>`
+        : `<div class="empty-state">${t("migration.feedback.none_available")}</div>`;
     return;
   }
 
@@ -450,14 +726,15 @@ function renderMigrationFeedback() {
 
     const header = document.createElement("h3");
     header.innerHTML = `<span>${entry.title ||
-      "Untitled"}</span><span class="tag">${entry.conference || "N/A"}</span>`;
+      t("labels.untitled")}</span><span class="tag">${entry.conference ||
+      t("labels.na")}</span>`;
     card.appendChild(header);
 
     const modelMeta = document.createElement("p");
     modelMeta.className = "card__meta";
     modelMeta.textContent = entry.model_name
-      ? `模型：${entry.model_name}`
-      : "模型：未记录";
+      ? t("migration.feedback.model", { value: entry.model_name })
+      : t("migration.feedback.model", { value: t("selection.model_missing") });
     card.appendChild(modelMeta);
 
     const linkRow = document.createElement("div");
@@ -469,9 +746,9 @@ function renderMigrationFeedback() {
       repoLink.href = entry.repo_url;
       repoLink.target = "_blank";
       repoLink.rel = "noreferrer";
-      repoLink.textContent = "打开仓库";
+      repoLink.textContent = t("migration.feedback.open_repo");
     } else {
-      repoLink.textContent = "暂无仓库";
+      repoLink.textContent = t("migration.feedback.no_repo");
       repoLink.classList.add("card__meta");
     }
     linkRow.appendChild(repoLink);
@@ -485,7 +762,7 @@ function renderMigrationFeedback() {
       if (/^https?:/i.test(pdfHref)) {
         pdfLink.rel = "noreferrer";
       }
-      pdfLink.textContent = "查看 PDF";
+      pdfLink.textContent = t("migration.feedback.view_pdf");
       linkRow.appendChild(pdfLink);
     }
 
@@ -495,9 +772,9 @@ function renderMigrationFeedback() {
     if (summaryHref) {
       summaryLink.href = summaryHref;
       summaryLink.target = "_blank";
-      summaryLink.textContent = "查看 Summary";
+      summaryLink.textContent = t("migration.feedback.view_summary");
     } else {
-      summaryLink.textContent = "Summary 未生成";
+      summaryLink.textContent = t("migration.feedback.summary_missing");
       summaryLink.classList.add("card__meta");
     }
     linkRow.appendChild(summaryLink);
@@ -507,12 +784,14 @@ function renderMigrationFeedback() {
     excerpt.className = "card__summary";
     excerpt.textContent =
       entry.summary_excerpt?.trim() ||
-      "暂无 Summary 内容，可重新运行迁移阶段生成。";
+      t("migration.feedback.summary_empty");
     card.appendChild(excerpt);
 
     const updated = document.createElement("p");
     updated.className = "card__meta";
-    updated.textContent = `最近更新: ${entry.last_updated || "N/A"}`;
+    updated.textContent = t("migration.feedback.updated", {
+      value: entry.last_updated || t("labels.na"),
+    });
     card.appendChild(updated);
 
     container.appendChild(card);
@@ -523,8 +802,7 @@ function renderJobs() {
   const container = document.getElementById("job-grid");
   if (!container) return;
   if (!Array.isArray(state.jobs) || state.jobs.length === 0) {
-    container.innerHTML =
-      '<div class="empty-state">暂无任务，提交文献搜索或模型迁移以查看状态。</div>';
+    container.innerHTML = `<div class="empty-state">${t("jobs.empty")}</div>`;
     return;
   }
 
@@ -548,9 +826,9 @@ function renderJobs() {
     const times = document.createElement("div");
     times.className = "job-times";
     times.innerHTML = `
-      <span>创建: ${job.created_at || "--"}</span>
-      <span>开始: ${job.started_at || "--"}</span>
-      <span>结束: ${job.finished_at || "--"}</span>
+      <span>${t("jobs.time.created")}: ${job.created_at || "--"}</span>
+      <span>${t("jobs.time.started")}: ${job.started_at || "--"}</span>
+      <span>${t("jobs.time.finished")}: ${job.finished_at || "--"}</span>
     `;
 
     card.appendChild(header);
@@ -561,10 +839,10 @@ function renderJobs() {
       meta.className = "card__meta";
       const parts = [];
       if (job.paper_title) {
-        parts.push(`论文: ${job.paper_title}`);
+        parts.push(t("jobs.meta.paper", { value: job.paper_title }));
       }
       if (job.model_name) {
-        parts.push(`模型: ${job.model_name}`);
+        parts.push(t("jobs.meta.model", { value: job.model_name }));
       }
       meta.textContent = parts.join(" · ");
       card.appendChild(meta);
@@ -572,7 +850,7 @@ function renderJobs() {
     if (job.error) {
       const errorText = document.createElement("p");
       errorText.className = "card__summary";
-      errorText.textContent = `错误: ${job.error}`;
+      errorText.textContent = t("jobs.meta.error", { value: job.error });
       card.appendChild(errorText);
     }
     container.appendChild(card);
@@ -595,14 +873,14 @@ function formatJobStatusClass(status) {
 function formatJobStatusLabel(status) {
   switch (status) {
     case "running":
-      return "运行中";
+      return t("jobs.status.running");
     case "succeeded":
-      return "完成";
+      return t("jobs.status.succeeded");
     case "failed":
-      return "失败";
+      return t("jobs.status.failed");
     case "pending":
     default:
-      return "排队中";
+      return t("jobs.status.pending");
   }
 }
 
@@ -615,22 +893,41 @@ function getCurrentKeywords() {
     .filter(Boolean);
 }
 
+function getSelectedYearFilter() {
+  const select = document.getElementById("year-filter");
+  if (!select) return "this_year";
+  return select.value || "this_year";
+}
+
+function getConferenceFilters() {
+  const input = document.getElementById("conference-input");
+  if (!input) return [];
+  return input.value
+    .split(/[,，\s]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function performSearch() {
   const keywords = getCurrentKeywords();
   const results = filterArticlesByKeywords(keywords);
   renderSearchResults(results);
 }
 
-async function requestLiteratureJob(keywords, button) {
+async function requestLiteratureJob(keywords, button, yearFilter, conferences) {
   try {
-    setButtonLoading(button, true, "提交中...");
+    setButtonLoading(button, true, t("alerts.submit_literature_loading"));
     await fetchJSON("/literature/run", {
       method: "POST",
-      body: { keywords },
+      body: {
+        keywords,
+        year_mode: yearFilter,
+        conferences,
+      },
     });
     await refreshJobs();
   } catch (error) {
-    handleError("提交文献搜索任务失败", error);
+    handleError(t("alerts.literature_failed"), error);
   } finally {
     setButtonLoading(button, false);
   }
@@ -638,11 +935,11 @@ async function requestLiteratureJob(keywords, button) {
 
 async function requestMigrationJob(button) {
   if (state.selectedPapers.size === 0) {
-    alert("请选择至少一篇论文再启动迁移任务。");
+    alert(t("alerts.no_selection"));
     return;
   }
   try {
-    setButtonLoading(button, true, "启动中...");
+    setButtonLoading(button, true, t("alerts.start_migration_loading"));
     const result = await fetchJSON("/migration/run", {
       method: "POST",
       body: { paper_ids: Array.from(state.selectedPapers) },
@@ -655,13 +952,13 @@ async function requestMigrationJob(button) {
     if (jobs.length > 0) {
       const message =
         jobs.length === 1
-          ? "已启动 1 个迁移任务。"
-          : `已启动 ${jobs.length} 个迁移任务。`;
+          ? t("alerts.migration_started_single")
+          : t("alerts.migration_started_multi", { count: jobs.length });
       alert(message);
     }
     await refreshJobs();
   } catch (error) {
-    handleError("提交模型迁移任务失败", error);
+    handleError(t("alerts.migration_failed"), error);
   } finally {
     setButtonLoading(button, false);
   }
@@ -669,7 +966,7 @@ async function requestMigrationJob(button) {
 
 function exportMigrationPlan() {
   if (state.selectedPapers.size === 0) {
-    alert("请选择至少一篇论文再导出迁移计划。");
+    alert(t("alerts.export_no_selection"));
     return;
   }
   const payload = Array.from(state.selectedPapers).map((articleId) => {
@@ -718,6 +1015,7 @@ async function loadDashboard() {
     state.stages = Array.isArray(stagePayload?.stages)
       ? stagePayload.stages
       : [];
+    state.stagePayload = { stages: state.stages };
     state.articles = Array.isArray(articlePayload?.items)
       ? articlePayload.items
       : [];
@@ -728,13 +1026,13 @@ async function loadDashboard() {
         .filter(([key]) => Boolean(key))
     );
 
-    renderStages(stagePayload);
+    renderStages(state.stagePayload);
     renderArticles(state.articles);
     renderMigrationSelection();
     renderMigrationFeedback();
     performSearch();
   } catch (error) {
-    handleError("加载仪表盘数据失败", error);
+    handleError(t("errors.dashboard_load"), error);
   }
 }
 
@@ -769,10 +1067,24 @@ function startJobPolling() {
   state.jobPoller = setInterval(refreshJobs, 5000);
 }
 
+function refreshAllViews() {
+  renderStages(state.stagePayload || { stages: state.stages || [] });
+  renderArticles(state.articles);
+  renderMigrationSelection();
+  renderMigrationFeedback();
+  performSearch();
+  renderJobs();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  setLanguage(currentLanguage);
   loadDashboard();
   refreshJobs();
   startJobPolling();
+  const langToggle = document.getElementById("lang-toggle");
+  if (langToggle) {
+    langToggle.addEventListener("click", toggleLanguage);
+  }
 
   const form = document.getElementById("search-form");
   if (form) {
@@ -780,8 +1092,10 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       const keywords = getCurrentKeywords();
       const submitBtn = form.querySelector('button[type="submit"]');
+      const yearFilter = getSelectedYearFilter();
+      const conferences = getConferenceFilters();
       if (keywords.length > 0) {
-        await requestLiteratureJob(keywords, submitBtn);
+        await requestLiteratureJob(keywords, submitBtn, yearFilter, conferences);
       }
       performSearch();
     });
@@ -796,6 +1110,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
       if (input) input.value = "";
+      const yearSelect = document.getElementById("year-filter");
+      if (yearSelect) yearSelect.value = "this_year";
+      const conferenceInput = document.getElementById("conference-input");
+      if (conferenceInput) conferenceInput.value = "";
       performSearch();
     });
   }

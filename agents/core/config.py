@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -8,6 +9,11 @@ from .types import AgentContext
 
 DEFAULT_CONFERENCES: List[str] = ["ICLR", "ICML", "NeurIPS", "KDD", "ICDE", "WWW", "AAAI", "IJCAI"]
 TARGET_YEAR = 2025
+YEAR_FILTER_CHOICES = {
+    "this_year": {"label": "今年", "offset": 0},
+    "last_year": {"label": "去年", "offset": -1},
+    "all": {"label": "全部", "offset": None},
+}
 
 
 @dataclass
@@ -50,6 +56,7 @@ def build_default_context(paths: AppPaths) -> AgentContext:
     except FileNotFoundError:
         benchmark_document = ""
 
+    mode, label, value = resolve_year_filter()
     return AgentContext(
         repo_path=str(paths.repo_path),
         benchmark_document=benchmark_document,
@@ -59,7 +66,32 @@ def build_default_context(paths: AppPaths) -> AgentContext:
         target_year=TARGET_YEAR,
         search_terms=[],
         selected_papers=[],
+        search_year_mode=mode,
+        search_year_label=label,
+        search_year_value=value,
+        search_conference_filters=[],
     )
 
 
-__all__ = ["AppPaths", "build_default_context", "DEFAULT_CONFERENCES", "TARGET_YEAR"]
+def resolve_year_filter(mode: str | None = None) -> tuple[str, str, int | None]:
+    normalized = (mode or "all").strip().lower()
+    if normalized not in YEAR_FILTER_CHOICES:
+        normalized = "all"
+    choice = YEAR_FILTER_CHOICES[normalized]
+    label = choice["label"]
+    offset = choice["offset"]
+    if offset is None:
+        value = None
+    else:
+        value = datetime.utcnow().year + offset
+    return normalized, label, value
+
+
+__all__ = [
+    "AppPaths",
+    "build_default_context",
+    "DEFAULT_CONFERENCES",
+    "TARGET_YEAR",
+    "resolve_year_filter",
+    "YEAR_FILTER_CHOICES",
+]

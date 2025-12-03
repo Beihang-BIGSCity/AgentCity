@@ -19,6 +19,8 @@ from agents.migration.utils import build_paper_signature
 
 class LiteratureRequest(BaseModel):
     keywords: List[str] = Field(default_factory=list)
+    year_mode: str = Field(default="this_year")
+    conferences: List[str] = Field(default_factory=list)
 
 
 class MigrationRequest(BaseModel):
@@ -83,6 +85,23 @@ def _article_index() -> Dict[str, Dict[str, object]]:
     return index
 
 
+def _normalize_year_mode(value: str | None) -> str:
+    if not value:
+        return "this_year"
+    raw = value.strip().lower()
+    mapping = {
+        "this_year": "this_year",
+        "今年": "this_year",
+        "current": "this_year",
+        "last_year": "last_year",
+        "去年": "last_year",
+        "previous": "last_year",
+        "all": "all",
+        "全部": "all",
+    }
+    return mapping.get(raw, "this_year")
+
+
 @app.get("/")
 async def root():
     if FRONTEND_DIR.exists():
@@ -134,14 +153,24 @@ async def enqueue_literature_job(request: LiteratureRequest):
     keywords = [word.strip() for word in request.keywords if word.strip()]
     if not keywords:
         raise HTTPException(status_code=400, detail="keywords are required")
+    year_mode = _normalize_year_mode(request.year_mode)
+    conferences = [word.strip() for word in request.conferences if word.strip()]
 
     async def runner():
-        await orchestrator.run_literature(search_terms=keywords)
+        await orchestrator.run_literature(
+            search_terms=keywords,
+            year_filter=year_mode,
+            conference_filters=conferences,
+        )
 
     job = await job_manager.enqueue(
         label="Literature Search",
         coro_factory=runner,
-        metadata={"keywords": keywords},
+        metadata={
+            "keywords": keywords,
+            "year_mode": year_mode,
+            "conferences": conferences,
+        },
     )
     return {"items": [job]}
 

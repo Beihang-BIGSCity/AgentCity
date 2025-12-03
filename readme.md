@@ -14,6 +14,7 @@
 ## 环境变量设置
 
 `export ANTHROPIC_BASE_URL=""`
+
 `export ANTHROPIC_API_KEY=""`
 
 ## 运行

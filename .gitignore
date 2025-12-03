@@ -1,7 +1,8 @@
 __pycache__/
-/data/
+data/
 /documentation/
 /repos/
 /tests/
 raw_data/
 cache/
+/claude_code.log

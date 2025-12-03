@@ -6,69 +6,114 @@
     <title>Repository Guidelines Agent Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="lang-zh">
     <header class="hero">
+      <div class="lang-switcher">
+        <button type="button" id="lang-toggle" class="lang-toggle" data-i18n="lang.toggle">
+          中文 / English
+        </button>
+      </div>
       <div class="hero__content">
-        <h1>LibCity Agent</h1>
-        <p>
+        <h1 data-i18n="hero.title">LibCity Agent</h1>
+        <p data-i18n="hero.description">
           Monitor the Claude-driven automation that scouts papers, ports models
           into LibCity, validates runs, and reports metrics—styled in the spirit
           of the LibCity landing page.
         </p>
+        <p class="hero__subtitle" data-i18n="hero.subtitle">
+          通过自动化代理完成最新论文检索、模型迁移与验证，全流程透明可追踪。
+        </p>
         <div class="hero__cta">
-          <a class="btn" href="../claude_client.py">View Pipeline Script</a>
-          <a class="btn btn--secondary" href="../AGENTS.md">Contributor Guide</a>
+          <a class="btn" href="../claude_client.py" data-i18n="hero.cta.script">View Pipeline Script</a>
+          <a class="btn btn--secondary" href="../AGENTS.md" data-i18n="hero.cta.guide">Contributor Guide</a>
         </div>
       </div>
       <div class="hero__badge">
-        <span class="badge">Autonomous Workflow</span>
-        <span class="subtext">2025 Editions: ICLR · ICML · NeurIPS · KDD · ICDE</span>
+        <span class="badge" data-i18n="hero.badge">Autonomous Workflow</span>
+        <span class="subtext" data-i18n="hero.badge_subtext">2025 Editions: ICLR · ICML · NeurIPS · KDD · ICDE</span>
       </div>
     </header>
 
     <main>
       <section class="panel" id="search-panel">
         <div class="panel__header">
-          <h2>文献搜索 & 下载</h2>
-          <p>输入关键词，筛选最新的交通预测论文并直接打开对应 PDF。</p>
+          <h2 data-i18n="search.title">文献搜索 & 下载 / Literature Search & Downloads</h2>
+          <p data-i18n="search.description">
+            输入关键词即可筛选最新的交通预测论文，同时可直接访问 PDF；Use the filters below to scope by year and conference.
+          </p>
         </div>
         <form id="search-form" class="search-form">
-          <input
-            type="text"
-            id="keyword-input"
-            name="keyword"
-            placeholder="例如：graph transformer, PEMS, diffusion"
-            autocomplete="off"
-          />
-          <button type="submit" class="btn">搜索并下载</button>
-          <button type="button" class="btn btn--ghost" id="reset-search">重置</button>
+          <div class="search-grid">
+            <label class="search-field search-field--full">
+              <span data-i18n="search.keywords.label">关键词 / Keywords</span>
+              <div class="search-input">
+                <input
+                  type="text"
+                  id="keyword-input"
+                  name="keyword"
+                  placeholder="例如：graph transformer, PEMS, diffusion / e.g. graph transformer"
+                  data-i18n-placeholder="search.keywords.placeholder"
+                  autocomplete="off"
+                />
+              </div>
+            </label>
+            <label class="search-field">
+              <span data-i18n="search.year.label">Year / 年份</span>
+              <select id="year-filter" name="year">
+                <option value="this_year" data-i18n="search.year.this">This Year / 今年</option>
+                <option value="last_year" data-i18n="search.year.last">Last Year / 去年</option>
+                <option value="all" data-i18n="search.year.all">All / 全部</option>
+              </select>
+            </label>
+            <label class="search-field search-field--full">
+              <span data-i18n="search.conference.label">Conference / 会议（可自定义）</span>
+              <div class="search-input">
+                <input
+                  type="text"
+                  id="conference-input"
+                  name="conferences"
+                  placeholder="例如：ICLR, ICML, NeurIPS / e.g. ICLR"
+                  data-i18n-placeholder="search.conference.placeholder"
+                  autocomplete="off"
+                />
+              </div>
+            </label>
+          </div>
+          <div class="search-actions">
+            <button type="submit" class="btn" data-i18n="search.actions.submit">搜索并下载 / Search</button>
+            <button type="button" class="btn btn--ghost" id="reset-search" data-i18n="search.actions.reset">
+              重置 / Reset
+            </button>
+          </div>
         </form>
         <div id="search-results" class="grid"></div>
       </section>
 
       <section class="panel" id="migration-panel">
         <div class="panel__header">
-          <h2>模型迁移批处理</h2>
-          <p>
+          <h2 data-i18n="migration.title">模型迁移批处理 / Migration Batch Runner</h2>
+          <p data-i18n="migration.description">
             在下载的论文中勾选目标，导出迁移计划，并回看每个模型在 LibCity
-            验证时的指标或报错。
+            验证时的指标或报错。Select saved papers with code to launch LibCity migrations.
           </p>
         </div>
         <div class="migration-controls">
           <div class="selection-block">
-            <h3>选择论文</h3>
-            <p>仅展示已成功保存 PDF 的论文。</p>
+            <h3 data-i18n="migration.selection.title">选择论文 / Select Papers</h3>
+            <p data-i18n="migration.selection.description">
+              仅展示已成功保存 PDF 的论文。Only papers with archived PDFs & repos appear here.
+            </p>
             <div id="migration-selection" class="selection-list"></div>
           </div>
           <div class="action-block">
-            <button type="button" class="btn" id="start-migration">
-              启动迁移
+            <button type="button" class="btn" id="start-migration" data-i18n="migration.actions.start">
+              启动迁移 / Start Migration
             </button>
-            <button type="button" class="btn" id="export-plan">
-              导出迁移计划
+            <button type="button" class="btn" id="export-plan" data-i18n="migration.actions.export">
+              导出迁移计划 / Export Plan
             </button>
-            <p class="helper-text">
-              生成的 JSON 包含仓库与模型，可直接交由管线执行：
+            <p class="helper-text" data-i18n="migration.helper" data-i18n-html="true">
+              生成的 JSON 包含仓库与模型，可直接交由管线执行；Generated JSON is ready for
               <code>python claude_client.py</code>
             </p>
           </div>
@@ -78,34 +123,41 @@
 
       <section class="panel" id="job-panel">
         <div class="panel__header">
-          <h2>任务队列</h2>
-          <p>实时关注文献搜索与模型迁移的运行状态。</p>
+          <h2 data-i18n="jobs.title">任务队列 / Job Queue</h2>
+          <p data-i18n="jobs.description">
+            实时关注文献搜索与模型迁移的运行状态。Track live status of literature scans and migrations.
+          </p>
         </div>
         <div id="job-grid" class="grid"></div>
       </section>
 
       <section class="panel" id="stage-panel">
         <div class="panel__header">
-          <h2>Stage Timeline</h2>
-          <p>Each block reflects a pipeline stage and its most recent transcript.</p>
+          <h2 data-i18n="stage.title">Stage Timeline / 阶段时间线</h2>
+          <p data-i18n="stage.description">
+            Each block reflects a pipeline stage and its most recent transcript. 每个条目展示阶段概览与片段。
+          </p>
         </div>
         <div id="stage-grid" class="grid"></div>
       </section>
 
       <section class="panel" id="article-panel">
         <div class="panel__header">
-          <h2>Archived Articles</h2>
-          <p>Saved PDFs and metadata gathered by the catalog_article tool.</p>
+          <h2 data-i18n="articles.title">Archived Articles / 论文归档</h2>
+          <p data-i18n="articles.description">
+            Saved PDFs and metadata gathered by the catalog_article tool. 所有下载记录与抓取到的元信息可在此浏览。
+          </p>
         </div>
         <div id="article-grid" class="grid"></div>
       </section>
     </main>
 
     <footer>
-      <p>
+      <p data-i18n="footer.note" data-i18n-html="true">
         Data sources refresh automatically after every run. Serve this folder via
-        <code>python -m http.server</code> to load local JSON from
-        <code>data/</code>.
+        <code>python -m http.server</code>
+        to load local JSON from
+        <code>data/</code>. 每次运行结束后数据都会自动刷新，本地可直接通过上述命令预览。
       </p>
     </footer>
 

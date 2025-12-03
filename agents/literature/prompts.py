@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from textwrap import dedent
 
 from agents.core.types import AgentContext
@@ -8,6 +9,9 @@ from agents.core.types import AgentContext
 def build_literature_prompt(context: AgentContext) -> str:
     conferences = ", ".join(context.conferences)
     keywords = ", ".join(context.search_terms) if context.search_terms else "用户未指定，需覆盖常规交通预测主题，查找ICLR/ICML/NIPS的会议论文"
+    year_filter = context.search_year_label or "全部"
+    conferences_payload = context.search_conference_filters or context.conferences
+    conference_hint = json.dumps(conferences_payload, ensure_ascii=False)
     return dedent(
         f"""
         Stage: Comprehensive Literature Sweep
@@ -15,9 +19,17 @@ def build_literature_prompt(context: AgentContext) -> str:
         that targets traffic state forecast (no dataset restrictions).
 
         User-provided keywords to prioritize: {keywords}
+        Year filter selected by operator: {year_filter}
+        Conference constraints: {", ".join(conferences_payload)}
 
         Requirements:
-        1. Use WebSearch repeatedly until no new candidates appear. Capture workshop, spotlight, and journal versions.
+        1. Invoke the search tool to enumerate high-recall arXiv candidates.
+           Pass descriptive queries (keywords + venue/year) and include the parameters:
+             - year_filter="{context.search_year_mode}"
+             - conferences={conference_hint}
+           The tool returns JSON with
+           `results` entries that include title, abstract, PaSa score, depth, and PDF links.
+           Review every result and expand with additional tool calls until no new candidates remain.
         2. For every paper collect:
            - Title, conference name, track, and publication link.
            - Datasets (no limitation—record all), metrics, and any official GitHub repository.

@@ -20,6 +20,10 @@ class AgentContext:
     stage_notes: Dict[str, str] = field(default_factory=dict)
     search_terms: List[str] = field(default_factory=list)
     selected_papers: List[Dict[str, Any]] = field(default_factory=list)
+    search_year_mode: str = "all"
+    search_year_label: str = "全部"
+    search_year_value: int | None = None
+    search_conference_filters: List[str] = field(default_factory=list)
 
 
 @dataclass
