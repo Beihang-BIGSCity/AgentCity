@@ -40,8 +40,33 @@ class AgentPipeline:
             self.logger.info("=== Completed workflow: %s ===", workflow.name)
 
     async def _run_stage(self, stage: StageDefinition, workflow_name: str) -> None:
-        prompt = stage.prompt_builder(self.context)
         self.logger.info("Starting stage: %s (%s)", stage.title, workflow_name)
+        if stage.runner:
+            prompt = (
+                stage.prompt_builder(self.context)
+                if stage.prompt_builder
+                else stage.description
+            )
+            summary = await self._run_custom_stage(stage)
+            stage_messages: List[dict] = []
+            self.storage.append_stage(
+                workflow=workflow_name,
+                stage_key=stage.key,
+                title=stage.title,
+                prompt=prompt,
+                summary=summary,
+                messages=stage_messages,
+            )
+            if summary:
+                self.context.stage_notes[stage.key] = summary
+            await self._handle_stage_callback(stage, summary)
+            self.logger.info("Completed stage: %s", stage.title)
+            return
+
+        if not stage.prompt_builder:
+            raise ValueError(f"Stage {stage.key} requires a prompt builder when no runner is set.")
+
+        prompt = stage.prompt_builder(self.context)
         await self.client.query(prompt)
         stage_messages = []
         text_sections: List[str] = []
@@ -66,6 +91,19 @@ class AgentPipeline:
         )
         await self._handle_stage_callback(stage, summary)
         self.logger.info("Completed stage: %s", stage.title)
+
+    async def _run_custom_stage(self, stage: StageDefinition) -> str:
+        assert stage.runner is not None
+        self.logger.info("Running custom stage: %s", stage.title)
+        result = stage.runner(self.context, stage)
+        if inspect.isawaitable(result):
+            result = await result
+        summary = (result or "").strip()
+        if summary:
+            self.logger.info("Custom stage summary: %s", summary)
+        else:
+            self.logger.info("Custom stage completed without summary output.")
+        return summary
 
     async def _handle_stage_callback(self, stage: StageDefinition, summary: str) -> None:
         if not self.stage_callback:

@@ -205,10 +205,6 @@ async def test_migration(args):
 
     repo_dir = Path("Bigscity-LibCity")
     cmd = [
-        "conda",
-        "run",
-        "-n",
-        "autogen",
         "python",
         "run_model.py",
         "--task",

@@ -5,13 +5,14 @@ from .logging_utils import setup_logger
 from .orchestrator import AgentOrchestrator
 from .pipeline import AgentPipeline
 from .storage import StageStorage
-from .types import AgentContext, StageDefinition, WorkflowDefinition
+from .types import AgentContext, StageDefinition, StageRunner, WorkflowDefinition
 
 __all__ = [
     "AgentContext",
     "AgentPipeline",
     "AppPaths",
     "StageDefinition",
+    "StageRunner",
     "StageStorage",
     "WorkflowDefinition",
     "AgentOrchestrator",

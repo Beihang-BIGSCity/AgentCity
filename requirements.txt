@@ -1,4 +1,6 @@
+accelerate==0.34.2
 Bio==1.8.1
+beautifulsoup4==4.12.3
 claude_agent_sdk==0.1.10
 dash==3.3.0
 dash_bootstrap_components==2.0.4
@@ -11,6 +13,7 @@ fastdtw==0.3.4
 Flask==3.1.2
 gensim==4.4.0
 geopy==2.4.1
+arxiv==2.1.1
 hyperopt==0.2.7
 infomap==2.8.0
 matplotlib==3.10.7
@@ -30,6 +33,7 @@ Requests==2.32.5
 ruamel.base==1.0.0
 scikit_learn==1.7.2
 scipy==1.16.3
+sentencepiece==0.2.0
 setproctitle==1.2.2
 statsmodels==0.14.5
 sympy==1.14.0
@@ -38,7 +42,9 @@ torch==2.9.0
 torch_geometric==2.7.0
 torchdiffeq==0.2.5
 torchtext==0.18.0
+transformers==4.46.3
 tqdm==4.67.1
 tslearn==0.6.4
 vertexai==1.71.1
 wandb==0.23.0
+lxml==5.3.0

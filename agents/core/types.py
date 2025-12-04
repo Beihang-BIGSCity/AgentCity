@@ -1,10 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List
+from typing import Any, Awaitable, Callable, Dict, List
 
 
 PromptBuilder = Callable[["AgentContext"], str]
+StageRunResult = str | None
+StageRunner = Callable[
+    ["AgentContext", "StageDefinition"],
+    Awaitable[StageRunResult] | StageRunResult,
+]
 
 
 @dataclass
@@ -21,6 +26,7 @@ class AgentContext:
     stage_notes: Dict[str, str] = field(default_factory=dict)
     search_terms: List[str] = field(default_factory=list)
     selected_papers: List[Dict[str, Any]] = field(default_factory=list)
+    paper_candidates: List[Dict[str, Any]] = field(default_factory=list)
     search_year_mode: str = "all"
     search_year_label: str = "全部"
     search_year_value: int | None = None
@@ -32,7 +38,8 @@ class StageDefinition:
     key: str
     title: str
     description: str
-    prompt_builder: PromptBuilder
+    prompt_builder: PromptBuilder | None = None
+    runner: StageRunner | None = None
 
 
 @dataclass
@@ -44,4 +51,10 @@ class WorkflowDefinition:
     stages: List[StageDefinition]
 
 
-__all__ = ["AgentContext", "StageDefinition", "WorkflowDefinition", "PromptBuilder"]
+__all__ = [
+    "AgentContext",
+    "StageDefinition",
+    "StageRunner",
+    "WorkflowDefinition",
+    "PromptBuilder",
+]

@@ -14,7 +14,7 @@ def _trim_document(document: str, limit: int = 5000) -> str:
 
 def build_migration_prompt(context: AgentContext) -> str:
     literature_summary = context.stage_notes.get(
-        "literature_scan",
+        "paper_analyze_agent",
         "No catalog summary captured yet. Inspect data/articles/catalog.json for metadata before acting.",
     )
     try:
