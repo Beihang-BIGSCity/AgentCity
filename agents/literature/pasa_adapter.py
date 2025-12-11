@@ -91,10 +91,10 @@ class PaSaSearchRunner:
         conference_filters: Sequence[str] | None = None,
     ) -> List[Dict[str, Any]]:
         cleaned_query = (query or "").strip()
-        normalized_conferences = self._normalize_conferences(conference_filters)
+        '''normalized_conferences = self._normalize_conferences(conference_filters)
         if normalized_conferences:
             conference_string = " ".join(normalized_conferences)
-            cleaned_query = f"{conference_string} {cleaned_query}".strip()
+            cleaned_query = f"{conference_string} {cleaned_query}".strip()'''
         if not cleaned_query:
             raise ValueError("query is required")
         params = self._resolve_params(overrides or {})

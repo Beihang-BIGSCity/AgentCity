@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import re
 import asyncio
 import logging
 from dataclasses import dataclass
@@ -52,7 +52,10 @@ class PaperSearchAgent:
 
     def search(self, context: AgentContext) -> List[Dict[str, object]]:
         keywords = [term.strip() for term in context.search_terms if term.strip()]
-        keywords = keywords.append(DEFAULT_KEYWORDS)
+        if keywords:
+            keywords.extend(DEFAULT_KEYWORDS)
+        else:
+            keywords = list(DEFAULT_KEYWORDS)
         conferences: Sequence[str] = (
             context.search_conference_filters or context.conferences
         )
@@ -66,12 +69,14 @@ class PaperSearchAgent:
         seen: Set[str] = set()
         for query in queries:
             try:
+                query = re.sub(r"\s*\[\s*|\s*\]\s*", " ", query).strip()
                 results = self.runner.search(
                     query,
                     max_results=self.max_results,
                     year_filter=year_filter,
                     conference_filters=conferences,
                 )
+                print(f"PaSa search for query '{query}' returned {len(results)} results.")
             except Exception as exc:  # pragma: no cover - PaSa runtime errors
                 self.logger.warning("Paper search failed for %s: %s", query, exc)
                 continue
@@ -103,11 +108,9 @@ class PaperSearchAgent:
         def with_year(term: str) -> str:
             return f"{term} {year_value}".strip() if year_value else term
 
-        for term in keywords:
-            combo = with_year(f"{conferences[: self.max_conference_combos]} {term} ")
-            add_query(combo)
-            if len(queries) >= self.max_queries:
-                break
+        combo = with_year(f"{conferences[: self.max_conference_combos]} {keywords} ")
+        add_query(combo)
+
         if not queries:
             add_query(with_year("traffic forecasting"))
         return queries

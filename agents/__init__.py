@@ -14,6 +14,7 @@ from .core import (
 )
 from .literature.workflow import get_literature_workflow
 from .migration.workflow import get_migration_workflow
+from .tuning.workflow import get_tuning_workflow
 
 __all__ = [
     "AgentContext",
@@ -27,5 +28,6 @@ __all__ = [
     "build_default_context",
     "get_literature_workflow",
     "get_migration_workflow",
+    "get_tuning_workflow",
     "setup_logger",
 ]

@@ -14,14 +14,14 @@ from agents.core.orchestrator import AgentOrchestrator  # noqa: E501
 from agents.migration import MigrationCatalog, create_migration_stage_callback
 from agents.migration.runtime import get_active_paper
 from agents.migration.storage import MigrationResultStore
-from agents.migration.tuning import (
+from agents.migration.utils import extract_standard_metrics
+from agents.tuning.tuning import (
     ensure_search_space,
     is_libcity_tuning_allowed,
     run_custom_grid_search,
     run_libcity_tuning,
     write_params_file,
 )
-from agents.migration.utils import extract_standard_metrics
 
 paths = AppPaths()
 paths.ensure()
@@ -92,6 +92,12 @@ def _append_article_record(record: dict) -> None:
     ARTICLE_CATALOG_PATH.write_text(
         json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
     )
+
+def _truncate_text(value: str, limit: int = 12000) -> str:
+    text = (value or "").strip()
+    if len(text) > limit:
+        return f"{text[:limit]}...[truncated]"
+    return text
 
 
 @tool(
@@ -264,7 +270,7 @@ async def test_migration(args):
         "content": [
             {
                 "type": "text",
-                "text": output,
+                "text": _truncate_text(output),
             }
         ]
     }
@@ -433,7 +439,7 @@ async def tune_migration_model(args):
         "content": [
             {
                 "type": "text",
-                "text": "\n".join(summary_lines),
+                "text": _truncate_text("\n".join(summary_lines)),
             }
         ]
     }

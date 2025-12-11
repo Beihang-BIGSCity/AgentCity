@@ -27,16 +27,21 @@ const TRANSLATIONS = {
     "search.actions.reset": "Reset",
     "migration.title": "Migration Batch Runner",
     "migration.description":
-      "Select any downloaded paper with code, export a migration plan, and review LibCity verification outputs.",
+      "Select downloaded papers with code, export a migration plan, then run migration and tuning as two separate steps.",
     "migration.selection.title": "Select Papers",
     "migration.selection.description":
-      "Only papers with an archived PDF and repository are listed here.",
+      "Only papers with a PDF (saved or link) and repository are listed here.",
+    "migration.actions.stage_label": "Step 1: Migration",
     "migration.actions.start": "Start Migration",
     "migration.actions.export": "Export Plan",
     "migration.helper":
       "The exported JSON includes repository + model metadata and can be passed to <code>python claude_client.py</code>.",
+    "tuning.actions.stage_label": "Step 2: Tuning",
+    "tuning.actions.start": "Start Tuning",
+    "tuning.helper":
+      "Run tuning after migration finishes; it reuses the same selection to search hyperparameters.",
     "jobs.title": "Job Queue",
-    "jobs.description": "Monitor literature-search and migration jobs in real time.",
+    "jobs.description": "Monitor literature-search, migration, and tuning jobs in real time.",
     "stage.title": "Stage Timeline",
     "stage.description":
       "Each block reflects a pipeline stage and highlights the latest transcript snippets.",
@@ -75,8 +80,9 @@ const TRANSLATIONS = {
     "search.repo.button_missing": "No repository",
     "search.added": "Added",
     "search.add_to_migration": "Add to migration list",
+    "search.add_unavailable": "Locked",
     "selection.empty":
-      "No papers currently satisfy “PDF saved + GitHub available”. Run a literature job first.",
+      "No papers currently satisfy “PDF (saved or link) + GitHub available”. Run a literature job first.",
     "selection.model_missing": "Model not specified",
     "migration.feedback.none_selected":
       "Selected papers have no migration summaries yet. Run the migration stage and refresh.",
@@ -91,7 +97,7 @@ const TRANSLATIONS = {
     "migration.feedback.summary_empty":
       "No summary excerpt available yet. Re-run the migration stage for a fresh summary.",
     "migration.feedback.updated": "Last updated: {{value}}",
-    "jobs.empty": "No jobs yet. Submit a literature search or migration run to see status here.",
+    "jobs.empty": "No jobs yet. Submit a literature search, migration, or tuning run to see status here.",
     "jobs.time.created": "Created",
     "jobs.time.started": "Started",
     "jobs.time.finished": "Finished",
@@ -105,12 +111,16 @@ const TRANSLATIONS = {
     "alerts.loading": "Processing...",
     "alerts.submit_literature_loading": "Submitting...",
     "alerts.start_migration_loading": "Launching...",
+    "alerts.start_tuning_loading": "Starting tuning...",
     "alerts.literature_failed": "Failed to submit literature search job",
     "alerts.migration_failed": "Failed to submit migration job",
-    "alerts.no_selection": "Select at least one paper before starting a migration.",
+    "alerts.tuning_failed": "Failed to submit tuning job",
+    "alerts.no_selection": "Select at least one paper before starting a run.",
     "alerts.export_no_selection": "Select at least one paper before exporting the migration plan.",
     "alerts.migration_started_single": "Started 1 migration job.",
     "alerts.migration_started_multi": "Started {{count}} migration jobs.",
+    "alerts.tuning_started_single": "Started 1 tuning job.",
+    "alerts.tuning_started_multi": "Started {{count}} tuning jobs.",
     "errors.dashboard_load": "Failed to load dashboard data",
     "search.reset": "Reset",
     "jobs.form.paper_meta": "Paper:",
@@ -145,15 +155,19 @@ const TRANSLATIONS = {
     "search.actions.reset": "重置",
     "migration.title": "模型迁移批处理",
     "migration.description":
-      "从已下载的论文中选择目标，导出迁移计划，并查看 LibCity 验证日志与指标。",
+      "从已下载的论文中选择目标，导出迁移计划，迁移完成后再单独触发调参阶段。",
     "migration.selection.title": "选择论文",
-    "migration.selection.description": "仅展示已保存 PDF 且提供 GitHub 仓库的论文。",
+    "migration.selection.description": "仅展示提供 PDF（本地或链接）且有 GitHub 仓库的论文。",
+    "migration.actions.stage_label": "步骤 1：迁移",
     "migration.actions.start": "启动迁移",
     "migration.actions.export": "导出迁移计划",
     "migration.helper":
       "导出的 JSON 包含仓库与模型信息，可直接交由 <code>python claude_client.py</code> 执行。",
+    "tuning.actions.stage_label": "步骤 2：调参",
+    "tuning.actions.start": "启动调参",
+    "tuning.helper": "迁移结束后再执行，复用同一批论文进行超参搜索。",
     "jobs.title": "任务队列",
-    "jobs.description": "实时关注文献搜索和模型迁移任务的状态。",
+    "jobs.description": "实时关注文献搜索、模型迁移与调参任务的状态。",
     "stage.title": "阶段时间线",
     "stage.description": "展示各阶段概览与最新对话片段，便于追踪自动化过程。",
     "articles.title": "论文归档",
@@ -189,7 +203,8 @@ const TRANSLATIONS = {
     "search.repo.button_missing": "暂无仓库",
     "search.added": "已添加",
     "search.add_to_migration": "加入迁移列表",
-    "selection.empty": "暂无满足“已保存 PDF 且提供 GitHub 仓库”的论文，请先运行文献搜索。",
+    "search.add_unavailable": "不可添加",
+    "selection.empty": "暂无满足“提供 PDF 或链接且有 GitHub 仓库”的论文，请先运行文献搜索。",
     "selection.model_missing": "未指定模型",
     "migration.feedback.none_selected": "所选论文尚未生成迁移 Summary，运行迁移阶段后刷新即可。",
     "migration.feedback.none_available": "还没有迁移 Summary，执行一次模型迁移即可查看。",
@@ -201,7 +216,7 @@ const TRANSLATIONS = {
     "migration.feedback.summary_missing": "Summary 未生成",
     "migration.feedback.summary_empty": "暂无 Summary 内容，可重新运行迁移阶段生成。",
     "migration.feedback.updated": "最近更新：{{value}}",
-    "jobs.empty": "暂无任务，提交文献搜索或模型迁移以查看状态。",
+    "jobs.empty": "暂无任务，提交文献搜索、模型迁移或调参以查看状态。",
     "jobs.time.created": "创建",
     "jobs.time.started": "开始",
     "jobs.time.finished": "结束",
@@ -215,12 +230,16 @@ const TRANSLATIONS = {
     "alerts.loading": "处理中...",
     "alerts.submit_literature_loading": "提交中...",
     "alerts.start_migration_loading": "启动中...",
+    "alerts.start_tuning_loading": "启动调参...",
     "alerts.literature_failed": "提交文献搜索任务失败",
     "alerts.migration_failed": "提交模型迁移任务失败",
-    "alerts.no_selection": "请选择至少一篇论文再启动迁移任务。",
+    "alerts.tuning_failed": "提交调参任务失败",
+    "alerts.no_selection": "请选择至少一篇论文再启动任务。",
     "alerts.export_no_selection": "请选择至少一篇论文再导出迁移计划。",
     "alerts.migration_started_single": "已启动 1 个迁移任务。",
     "alerts.migration_started_multi": "已启动 {{count}} 个迁移任务。",
+    "alerts.tuning_started_single": "已启动 1 个调参任务。",
+    "alerts.tuning_started_multi": "已启动 {{count}} 个调参任务。",
     "errors.dashboard_load": "加载仪表盘数据失败",
   },
 };
@@ -385,6 +404,14 @@ function hasRepo(article) {
 
 function hasSavedPdf(article) {
   return Boolean(getPdfPath(article));
+}
+
+function hasAvailablePdf(article) {
+  return Boolean(getPdfHref(article));
+}
+
+function canSelectForMigration(article) {
+  return hasAvailablePdf(article) && hasRepo(article);
 }
 
 function renderStages(stagePayload) {
@@ -597,25 +624,35 @@ function renderSearchResults(results) {
       repoBtn.classList.add("btn--disabled");
     }
 
-    const addBtn = document.createElement("button");
-    addBtn.type = "button";
-    addBtn.className = "btn btn--inline btn--ghost";
     const articleId = getArticleId(article);
     const alreadySelected = state.selectedPapers.has(articleId);
-    addBtn.textContent = alreadySelected
-      ? t("search.added")
-      : t("search.add_to_migration");
-    addBtn.disabled = alreadySelected;
-    addBtn.addEventListener("click", () => {
-      state.selectedPapers.add(articleId);
-      renderMigrationSelection();
-      renderMigrationFeedback();
-      performSearch();
-    });
+    const eligible = canSelectForMigration(article);
 
     actionRow.appendChild(pdfBtn);
     actionRow.appendChild(repoBtn);
-    actionRow.appendChild(addBtn);
+
+    if (!eligible && !alreadySelected) {
+      const note = document.createElement("p");
+      note.className = "card__meta action-note";
+      note.textContent = t("search.add_unavailable");
+      actionRow.appendChild(note);
+    } else {
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn--inline btn--ghost";
+      addBtn.textContent = alreadySelected
+        ? t("search.added")
+        : t("search.add_to_migration");
+      addBtn.disabled = alreadySelected;
+      addBtn.addEventListener("click", () => {
+        if (!eligible) return;
+        state.selectedPapers.add(articleId);
+        renderMigrationSelection();
+        renderMigrationFeedback();
+        performSearch();
+      });
+      actionRow.appendChild(addBtn);
+    }
 
     card.appendChild(header);
     card.appendChild(excerpt);
@@ -628,7 +665,7 @@ function renderSearchResults(results) {
 function renderMigrationSelection() {
   const container = document.getElementById("migration-selection");
   const eligible = state.articles.filter(
-    (article) => hasSavedPdf(article) && hasRepo(article)
+    (article) => hasAvailablePdf(article) && hasRepo(article)
   );
 
   if (eligible.length === 0) {
@@ -964,6 +1001,37 @@ async function requestMigrationJob(button) {
   }
 }
 
+async function requestTuningJob(button) {
+  if (state.selectedPapers.size === 0) {
+    alert(t("alerts.no_selection"));
+    return;
+  }
+  try {
+    setButtonLoading(button, true, t("alerts.start_tuning_loading"));
+    const result = await fetchJSON("/tuning/run", {
+      method: "POST",
+      body: { paper_ids: Array.from(state.selectedPapers) },
+    });
+    const jobs = Array.isArray(result?.items)
+      ? result.items
+      : result
+      ? [result]
+      : [];
+    if (jobs.length > 0) {
+      const message =
+        jobs.length === 1
+          ? t("alerts.tuning_started_single")
+          : t("alerts.tuning_started_multi", { count: jobs.length });
+      alert(message);
+    }
+    await refreshJobs();
+  } catch (error) {
+    handleError(t("alerts.tuning_failed"), error);
+  } finally {
+    setButtonLoading(button, false);
+  }
+}
+
 function exportMigrationPlan() {
   if (state.selectedPapers.size === 0) {
     alert(t("alerts.export_no_selection"));
@@ -1126,5 +1194,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start-migration");
   if (startBtn) {
     startBtn.addEventListener("click", () => requestMigrationJob(startBtn));
+  }
+
+  const tuningBtn = document.getElementById("start-tuning");
+  if (tuningBtn) {
+    tuningBtn.addEventListener("click", () => requestTuningJob(tuningBtn));
   }
 });

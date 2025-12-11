@@ -232,14 +232,45 @@ main {
   opacity: 0.6;
 }
 
-.btn--secondary {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+.btn.btn--secondary {
+  background-color: rgba(31, 63, 255, 0.1) !important;
+  background-image: none !important;
+  color: var(--primary) !important;
+  border: 1px solid rgba(31, 63, 255, 0.5) !important;
   box-shadow: none;
+  animation: none;
+}
+
+.btn--secondary:link,
+.btn--secondary:visited,
+.btn--secondary span,
+.btn--secondary strong,
+.btn--secondary svg {
+  color: var(--primary) !important;
+  fill: var(--primary) !important;
+  stroke: var(--primary) !important;
 }
 
 .btn--secondary:hover {
+  background-color: rgba(31, 63, 255, 0.16) !important;
+  color: var(--primary) !important;
+}
+
+.hero .btn--secondary {
+  color: #ffffff !important;
+  background-color: transparent;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.hero .btn--secondary:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.hero .btn--secondary svg {
+  color: currentColor;
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .btn--ghost {
@@ -266,6 +297,13 @@ main {
 .btn--disabled {
   opacity: 0.45;
   pointer-events: none;
+}
+
+.action-note {
+  flex-basis: 100%;
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
 }
 
 .article-link {

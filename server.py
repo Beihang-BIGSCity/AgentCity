@@ -27,6 +27,10 @@ class MigrationRequest(BaseModel):
     paper_ids: List[str] = Field(default_factory=list)
 
 
+class TuningRequest(BaseModel):
+    paper_ids: List[str] = Field(default_factory=list)
+
+
 paths = AppPaths()
 paths.ensure()
 logger = setup_logger(paths.log_file)
@@ -76,6 +80,49 @@ def _load_articles() -> List[Dict[str, object]]:
     data = _read_json(ARTICLE_CATALOG_PATH, [])
     return data if isinstance(data, list) else []
 
+def _truncate_text(value: str | None, limit: int) -> str:
+    text = (value or "").strip()
+    if len(text) > limit:
+        return f"{text[:limit]}...[truncated]"
+    return text
+
+def _trim_stage_messages(messages, max_messages: int = 200, max_text: int = 2000, max_tool_input: int = 1000):
+    trimmed = []
+    if not isinstance(messages, list):
+        return trimmed
+    for message in messages[-max_messages:]:
+        if not isinstance(message, dict):
+            continue
+        entry = dict(message)
+        if entry.get("type") == "text":
+            entry["content"] = _truncate_text(entry.get("content"), max_text)
+        elif entry.get("type") == "tool_use":
+            payload = entry.get("tool_input")
+            try:
+                serialized = json.dumps(payload, ensure_ascii=False)
+            except TypeError:
+                serialized = str(payload)
+            entry["tool_input"] = _truncate_text(serialized, max_tool_input)
+        trimmed.append(entry)
+    return trimmed
+
+def _sanitize_stage_payload(payload: Dict[str, object]) -> Dict[str, object]:
+    if not isinstance(payload, dict):
+        return {"stages": []}
+    stages = payload.get("stages")
+    if not isinstance(stages, list):
+        return {"stages": []}
+    sanitized = []
+    for entry in stages:
+        if not isinstance(entry, dict):
+            continue
+        item = dict(entry)
+        item["messages"] = _trim_stage_messages(item.get("messages"))
+        item["summary"] = _truncate_text(item.get("summary"), 2000)
+        item["prompt"] = _truncate_text(item.get("prompt"), 2000)
+        sanitized.append(item)
+    return {"stages": sanitized[-200:]}
+
 
 def _article_index() -> Dict[str, Dict[str, object]]:
     index: Dict[str, Dict[str, object]] = {}
@@ -83,6 +130,21 @@ def _article_index() -> Dict[str, Dict[str, object]]:
         signature = build_paper_signature(entry)
         index[signature] = entry
     return index
+
+
+def _resolve_selected_papers(paper_ids: List[str]) -> List[Dict[str, object]]:
+    ids = [pid for pid in paper_ids if pid]
+    if not ids:
+        raise HTTPException(status_code=400, detail="paper_ids are required")
+
+    index = _article_index()
+    missing = [pid for pid in ids if pid not in index]
+    if missing:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Unknown paper IDs: {', '.join(missing)}",
+        )
+    return [index[pid] for pid in ids]
 
 
 def _normalize_year_mode(value: str | None) -> str:
@@ -117,10 +179,7 @@ async def health() -> Dict[str, str]:
 @app.get("/api/stages")
 async def get_stages():
     payload = _read_json(STAGE_LOG_PATH, {"stages": []})
-    if not isinstance(payload, dict):
-        return {"stages": []}
-    payload.setdefault("stages", [])
-    return payload
+    return _sanitize_stage_payload(payload)
 
 
 @app.get("/api/articles")
@@ -175,20 +234,33 @@ async def enqueue_literature_job(request: LiteratureRequest):
     return {"items": [job]}
 
 
+@app.post("/api/tuning/run")
+async def enqueue_tuning_job(request: TuningRequest):
+    paper_ids = [pid for pid in request.paper_ids if pid]
+    selected = _resolve_selected_papers(paper_ids)
+
+    async def runner():
+        await orchestrator.run_tuning_sequence(selected)
+
+    primary = selected[0]
+    label_suffix = primary.get("title") or "Tuning"
+    if len(selected) > 1:
+        label_suffix = f"{label_suffix} +{len(selected) - 1}"
+    job = await job_manager.enqueue(
+        label=f"Tuning: {label_suffix}",
+        coro_factory=runner,
+        metadata={
+            "paper_title": primary.get("title"),
+            "model_name": primary.get("model_name"),
+            "paper_ids": paper_ids,
+        },
+    )
+    return {"items": [job]}
+
 @app.post("/api/migration/run")
 async def enqueue_migration_job(request: MigrationRequest):
     paper_ids = [pid for pid in request.paper_ids if pid]
-    if not paper_ids:
-        raise HTTPException(status_code=400, detail="paper_ids are required")
-
-    index = _article_index()
-    missing = [pid for pid in paper_ids if pid not in index]
-    if missing:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Unknown paper IDs: {', '.join(missing)}",
-        )
-    selected = [index[pid] for pid in paper_ids]
+    selected = _resolve_selected_papers(paper_ids)
 
     async def runner():
         await orchestrator.run_migration_sequence(selected)

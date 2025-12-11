@@ -93,8 +93,7 @@
         <div class="panel__header">
           <h2 data-i18n="migration.title">模型迁移批处理 / Migration Batch Runner</h2>
           <p data-i18n="migration.description">
-            在下载的论文中勾选目标，导出迁移计划，并回看每个模型在 LibCity
-            验证时的指标或报错。Select saved papers with code to launch LibCity migrations.
+            在下载的论文中勾选目标，导出迁移计划，先运行迁移再单独触发调参；Select saved papers with code, run migration first, then launch tuning separately.
           </p>
         </div>
         <div class="migration-controls">
@@ -106,6 +105,7 @@
             <div id="migration-selection" class="selection-list"></div>
           </div>
           <div class="action-block">
+            <h4 data-i18n="migration.actions.stage_label">步骤 1：迁移 / Step 1: Migration</h4>
             <button type="button" class="btn" id="start-migration" data-i18n="migration.actions.start">
               启动迁移 / Start Migration
             </button>
@@ -117,6 +117,15 @@
               <code>python claude_client.py</code>
             </p>
           </div>
+          <div class="action-block">
+            <h4 data-i18n="tuning.actions.stage_label">步骤 2：调参 / Step 2: Tuning</h4>
+            <button type="button" class="btn" id="start-tuning" data-i18n="tuning.actions.start">
+              启动调参 / Start Tuning
+            </button>
+            <p class="helper-text" data-i18n="tuning.helper">
+              迁移结束后再运行此步骤，复用所选论文进行超参搜索。Run this after migration to tune hyperparameters.
+            </p>
+          </div>
         </div>
         <div id="migration-feedback" class="grid"></div>
       </section>
@@ -125,7 +134,7 @@
         <div class="panel__header">
           <h2 data-i18n="jobs.title">任务队列 / Job Queue</h2>
           <p data-i18n="jobs.description">
-            实时关注文献搜索与模型迁移的运行状态。Track live status of literature scans and migrations.
+            实时关注文献搜索、模型迁移与调参的运行状态。Track live status of literature scans, migrations, and tuning runs.
           </p>
         </div>
         <div id="job-grid" class="grid"></div>

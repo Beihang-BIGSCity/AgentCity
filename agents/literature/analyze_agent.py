@@ -36,7 +36,7 @@ def build_analyze_agent_prompt(context: AgentContext) -> str:
     conference_hint = json.dumps(conferences_payload, ensure_ascii=False)
     candidates = context.paper_candidates or []
     preview = (
-        json.dumps(candidates[: min(len(candidates), 12)], ensure_ascii=False, indent=2)
+        json.dumps(candidates[: min(len(candidates), 20)], ensure_ascii=False, indent=2)
         if candidates
         else "[]"
     )
@@ -54,11 +54,11 @@ def build_analyze_agent_prompt(context: AgentContext) -> str:
 
         Requirements:
         1. Work through the candidates one by one. If you believe an essential paper is missing you may do limited manual web lookups, but DO NOT call `paper_search_agent` again—this stage is analysis only.
-        2. For each paper capture:
+        2. Download PDFs for papers into {context.article_dir}. Name files `<conference>_<short-title>.pdf`, record the saved path, and confirm each download. If no repo exists, explain why the PDF was skipped.
+        3. For each paper having a PDF, extract and document from the PDF:
            - Title, conference, track, and the main publication link (prefer arXiv or the official proceedings page).
            - Every dataset and evaluation metric mentioned.
            - The official GitHub repository URL. If none exists, explicitly note it.
-        3. Download PDFs for papers that provide a repository into {context.article_dir}. Name files `<conference>_<short-title>.pdf`, record the saved path, and confirm each download. If no repo exists, explain why the PDF was skipped.
         4. After documenting a paper, call `catalog_article` so {context.article_catalog} stays synchronized.
         5. Produce a markdown table listing all analyzed papers with columns ["title","conference","year","track","pdf_link","pdf_path","datasets","metrics","repo_url","keywords"].
         6. Summarize all saved PDF paths plus any missing information (e.g., repository absent, datasets unclear).

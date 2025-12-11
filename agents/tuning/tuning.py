@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence
 
-from .utils import extract_standard_metrics, sanitize_signature
+from agents.migration.utils import extract_standard_metrics, sanitize_signature
 
 LIBCITY_TUNING_ENV = "AGENTCITY_ALLOW_LIBCITY_TUNING"
 DEFAULT_TUNING_SPACE: Dict[str, List[Any]] = {
@@ -95,7 +95,6 @@ def run_libcity_tuning(
     params_file: Path,
     task: str = "traffic_state_pred",
     config_file: str | None = None,
-    conda_env: str = "autogen",
     hyper_algo: str | None = None,
     max_evals: int | None = None,
     saved_model: bool | None = None,
@@ -105,10 +104,6 @@ def run_libcity_tuning(
     """Run LibCity's run_hyper.py and parse its output."""
 
     cmd = [
-        "conda",
-        "run",
-        "-n",
-        conda_env,
         "python",
         "run_hyper.py",
         "--task",
@@ -175,7 +170,6 @@ def run_custom_grid_search(
     search_space: Mapping[str, Sequence[Any]],
     task: str = "traffic_state_pred",
     config_file: str | None = None,
-    conda_env: str = "autogen",
     max_trials: int | None = None,
 ) -> Dict[str, Any]:
     """Perform a simple grid search by repeatedly invoking run_model.py."""
@@ -193,10 +187,6 @@ def run_custom_grid_search(
             break
         params = dict(zip(keys, combo))
         cmd = [
-            "conda",
-            "run",
-            "-n",
-            conda_env,
             "python",
             "run_model.py",
             "--task",
