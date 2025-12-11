@@ -562,7 +562,7 @@ function renderSearchResults(results) {
     const localPdf = hasSavedPdf(article);
     const repoStatus = document.createElement("p");
     repoStatus.className = "card__meta repo-status";
-    repoStatus.textContent = repoUrl
+    repoStatus.textContent = (Boolean(repoUrl) && String(repoUrl).toLowerCase() !== "not available")
       ? t("search.repo.available")
       : t("search.repo.missing");
 
