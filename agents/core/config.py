@@ -62,6 +62,7 @@ def build_default_context(paths: AppPaths) -> AgentContext:
         benchmark_document=benchmark_document,
         article_dir=str(paths.article_dir),
         article_catalog=str(paths.article_catalog),
+        migration_catalog=str(paths.migration_catalog),
         conferences=DEFAULT_CONFERENCES,
         target_year=TARGET_YEAR,
         search_terms=[],

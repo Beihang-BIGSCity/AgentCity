@@ -5,7 +5,7 @@ from textwrap import dedent
 from agents.core.types import AgentContext
 
 
-def _trim_document(document: str, limit: int = 3500) -> str:
+def _trim_document(document: str, limit: int = 5000) -> str:
     if not document:
         return "Benchmark document not found. Inspect LibCity manually."
     if len(document) <= limit:
@@ -18,6 +18,7 @@ def build_migration_prompt(context: AgentContext) -> str:
         "literature_scan",
         "No catalog summary captured yet. Inspect data/articles/catalog.json for metadata before acting.",
     )
+    migration_history_info = json.loads(context.migration_catalog)
     doc_excerpt = _trim_document(context.benchmark_document)
     if context.selected_papers:
         selection_lines = "\n".join(
@@ -37,6 +38,9 @@ def build_migration_prompt(context: AgentContext) -> str:
         Papers selected by the user for migration:
         {selection_lines}
 
+        Historical Migration Records for Reference:
+        {migration_history_info}
+
         Tasks:
         - Clone every listed repository (or as many as feasible) and port their models into LibCity
           at {context.repo_path}. Keep the upstream repo history intact and always clone into the project-level
@@ -46,7 +50,7 @@ def build_migration_prompt(context: AgentContext) -> str:
         - Modify config files to match LibCity's conventions, such as task_config.json. Ensure hyperparameters, data paths, and training loops
         - Store automation helpers (e.g., prompt templates, config generators) in this agent project instead of scattering scripts.
         - Document all touched LibCity files and the ./repos/<model-name> directory. Produce only
-          a concise summary markdown and save it below ./documentation (one file per migration).
+          a concise summary markdown with no more than 2000 characters, and save it below ./documentation (one file per migration).
         - Test the migrated models with LibCity's existing training and evaluation scripts.
 
         Reference (truncated LibCity documentation):

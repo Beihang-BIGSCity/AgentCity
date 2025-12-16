@@ -78,7 +78,7 @@ class MigrationCatalog:
             relative = path.resolve()
         return f"/{relative.as_posix()}"
 
-    def _excerpt(self, summary: str, limit: int = 320) -> str:
+    def _excerpt(self, summary: str, limit: int = 2000) -> str:
         if len(summary) <= limit:
             return summary
         return f"{summary[:limit]}..."

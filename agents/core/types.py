@@ -15,6 +15,7 @@ class AgentContext:
     benchmark_document: str
     article_dir: str
     article_catalog: str
+    migration_catalog: str
     conferences: List[str]
     target_year: int
     stage_notes: Dict[str, str] = field(default_factory=dict)
