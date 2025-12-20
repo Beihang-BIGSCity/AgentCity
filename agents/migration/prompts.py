@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from textwrap import dedent
-
 from agents.core.types import AgentContext
 
 
@@ -18,7 +17,11 @@ def build_migration_prompt(context: AgentContext) -> str:
         "literature_scan",
         "No catalog summary captured yet. Inspect data/articles/catalog.json for metadata before acting.",
     )
-    migration_history_info = json.loads(context.migration_catalog)
+    try:
+        with open(context.migration_catalog, 'r', encoding='utf-8') as f:
+            migration_history_info = f.read()
+    except Exception:
+        migration_history_info = "Migration catalog not found or unreadable."
     doc_excerpt = _trim_document(context.benchmark_document)
     if context.selected_papers:
         selection_lines = "\n".join(
