@@ -52,10 +52,15 @@ def build_search_agent_prompt(context: AgentContext) -> str:
     conferences_payload = context.search_conference_filters or context.conferences
     conference_str = ", ".join(conferences_payload) if conferences_payload else "All major AI/ML conferences"
 
-    # Year filter
+    # Year filter - support year range
     year_info = ""
-    if context.search_year_value:
-        year_info = f"Focus on papers from year {context.search_year_value}."
+    if context.search_year_start and context.search_year_end:
+        if context.search_year_start == context.search_year_end:
+            year_info = f"Focus ONLY on papers from year {context.search_year_start}. Include the year in every search query."
+        else:
+            year_info = f"Focus ONLY on papers from {context.search_year_start} to {context.search_year_end}. Include the year range in every search query (e.g., '2024 OR 2025')."
+    elif context.search_year_value:
+        year_info = f"Focus ONLY on papers from year {context.search_year_value}. Include the year in every search query."
     elif context.target_year:
         year_info = f"Focus on papers from year {context.target_year} or recent years."
     else:

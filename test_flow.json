@@ -1,0 +1,288 @@
+  [{
+    "id": 10,
+    "title": "DSTAGNN: Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting",
+    "authors": [
+      "Shiyong Lan",
+      "Yitong Ma",
+      "Weikang Huang",
+      "Wenwu Wang",
+      "Hongyu Yang",
+      "Pyang Li"
+    ],
+    "venue": "ICML",
+    "year": 2022,
+    "score": 9,
+    "arxiv": "2206.09112",
+    "github": "https://github.com/SYLan2019/DSTAGNN",
+    "datasets": [
+      "PEMSD3",
+      "PEMSD4",
+      "PEMSD7",
+      "PEMSD8"
+    ],
+    "model_name": "DSTAGNN",
+    "key_contributions": [
+      "Dynamic spatial-temporal aware graph construction",
+      "Captures time-varying correlations at each time step",
+      "Multi-head attention for ST dependencies",
+      "Significant improvements over static graph methods"
+    ],
+    "metrics": {
+      "PEMSD3": {
+        "MAE": 15.57,
+        "MAPE": "14.68%",
+        "RMSE": 27.21
+      },
+      "PEMSD4": {
+        "MAE": 19.30,
+        "MAPE": "12.70%",
+        "RMSE": 31.46
+      },
+      "PEMSD7": {
+        "MAE": 21.42,
+        "MAPE": "9.01%",
+        "RMSE": 31.51
+      },
+      "PEMSD8": {
+        "MAE": 15.67,
+        "MAPE": "9.94%",
+        "RMSE": 24.77
+      }
+    },
+    "abstract": "Proposes dynamic ST-aware GNN with learnable graph structure at each time step. Captures both static topology and dynamic correlations. Strong performance but LargeST reveals scalability limitations on large graphs.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/pdfs/dstagnn.pdf",
+    "notes": "ICML 2022. Strong performance on medium datasets. LargeST benchmark shows it cannot scale to GLA/CA due to memory requirements from dynamic graph generation."
+  },
+  {
+    "title": "Information Bottleneck-guided MLPs for Robust Spatial-temporal Forecasting",
+    "conference": "ICML",
+    "year": 2025,
+    "track": "Poster",
+    "pdf_link": "https://openreview.net/attachment?id=pqSLcEbk5X&name=pdf",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ICML2025_RSTIB.pdf",
+    "datasets": [
+      "PEMSD4",
+      "PEMSD7",
+      "PEMSD8"
+    ],
+    "model_name": "RSTIB",
+    "metrics": {
+      "PEMSD4": {
+        "MAE": 18.46,
+        "MAPE": "12.22%",
+        "RMSE": 30.14
+      },
+      "PEMSD7": {
+        "MAE": 19.84,
+        "MAPE": "8.33%",
+        "RMSE": 33.90
+      },
+      "PEMSD8": {
+        "MAE": 15.51,
+        "MAPE": "9.44%",
+        "RMSE": 24.18
+      }
+    },
+    "github": "https://github.com/mchen644/RSTIB",
+    "keywords": [
+      "spatial-temporal",
+      "traffic-speed-forecast",
+      "information bottleneck",
+      "MLP",
+      "robustness"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "STD-MAE: Spatial-Temporal Dual Masked Autoencoder for Traffic Forecasting",
+    "authors": [
+      "Authors TBD"
+    ],
+    "venue": "IJCAI",
+    "year": 2024,
+    "score": 8,
+    "arxiv": "2312.00516",
+    "github": "https://github.com/Jimmy-7664/STD-MAE",
+    "datasets": [
+      "METR_LA"
+    ],
+    "model_name": "STD-MAE",
+    "key_contributions": [
+      "Masked autoencoder for ST data",
+      "Self-supervised pre-training approach",
+      "Dual masking: spatial and temporal",
+      "Learns robust representations"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.40,
+        "MAPE": "7.07%",
+        "RMSE": 9.59
+      }
+    },
+    "abstract": "Applies masked autoencoder paradigm to spatial-temporal traffic data. Pre-trains with dual masking strategy (masking both spatial nodes and temporal steps) to learn robust representations for downstream forecasting.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/pdfs/stdmae.pdf",
+    "notes": "IJCAI 2024. Brings self-supervised learning (MAE) to traffic forecasting. Growing trend toward pre-training approaches."
+  },
+  {
+    "title": "LSTTN: A Long-Short Term Transformer-based Spatio-temporal Neural Network for Traffic Flow Forecasting",
+    "authors": [
+      "Qinyao Luo",
+      "Silu He",
+      "Xing Han",
+      "Yuhan Wang",
+      "Haifeng Li"
+    ],
+    "venue": "Knowledge-Based Systems",
+    "year": 2024,
+    "arxiv": "2403.16495",
+    "github": "https://github.com/GeoX-Lab/LSTTN",
+    "datasets": [
+      "METR_LA",
+      "PEMSD4",
+      "PEMSD8"
+    ],
+    "model_name": "LSTTN",
+    "key_contributions": [
+      "Masked subseries Transformer to learn compressed contextual temporal representations from long historical series",
+      "Long-term trend extractor using stacked 1D dilated convolutions",
+      "Periodicity extractor using dynamic graph convolution for weekly and daily patterns",
+      "Short-term trend extractor using existing STGNNs for fine-grained predictions",
+      "Integrates long-term trends, periodic features, and short-term features comprehensively"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 2.96,
+        "MAPE": "7.93%",
+        "RMSE": 5.92
+      },
+      "PEMSD4": {
+        "MAE": 18.46,
+        "MAPE": "12.17%",
+        "RMSE": 30.00
+      },
+      "PEMSD8": {
+        "MAE": 14.54,
+        "MAPE": "9.77%",
+        "RMSE": 23.47
+      },
+      "improvement": "5.63% minimum to 16.78% maximum improvement over baselines in 60-min ahead forecasting"
+    },
+    "abstract": "LSTTN addresses limitations of existing STGNNs that only utilize short-range traffic data by comprehensively considering long- and short-term features. Uses masked subseries Transformer for efficient learning of compressed temporal representations from long series, extracts long-term trends and periodic features, then fuses with short-term features from STGNNs for accurate predictions.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ArXiv2024_LSTTN.pdf",
+    "notes": "Published in Knowledge-Based Systems 2024 (293: 111637). Central South University and Xiangjiang Laboratory. Uses two-week historical data (4032 timesteps for 5-min intervals). Mask reconstruction with 75% random masking. Graph WaveNet adopted as short-term trend extractor. Demonstrates robustness to missing data and superior sensing of sudden traffic changes."
+  },
+  {
+    "title": "FUSE-Traffic: Fusion of Unstructured and Structured Data for Event-aware Traffic Forecasting",
+    "conference": "SIGSPATIAL",
+    "year": 2025,
+    "model_name": "FUSE-Traffic",
+    "track": "Conference",
+    "pdf_link": "https://arxiv.org/pdf/2510.16053",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/SIGSPATIAL2025_FUSE-Traffic.pdf",
+    "datasets": [
+      "METR_LA"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.39,
+        "MAPE": " 9.84%",
+        "RMSE": 7.28
+      }
+  },
+    "repo_url": "https://github.com/GeoAICenter/FUSE-Traffic_Sigspatial2025",
+    "keywords": [
+      "spatial-temporal",
+      "traffic-speed-forecast",
+      "event-aware",
+      "data fusion"
+    ]
+  },
+  {
+    "title": "AutoSTF: Decoupled Neural Architecture Search for Cost-Effective Automated Spatio-Temporal Forecasting",
+    "conference": "KDD",
+    "year": 2025,
+    "model_name":"AutoSTF",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2409.16586",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/KDD2025_AutoSTF.pdf",
+    "datasets": [
+      "METR-LA"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.35,
+        "MAPE": " 9.58%",
+        "RMSE": 7.09
+      },
+    "repo_url": "https://github.com/usail-hkust/AutoSTF",
+    "keywords": [
+      "spatial-temporal",
+      "traffic forecasting",
+      "neural architecture search",
+      "automated machine learning",
+      "cost-effective"
+      ]
+    }
+  },
+{
+    "title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)",
+    "conference": "NeurIPS",
+    "year": 2025,
+    "track": "Conference",
+    "model_name":"ST-SSDL",
+    "pdf_link": "https://arxiv.org/pdf/2510.04908",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf",
+    "datasets": [
+      "METR-LA"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.37,
+        "MAPE": " 9.48%",
+        "RMSE": 7.17
+      },
+    "repo_url": "https://github.com/Jimmy-7664/ST-SSDL",
+    "keywords": [
+      "spatial-temporal",
+      "traffic-speed-forecast",
+      "self-supervised learning",
+      "deviation learning",
+      "traffic management"
+    ]
+  }
+  },
+  {
+    "title": "Efficient Traffic Prediction Through Spatio-Temporal Distillation",
+    "conference": "AAAI",
+    "year": 2025,
+    "track": "Conference",
+    "pdf_link": "https://arxiv.org/pdf/2501.10459",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/AAAI2025_LightST.pdf",
+    "model_name":"LightST",
+    "datasets": [
+      "PEMSD4",
+      "PEMSD7"
+    ],
+    "metrics": {
+      "PEMSD4": {
+        "MAE": 19.21,
+        "MAPE": " 12.70%",
+        "RMSE": 31.31
+      },
+      "PEMSD7": {
+        "MAE": 20.78,
+        "MAPE": " 8.98%",
+        "RMSE": 33.95
+      }
+    },
+    "repo_url": "https://github.com/lizzyhku/TP",
+    "keywords": [
+      "spatial-temporal",
+      "knowledge distillation",
+      "traffic prediction",
+      "efficiency",
+      "lightweight"
+    ]
+  }
+]

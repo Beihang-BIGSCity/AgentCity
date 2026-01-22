@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from .types import AgentContext
 
@@ -56,7 +56,7 @@ def build_default_context(paths: AppPaths) -> AgentContext:
     except FileNotFoundError:
         benchmark_document = ""
 
-    mode, label, value = resolve_year_filter()
+    mode, label, value, year_start, year_end = resolve_year_filter()
     return AgentContext(
         repo_path=str(paths.repo_path),
         benchmark_document=benchmark_document,
@@ -70,22 +70,65 @@ def build_default_context(paths: AppPaths) -> AgentContext:
         search_year_mode=mode,
         search_year_label=label,
         search_year_value=value,
+        search_year_start=year_start,
+        search_year_end=year_end,
         search_conference_filters=[],
     )
 
 
-def resolve_year_filter(mode: str | None = None) -> tuple[str, str, int | None]:
-    normalized = (mode or "all").strip().lower()
-    if normalized not in YEAR_FILTER_CHOICES:
-        normalized = "all"
-    choice = YEAR_FILTER_CHOICES[normalized]
+def resolve_year_filter(mode: str | None = None) -> Tuple[str, str, int | None, int | None, int | None]:
+    """Resolve year filter mode to (normalized_mode, label, year_value, year_start, year_end).
+
+    Supports:
+    - "this_year": Current year
+    - "last_year": Previous year
+    - "all": No year filter
+    - Direct year number (e.g., "2024", "2025"): Specific year
+    - Year range (e.g., "2024-2025"): Range of years
+    """
+    if not mode:
+        return "all", "全部", None, None, None
+
+    normalized = mode.strip()
+
+    # Check for year range input (e.g., "2024-2025")
+    if "-" in normalized:
+        parts = normalized.split("-")
+        if len(parts) == 2:
+            try:
+                start_year = int(parts[0].strip())
+                end_year = int(parts[1].strip())
+                if 2000 <= start_year <= 2030 and 2000 <= end_year <= 2030:
+                    # Ensure start <= end
+                    if start_year > end_year:
+                        start_year, end_year = end_year, start_year
+                    label = f"{start_year}-{end_year}"
+                    return "range", label, None, start_year, end_year
+            except ValueError:
+                pass
+
+    normalized_lower = normalized.lower()
+
+    # Check for direct year input (numeric string)
+    if normalized_lower.isdigit():
+        year = int(normalized_lower)
+        if 2000 <= year <= 2030:  # Reasonable year range
+            return "specific", str(year), year, year, year
+        # Fall back to all if year is out of range
+        return "all", "全部", None, None, None
+
+    # Check predefined choices
+    if normalized_lower not in YEAR_FILTER_CHOICES:
+        normalized_lower = "all"
+
+    choice = YEAR_FILTER_CHOICES[normalized_lower]
     label = choice["label"]
     offset = choice["offset"]
     if offset is None:
-        value = None
+        return normalized_lower, label, None, None, None
     else:
         value = datetime.utcnow().year + offset
-    return normalized, label, value
+        return normalized_lower, label, value, value, value
 
 
 __all__ = [

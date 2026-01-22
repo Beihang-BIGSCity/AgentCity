@@ -17,10 +17,9 @@ const TRANSLATIONS = {
       "Enter keywords to surface the latest traffic-forecasting papers. Use the filters to scope the PaSa agent by year and conference.",
     "search.keywords.label": "Keywords",
     "search.keywords.placeholder": "e.g. graph transformer, PEMS, diffusion",
-    "search.year.label": "Year",
-    "search.year.this": "This Year",
-    "search.year.last": "Last Year",
-    "search.year.all": "All",
+    "search.year.label": "Year Range",
+    "search.year.start_placeholder": "Start (e.g. 2024)",
+    "search.year.end_placeholder": "End (e.g. 2025)",
     "search.conference.label": "Conference (Customizable)",
     "search.conference.placeholder": "e.g. ICLR, ICML, NeurIPS",
     "search.actions.submit": "Search & Download",
@@ -145,10 +144,9 @@ const TRANSLATIONS = {
       "输入关键词即可筛选最新的交通预测论文，并可限制年份与会议；PaSa 代理将自动搜索并保存结果。",
     "search.keywords.label": "关键词",
     "search.keywords.placeholder": "例如：graph transformer, PEMS, diffusion",
-    "search.year.label": "年份",
-    "search.year.this": "今年",
-    "search.year.last": "去年",
-    "search.year.all": "全部",
+    "search.year.label": "年份范围",
+    "search.year.start_placeholder": "起始年（如 2024）",
+    "search.year.end_placeholder": "结束年（如 2025）",
     "search.conference.label": "会议（可自定义）",
     "search.conference.placeholder": "例如：ICLR, ICML, NeurIPS",
     "search.actions.submit": "搜索并下载",
@@ -931,9 +929,19 @@ function getCurrentKeywords() {
 }
 
 function getSelectedYearFilter() {
-  const select = document.getElementById("year-filter");
-  if (!select) return "this_year";
-  return select.value || "this_year";
+  const startInput = document.getElementById("year-start-input");
+  const endInput = document.getElementById("year-end-input");
+  const startYear = startInput && startInput.value.trim() ? parseInt(startInput.value.trim(), 10) : null;
+  const endYear = endInput && endInput.value.trim() ? parseInt(endInput.value.trim(), 10) : null;
+
+  if (startYear && !isNaN(startYear) && endYear && !isNaN(endYear)) {
+    return `${startYear}-${endYear}`;
+  } else if (startYear && !isNaN(startYear)) {
+    return startYear.toString();
+  } else if (endYear && !isNaN(endYear)) {
+    return endYear.toString();
+  }
+  return "all";
 }
 
 function getConferenceFilters() {
@@ -1178,8 +1186,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
       if (input) input.value = "";
-      const yearSelect = document.getElementById("year-filter");
-      if (yearSelect) yearSelect.value = "this_year";
+      const yearInput = document.getElementById("year-input");
+      if (yearInput) yearInput.value = "";
+      const yearStartInput = document.getElementById("year-start-input");
+      if (yearStartInput) yearStartInput.value = "";
+      const yearEndInput = document.getElementById("year-end-input");
+      if (yearEndInput) yearEndInput.value = "";
       const conferenceInput = document.getElementById("conference-input");
       if (conferenceInput) conferenceInput.value = "";
       performSearch();

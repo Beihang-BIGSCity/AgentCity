@@ -99,6 +99,7 @@ def run_libcity_tuning(
     max_evals: int | None = None,
     saved_model: bool | None = None,
     train: bool | None = None,
+    gpu_id: str | None = None,
     extra_cli_args: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Run LibCity's run_hyper.py and parse its output."""
@@ -115,6 +116,8 @@ def run_libcity_tuning(
         "--params_file",
         str(params_file),
     ]
+    if gpu_id is not None:
+        cmd.extend(["--gpu_id", str(gpu_id)])
     if config_file:
         cmd.extend(["--config_file", config_file])
     if hyper_algo:
@@ -171,6 +174,7 @@ def run_custom_grid_search(
     task: str = "traffic_state_pred",
     config_file: str | None = None,
     max_trials: int | None = None,
+    gpu_id: str | None = None,
 ) -> Dict[str, Any]:
     """Perform a simple grid search by repeatedly invoking run_model.py."""
 
@@ -196,6 +200,8 @@ def run_custom_grid_search(
             "--dataset",
             dataset_name,
         ]
+        if gpu_id is not None:
+            cmd.extend(["--gpu_id", str(gpu_id)])
         if config_file:
             cmd.extend(["--config_file", config_file])
         for key, value in params.items():

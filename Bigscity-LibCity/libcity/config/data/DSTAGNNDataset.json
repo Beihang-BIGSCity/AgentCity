@@ -1,15 +1,43 @@
 {
-  "batch_size": 64,
+  "batch_size": 32,
+  "comment_batch_size": "Training batch size from ICML 2022 paper. Paper default: 32",
+
   "cache_dataset": true,
+  "comment_cache_dataset": "Cache dataset in memory for faster training",
+
   "num_workers": 0,
+  "comment_num_workers": "Number of parallel data loading workers",
+
   "train_rate": 0.6,
+  "comment_train_rate": "Training data ratio (60% train, 20% eval, 20% test by default)",
+
   "eval_rate": 0.2,
+  "comment_eval_rate": "Evaluation data ratio",
+
   "scaler": "standard",
+  "comment_scaler": "Feature scaling method. Paper uses standard (z-score normalization)",
+
   "load_external": false,
+  "comment_load_external": "Whether to load external features (e.g., weather, POI)",
+
   "normal_external": false,
+  "comment_normal_external": "Whether to normalize external features",
+
   "ext_scaler": "none",
+  "comment_ext_scaler": "Scaler for external features",
+
   "input_window": 12,
+  "comment_input_window": "Input sequence length in timesteps (12 timesteps = 1 hour at 5-min intervals)",
+
   "output_window": 12,
+  "comment_output_window": "Output prediction horizon in timesteps (12 timesteps = 1 hour ahead)",
+
+  "output_dim": 1,
+  "comment_output_dim": "Output feature dimension. DSTAGNN uses only traffic_flow (first feature). Set to 1 to select only first column",
+
   "sparsity": 0.01,
-  "period": 288
+  "comment_sparsity": "Sparsity parameter for Adaptive Graph (AG) construction. Default: 0.01 (1% connectivity)",
+
+  "period": 288,
+  "comment_period": "Number of timesteps in one day. For 5-minute intervals: 288 (24*60/5)"
 }

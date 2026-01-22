@@ -1,34 +1,48 @@
+"""Migration workflow using multi-agent coordination.
+
+This workflow uses a lead agent to coordinate specialized subagents for
+repository cloning, model adaptation, configuration, and testing.
+"""
+
 from __future__ import annotations
 
-from agents.core.types import StageDefinition, WorkflowDefinition
+from agents.core.types import MultiAgentStage, WorkflowDefinition
+from agents.core.agent_registry import build_migration_agents
 
-from .prompts import (
-    build_migration_prompt,
-    build_validation_prompt,
-)
+from .prompts.lead_agent import build_migration_lead_prompt
 
 
 def get_migration_workflow() -> WorkflowDefinition:
-    """Return the workflow definition that handles model migration."""
+    """Return the multi-agent migration workflow.
 
-    stages = [
-        StageDefinition(
-            key="model_migration",
-            title="Repository Migration",
-            description="Clone repositories and port models into LibCity.",
-            prompt_builder=build_migration_prompt,
-        ),
-        StageDefinition(
-            key="verification",
-            title="Verification",
-            description="Run training/evaluation flows and capture logs.",
-            prompt_builder=build_validation_prompt,
-        )
-    ]
+    The workflow consists of a single MultiAgentStage where a lead agent
+    coordinates four specialized subagents:
+    - repo-cloner: Clones and analyzes external repositories
+    - model-adapter: Adapts PyTorch models to LibCity conventions
+    - config-migrator: Creates and updates configuration files
+    - migration-tester: Runs tests and diagnoses issues
+    """
+
     return WorkflowDefinition(
         name="migration",
-        description="Clone external repos, port models, and verify metrics.",
-        stages=stages,
+        description=(
+            "Multi-agent workflow for porting external models to LibCity. "
+            "A lead agent coordinates cloner, adapter, config, and tester subagents "
+            "to migrate models from research repositories."
+        ),
+        stages=[
+            MultiAgentStage(
+                key="model_migration",
+                title="Model Migration",
+                description=(
+                    "Coordinate repository cloning, model adaptation, configuration, "
+                    "and testing using specialized subagents."
+                ),
+                lead_agent_prompt_builder=build_migration_lead_prompt,
+                agents=build_migration_agents,  # Will be called with context
+                lead_model="sonnet",
+            )
+        ],
     )
 
 

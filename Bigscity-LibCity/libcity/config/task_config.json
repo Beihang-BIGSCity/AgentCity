@@ -97,7 +97,7 @@
             "GEML", "FNN", "GSNet", "CSTN", "D2STGNN", "STID","STGODE", "STNorm", "DMSTGCN", "ESG", "SSTBAN", "STTSNet",
             "FOGS", "RGSL", "DSTAGNN", "STPGCN", "HIEST", "STAEformer", "TESTAM", "MultiSPANS", "SimST", "TimeMixer",
             "MegaCRN", "Trafformer", "STSSL", "STWave",  "PDFormer", "STGNCDE", "ASTGNN", "ASTGNNCommon", "FreTS", "PatchSTG",
-            "LSTGAN", "MLCAFormer", "TimerXL", "RSTIB", "GriddedTNP", "EAC", "SRSNet", "STSSDL", "PatchTST", "UniST","Uni2TS","BigST"
+            "LSTGAN", "MLCAFormer", "TimerXL", "RSTIB", "GriddedTNP", "EAC", "SRSNet", "STSSDL", "PatchTST", "STDMAE", "UniST","Uni2TS","BigST"
         ],
         "allowed_dataset": [
             "ANTWERP", "Bangkok", "Barcelona",
@@ -531,6 +531,11 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "PatchTST": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "STDMAE": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

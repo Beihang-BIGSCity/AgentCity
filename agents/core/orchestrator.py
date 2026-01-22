@@ -70,10 +70,14 @@ class AgentOrchestrator:
             context = build_default_context(self.paths)
             context.search_terms = list(search_terms or [])
             context.selected_papers = list(selected_papers or [])
-            normalized_year, year_label, year_value = resolve_year_filter(year_filter)
+
+            normalized_year, year_label, year_value, year_start, year_end = resolve_year_filter(year_filter)
+
             context.search_year_mode = normalized_year
-            context.search_year_label = f"{year_label}{f'（{year_value}）' if year_value else ''}".strip()
+            context.search_year_label = year_label
             context.search_year_value = year_value
+            context.search_year_start = year_start
+            context.search_year_end = year_end
             conference_list = [
                 entry.strip()
                 for entry in (conference_filters or [])

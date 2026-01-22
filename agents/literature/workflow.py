@@ -1,45 +1,48 @@
+"""Literature search workflow using multi-agent coordination.
+
+This workflow uses a lead agent to coordinate specialized subagents for
+paper searching, evaluation, and analysis.
+"""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List
+from agents.core.types import MultiAgentStage, WorkflowDefinition
+from agents.core.agent_registry import build_literature_agents
 
-from agents.core.types import StageDefinition, WorkflowDefinition
-
-from .analyze_agent import PaperAnalyzeAgent
-from .search_agent import PaperSearchStageAgent
-
-
-@dataclass
-class LiteratureMASAgent:
-    """Small descriptor for MAS agent assembly in the literature workflow."""
-
-    name: str
-    stage: StageDefinition
-
-
-def build_literature_agents() -> List[LiteratureMASAgent]:
-    """Return the MAS agent roster (paper search + paper analyze)."""
-
-    search_agent = LiteratureMASAgent(
-        name="paper_search_agent",
-        stage=PaperSearchStageAgent().build_stage(),
-    )
-    analyze_agent = LiteratureMASAgent(
-        name="paper_analyze_agent",
-        stage=PaperAnalyzeAgent().build_stage(),
-    )
-    return [search_agent, analyze_agent]
+from .prompts.lead_agent import build_literature_lead_prompt
 
 
 def get_literature_workflow() -> WorkflowDefinition:
-    """Return the MAS-based workflow chaining the search and analyze agents."""
+    """Return the multi-agent literature search and analysis workflow.
 
-    agents = build_literature_agents()
+    The workflow consists of a single MultiAgentStage where a lead agent
+    coordinates three specialized subagents:
+    - paper-searcher: Searches academic databases
+    - paper-evaluator: Scores paper relevance
+    - paper-analyzer: Downloads and analyzes PDFs
+    """
+
     return WorkflowDefinition(
         name="literature_mas",
-        description="MAS workflow that invokes the Claude paper search agent then the Claude paper analyze agent.",
-        stages=[agent.stage for agent in agents],
+        description=(
+            "Multi-agent workflow for academic paper discovery. "
+            "A lead agent coordinates searcher, evaluator, and analyzer subagents "
+            "to find, score, and catalog relevant papers."
+        ),
+        stages=[
+            MultiAgentStage(
+                key="literature_search",
+                title="Literature Search & Analysis",
+                description=(
+                    "Coordinate paper search, relevance evaluation, and PDF analysis "
+                    "using specialized subagents."
+                ),
+                lead_agent_prompt_builder=build_literature_lead_prompt,
+                agents=build_literature_agents,  # Will be called with context
+                lead_model="sonnet",
+            )
+        ],
     )
 
 
-__all__ = ["get_literature_workflow", "build_literature_agents"]
+__all__ = ["get_literature_workflow"]

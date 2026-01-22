@@ -289,12 +289,13 @@ async def evaluate_paper_relevance(args):
 
 @tool(
     "test_migration",
-    "Run the LibCity benchmark with the provided model and dataset",
-    {"model_name": str, "dataset": str, "paper_title": str},
+    "Run the LibCity benchmark with the provided model and dataset (supports GPU acceleration)",
+    {"model_name": str, "dataset": str, "paper_title": str, "gpu": str},
 )
 async def test_migration(args):
     model_name = args.get("model_name")
     dataset = args.get("dataset", "PEMSD8")
+    gpu = args.get("gpu", "0")  # Default to cuda:0
     if not model_name:
         return {
             "content": [
@@ -315,6 +316,8 @@ async def test_migration(args):
         model_name,
         "--dataset",
         dataset,
+        "--gpu_id",
+        gpu,
     ]
     stdout = ""
     stderr = ""
@@ -374,7 +377,7 @@ async def test_migration(args):
 
 @tool(
     "tune_migration_model",
-    "Hyperparameter tuning for migrated LibCity models",
+    "Hyperparameter tuning for migrated LibCity models (supports GPU acceleration)",
     {
         "model_name": str,
         "dataset": str,
@@ -387,6 +390,7 @@ async def test_migration(args):
         "max_trials": int,
         "saved_model": bool,
         "train": bool,
+        "gpu": str,
         "extra_cli_args": dict,
     },
 )
@@ -404,6 +408,7 @@ async def tune_migration_model(args):
 
     dataset = args.get("dataset", "PEMSD8")
     task = args.get("task", "traffic_state_pred")
+    gpu = args.get("gpu", "0")  # Default to cuda:0
     config_file = args.get("config_file")
     hyper_algo = args.get("hyper_algo")
     raw_search_space = args.get("search_space")
@@ -447,6 +452,7 @@ async def tune_migration_model(args):
                 max_evals=max_evals,
                 saved_model=saved_model,
                 train=train_flag,
+                gpu_id=gpu,
                 extra_cli_args=cli_args,
             )
             if libcity_result.get("status") == "success":
@@ -466,6 +472,7 @@ async def tune_migration_model(args):
                 task=task,
                 config_file=config_file,
                 max_trials=max_trials,
+                gpu_id=gpu,
             )
         except Exception as exc:
             return {

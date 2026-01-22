@@ -37,6 +37,7 @@ from libcity.model.traffic_speed_prediction.PatchTST import PatchTST
 from libcity.model.traffic_speed_prediction.UniST import UniST
 from libcity.model.traffic_speed_prediction.Uni2TS import Uni2TS
 from libcity.model.traffic_speed_prediction.BigST import BigST
+from libcity.model.traffic_speed_prediction.STDMAE import STDMAE
 
 __all__ = [
     "DCRNN",
@@ -78,4 +79,5 @@ __all__ = [
     "UniST",
     "Uni2TS",
     "BigST",
+    "STDMAE",
 ]

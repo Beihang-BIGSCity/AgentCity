@@ -31,7 +31,17 @@ def build_analyze_agent_prompt(context: AgentContext) -> str:
         if context.search_terms
         else "Not specified; cover canonical traffic forecasting topics and scan ICLR/ICML/NeurIPS venues."
     )
-    year_filter = context.search_year_label or "All"
+    # Build year filter string with range support
+    if context.search_year_start and context.search_year_end:
+        if context.search_year_start == context.search_year_end:
+            year_filter = f"{context.search_year_start} only"
+        else:
+            year_filter = f"{context.search_year_start} to {context.search_year_end}"
+    elif context.search_year_value:
+        year_filter = f"{context.search_year_value} only"
+    else:
+        year_filter = "All years"
+
     conferences_payload = context.search_conference_filters or context.conferences
     conference_hint = json.dumps(conferences_payload, ensure_ascii=False)
     candidates = context.paper_candidates or []

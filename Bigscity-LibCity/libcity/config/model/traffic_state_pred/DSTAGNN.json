@@ -1,17 +1,86 @@
 {
-  "max_epoch": 100,
+  "model_name": "DSTAGNN",
+
+  "comment_model": "Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting (ICML 2022)",
+  "comment_paper": "Lan et al. ICML 2022. Reference: https://github.com/SYLan2019/DSTAGNN",
+
+  "comment_architecture_parameters": "These parameters control the model architecture",
+  "in_channels": 1,
+  "comment_in_channels": "Input feature dimension (usually 1 for traffic speed/flow)",
+
+  "nb_block": 4,
+  "comment_nb_block": "Number of DSTAGNN blocks (stacked residual blocks). Paper default: 4",
+
+  "K": 3,
+  "comment_K": "Order of Chebyshev polynomials for graph convolution. Paper default: 3",
+
+  "nb_chev_filter": 32,
+  "comment_nb_chev_filter": "Output channels from Chebyshev graph convolution. Paper default: 32",
+
+  "nb_time_filter": 32,
+  "comment_nb_time_filter": "Output channels from temporal convolution (GTU). Paper default: 32",
+
+  "d_model": 512,
+  "comment_d_model": "Attention model dimension for temporal and spatial attention. Paper default: 512",
+
+  "d_k": 32,
+  "comment_d_k": "Key/query/value dimension in attention layers. Paper default: 32",
+
+  "n_heads": 3,
+  "comment_n_heads": "Number of attention heads. Paper default: 3 (must divide d_model evenly)",
+
+  "graph_use": "AG",
+  "comment_graph_use": "Graph type to use. 'G'=static adjacency matrix, 'AG'=adaptive graph with STAG/STRG. Paper default: AG",
+
+  "comment_training_parameters": "Training hyperparameters",
+  "max_epoch": 110,
+  "comment_max_epoch": "Maximum training epochs. Paper default: 110",
 
   "learner": "adam",
-  "learning_rate": 0.0001,
-  "use_early_stop": false,
+  "comment_learner": "Optimizer type. Paper uses Adam",
 
-  "in_channels": 1,
-  "nb_block": 4,
-  "K": 3,
-  "nb_chev_filter": 32,
-  "nb_time_filter": 32,
-  "d_model": 512,
-  "d_k": 32,
-  "n_heads": 3,
-  "graph_use": "AG"
+  "learning_rate": 0.0001,
+  "comment_learning_rate": "Initial learning rate for Adam optimizer. Paper default: 0.0001",
+
+  "lr_decay": false,
+  "comment_lr_decay": "Whether to apply learning rate decay during training",
+
+  "clip_grad_norm": false,
+  "comment_clip_grad_norm": "Whether to apply gradient clipping to prevent exploding gradients",
+
+  "use_early_stop": false,
+  "comment_use_early_stop": "Whether to use early stopping based on validation loss",
+
+  "comment_data_parameters": "Dataset and data loading parameters",
+  "batch_size": 32,
+  "comment_batch_size": "Training batch size. Paper default: 32",
+
+  "scaler": "standard",
+  "comment_scaler": "Feature scaling method: standard (z-score), minmax, etc.",
+
+  "load_external": false,
+  "comment_load_external": "Whether to load external features (e.g., POI, weather)",
+
+  "normal_external": false,
+  "comment_normal_external": "Whether to normalize external features",
+
+  "ext_scaler": "none",
+  "comment_ext_scaler": "Scaler for external features if load_external=true",
+
+  "add_time_in_day": false,
+  "comment_add_time_in_day": "Whether to add time-of-day features (hour embeddings)",
+
+  "add_day_in_week": false,
+  "comment_add_day_in_week": "Whether to add day-of-week features",
+
+  "comment_reduced_capacity": "For memory-limited scenarios, use these settings:",
+  "comment_reduced_setup": "nb_block=2, nb_chev_filter=16, nb_time_filter=16, d_model=256, d_k=16, n_heads=2, batch_size=16",
+
+  "comment_expected_performance": "PEMS04 dataset (from ICML 2022 paper):",
+  "comment_mae": "MAE: 19.3",
+  "comment_rmse": "RMSE: 31.3",
+  "comment_mape": "MAPE: 12.8%",
+
+  "comment_datasets": "Recommended datasets: PEMS03, PEMS04, PEMS07, PEMS08",
+  "comment_io_format": "Input: (batch_size, T_in=12, N_nodes, F_in=1). Output: (batch_size, T_out=12, N_nodes, 1)"
 }

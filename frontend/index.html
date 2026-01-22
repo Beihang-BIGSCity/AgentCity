@@ -58,12 +58,26 @@
               </div>
             </label>
             <label class="search-field">
-              <span data-i18n="search.year.label">Year / 年份</span>
-              <select id="year-filter" name="year">
-                <option value="this_year" data-i18n="search.year.this">This Year / 今年</option>
-                <option value="last_year" data-i18n="search.year.last">Last Year / 去年</option>
-                <option value="all" data-i18n="search.year.all">All / 全部</option>
-              </select>
+              <span data-i18n="search.year.label">Year Range / 年份范围</span>
+              <div class="search-input year-range-input">
+                <input
+                  type="number"
+                  id="year-start-input"
+                  name="year_start"
+                  min="2000"
+                  max="2030"
+                  autocomplete="off"
+                />
+                <span class="year-separator">-</span>
+                <input
+                  type="number"
+                  id="year-end-input"
+                  name="year_end"
+                  min="2000"
+                  max="2030"
+                  autocomplete="off"
+                />
+              </div>
             </label>
             <label class="search-field search-field--full">
               <span data-i18n="search.conference.label">Conference / 会议（可自定义）</span>

@@ -127,6 +127,14 @@ class DSTAGNNDataset(TrafficStatePointDataset):
         all_df = np.concatenate(df_list)
         x = np.concatenate(x_list)
         y = np.concatenate(y_list)
+
+        # DSTAGNN only uses first feature (traffic_flow)
+        # Select only output_dim features to ensure compatibility
+        if self.output_dim < x.shape[-1]:
+            self._logger.info(f"Selecting first {self.output_dim} feature(s) from {x.shape[-1]} available features")
+            x = x[..., :self.output_dim]
+            y = y[..., :self.output_dim]
+
         self._logger.info("final all df shape: " + str(all_df.shape))
         self.a_adj, self.r_adj = self.gen_ag_adj(all_df)
         self._logger.info("Dataset created")
@@ -206,6 +214,18 @@ class DSTAGNNDataset(TrafficStatePointDataset):
         y_val = cat_data['y_val']
         self.a_adj = cat_data['a_adj']
         self.r_adj = cat_data['r_adj']
+
+        # Ensure cached data has correct feature dimensions
+        # This handles cases where old cache files may have more features
+        if self.output_dim < x_train.shape[-1]:
+            self._logger.warning(f"Cached data has {x_train.shape[-1]} features, selecting first {self.output_dim}")
+            x_train = x_train[..., :self.output_dim]
+            y_train = y_train[..., :self.output_dim]
+            x_val = x_val[..., :self.output_dim]
+            y_val = y_val[..., :self.output_dim]
+            x_test = x_test[..., :self.output_dim]
+            y_test = y_test[..., :self.output_dim]
+
         self._logger.info("train\t" + "x: " + str(x_train.shape) + ", y: " + str(y_train.shape))
         self._logger.info("eval\t" + "x: " + str(x_val.shape) + ", y: " + str(y_val.shape))
         self._logger.info("test\t" + "x: " + str(x_test.shape) + ", y: " + str(y_test.shape))

@@ -19,7 +19,7 @@ from agents.migration.utils import build_paper_signature
 
 class LiteratureRequest(BaseModel):
     keywords: List[str] = Field(default_factory=list)
-    year_mode: str = Field(default="this_year")
+    year_mode: str = Field(default="all")  # 默认不过滤年份
     conferences: List[str] = Field(default_factory=list)
 
 
@@ -148,9 +148,12 @@ def _resolve_selected_papers(paper_ids: List[str]) -> List[Dict[str, object]]:
 
 
 def _normalize_year_mode(value: str | None) -> str:
+    """Normalize year mode, supporting predefined modes and direct year/range values."""
     if not value:
-        return "this_year"
-    raw = value.strip().lower()
+        return "all"
+
+    raw = value.strip()
+    raw_lower = raw.lower()
     mapping = {
         "this_year": "this_year",
         "今年": "this_year",
@@ -161,7 +164,17 @@ def _normalize_year_mode(value: str | None) -> str:
         "all": "all",
         "全部": "all",
     }
-    return mapping.get(raw, "this_year")
+
+    if raw_lower in mapping:
+        return mapping[raw_lower]
+
+    if "-" in raw:
+        parts = raw.split("-")
+        if len(parts) == 2 and parts[0].strip().isdigit() and parts[1].strip().isdigit():
+            return raw
+    if raw.isdigit():
+        return raw
+    return "all"
 
 
 @app.get("/")
@@ -212,7 +225,9 @@ async def enqueue_literature_job(request: LiteratureRequest):
     keywords = [word.strip() for word in request.keywords if word.strip()]
     if not keywords:
         raise HTTPException(status_code=400, detail="keywords are required")
+
     year_mode = _normalize_year_mode(request.year_mode)
+
     conferences = [word.strip() for word in request.conferences if word.strip()]
 
     async def runner():
