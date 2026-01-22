@@ -41,6 +41,7 @@ class TrajLocPredEvaluator(AbstractEvaluator):
         """
         if not isinstance(batch, dict):
             raise TypeError('evaluator.collect input is not a dict of user')
+        #import pdb; pdb.set_trace()
         if(type(self.topk) == type(0)):
             hit, rank, dcg = top_k(batch['loc_pred'], batch['loc_true'], self.topk)
             total = len(batch['loc_true'])

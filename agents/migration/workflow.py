@@ -3,7 +3,6 @@ from __future__ import annotations
 from agents.core.types import StageDefinition, WorkflowDefinition
 
 from .prompts import (
-    build_metrics_prompt,
     build_migration_prompt,
     build_validation_prompt,
 )
@@ -24,13 +23,7 @@ def get_migration_workflow() -> WorkflowDefinition:
             title="Verification",
             description="Run training/evaluation flows and capture logs.",
             prompt_builder=build_validation_prompt,
-        ),
-        StageDefinition(
-            key="metrics",
-            title="Metrics Review",
-            description="Report metrics and compare against papers.",
-            prompt_builder=build_metrics_prompt,
-        ),
+        )
     ]
     return WorkflowDefinition(
         name="migration",

@@ -63,14 +63,30 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
     model_cache_file = './libcity/cache/{}/model_cache/{}_{}.m'.format(
         exp_id, model_name, dataset_name)
     model = get_model(config, data_feature)
+    if model_name == 'UniST':
+        print('Loading pretrained weights for UniST...')
+        ckpt = torch.load('model_Emb.pkl')
+        new_ckpt = {'model.' + k: v for k, v in ckpt.items()}
+        filtered_dict = {}
+        model_dict = model.state_dict()
+        for k, v in new_ckpt.items():
+            if k in model_dict and v.shape == model_dict[k].shape:
+                filtered_dict[k] = v
+            else:
+                print(f"[SKIP] {k}: checkpoint shape {v.shape} != model shape {model_dict[k].shape if k in model_dict else 'NOT FOUND'}")
+        model.load_state_dict(filtered_dict,strict=False)
+        print('Pretrained weights loaded.')
     executor = get_executor(config, model, data_feature)
     # 训练
-    if train or not os.path.exists(model_cache_file):
+    if train:
         executor.train(train_data, valid_data)
         if saved_model:
             executor.save_model(model_cache_file)
     else:
-        executor.load_model(model_cache_file)
+        try:
+            executor.load_model(model_cache_file)
+        except FileNotFoundError:
+            print('No saved model found at {}.'.format(model_cache_file))
     # 评估，评估结果将会放在 cache/evaluate_cache 下
     executor.evaluate(test_data)
 

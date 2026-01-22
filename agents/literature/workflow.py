@@ -37,7 +37,7 @@ def get_literature_workflow() -> WorkflowDefinition:
     agents = build_literature_agents()
     return WorkflowDefinition(
         name="literature_mas",
-        description="MAS workflow that invokes the PaSa paper search agent then the Claude paper analyze agent.",
+        description="MAS workflow that invokes the Claude paper search agent then the Claude paper analyze agent.",
         stages=[agent.stage for agent in agents],
     )
 

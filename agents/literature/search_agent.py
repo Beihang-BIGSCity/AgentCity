@@ -1,13 +1,12 @@
 from __future__ import annotations
-import re
-import asyncio
-import logging
+
+import json
 from dataclasses import dataclass
-from typing import Dict, List, Sequence, Set
+from textwrap import dedent
+from typing import List
 
 from agents.core.types import AgentContext, StageDefinition
 
-from .pasa_adapter import PaSaSearchRunner
 
 DEFAULT_KEYWORDS = [
     "traffic state prediction",
@@ -17,134 +16,146 @@ DEFAULT_KEYWORDS = [
 
 @dataclass
 class PaperSearchStageAgent:
-    """MAS agent descriptor for PaSa-based crawling."""
+    """Claude-driven MAS agent for paper search."""
 
     key: str = "paper_search_agent"
     title: str = "Paper Search Agent"
-    description: str = "MAS agent: PaSa crawler producing candidate papers."
+    description: str = "MAS agent: Claude searches for relevant papers using search_paper tool."
 
     def build_stage(self) -> StageDefinition:
         return StageDefinition(
             key=self.key,
             title=self.title,
             description=self.description,
-            runner=run_paper_search_stage,
+            prompt_builder=build_search_agent_prompt,
         )
 
 
+def build_search_agent_prompt(context: AgentContext) -> str:
+    """Build prompt for the Claude-driven paper search agent.
+
+    This prompt incorporates the core logic from the original PaSa prompts:
+    - generate_query: Generate search queries based on user query
+    - get_selected/get_value: Evaluate paper relevance
+    """
+
+    # Build search keywords
+    keywords = [term.strip() for term in context.search_terms if term.strip()]
+    if keywords:
+        keywords.extend(DEFAULT_KEYWORDS)
+    else:
+        keywords = list(DEFAULT_KEYWORDS)
+
+    keywords_str = ", ".join(keywords)
+
+    # Conference constraints
+    conferences_payload = context.search_conference_filters or context.conferences
+    conference_str = ", ".join(conferences_payload) if conferences_payload else "All major AI/ML conferences"
+
+    # Year filter
+    year_info = ""
+    if context.search_year_value:
+        year_info = f"Focus on papers from year {context.search_year_value}."
+    elif context.target_year:
+        year_info = f"Focus on papers from year {context.target_year} or recent years."
+    else:
+        year_info = "Include papers from recent years (preferably 2020-2025)."
+
+    return dedent(
+        f"""
+        You are an elite Academic Research Assistant specializing in Spatio-Temporal Data Mining (STDM) and Traffic Prediction.
+
+        ## Your Task
+        Search for relevant academic papers based on the user's research interests and build a candidate list for further analysis.
+
+        ## User Query and Search Constraints
+        - **Research Keywords**: {keywords_str}
+        - **Target Conferences**: {conference_str}
+        - **Year Constraint**: {year_info}
+
+        ## Instructions
+
+        ### Step 1: Generate Search Queries
+        Based on the research keywords, generate multiple diverse and mutually exclusive search queries to maximize coverage:
+        - Include both specific technical terms and broader topic terms
+        - Consider different aspects: methods (deep learning, graph neural networks, transformers), applications (traffic forecasting, urban computing), and data types (spatial-temporal data, time series)
+        - Searching for survey papers can help discover more related work
+
+        Example queries you might generate:
+        - "spatial-temporal graph neural network traffic prediction"
+        - "deep learning urban traffic forecasting"
+        - "transformer time series forecasting survey"
+
+        ### Step 2: Execute Searches
+        Use the `search_paper` tool to search for papers. Call it multiple times with different queries to get comprehensive results.
+
+        Tool parameters:
+        - `query`: Your search query string
+        - `num`: Number of results to retrieve (recommend 10-15 per query)
+        - `end_date`: Optional date filter in YYYYMMDD format
+
+        ### Step 3: Evaluate Relevance
+        For each paper found, evaluate whether it satisfies the user's research needs:
+
+        **Evaluation Criteria** (from original PaSa prompts):
+        - Does the paper fully satisfy the detailed requirements of the user query?
+        - Is the paper relevant to spatial-temporal data mining or traffic prediction?
+        - Does it present novel methods, datasets, or significant experimental results?
+
+        Provide a relevance score (0-10) and brief reasoning for each paper.
+
+        ### Step 4: Compile Results
+        After searching and evaluating, compile a final list of candidate papers in JSON format:
+
+        ```json
+        [
+            {{
+                "title": "Paper Title",
+                "arxiv_id": "2401.12345",
+                "abstract": "Brief abstract...",
+                "abs_url": "https://arxiv.org/abs/2401.12345",
+                "pdf_url": "https://arxiv.org/pdf/2401.12345.pdf",
+                "year": 2024,
+                "relevance_score": 8,
+                "relevance_reason": "Highly relevant because..."
+            }}
+        ]
+        ```
+
+        ## Output Requirements
+        1. Execute at least 3-5 different search queries
+        2. Aim to find 15-30 relevant candidate papers
+        3. Rank papers by relevance score (highest first)
+        4. Provide a summary of the search process and key findings
+        5. The final JSON candidate list should be clearly marked for the next stage to process
+
+        ## Important Notes
+        - Focus on finding papers that could contribute to traffic forecasting benchmark studies
+        - Prioritize papers with available code repositories
+        - Include both foundational works and recent state-of-the-art methods
+        - If a query returns no results, try alternative formulations
+
+        Begin your paper search now. Start by generating your search queries, then execute them systematically.
+        """
+    ).strip()
+
+
+# Keep backward compatibility exports
 class PaperSearchAgent:
-    """Runs PaSa searches and returns deduplicated paper candidates."""
+    """Deprecated: Use PaperSearchStageAgent instead. This class exists for backward compatibility."""
 
-    def __init__(
-        self,
-        *,
-        runner: PaSaSearchRunner | None = None,
-        max_results: int = 25,
-        max_queries: int = 6,
-        max_conference_combos: int = 3,
-        logger: logging.Logger | None = None,
-    ) -> None:
-        self.runner = runner or PaSaSearchRunner()
-        self.max_results = max(5, max_results)
-        self.max_queries = max(1, max_queries)
-        self.max_conference_combos = max(1, max_conference_combos)
-        self.logger = logger or logging.getLogger(__name__)
-
-    def search(self, context: AgentContext) -> List[Dict[str, object]]:
-        keywords = [term.strip() for term in context.search_terms if term.strip()]
-        if keywords:
-            keywords.extend(DEFAULT_KEYWORDS)
-        else:
-            keywords = list(DEFAULT_KEYWORDS)
-        conferences: Sequence[str] = (
-            context.search_conference_filters or context.conferences
+    def __init__(self, **kwargs):
+        import warnings
+        warnings.warn(
+            "PaperSearchAgent is deprecated. Use PaperSearchStageAgent with Claude SDK instead.",
+            DeprecationWarning,
+            stacklevel=2
         )
-        year_filter = context.search_year_mode
-        queries = self._build_queries(
-            keywords,
-            conferences,
-            context.search_year_value or context.target_year,
+
+    def search(self, context: AgentContext) -> List[dict]:
+        raise NotImplementedError(
+            "Direct search is no longer supported. Use the Claude-driven PaperSearchStageAgent instead."
         )
-        aggregated: List[Dict[str, object]] = []
-        seen: Set[str] = set()
-        for query in queries:
-            try:
-                query = re.sub(r"\s*\[\s*|\s*\]\s*", " ", query).strip()
-                results = self.runner.search(
-                    query,
-                    max_results=self.max_results,
-                    year_filter=year_filter,
-                    conference_filters=conferences,
-                )
-                print(f"PaSa search for query '{query}' returned {len(results)} results.")
-            except Exception as exc:  # pragma: no cover - PaSa runtime errors
-                self.logger.warning("Paper search failed for %s: %s", query, exc)
-                continue
-            for item in results:
-                identifier = item.get("arxiv_id") or item.get("title")
-                if not identifier or identifier in seen:
-                    continue
-                seen.add(identifier)
-                aggregated.append(item)
-        return aggregated
-
-    def _build_queries(
-        self,
-        keywords: Sequence[str],
-        conferences: Sequence[str],
-        year_value: int | None,
-    ) -> List[str]:
-        queries: List[str] = []
-        seen: Set[str] = set()
-
-        def add_query(candidate: str) -> None:
-            normalized = candidate.strip()
-            if not normalized or normalized in seen:
-                return
-            seen.add(normalized)
-            if len(queries) < self.max_queries:
-                queries.append(normalized)
-
-        def with_year(term: str) -> str:
-            return f"{term} {year_value}".strip() if year_value else term
-
-        combo = with_year(f"{conferences[: self.max_conference_combos]} {keywords} ")
-        add_query(combo)
-
-        if not queries:
-            add_query(with_year("traffic forecasting"))
-        return queries
 
 
-_SEARCH_AGENT: PaperSearchAgent | None = None
-
-
-def _get_search_agent() -> PaperSearchAgent:
-    global _SEARCH_AGENT
-    if _SEARCH_AGENT is None:
-        _SEARCH_AGENT = PaperSearchAgent()
-    return _SEARCH_AGENT
-
-
-async def run_paper_search_stage(context: AgentContext, stage: StageDefinition) -> str:
-    """Stage runner that populates context.paper_candidates with PaSa results."""
-
-    agent = _get_search_agent()
-    results = await asyncio.to_thread(agent.search, context)
-    context.paper_candidates = results
-    if not results:
-        return "Paper search agent did not locate any matching arXiv papers."
-    #print(results)
-    lines = [
-        f"- {item.get('title', 'Untitled')} :: {item.get('abs_url') or item.get('pdf_url') or 'N/A'}"
-        for item in results[: min(10, len(results))]
-    ]
-    summary = [
-        f"Paper search agent located {len(results)} candidate papers for review.",
-        "Top matches:",
-        *lines,
-    ]
-    return "\n".join(summary)
-
-
-__all__ = ["PaperSearchAgent", "PaperSearchStageAgent", "run_paper_search_stage"]
+__all__ = ["PaperSearchStageAgent", "PaperSearchAgent", "build_search_agent_prompt"]

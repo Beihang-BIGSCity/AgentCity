@@ -41,11 +41,14 @@ class AgentOrchestrator:
                 "Grep",
                 "Glob",
                 "WebSearch",
+                "search_paper",
+                "evaluate_paper_relevance",
                 "catalog_article",
                 "test_migration",
                 "tune_migration_model",
             ],
             permission_mode="bypassPermissions",
+            setting_sources=["project"],  # Load skills (pdf) and plugins (ralph-wiggum) from .claude directory
         )
 
     async def run_workflows(

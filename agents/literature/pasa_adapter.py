@@ -1,5 +1,12 @@
+"""
+DEPRECATED: This module is deprecated and will be removed in a future version.
+
+The paper search functionality has been migrated to use Claude SDK instead of PaSa.
+Please use the new implementation in search_agent.py with PaperSearchStageAgent.
+"""
 from __future__ import annotations
 
+import warnings
 import os
 from dataclasses import dataclass
 from datetime import datetime
@@ -7,6 +14,12 @@ from pathlib import Path
 from threading import Lock
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, TYPE_CHECKING
 import re
+
+warnings.warn(
+    "pasa_adapter is deprecated. Paper search is now handled by Claude SDK via PaperSearchStageAgent.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 if TYPE_CHECKING:  # pragma: no cover - imported lazily at runtime
     from pasa.paper_agent import PaperAgent

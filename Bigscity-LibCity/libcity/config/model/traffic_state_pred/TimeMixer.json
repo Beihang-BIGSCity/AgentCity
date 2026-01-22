@@ -13,5 +13,6 @@
   "decomp_method": "moving_avg",
   "moving_avg": 25,
   "dropout": 0.1,
-  "top_k": 5
+  "top_k": 5,
+  "max_epoch": 20
 }

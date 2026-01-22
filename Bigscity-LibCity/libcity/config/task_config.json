@@ -1,7 +1,7 @@
 {
     "traj_loc_pred": {
-        "allowed_model": ["DeepMove", "RNN", "LSTM", "GRU", "FPMC", "LSTPM", "STRNN", "SERM", "TemplateTLP", "ATSTLSTM", "HSTLSTM", "STAN", "CARA", "GeoSAN"],
-        "allowed_dataset": ["foursquare_tky", "foursquare_nyc", "gowalla", "foursquare_serm"],
+        "allowed_model": ["DeepMove", "RNN", "LSTM", "GRU", "FPMC", "LSTPM", "STRNN", "SERM", "TemplateTLP", "ATSTLSTM", "HSTLSTM", "STAN", "CARA", "GeoSAN", "LightPath"],
+        "allowed_dataset": ["foursquare_tky", "foursquare_nyc", "gowalla", "foursquare_serm", "Proto", "LightPath"],
         "GeoSAN": {
             "dataset_class": "GeoSANDataset",
             "executor": "GeoSANExecutor",
@@ -79,6 +79,12 @@
             "executor": "TrajLocPredExecutor",
             "evaluator": "CARALocPredEvaluator",
             "traj_encoder": "CARATrajectoryEncoder"
+        },
+        "LightPath": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
         }
     },
     "traffic_state_pred": {
@@ -91,9 +97,10 @@
             "GEML", "FNN", "GSNet", "CSTN", "D2STGNN", "STID","STGODE", "STNorm", "DMSTGCN", "ESG", "SSTBAN", "STTSNet",
             "FOGS", "RGSL", "DSTAGNN", "STPGCN", "HIEST", "STAEformer", "TESTAM", "MultiSPANS", "SimST", "TimeMixer",
             "MegaCRN", "Trafformer", "STSSL", "STWave",  "PDFormer", "STGNCDE", "ASTGNN", "ASTGNNCommon", "FreTS", "PatchSTG",
-            "LSTGAN", "MLCAFormer", "TimerXL", "RSTIB", "GriddedTNP", "EAC", "SRSNet", "STSSDL"
+            "LSTGAN", "MLCAFormer", "TimerXL", "RSTIB", "GriddedTNP", "EAC", "SRSNet", "STSSDL", "PatchTST", "UniST","Uni2TS","BigST"
         ],
         "allowed_dataset": [
+            "ANTWERP", "Bangkok", "Barcelona",
             "METR_LA", "PEMS_BAY", "PEMSD3", "PEMSD4", "PEMSD7", "PEMSD8", "PEMSD7(M)",
             "LOOP_SEATTLE", "LOS_LOOP", "LOS_LOOP_SMALL", "Q_TRAFFIC", "SZ_TAXI",
             "NYCBike20140409", "NYCBike20160708", "NYCBike20160809", "NYCTaxi20140112",
@@ -154,7 +161,7 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "TimeMixer": {
-            "dataset_class": "TrafficStatePointDataset",
+            "dataset_class": "TrafficStateGridDataset",
             "executor": "TimeMixerExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
@@ -304,7 +311,7 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "GRU": {
-            "dataset_class": "TrafficStatePointDataset",
+            "dataset_class": "TrafficStateGridDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
@@ -479,7 +486,7 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "STID": {
-            "dataset_class": "TrafficStatePointDataset",
+            "dataset_class": "TrafficStateGridDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
@@ -520,6 +527,26 @@
         },
         "STSSDL": {
             "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "PatchTST": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "UniST": {
+            "dataset_class": "TrafficStateGridDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "Uni2TS": {
+            "dataset_class": "TrafficStateGridDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "BigST": {
+            "dataset_class": "TrafficStateGridDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         }

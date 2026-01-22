@@ -41,27 +41,25 @@ args = parser.parse_args()
 crawler = Agent(args.crawler_path)
 selector = Agent(args.selector_path)
 
-with open(args.input_file) as f:
-    for idx, line in enumerate(f.readlines()):
-        data = json.loads(line)
-        end_date = data['source_meta']['published_time']
-        end_date = datetime.strptime(end_date, "%Y%m%d") - timedelta(days=7)
-        end_date = end_date.strftime("%Y%m%d")
-        paper_agent = PaperAgent(
-            user_query     = data['question'], 
+user_query = "spatial-temporal data mining methods, containing machine learing, deep learning and large language model"
+
+user_query1 = "spatial-temporal data mining for traffic forecasting, urban computing, and spatial-temporal decision"
+
+user_query2 = "spatial-temporal data mining for data analysis and data fusion"
+
+paper_agent = PaperAgent(
+            user_query     = user_query, 
             crawler        = crawler,
             selector       = selector,
-            end_date       = end_date,
-            expand_layers  = args.expand_layers,
-            search_queries = args.expand_papers,
-            search_papers  = args.search_papers,
-            expand_papers  = args.expand_papers,
+            end_date       = 2025,
+            expand_layers  = 3,
+            search_queries = 20,
+            search_papers  = 50,
+            expand_papers  = 20,
             threads_num    = args.threads_num
         )
-        if "answer" in data:
-            paper_agent.root.extra["answer"] = data["answer"]
         
-        paper_agent.run()
+paper_agent.run()
         
-        if args.output_folder != "":
-            json.dump(paper_agent.root.todic(), open(os.path.join(f"result.json"), "w"), indent=2)
+if args.output_folder != "":
+    json.dump(paper_agent.root.todic(), open(os.path.join(f"result.json"), "w"), indent=2)

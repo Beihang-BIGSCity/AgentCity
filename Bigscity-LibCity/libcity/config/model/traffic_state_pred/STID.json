@@ -13,11 +13,13 @@
   "ext_scaler": "none",
   "add_time_in_day": true,
   "add_day_in_week": true,
-  "max_epoch": 100,
+  "max_epoch": 20,
   "learner": "adam",
   "learning_rate": 0.001,
   "lr_decay": false,
   "clip_grad_norm": true,
   "max_grad_norm": 5,
-  "use_early_stop": false
+  "use_early_stop": false,
+  "input_window": 12,
+  "output_window": 12
 }

@@ -42,7 +42,8 @@ def build_analyze_agent_prompt(context: AgentContext) -> str:
     )
     return dedent(
         f"""
-        Stage: Paper Analyze (MAS Agent)
+        You are an elite Academic Research Assistant specializing in Spatio-Temporal Data Mining (STDM) and Traffic Prediction.
+        
         Goal: Using the candidate list returned by the paper search agent, download, catalog, and analyze every traffic forecasting paper from {conferences}.
 
         User-provided keywords: {keywords}
@@ -60,7 +61,7 @@ def build_analyze_agent_prompt(context: AgentContext) -> str:
            - Every dataset and evaluation metric mentioned.
            - The official GitHub repository URL. If none exists, explicitly note it.
         4. After documenting a paper, call `catalog_article` so {context.article_catalog} stays synchronized.
-        5. Produce a markdown table listing all analyzed papers with columns ["title","conference","year","track","pdf_link","pdf_path","datasets","metrics","repo_url","keywords"].
+        5. Produce a markdown table listing all analyzed papers with columns ["title","conference","year","track","pdf_link","pdf_path","datasets","metrics_values","experiment_setting","repo_url","keywords"].
         6. Summarize all saved PDF paths plus any missing information (e.g., repository absent, datasets unclear).
 
         Deliverables: the markdown table, PDF download confirmations, catalog updates, and any follow-up recommendations.

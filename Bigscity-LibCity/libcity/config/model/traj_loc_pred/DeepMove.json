@@ -8,7 +8,7 @@
     "dropout_p": 0.5,
     "learning_rate": 0.001,
     "lr_step": 3,
-    "max_epoch": 30,
+    "max_epoch": 1,
     "optimizer": "adam",
     "window_size": 72
 }

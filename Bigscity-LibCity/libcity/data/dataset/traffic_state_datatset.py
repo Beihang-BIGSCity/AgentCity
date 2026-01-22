@@ -789,6 +789,7 @@ class TrafficStateDataset(AbstractDataset):
         x_list, y_list = [], []
         for filename in data_files:
             df = self._load_dyna(filename)  # (len_time, ..., feature_dim)
+            print(df.shape)
             if self.load_external:
                 df = self._add_external_information(df, ext_data)
             x, y = self._generate_input_data(df)

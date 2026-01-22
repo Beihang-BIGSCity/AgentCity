@@ -212,6 +212,7 @@ class TrajectoryDataset(AbstractDataset):
         """
         encoded_data = {}
         for uid in tqdm(data, desc="encoding trajectory"):
+            #import pdb; pdb.set_trace()
             encoded_data[uid] = self.encoder.encode(int(uid), data[uid])
         self.encoder.gen_data_feature()
         return {

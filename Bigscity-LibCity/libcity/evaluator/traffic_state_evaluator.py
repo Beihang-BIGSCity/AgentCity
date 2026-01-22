@@ -44,6 +44,7 @@ class TrafficStateEvaluator(AbstractEvaluator):
             raise TypeError('evaluator.collect input is not a dict of user')
         y_true = batch['y_true']  # tensor
         y_pred = batch['y_pred']  # tensor
+        #import pdb; pdb.set_trace()
         if y_true.shape != y_pred.shape:
             raise ValueError("batch['y_true'].shape is not equal to batch['y_pred'].shape")
         self.len_timeslots = y_true.shape[1]
@@ -121,10 +122,10 @@ class TrafficStateEvaluator(AbstractEvaluator):
                             loss.masked_mape_torch(y_pred[:, i - 1], y_true[:, i - 1]).item())
                     elif metric == 'R2':
                         self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.r2_score_torch(y_pred[:, i - 1], y_true[:, i - 1]).item())
+                            loss.r2_score_torch(y_pred[:, i - 1], y_true[:, i - 1]))
                     elif metric == 'EVAR':
                         self.intermediate_result[metric + '@' + str(i)].append(
-                            loss.explained_variance_score_torch(y_pred[:, i - 1], y_true[:, i - 1]).item())
+                            loss.explained_variance_score_torch(y_pred[:, i - 1], y_true[:, i - 1]))
         else:
             raise ValueError('Error parameter evaluator_mode={}, please set `single` or `average`.'.format(self.mode))
 

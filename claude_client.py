@@ -145,51 +145,147 @@ async def catalog_article(args):
     }
 
 
+def _fetch_arxiv_metadata(arxiv_id: str) -> Dict[str, Any] | None:
+    """Fetch paper metadata from arXiv API."""
+    try:
+        api_url = f"http://export.arxiv.org/api/query?id_list={arxiv_id}"
+        resp = requests.get(api_url, timeout=10)
+        if resp.status_code != 200:
+            return None
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(resp.text)
+        ns = {"atom": "http://www.w3.org/2005/Atom"}
+        entry = root.find("atom:entry", ns)
+        if entry is None:
+            return None
+        title_el = entry.find("atom:title", ns)
+        abstract_el = entry.find("atom:summary", ns)
+        published_el = entry.find("atom:published", ns)
+        title = title_el.text.strip().replace("\n", " ") if title_el is not None else ""
+        abstract = abstract_el.text.strip().replace("\n", " ") if abstract_el is not None else ""
+        published = published_el.text.strip() if published_el is not None else ""
+        year = None
+        if published:
+            year_match = re.match(r"(\d{4})", published)
+            if year_match:
+                year = int(year_match.group(1))
+        return {
+            "arxiv_id": arxiv_id,
+            "title": title,
+            "abstract": abstract,
+            "year": year,
+            "abs_url": f"https://arxiv.org/abs/{arxiv_id}",
+            "pdf_url": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
+        }
+    except Exception:
+        return None
+
+
 @tool(
-    "google_search_arxiv_id",
-    "search for papers",
-    {"query": str, "num": int},
+    "search_paper",
+    "Search for academic papers on arXiv using Google Search API. Returns paper metadata including title, abstract, arxiv_id, and URLs.",
+    {
+        "query": str,
+        "num": int,
+        "end_date": str,
+    },
 )
-async def google_search_arxiv_id(args):
+async def search_paper(args):
+    """Search for papers and return detailed metadata."""
     url = "https://google.serper.dev/search"
     query = args.get("query")
     num = args.get("num", 10)
+    end_date = args.get("end_date")
+
+    if not query:
+        return {
+            "content": [{"type": "text", "text": "search_paper failed: query is required"}]
+        }
+
     search_query = f"{query} site:arxiv.org"
     if end_date:
         try:
-            end_date = datetime.strptime(end_date, '%Y%m%d').strftime('%Y-%m-%d')
-            search_query = f"{query} before:{end_date} site:arxiv.org"
-        except:
-            search_query = f"{query} site:arxiv.org"
-    
+            parsed_date = datetime.strptime(end_date, '%Y%m%d').strftime('%Y-%m-%d')
+            search_query = f"{query} before:{parsed_date} site:arxiv.org"
+        except Exception:
+            pass
+
     payload = json.dumps({
-        "q": search_query, 
-        "num": num, 
-        "page": 1, 
+        "q": search_query,
+        "num": num,
+        "page": 1,
     })
 
     headers = {
         'X-API-KEY': "1163e00449dce84869048401eccca059865553ff",
         'Content-Type': 'application/json'
     }
-    assert headers['X-API-KEY'] != 'your google keys', "add your google search key!!!"
+
+    papers = []
+    seen_ids = set()
 
     for _ in range(3):
         try:
             response = requests.request("POST", url, headers=headers, data=payload)
-            print(response,payload)
             if response.status_code == 200:
                 results = json.loads(response.text)
-                arxiv_id_list = []
-                for paper in results['organic']:
-                    if re.search(r'arxiv\.org/(?:abs|pdf|html)/(\d{4}\.\d+)', paper["link"]):
-                        arxiv_id = re.search(r'arxiv\.org/(?:abs|pdf|html)/(\d{4}\.\d+)', paper["link"]).group(1)
-                        arxiv_id_list.append(arxiv_id)
-                return list(set(arxiv_id_list))
-        except:
-            warnings.warn(f"google search failed, query: {query}")
+                for paper in results.get('organic', []):
+                    link = paper.get("link", "")
+                    match = re.search(r'arxiv\.org/(?:abs|pdf|html)/(\d{4}\.\d+)', link)
+                    if match:
+                        arxiv_id = match.group(1)
+                        if arxiv_id in seen_ids:
+                            continue
+                        seen_ids.add(arxiv_id)
+                        metadata = _fetch_arxiv_metadata(arxiv_id)
+                        if metadata:
+                            papers.append(metadata)
+                        else:
+                            papers.append({
+                                "arxiv_id": arxiv_id,
+                                "title": paper.get("title", ""),
+                                "abstract": paper.get("snippet", ""),
+                                "year": None,
+                                "abs_url": f"https://arxiv.org/abs/{arxiv_id}",
+                                "pdf_url": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
+                            })
+                break
+        except Exception as exc:
+            warnings.warn(f"search_paper failed: {exc}")
             continue
-    return []
+
+    if not papers:
+        return {
+            "content": [{"type": "text", "text": f"No papers found for query: {query}"}]
+        }
+
+    result_text = json.dumps(papers, ensure_ascii=False, indent=2)
+    return {
+        "content": [{"type": "text", "text": f"Found {len(papers)} papers:\n{result_text}"}]
+    }
+
+
+@tool(
+    "evaluate_paper_relevance",
+    "Evaluate whether a paper is relevant to the user query based on title and abstract.",
+    {
+        "title": str,
+        "abstract": str,
+        "user_query": str,
+    },
+)
+async def evaluate_paper_relevance(args):
+    """Placeholder tool for paper relevance evaluation. Claude should use its own judgment."""
+    title = args.get("title", "")
+    abstract = args.get("abstract", "")
+    user_query = args.get("user_query", "")
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": f"Paper evaluation request received.\nTitle: {title}\nAbstract: {abstract[:500]}...\nQuery: {user_query}\n\nPlease use your judgment to evaluate this paper's relevance."
+        }]
+    }
 
 @tool(
     "test_migration",

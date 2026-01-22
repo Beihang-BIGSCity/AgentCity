@@ -91,7 +91,33 @@ class TrajLocPredExecutor(AbstractExecutor):
         self.evaluator.clear()
         for batch in test_dataloader:
             batch.to_tensor(device=self.config['device'])
+            #import pdb; pdb.set_trace()
+            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            N, L = batch.data['current_loc'].shape
+            device = self.config['device']
+            col_indices = torch.arange(L, device=device).unsqueeze(0)
+            center = last_indices.unsqueeze(1)
+            mask = (col_indices >= (center - 2)) & (col_indices < (center + 1))
+            batch.data['current_loc'][mask] = 10497
+            true_tim = batch.data['current_tim']
+            batch.data['current_tim'][mask] = 48
+            rows = torch.arange(N, device=device)
             scores = self.model.predict(batch)
+
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            batch.data['current_loc'][rows, last_indices-1] = pred_loc.squeeze()
+            batch.data['current_tim'][rows, last_indices-1] =  true_tim[rows, last_indices-1]
+            scores = self.model.predict(batch)
+
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            batch.data['current_loc'][rows, last_indices] = pred_loc.squeeze()
+            batch.data['current_tim'][rows, last_indices] =  true_tim[rows, last_indices]
+
+            scores = self.model.predict(batch)
+
+
             if self.config['evaluate_method'] == 'popularity':
                 evaluate_input = {
                     'uid': batch['uid'].tolist(),
@@ -116,11 +142,48 @@ class TrajLocPredExecutor(AbstractExecutor):
             torch.autograd.set_detect_anomaly(True)
         total_loss = []
         loss_func = self.loss_func or model.calculate_loss
+        print("num_batchs:", len(data_loader))
         for batch in data_loader:
             # one batch, one step
             self.optimizer.zero_grad()
             batch.to_tensor(device=self.config['device'])
             loss = loss_func(batch)
+
+            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            N, L = batch.data['current_loc'].shape
+            device = self.config['device']
+            col_indices = torch.arange(L, device=device).unsqueeze(0)
+            center = last_indices.unsqueeze(1)
+            mask = (col_indices >= (center - 2)) & (col_indices < (center + 1))
+            current_loc = batch.data['current_loc'].clone()
+            current_tim = batch.data['current_tim'].clone()
+            current_loc[mask] = 10497
+            true_tim = batch.data['current_tim']
+            current_tim[mask] = 48
+            batch.data['current_loc'] = current_loc
+            batch.data['current_tim'] = current_tim
+            rows = torch.arange(N, device=device)
+            scores = self.model.predict(batch)
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            current_loc = current_loc.clone()
+            current_tim = current_tim.clone()
+            current_loc[rows, last_indices-1] = pred_loc.squeeze()
+            current_tim[rows, last_indices-1] =  true_tim[rows, last_indices-1]
+            batch.data['current_loc'] = current_loc
+            batch.data['current_tim'] = current_tim
+            scores = self.model.predict(batch)
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            current_loc = current_loc.clone()
+            current_tim = current_tim.clone()
+            current_loc[rows, last_indices] = pred_loc.squeeze()
+            current_tim[rows, last_indices] =  true_tim[rows, last_indices]
+            batch.data['current_loc'] = current_loc
+            batch.data['current_tim'] = current_tim
+            loss = loss+loss_func(batch)
+
+
             if self.config['debug']:
                 with torch.autograd.detect_anomaly():
                     loss.backward()
@@ -144,6 +207,29 @@ class TrajLocPredExecutor(AbstractExecutor):
             batch.to_tensor(device=self.config['device'])
             scores = model.predict(batch)
             loss = loss_func(batch)
+
+            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            N, L = batch.data['current_loc'].shape
+            device = self.config['device']
+            col_indices = torch.arange(L, device=device).unsqueeze(0)
+            center = last_indices.unsqueeze(1)
+            mask = (col_indices >= (center - 2)) & (col_indices < (center + 1))
+            batch.data['current_loc'][mask] = 10497
+            true_tim = batch.data['current_tim']
+            batch.data['current_tim'][mask] = 48
+            rows = torch.arange(N, device=device)
+            scores = self.model.predict(batch)
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            batch.data['current_loc'][rows, last_indices-1] = pred_loc.squeeze()
+            batch.data['current_tim'][rows, last_indices-1] =  true_tim[rows, last_indices-1]
+            scores = self.model.predict(batch)
+            pred_loc = torch.argmax(scores, dim=1)
+            #print(pred_loc)
+            batch.data['current_loc'][rows, last_indices] = pred_loc.squeeze()
+            batch.data['current_tim'][rows, last_indices] =  true_tim[rows, last_indices]
+            scores = self.model.predict(batch)
+            
             total_loss.append(loss.data.cpu().numpy().tolist())
             if self.config['evaluate_method'] == 'popularity':
                 evaluate_input = {
