@@ -121,6 +121,7 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         - Maximum 3 fix iterations per paper before marking as failed
         - Document everything in ./documentation/<model>_migration_summary.md
         - Keep responses concise between delegations
+        - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 
         Begin by delegating the clone task for the first paper to repo-cloner.
         """

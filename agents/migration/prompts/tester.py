@@ -95,4 +95,5 @@ test_migration(model="<name>", dataset="<dataset>", gpu="0")
 - Use standard datasets first (METR_LA, PEMS_BAY)
 - Capture full error traceback
 - Don't attempt fixes directly - report findings
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

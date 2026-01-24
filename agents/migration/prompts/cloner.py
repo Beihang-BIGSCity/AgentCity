@@ -51,4 +51,5 @@ Return a structured summary:
 - Report if clone fails (private repo, invalid URL, etc.)
 - Note if repository uses submodules
 - Identify the main model class name if visible
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

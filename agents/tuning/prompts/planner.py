@@ -66,4 +66,5 @@ Return a JSON search space:
 - Consider dataset size when choosing batch sizes
 - Document rationale for each parameter range
 - Keep search space tractable for grid search
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

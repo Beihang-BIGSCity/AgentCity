@@ -29,8 +29,20 @@
   "n_heads": 3,
   "comment_n_heads": "Number of attention heads. Paper default: 3 (must divide d_model evenly)",
 
-  "graph_use": "AG",
-  "comment_graph_use": "Graph type to use. 'G'=static adjacency matrix, 'AG'=adaptive graph with STAG/STRG. Paper default: AG",
+  "graph": "AG",
+  "comment_graph": "Graph type to use. 'G'=static adjacency matrix, 'AG'=adaptive graph learning. Paper default: AG",
+
+  "time_strides": 1,
+  "comment_time_strides": "Temporal stride in the first DSTAGNN block. Paper default: 1",
+
+  "d_v": 32,
+  "comment_d_v": "Value dimension in attention layers. Paper default: 32 (same as d_k)",
+
+  "input_window": 12,
+  "comment_input_window": "Input time sequence length (look-back window). Paper default: 12 (PEMS datasets)",
+
+  "output_window": 12,
+  "comment_output_window": "Output prediction horizon length. Paper default: 12 (PEMS datasets)",
 
   "comment_training_parameters": "Training hyperparameters",
   "max_epoch": 110,

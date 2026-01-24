@@ -1,0 +1,13 @@
+/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, name):
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+2026-01-22 18:03:01,549 - INFO - Log directory: ./libcity/log
+Traceback (most recent call last):
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/run_hyper.py", line 58, in <module>
+    hp = HyperTuning(objective_function, params_file=args.params_file, algo=args.hyper_algo,
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/executor/hyper_tuning.py", line 141, in __init__
+    self.space = self._build_space_from_file(params_file)
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/executor/hyper_tuning.py", line 182, in _build_space_from_file
+    raise ValueError('Illegal parameter type [{}]'.format(para_type))
+ValueError: Illegal parameter type [[0.001,]

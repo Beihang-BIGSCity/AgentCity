@@ -28,11 +28,6 @@
       "Significant improvements over static graph methods"
     ],
     "metrics": {
-      "PEMSD3": {
-        "MAE": 15.57,
-        "MAPE": "14.68%",
-        "RMSE": 27.21
-      },
       "PEMSD4": {
         "MAE": 19.30,
         "MAPE": "12.70%",
@@ -42,11 +37,6 @@
         "MAE": 21.42,
         "MAPE": "9.01%",
         "RMSE": 31.51
-      },
-      "PEMSD8": {
-        "MAE": 15.67,
-        "MAPE": "9.94%",
-        "RMSE": 24.77
       }
     },
     "abstract": "Proposes dynamic ST-aware GNN with learnable graph structure at each time step. Captures both static topology and dynamic correlations. Strong performance but LargeST reveals scalability limitations on large graphs.",
@@ -67,20 +57,10 @@
     ],
     "model_name": "RSTIB",
     "metrics": {
-      "PEMSD4": {
-        "MAE": 18.46,
-        "MAPE": "12.22%",
-        "RMSE": 30.14
-      },
       "PEMSD7": {
         "MAE": 19.84,
         "MAPE": "8.33%",
         "RMSE": 33.90
-      },
-      "PEMSD8": {
-        "MAE": 15.51,
-        "MAPE": "9.44%",
-        "RMSE": 24.18
       }
     },
     "github": "https://github.com/mchen644/RSTIB",
@@ -106,7 +86,7 @@
     "datasets": [
       "METR_LA"
     ],
-    "model_name": "STD-MAE",
+    "model_name": "STDMAE",
     "key_contributions": [
       "Masked autoencoder for ST data",
       "Self-supervised pre-training approach",
@@ -155,48 +135,11 @@
         "MAE": 2.96,
         "MAPE": "7.93%",
         "RMSE": 5.92
-      },
-      "PEMSD4": {
-        "MAE": 18.46,
-        "MAPE": "12.17%",
-        "RMSE": 30.00
-      },
-      "PEMSD8": {
-        "MAE": 14.54,
-        "MAPE": "9.77%",
-        "RMSE": 23.47
-      },
-      "improvement": "5.63% minimum to 16.78% maximum improvement over baselines in 60-min ahead forecasting"
+      }
     },
     "abstract": "LSTTN addresses limitations of existing STGNNs that only utilize short-range traffic data by comprehensively considering long- and short-term features. Uses masked subseries Transformer for efficient learning of compressed temporal representations from long series, extracts long-term trends and periodic features, then fuses with short-term features from STGNNs for accurate predictions.",
     "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ArXiv2024_LSTTN.pdf",
     "notes": "Published in Knowledge-Based Systems 2024 (293: 111637). Central South University and Xiangjiang Laboratory. Uses two-week historical data (4032 timesteps for 5-min intervals). Mask reconstruction with 75% random masking. Graph WaveNet adopted as short-term trend extractor. Demonstrates robustness to missing data and superior sensing of sudden traffic changes."
-  },
-  {
-    "title": "FUSE-Traffic: Fusion of Unstructured and Structured Data for Event-aware Traffic Forecasting",
-    "conference": "SIGSPATIAL",
-    "year": 2025,
-    "model_name": "FUSE-Traffic",
-    "track": "Conference",
-    "pdf_link": "https://arxiv.org/pdf/2510.16053",
-    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/SIGSPATIAL2025_FUSE-Traffic.pdf",
-    "datasets": [
-      "METR_LA"
-    ],
-    "metrics": {
-      "METR_LA": {
-        "MAE": 3.39,
-        "MAPE": " 9.84%",
-        "RMSE": 7.28
-      }
-  },
-    "repo_url": "https://github.com/GeoAICenter/FUSE-Traffic_Sigspatial2025",
-    "keywords": [
-      "spatial-temporal",
-      "traffic-speed-forecast",
-      "event-aware",
-      "data fusion"
-    ]
   },
   {
     "title": "AutoSTF: Decoupled Neural Architecture Search for Cost-Effective Automated Spatio-Temporal Forecasting",
@@ -230,7 +173,7 @@
     "conference": "NeurIPS",
     "year": 2025,
     "track": "Conference",
-    "model_name":"ST-SSDL",
+    "model_name":"STSSDL",
     "pdf_link": "https://arxiv.org/pdf/2510.04908",
     "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf",
     "datasets": [
@@ -265,11 +208,6 @@
       "PEMSD7"
     ],
     "metrics": {
-      "PEMSD4": {
-        "MAE": 19.21,
-        "MAPE": " 12.70%",
-        "RMSE": 31.31
-      },
       "PEMSD7": {
         "MAE": 20.78,
         "MAPE": " 8.98%",

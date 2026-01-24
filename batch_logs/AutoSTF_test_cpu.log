@@ -1,0 +1,615 @@
+/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, name):
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+2026-01-23 02:54:59,524 - INFO - Log directory: ./libcity/log
+2026-01-23 02:54:59,524 - INFO - Begin pipeline, task=traffic_state_pred, model_name=AutoSTF, dataset_name=PEMSD8, exp_id=40070
+2026-01-23 02:54:59,524 - INFO - {'task': 'traffic_state_pred', 'model': 'AutoSTF', 'dataset': 'PEMSD8', 'saved_model': True, 'train': True, 'seed': 0, 'gpu': False, 'batch_size': 4, 'learning_rate': 0.002, 'max_epoch': 1, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', '_comment_model': 'AutoSTF: Automated Spatio-Temporal Forecasting with Neural Architecture Search', '_comment_paper': 'AutoSTF: https://github.com/HKUDS/AutoSTF', '_comment_dataset_defaults': 'Default parameters based on PEMS04 (universal baseline). Use dataset-specific values for better performance.', 'model_name': 'AutoSTF', '_comment_core_architecture': 'Core AutoSTF Architecture Parameters', 'hidden_channels': 32, 'end_channels': 512, 'mlp_node_dim': 32, 'temp_dim_tid': 32, 'temp_dim_diw': 32, '_comment_temporal_config': 'Temporal Search Configuration', 'layer_names': ['TemporalSearch', 'SpatialSearch'], 'temporal_operations': ['DCC_2', 'Informer'], 'num_temporal_search_node': 4, '_comment_spatial_config': 'Spatial Search Configuration', 'spatial_operations': ['GNN_fixed', 'GNN_adap', 'GNN_att'], 'num_spatial_search_node': 4, 'num_hop': 1, 'num_att_layers': 1, '_comment_linear_layers': 'Linear Layer Configuration', 'IsUseLinear': True, 'num_linear_layers': 3, 'num_mlp_layers': 3, '_comment_time_config': 'Temporal Embedding Configuration', 'time_of_day_size': 288, 'day_of_week_size': 7, 'add_time_in_day': True, 'add_day_in_week': True, '_comment_multi_scale': 'Multi-scale Configuration', 'scale_list': [1, 2, 3], '_comment_sequence_config': 'Sequence Length Configuration', 'input_window': 12, 'output_window': 12, '_comment_training': 'Training Configuration', 'learner': 'adam', 'lr_decay': True, 'lr_decay_ratio': 0.1, 'milestones': [50, 60, 70, 80], 'clip_grad_norm': True, 'max_grad_norm': 5, '_comment_regularization': 'Regularization and Early Stopping', 'weight_decay': 0.0001, 'use_early_stop': True, 'patience': 30, '_comment_data_normalization': 'Data Scaling and External Features', 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', '_comment_dataset_specific': 'Dataset-Specific Parameter Overrides', '_dataset_specific_note': 'The following parameters can be overridden per dataset for optimal performance', 'METR_LA': {'_note': 'Best configuration for METR-LA dataset (207 sensors)', 'num_mlp_layers': 1, 'num_linear_layers': 4, 'num_spatial_search_node': 5, 'num_att_layers': 2, 'num_hop': 2, 'weight_decay': 1e-05, 'lr_decay_ratio': 0.1, 'train_rate': 0.7, 'eval_rate': 0.1}, 'PEMS_BAY': {'_note': 'Best configuration for PEMS-BAY dataset (325 sensors)', 'num_mlp_layers': 1, 'num_linear_layers': 4, 'num_temporal_search_node': 3, 'num_att_layers': 2, 'num_hop': 2, 'weight_decay': 1e-05, 'lr_decay_ratio': 0.1, 'train_rate': 0.7, 'eval_rate': 0.1}, 'PEMSD3': {'_note': 'Configuration for PEMS03 dataset (358 sensors, 2 input channels)', 'num_mlp_layers': 2, 'num_linear_layers': 4, 'num_temporal_search_node': 2, 'spatial_operations': ['GNN_att', 'Identity'], 'learning_rate': 0.002, 'train_rate': 0.6, 'eval_rate': 0.2}, 'PEMSD4': {'_note': 'Configuration for PEMS04 dataset (307 sensors, 3 input channels)', 'num_mlp_layers': 3, 'num_linear_layers': 3, 'num_temporal_search_node': 4, 'spatial_operations': ['GNN_fixed', 'GNN_adap', 'GNN_att'], 'train_rate': 0.6, 'eval_rate': 0.2}, 'PEMSD7': {'_note': 'Configuration for PEMS07 dataset (883 sensors, 3 input channels, large-scale)', 'num_mlp_layers': 6, 'num_linear_layers': 4, 'num_temporal_search_node': 4, 'batch_size': 24, 'learning_rate': 0.001, 'weight_decay': 0.0001, 'train_rate': 0.6, 'eval_rate': 0.2}, 'PEMSD8': {'_note': 'Configuration for PEMS08 dataset (170 sensors, 3 input channels)', 'num_mlp_layers': 6, 'num_linear_layers': 3, 'scale_list': [1, 2, 3, 4], 'num_temporal_search_node': 4, 'learning_rate': 0.002, 'train_rate': 0.6, 'eval_rate': 0.2}, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num', 'traffic_occupancy': 'num', 'traffic_speed': 'num'}}, 'data_col': ['traffic_flow', 'traffic_occupancy', 'traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMSD8'], 'geo_file': 'PEMSD8', 'rel_file': 'PEMSD8', 'output_dim': 3, 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cpu'), 'exp_id': 40070}
+2026-01-23 02:54:59,551 - INFO - Loaded file PEMSD8.geo, num_nodes=170
+2026-01-23 02:54:59,554 - INFO - set_weight_link_or_dist: link
+2026-01-23 02:54:59,554 - INFO - init_weight_inf_or_zero: zero
+2026-01-23 02:54:59,556 - INFO - Loaded file PEMSD8.rel, shape=(170, 170)
+2026-01-23 02:54:59,557 - INFO - Loading file PEMSD8.dyna
+2026-01-23 02:55:02,717 - INFO - Loaded file PEMSD8.dyna, shape=(17856, 170, 3)
+(17856, 170, 3)
+2026-01-23 02:55:13,017 - INFO - Dataset created
+2026-01-23 02:55:13,018 - INFO - x shape: (17833, 12, 170, 11), y shape: (17833, 12, 170, 11)
+2026-01-23 02:55:13,409 - INFO - train	x: (12483, 12, 170, 11), y: (12483, 12, 170, 11)
+2026-01-23 02:55:13,409 - INFO - eval	x: (1783, 12, 170, 11), y: (1783, 12, 170, 11)
+2026-01-23 02:55:13,409 - INFO - test	x: (3567, 12, 170, 11), y: (3567, 12, 170, 11)
+2026-01-23 02:56:59,822 - INFO - Saved at ./libcity/cache/dataset_cache/point_based_PEMSD8_12_12_0.7_0.1_standard_4_True_True_True_True.npz
+2026-01-23 02:57:01,542 - INFO - StandardScaler mean: 98.0268933270498, std: 128.5512067009922
+2026-01-23 02:57:01,542 - INFO - NoneScaler
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_version_cpu.so: undefined symbol: _ZN3c106detail14torchCheckFailEPKcS2_jRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+  import torch_geometric.typing
+/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/AutoSTF.py:949: RuntimeWarning: divide by zero encountered in power
+  d_inv = np.power(rowsum, -1).flatten()
+2026-01-23 02:57:17,322 - INFO - AutoSTF model initialized with 170 nodes, 2 temporal ops, 3 spatial ops
+2026-01-23 02:57:17,526 - INFO - AutoSTF(
+  (time_series_emb_layer): Conv2d(132, 32, kernel_size=(1, 1), stride=(1, 1))
+  (start_encoder): Sequential(
+    (0): MultiLayerPerceptron(
+      (fc1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (fc2): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (act): ReLU()
+      (drop): Dropout(p=0.15, inplace=False)
+    )
+    (1): MultiLayerPerceptron(
+      (fc1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (fc2): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (act): ReLU()
+      (drop): Dropout(p=0.15, inplace=False)
+    )
+    (2): MultiLayerPerceptron(
+      (fc1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (fc2): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (act): ReLU()
+      (drop): Dropout(p=0.15, inplace=False)
+    )
+  )
+  (fusion_layer): Conv2d(128, 32, kernel_size=(1, 1), stride=(1, 1))
+  (light_linear_layer): LightLinear(
+    (LightLayers): ModuleList(
+      (0-2): 3 x LightLayer(
+        (linear1): Linear(in_features=32, out_features=128, bias=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (linear2): Linear(in_features=64, out_features=16, bias=True)
+        (norm1): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.1, inplace=False)
+        (dropout2): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (start_scale_light): Conv2d(4, 1, kernel_size=(1, 1), stride=(1, 1))
+  (start_linear_light): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+  (TemporalSearchLayers): ModuleList(
+    (0): TemporalSearchLayer(
+      (_mixed_ops): ModuleList(
+        (0-5): 6 x TemporalLayerMixedOp(
+          (_candidate_ops): ModuleList(
+            (0): DCCLayer(
+              (relu): ReLU()
+              (filter_conv): CausalConv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), padding=(0, 2), dilation=(2, 2))
+              (gate_conv): CausalConv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), padding=(0, 2), dilation=(2, 2))
+              (bn): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+            )
+            (1): InformerLayer(
+              (attention): AttentionLayer(
+                (inner_attention): ProbAttention(
+                  (dropout): Dropout(p=0.0, inplace=False)
+                )
+                (query_projection): Linear(in_features=32, out_features=32, bias=True)
+                (key_projection): Linear(in_features=32, out_features=32, bias=True)
+                (value_projection): Linear(in_features=32, out_features=32, bias=True)
+                (out_projection): Linear(in_features=32, out_features=32, bias=True)
+              )
+              (conv1): Conv1d(32, 32, kernel_size=(1,), stride=(1,))
+              (conv2): Conv1d(32, 32, kernel_size=(1,), stride=(1,))
+              (norm1): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+              (norm2): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+              (dropout): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+    )
+  )
+  (SpatialSearchLayers): ModuleList(
+    (0): SpatialSearchLayer(
+      (_mixed_ops): ModuleList(
+        (0-5): 6 x SpatialLayerMixedOp(
+          (_candidate_ops): ModuleList(
+            (0): GNN_fixed(
+              (linear): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (bn): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (1): GNN_adap(
+              (linear): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (bn): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            )
+            (2): GNN_att(
+              (attention_layer): LinearFormerLayer(
+                (self_attn): LMultiHeadAttention(
+                  (attention): LScaledDotProductAttention(
+                    (fc_q): Linear(in_features=16, out_features=16, bias=True)
+                    (fc_k): Linear(in_features=16, out_features=16, bias=True)
+                    (fc_v): Linear(in_features=16, out_features=16, bias=True)
+                    (fc_o): Linear(in_features=16, out_features=16, bias=True)
+                    (dropout): Dropout(p=0.1, inplace=False)
+                  )
+                )
+                (linear1): Linear(in_features=32, out_features=128, bias=True)
+                (dropout): Dropout(p=0.1, inplace=False)
+                (linear2): Linear(in_features=64, out_features=16, bias=True)
+                (norm1): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+                (norm2): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+                (dropout1): Dropout(p=0.1, inplace=False)
+                (dropout2): Dropout(p=0.1, inplace=False)
+              )
+              (attention_norm): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+              (attention): LinearFormer(
+                (layers): ModuleList(
+                  (0): LinearFormerLayer(
+                    (self_attn): LMultiHeadAttention(
+                      (attention): LScaledDotProductAttention(
+                        (fc_q): Linear(in_features=16, out_features=16, bias=True)
+                        (fc_k): Linear(in_features=16, out_features=16, bias=True)
+                        (fc_v): Linear(in_features=16, out_features=16, bias=True)
+                        (fc_o): Linear(in_features=16, out_features=16, bias=True)
+                        (dropout): Dropout(p=0.1, inplace=False)
+                      )
+                    )
+                    (linear1): Linear(in_features=32, out_features=128, bias=True)
+                    (dropout): Dropout(p=0.1, inplace=False)
+                    (linear2): Linear(in_features=64, out_features=16, bias=True)
+                    (norm1): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+                    (norm2): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+                    (dropout1): Dropout(p=0.1, inplace=False)
+                    (dropout2): Dropout(p=0.1, inplace=False)
+                  )
+                )
+                (norm): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+              )
+              (lpos): LearnedPositionalEncoding(
+                170, 32
+                (dropout): Dropout(p=0.1, inplace=False)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (start_temporal): Conv2d(1, 32, kernel_size=(1, 1), stride=(1, 1))
+  (spatial_fusion): Linear(in_features=96, out_features=32, bias=True)
+  (end_conv1): Linear(in_features=64, out_features=512, bias=True)
+  (end_conv2): Linear(in_features=512, out_features=36, bias=True)
+)
+2026-01-23 02:57:17,532 - INFO - node_emb	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,532 - INFO - time_in_day_emb	torch.Size([288, 32])	cpu	True
+2026-01-23 02:57:17,532 - INFO - day_in_week_emb	torch.Size([7, 32])	cpu	True
+2026-01-23 02:57:17,532 - INFO - node_vec1	torch.Size([170, 10])	cpu	True
+2026-01-23 02:57:17,532 - INFO - node_vec2	torch.Size([10, 170])	cpu	True
+2026-01-23 02:57:17,532 - INFO - time_series_emb_layer.weight	torch.Size([32, 132, 1, 1])	cpu	True
+2026-01-23 02:57:17,532 - INFO - time_series_emb_layer.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,532 - INFO - start_encoder.0.fc1.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,532 - INFO - start_encoder.0.fc1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,532 - INFO - start_encoder.0.fc2.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.0.fc2.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.1.fc1.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.1.fc1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.1.fc2.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.1.fc2.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.2.fc1.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.2.fc1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.2.fc2.weight	torch.Size([128, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - start_encoder.2.fc2.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - fusion_layer.weight	torch.Size([32, 128, 1, 1])	cpu	True
+2026-01-23 02:57:17,533 - INFO - fusion_layer.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,533 - INFO - light_linear_layer.LightLayers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,533 - INFO - light_linear_layer.LightLayers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,533 - INFO - light_linear_layer.LightLayers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,533 - INFO - light_linear_layer.LightLayers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,533 - INFO - light_linear_layer.LightLayers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.2.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,534 - INFO - light_linear_layer.LightLayers.2.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,535 - INFO - light_linear_layer.LightLayers.2.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,535 - INFO - start_scale_light.weight	torch.Size([1, 4, 1, 1])	cpu	True
+2026-01-23 02:57:17,535 - INFO - start_scale_light.bias	torch.Size([1])	cpu	True
+2026-01-23 02:57:17,535 - INFO - start_linear_light.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,535 - INFO - start_linear_light.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,535 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,536 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,536 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,536 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,536 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,536 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,537 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.0._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,538 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.1._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,539 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,540 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.2._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,541 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.3._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,542 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,543 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.4._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_alphas	torch.Size([2])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.0.filter_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.0.filter_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.0.gate_conv.weight	torch.Size([32, 32, 1, 2])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.0.gate_conv.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,544 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.query_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.query_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.key_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.key_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.value_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.value_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.out_projection.weight	torch.Size([32, 32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.attention.out_projection.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.conv1.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.conv1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.conv2.weight	torch.Size([32, 32, 1])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.conv2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,545 - INFO - TemporalSearchLayers.0._mixed_ops.5._candidate_ops.1.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,546 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,547 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,548 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.0._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,549 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,550 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,551 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.1._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,552 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,553 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,554 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.2._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,555 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,556 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,557 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.3._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,558 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,559 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,560 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.4._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.0.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.0.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.0.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.0.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.1.linear.weight	torch.Size([32, 64, 1, 1])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.1.linear.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.1.bn.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.1.bn.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,561 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_layer.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_norm.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention_norm.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_q.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_k.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,562 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_v.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.weight	torch.Size([16, 16])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.self_attn.attention.fc_o.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.linear1.weight	torch.Size([128, 32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.linear1.bias	torch.Size([128])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.linear2.weight	torch.Size([16, 64])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.linear2.bias	torch.Size([16])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.norm1.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.norm1.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.norm2.weight	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.attention.layers.0.norm2.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - SpatialSearchLayers.0._mixed_ops.5._candidate_ops.2.lpos.weight	torch.Size([170, 32])	cpu	True
+2026-01-23 02:57:17,563 - INFO - start_temporal.weight	torch.Size([32, 1, 1, 1])	cpu	True
+2026-01-23 02:57:17,564 - INFO - start_temporal.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,564 - INFO - spatial_fusion.weight	torch.Size([32, 96])	cpu	True
+2026-01-23 02:57:17,564 - INFO - spatial_fusion.bias	torch.Size([32])	cpu	True
+2026-01-23 02:57:17,564 - INFO - end_conv1.weight	torch.Size([512, 64])	cpu	True
+2026-01-23 02:57:17,564 - INFO - end_conv1.bias	torch.Size([512])	cpu	True
+2026-01-23 02:57:17,564 - INFO - end_conv2.weight	torch.Size([36, 512])	cpu	True
+2026-01-23 02:57:17,564 - INFO - end_conv2.bias	torch.Size([36])	cpu	True
+2026-01-23 02:57:17,566 - INFO - Total parameter numbers: 399181
+2026-01-23 02:57:17,566 - INFO - You select `adam` optimizer.
+2026-01-23 02:57:17,568 - INFO - You select `multisteplr` lr_scheduler.
+2026-01-23 02:57:17,569 - WARNING - Received none train loss func and will use the loss func defined in the model.
+2026-01-23 02:57:17,569 - INFO - Start training ...
+2026-01-23 02:57:17,569 - INFO - num_batches:3121

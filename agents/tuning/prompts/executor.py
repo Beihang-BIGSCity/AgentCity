@@ -82,4 +82,5 @@ Report execution results:
 - Report all failures with error details
 - Capture artifact paths for analyzer
 - Note any trials that didn't complete
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

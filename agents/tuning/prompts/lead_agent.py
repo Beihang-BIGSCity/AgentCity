@@ -109,9 +109,10 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
         ## Critical Rules
         - Use Task tool to delegate - do NOT tune directly
         - Keep search spaces tractable (< 50 trials)
-        - Document everything for reproducibility
+        - Document everything for reproducibility in ./documentation
         - Stop tuning if results are within 5% of paper
         - Keep responses concise between delegations
+        - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 
         Begin by delegating the planning task for the first model to tuning-planner.
         """

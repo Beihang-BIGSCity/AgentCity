@@ -92,7 +92,7 @@ class TrajLocPredExecutor(AbstractExecutor):
         for batch in test_dataloader:
             batch.to_tensor(device=self.config['device'])
             #import pdb; pdb.set_trace()
-            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            '''last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
             N, L = batch.data['current_loc'].shape
             device = self.config['device']
             col_indices = torch.arange(L, device=device).unsqueeze(0)
@@ -113,7 +113,7 @@ class TrajLocPredExecutor(AbstractExecutor):
             pred_loc = torch.argmax(scores, dim=1)
             #print(pred_loc)
             batch.data['current_loc'][rows, last_indices] = pred_loc.squeeze()
-            batch.data['current_tim'][rows, last_indices] =  true_tim[rows, last_indices]
+            batch.data['current_tim'][rows, last_indices] =  true_tim[rows, last_indices]'''
 
             scores = self.model.predict(batch)
 
@@ -149,7 +149,7 @@ class TrajLocPredExecutor(AbstractExecutor):
             batch.to_tensor(device=self.config['device'])
             loss = loss_func(batch)
 
-            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            '''last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
             N, L = batch.data['current_loc'].shape
             device = self.config['device']
             col_indices = torch.arange(L, device=device).unsqueeze(0)
@@ -181,7 +181,7 @@ class TrajLocPredExecutor(AbstractExecutor):
             current_tim[rows, last_indices] =  true_tim[rows, last_indices]
             batch.data['current_loc'] = current_loc
             batch.data['current_tim'] = current_tim
-            loss = loss+loss_func(batch)
+            loss = loss+loss_func(batch)'''
 
 
             if self.config['debug']:
@@ -208,7 +208,7 @@ class TrajLocPredExecutor(AbstractExecutor):
             scores = model.predict(batch)
             loss = loss_func(batch)
 
-            last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
+            '''last_indices = (batch.data['current_loc'] != 10497).sum(dim=1) - 1
             N, L = batch.data['current_loc'].shape
             device = self.config['device']
             col_indices = torch.arange(L, device=device).unsqueeze(0)
@@ -228,7 +228,7 @@ class TrajLocPredExecutor(AbstractExecutor):
             #print(pred_loc)
             batch.data['current_loc'][rows, last_indices] = pred_loc.squeeze()
             batch.data['current_tim'][rows, last_indices] =  true_tim[rows, last_indices]
-            scores = self.model.predict(batch)
+            scores = self.model.predict(batch)'''
             
             total_loss.append(loss.data.cpu().numpy().tolist())
             if self.config['evaluate_method'] == 'popularity':

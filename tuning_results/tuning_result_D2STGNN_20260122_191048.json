@@ -1,0 +1,784 @@
+{
+  "strategy": "custom_grid",
+  "status": "error",
+  "best_params": {
+    "learning_rate": 0.0005,
+    "batch_size": 32,
+    "num_hidden": 32,
+    "dropout": 0.1
+  },
+  "best_metrics": {},
+  "best_score": null,
+  "total_trials": 48,
+  "successful_trials": 0,
+  "trials": [
+    {
+      "trial_idx": 1,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.689598,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 2,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.865329,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 3,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.029005,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 4,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.575665,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 5,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.689201,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 6,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.304798,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 7,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.629447,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 8,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.391572,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 9,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.395784,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 10,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.678665,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 11,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.714957,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 12,
+      "params": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.452444,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 13,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.696555,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 14,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.764821,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 15,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.582122,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 16,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.464332,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 17,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.488472,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 18,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.096498,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 19,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.047532,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 20,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.674053,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 21,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.669021,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 22,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.605268,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 23,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.107812,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 24,
+      "params": {
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.039635,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 25,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.496017,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 26,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.436558,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 27,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.792115,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 28,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.708727,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 29,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.724423,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 30,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.897047,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 31,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.253574,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 32,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 9.01935,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 33,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 11.423318,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 34,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.866403,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 35,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.400604,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 36,
+      "params": {
+        "learning_rate": 0.002,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.786566,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 37,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.141253,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 38,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 32,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.952764,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 39,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.569787,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 40,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 32,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.603848,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 41,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.719295,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 42,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 64,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.974017,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 43,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.693554,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 44,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 64,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.784947,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 45,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.320405,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 46,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 128,
+        "num_hidden": 32,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.502087,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 32 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 47,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.1
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 8.118196,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.1 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    },
+    {
+      "trial_idx": 48,
+      "params": {
+        "learning_rate": 0.005,
+        "batch_size": 128,
+        "num_hidden": 64,
+        "dropout": 0.2
+      },
+      "metrics": {},
+      "status": "error",
+      "returncode": 2,
+      "elapsed_seconds": 7.699135,
+      "score": null,
+      "stdout": "",
+      "stderr": "_RATE] [--max_epoch MAX_EPOCH]\n                    [--dataset_class DATASET_CLASS] [--executor EXECUTOR]\n                    [--evaluator EVALUATOR]\nrun_model.py: error: unrecognized arguments: --num_hidden 64 --dropout 0.2 --weight_decay 1e-05 --node_dim 10 --time_emd_dim 10 --num_layers 5 --k_t 3 --k_s 2 --gap 3 --lr_scheduler multisteplr --lr_decay_ratio 0.5 --max_grad_norm 5 --use_curriculum_learning True --cl_decay_epochs 3 --use_early_stop True --patience 30 --steps 1,30,38,46,54,62,70,80\n"
+    }
+  ]
+}

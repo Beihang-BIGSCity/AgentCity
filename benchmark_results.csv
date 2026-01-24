@@ -1,0 +1,34 @@
+Model,Dataset,Venue,Year,Paper_MAE,Paper_RMSE,Paper_MAPE,Test_MAE,Test_RMSE,Test_MAPE,exp_id,Test_Status,Migration_Status,Tuning_Status,Runtime_s
+STDMAE,METR_LA,IJCAI,2024,3.4,9.59,7.07,,,,,Not Run,"failed: Traceback (most recent call last):
+  File ""<string>"", line 4, in <module>
+  File ""/home/wangwenrui/private/shk/agentCity/agents/__init__.py"", line 3, in <module>
+    from .core import (
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/__init__.py"", line 10, in <module>
+    from .orchestrator import AgentOrchestrator
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/orchestrator.py"", line 10, in <module>
+    from agents.migration.runtime import clear_active_paper, set_active_paper
+  File ""/home/wangwenrui/private/shk/agentCity/agents/migration/__init__.py"", line 10, in <module>
+    from .legacy_prompts import build_migration_prompt, build_validation_prompt
+ModuleNotFoundError: No module named 'agents.migration.legacy_prompts'",N/A,
+AutoSTF,METR-LA,KDD,2025,3.35,7.09,9.58,,,,,Not Run,"failed: Traceback (most recent call last):
+  File ""<string>"", line 4, in <module>
+  File ""/home/wangwenrui/private/shk/agentCity/agents/__init__.py"", line 3, in <module>
+    from .core import (
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/__init__.py"", line 10, in <module>
+    from .orchestrator import AgentOrchestrator
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/orchestrator.py"", line 10, in <module>
+    from agents.migration.runtime import clear_active_paper, set_active_paper
+  File ""/home/wangwenrui/private/shk/agentCity/agents/migration/__init__.py"", line 10, in <module>
+    from .legacy_prompts import build_migration_prompt, build_validation_prompt
+ModuleNotFoundError: No module named 'agents.migration.legacy_prompts'",N/A,
+STSSDL,METR-LA,NeurIPS,2025,3.37,7.17,9.48,,,,,Not Run,"failed: Traceback (most recent call last):
+  File ""<string>"", line 4, in <module>
+  File ""/home/wangwenrui/private/shk/agentCity/agents/__init__.py"", line 3, in <module>
+    from .core import (
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/__init__.py"", line 10, in <module>
+    from .orchestrator import AgentOrchestrator
+  File ""/home/wangwenrui/private/shk/agentCity/agents/core/orchestrator.py"", line 10, in <module>
+    from agents.migration.runtime import clear_active_paper, set_active_paper
+  File ""/home/wangwenrui/private/shk/agentCity/agents/migration/__init__.py"", line 10, in <module>
+    from .legacy_prompts import build_migration_prompt, build_validation_prompt
+ModuleNotFoundError: No module named 'agents.migration.legacy_prompts'",N/A,

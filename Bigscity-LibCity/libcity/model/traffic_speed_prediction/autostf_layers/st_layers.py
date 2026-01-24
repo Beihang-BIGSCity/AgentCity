@@ -1,8 +1,8 @@
 
 import torch.nn as nn
 import torch
-from src.model.mode import Mode
-from src.model.MixedOpration import TemporalLayerMixedOp, SpatialLayerMixedOp
+from libcity.model.traffic_speed_prediction.autostf_layers.mode import Mode
+from libcity.model.traffic_speed_prediction.autostf_layers.mixed_operation import TemporalLayerMixedOp, SpatialLayerMixedOp
 
 
 class TemporalSearchLayer(nn.Module):

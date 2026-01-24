@@ -85,4 +85,5 @@ Generate a markdown report:
 - Note any experimental differences (epochs, data splits)
 - Consider statistical significance for small deltas
 - Save analysis report to ./documentation/
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

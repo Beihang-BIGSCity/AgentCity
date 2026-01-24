@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import math
-from src.model.transformer import LinearFormerLayer, LinearFormer, LearnedPositionalEncoding
+from libcity.model.traffic_speed_prediction.autostf_layers.transformer import LinearFormerLayer, LinearFormer, LearnedPositionalEncoding
 
 
 def create_op(op_name, node_embedding_1, node_embedding_2, adj_mx, config, device):

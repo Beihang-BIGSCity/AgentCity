@@ -14,8 +14,6 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
     conferences = ", ".join(context.conferences)
     keywords = (
         ", ".join(context.search_terms)
-        if context.search_terms
-        else "traffic state prediction, spatiotemporal forecasting"
     )
     # 构建年份过滤说明
     if context.search_year_start and context.search_year_end:

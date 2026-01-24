@@ -1,0 +1,73 @@
+[  
+    {
+    "title": "Taming the Long Tail in Human Mobility Prediction",
+    "venue": "NeurIPS",
+    "year": 2024,
+    "score": 7,
+    "arxiv_id": "2410.14970",
+    "datasets": ["gowalla"],
+    "metrics": {
+        "gowalla": {
+            "Acc@1": 0.1668,
+            "Acc@5": 0.3605,
+            "Acc@10": 0.4429,
+            "MRR": 0.2591
+        }
+    },
+    "github": "https://github.com/Yukayo/LoTNext",
+    "model_name": "MWSL-TTE"
+  },
+  {
+    "title": "Large Language Models for Next POI Recommendation",
+    "venue": "SIGIR",
+    "year": 2024,
+    "score": 6,
+    "arxiv_id": "2404.17591",
+    "url": "https://arxiv.org/pdf/2404.17591",
+    "datasets": ["foursquare_nyc"],
+    "metrics": {"foursquare_nyc": {
+        "Acc@1": 0.3372
+        }
+    },
+    "github": "https://github.com/neolifer/LLM4POI",
+    "model_name": "LLM4POI",
+    "methodology": "Large Language Models, POI Recommendation, Next Location",
+    "analyzed": false,
+    "notes": "SIGIR 2024. Leverages LLMs for POI recommendation and trajectory prediction."
+  },
+  {
+    "title": "CoMaPOI: Multi-Agent Framework for Next POI Prediction",
+    "venue": "SIGIR",
+    "year": 2025,
+    "score": 6,
+    "datasets": ["foursquare_tky"],
+    "metrics": {"foursquare_tky": {
+        "NDCG@5":0.3448,
+        "MRR": 0.3182
+        }
+    },
+    "github": "https://github.com/Chips98/CoMaPOI",
+    "model_name": "CoMaPOI",
+    "methodology": "Multi-agent Systems, POI Prediction, Collaborative Learning",
+    "analyzed": false,
+    "notes": "SIGIR 2025. Multi-agent approach for POI prediction."
+  },
+  {
+    "title": "GETNext: Trajectory Flow Map Enhanced Transformer for Next POI Recommendation",
+    "venue": "SIGIR",
+    "year": 2022,
+    "datasets": ["foursquare_nyc"],
+    "metrics": {"foursquare_nyc": {
+        "Acc@1": 0.2435,
+        "Acc@5": 0.5089,
+        "Acc@10": 0.6143,
+        "MRR":  0.3621 
+        }
+    },
+    "github": "https://github.com/Chips98/CoMaPOI",
+    "model_name": "CoMaPOI",
+    "methodology": "Multi-agent Systems, POI Prediction, Collaborative Learning",
+    "analyzed": false,
+    "notes": "SIGIR 2025. Multi-agent approach for POI prediction."
+  }
+]

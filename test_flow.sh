@@ -1,0 +1,1 @@
+python batch_runner.py --catalog test_flow.json --concurrency 3 --models STDMAE,FUSETraffic,AutoSTF

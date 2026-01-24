@@ -13,7 +13,7 @@ Evaluate papers against user query and domain requirements, scoring their releva
 - Is the method applicable to traffic/transportation domains?
 
 ### 2. Dataset Relevance (0-3 points)
-- Does it use standard traffic benchmarks (METR-LA, PEMS-BAY, PEMS03-08)?
+- Does it use standard traffic datasets?
 - Are the datasets publicly available and reproducible?
 - Does it cover relevant prediction horizons?
 
@@ -41,7 +41,7 @@ Return a JSON array with evaluations:
   {
     "title": "Paper Title",
     "relevance_score": 8,
-    "relevance_reason": "Strong spatial-temporal GNN method, uses METR-LA and PEMS-BAY, code available on GitHub. Novel attention mechanism for capturing dynamic dependencies.",
+    "relevance_reason": "",
     "method_score": 3,
     "dataset_score": 3,
     "reproducibility_score": 2,

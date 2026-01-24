@@ -83,4 +83,5 @@ Common mappings from original code to LibCity:
 - Document source of each parameter value
 - Don't change dataset configs unless necessary
 - Validate JSON syntax before saving
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

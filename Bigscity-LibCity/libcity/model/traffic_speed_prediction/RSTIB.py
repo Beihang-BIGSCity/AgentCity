@@ -1,5 +1,6 @@
 from logging import getLogger
 from numbers import Number
+import math
 
 import torch
 import torch.nn as nn
@@ -58,6 +59,14 @@ class RSTIB(AbstractTrafficStateModel):
 
     Robust Spatial-Temporal Information Bottleneck (RSTIB) model using MLPs
     for efficient and robust spatial-temporal forecasting.
+
+    Key features:
+    - Information Bottleneck (IB) mechanism with variational inference
+    - MLP-based architecture with residual connections
+    - Spatial and temporal embeddings (node, time-of-day, day-of-week)
+    - Dynamic Node Embeddings (DNE) support
+    - Difficulty-weighted loss (simplified in initial version)
+    - Multiple IB regularization losses (encoding, output, reconstruction)
     """
 
     def __init__(self, config, data_feature):
@@ -91,6 +100,11 @@ class RSTIB(AbstractTrafficStateModel):
         # Information Bottleneck parameters
         self.info_beta = config.get('info_beta', 0.001)
         self.n_sample = config.get('n_sample', 1)  # Number of sampling for reparameterization
+        self.n_sample_avg = config.get('n_sample_avg', 12)  # Number of samples for averaging
+
+        # Loss configuration
+        self.use_difficulty_weighting = config.get('use_difficulty_weighting', False)
+        self.use_ib_loss = config.get('use_ib_loss', True)
 
         # Time embeddings calculation
         time_intervals = config.get('time_intervals', 300)  # 5 minutes = 300 seconds
@@ -185,6 +199,8 @@ class RSTIB(AbstractTrafficStateModel):
                 'none': none_act
             }[dne_act_name]
 
+        self._logger.info(f"RSTIB initialized with {sum(p.numel() for p in self.parameters())} parameters")
+
     def construct_dne(self, te):
         """
         Construct Dynamic Node Embeddings based on time encoding.
@@ -225,20 +241,24 @@ class RSTIB(AbstractTrafficStateModel):
             mu = expand(mu)
             std = expand(std)
 
-        eps = Variable(cuda(std.data.new(std.size()).normal_(), std.is_cuda)).to(self.device)
+        # Bug Fix #2: Proper device placement without using deprecated cuda() wrapper
+        eps = std.data.new(std.size()).normal_().to(self.device)
         return mu + eps * std
 
-    def forward(self, batch):
+    def forward_ib(self, batch, n_sample=None):
         """
-        Forward pass of RSTIB model.
+        Forward pass with full Information Bottleneck mechanism.
 
         Args:
-            batch: Dictionary containing input data with keys:
-                - 'X': Input tensor [B, L, N, C] where C includes [traffic_feature, time_in_day, day_in_week]
+            batch: Dictionary containing input data
+            n_sample: Number of samples for reparameterization (default: self.n_sample)
 
         Returns:
-            torch.Tensor: Predictions [B, T, N, output_dim]
+            tuple: (prediction, encoding, (mu, std), noise_y, (mu_y, std_y), (mu_x, std_x))
         """
+        if n_sample is None:
+            n_sample = self.n_sample
+
         history_data = batch['X']  # [B, L, N, C]
 
         # Extract traffic features (first input_dim features)
@@ -276,9 +296,28 @@ class RSTIB(AbstractTrafficStateModel):
             node_emb.append(
                 self.node_emb.unsqueeze(0).expand(B, -1, -1).transpose(1, 2).unsqueeze(-1))  # [B, node_dim, N, 1]
 
-        if self.if_dne and 'te' in batch:
-            dne = self.construct_dne(batch['te'].type(torch.LongTensor))
-            node_emb.append(dne)
+        # Bug Fix #3 & #4: Robust batch key checking for DNE feature with dimension consistency
+        if self.if_dne:
+            try:
+                # Check if batch has 'te' key via dictionary access
+                te = batch.get('te') if hasattr(batch, 'get') else batch.data.get('te', None) if hasattr(batch, 'data') else None
+                if te is not None:
+                    dne = self.construct_dne(te.type(torch.LongTensor).to(self.device))
+                    node_emb.append(dne)
+                else:
+                    # Add zero-padding to maintain dimension consistency
+                    B = history_data.shape[0]
+                    N = history_data.shape[2]
+                    zero_dne = torch.zeros(B, self.node_dim, N, 1, device=self.device)
+                    node_emb.append(zero_dne)
+                    self._logger.debug("DNE feature unavailable, using zero padding")
+            except (KeyError, AttributeError) as e:
+                # Add zero-padding on error to maintain dimension consistency
+                B = history_data.shape[0]
+                N = history_data.shape[2]
+                zero_dne = torch.zeros(B, self.node_dim, N, 1, device=self.device)
+                node_emb.append(zero_dne)
+                self._logger.debug(f"DNE feature skipped: {e}, using zero padding")
 
         # Temporal embeddings
         tem_emb = []
@@ -308,12 +347,12 @@ class RSTIB(AbstractTrafficStateModel):
         std_x = std_x.clamp(1e-2, 1 - 1e-2)
 
         # Reparameterization
-        noise_y = self.reparametrize_n(mu_y, std_y, n=self.n_sample)
-        noise_x = self.reparametrize_n(mu_x, std_x, n=self.n_sample)
+        noise_y = self.reparametrize_n(mu_y, std_y, n=n_sample)
+        noise_x = self.reparametrize_n(mu_x, std_x, n=n_sample)
 
-        if self.n_sample == 1:
+        if n_sample == 1:
             pass
-        elif self.n_sample > 1:
+        elif n_sample > 1:
             noise_x = noise_x.mean(0)
             noise_y = noise_y.mean(0)
 
@@ -326,11 +365,11 @@ class RSTIB(AbstractTrafficStateModel):
         std_clean = std_clean.clamp(1e-2, 1 - 1e-2)
 
         # Final encoding
-        encoding = self.reparametrize_n(mu_clean, std_clean, n=self.n_sample)
+        encoding = self.reparametrize_n(mu_clean, std_clean, n=n_sample)
 
-        if self.n_sample == 1:
+        if n_sample == 1:
             pass
-        elif self.n_sample > 1:
+        elif n_sample > 1:
             encoding = encoding.mean(0)
 
         # Prediction
@@ -341,30 +380,111 @@ class RSTIB(AbstractTrafficStateModel):
         prediction = prediction.view(B, N, self.output_window, self.output_dim)  # [B, N, output_window, output_dim]
         prediction = prediction.transpose(1, 2)  # [B, output_window, N, output_dim]
 
+        return prediction, encoding, (mu, std), noise_y, (mu_y, std_y), (mu_x, std_x)
+
+    def forward(self, batch):
+        """
+        Simplified forward pass for prediction only.
+
+        Args:
+            batch: Dictionary containing input data with keys:
+                - 'X': Input tensor [B, L, N, C] where C includes [traffic_feature, time_in_day, day_in_week]
+
+        Returns:
+            torch.Tensor: Predictions [B, T, N, output_dim]
+        """
+        prediction, _, _, _, _, _ = self.forward_ib(batch, n_sample=1)
         return prediction
 
     def calculate_loss(self, batch):
         """
-        Calculate loss for the model.
+        Calculate loss for the model, including Information Bottleneck regularization.
+
+        Loss components:
+        1. Prediction loss (MAE or difficulty-weighted MAE)
+        2. Information bottleneck losses:
+           - loss_info: KL divergence on encoding distribution
+           - loss_info_y: KL divergence on output distribution
+           - loss_info_x: KL divergence on reconstruction distribution
 
         Args:
             batch: Dictionary containing 'X' and 'y'
 
         Returns:
-            torch.Tensor: Loss value
+            torch.Tensor: Total loss value
         """
         y_true = batch['y']  # [B, output_window, N, output_dim]
-        y_predicted = self.predict(batch)  # [B, output_window, N, output_dim]
 
-        # Inverse transform predictions
-        y_true = self._scaler.inverse_transform(y_true[..., :self.output_dim])
-        y_predicted = self._scaler.inverse_transform(y_predicted[..., :self.output_dim])
+        # Forward pass with IB mechanism
+        y_predicted, encoding, (mu, std), noise_y, (mu_y, std_y), (mu_x, std_x) = self.forward_ib(batch, n_sample=1)
 
-        return loss.masked_mae_torch(y_predicted, y_true, 0)
+        # Inverse transform predictions and ground truth
+        y_true_inv = self._scaler.inverse_transform(y_true[..., :self.output_dim])
+        y_predicted_inv = self._scaler.inverse_transform(y_predicted[..., :self.output_dim])
+
+        # Add noise to output for robustness (from original implementation)
+        # Bug Fix #1: Keep noise_y shape as [B, T, N, 1] to match y_true_inv/y_predicted_inv
+        y_true_noisy = y_true_inv + noise_y
+        y_predicted_noisy = y_predicted_inv + noise_y
+
+        # Calculate prediction loss
+        if self.use_difficulty_weighting:
+            # Difficulty weighting: assign higher weights to harder samples
+            # Difficulty is measured by error magnitude
+            difficulty = torch.abs(y_predicted_noisy - y_true_noisy)
+            difficulty = difficulty.mean(dim=1).squeeze(-1)  # [B, N]
+            difficulty = F.softmax(difficulty, dim=1)
+            difficulty_weight = 2 - difficulty.unsqueeze(1).repeat(1, y_true_noisy.size(1), 1).unsqueeze(-1)  # [B, T, N, 1]
+
+            stu_loss_pre = torch.abs(y_predicted_noisy - y_true_noisy)
+            stu_loss = difficulty_weight * stu_loss_pre
+            loss_reg = stu_loss.mean()
+        else:
+            # Simple MAE loss
+            loss_reg = torch.abs(y_predicted_noisy - y_true_noisy).mean()
+
+        # Information Bottleneck losses (KL divergence)
+        if self.use_ib_loss:
+            # Compute difficulty weighting for IB losses
+            if self.use_difficulty_weighting:
+                B, N = difficulty.shape
+                # Expand difficulty to match distribution dimensions
+                KL_weight_loss = 1 + difficulty.unsqueeze(1).repeat(1, std.size(1), 1).unsqueeze(-1)  # [B, K, N, 1]
+                KL_weight_loss_y = 1 + difficulty.unsqueeze(1).repeat(1, std_y.size(1), 1).unsqueeze(-1)  # [B, T_out, N, 1]
+                KL_weight_loss_x = 1 + difficulty.unsqueeze(1).repeat(1, std_x.size(1), 1).unsqueeze(-1)  # [B, hidden_dim, N, 1]
+            else:
+                KL_weight_loss = 1
+                KL_weight_loss_y = 1
+                KL_weight_loss_x = 1
+
+            # KL divergence on encoding: -0.5 * (1 + 2*log(std) - mu^2 - std^2)
+            temp = -0.5 * (1 + 2 * std.log() - mu.pow(2) - std.pow(2))
+            temp = KL_weight_loss * temp
+            loss_info = temp.sum(1).mean().div(math.log(2))
+
+            # KL divergence on output distribution
+            temp = -0.5 * (1 + 2 * std_y.log() - mu_y.pow(2) - std_y.pow(2))
+            temp = KL_weight_loss_y * temp
+            loss_info_y = temp.sum(1).mean().div(math.log(2))
+
+            # KL divergence on reconstruction distribution
+            temp = -0.5 * (1 + 2 * std_x.log() - mu_x.pow(2) - std_x.pow(2))
+            temp = KL_weight_loss_x * temp
+            loss_info_x = temp.sum(1).mean().div(math.log(2))
+
+            # Total loss: prediction + IB regularization
+            total_loss = (loss_reg.div(math.log(2)) +
+                         2 * self.info_beta * loss_info +
+                         2 * self.info_beta * loss_info_y +
+                         2 * self.info_beta * loss_info_x)
+        else:
+            total_loss = loss_reg
+
+        return total_loss
 
     def predict(self, batch):
         """
-        Multi-step prediction.
+        Multi-step prediction with averaging over multiple samples.
 
         Args:
             batch: Dictionary containing input data
@@ -372,4 +492,10 @@ class RSTIB(AbstractTrafficStateModel):
         Returns:
             torch.Tensor: Predictions [B, output_window, N, output_dim]
         """
-        return self.forward(batch)
+        # During prediction, we can optionally average over multiple samples
+        if self.training:
+            return self.forward(batch)
+        else:
+            # Average over multiple samples for more robust predictions
+            prediction, _, _, _, _, _ = self.forward_ib(batch, n_sample=self.n_sample_avg)
+            return prediction

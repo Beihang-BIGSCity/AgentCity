@@ -27,7 +27,7 @@ import pandas as pd
 ROOT_DIR = Path(__file__).resolve().parent
 LIBCITY_DIR = ROOT_DIR / "Bigscity-LibCity"
 DEFAULT_CATALOG = ROOT_DIR / "test_flow.json"
-DEFAULT_OUTPUT = ROOT_DIR / "benchmark_results.xlsx"
+DEFAULT_OUTPUT = ROOT_DIR / "benchmark_results.csv"
 LOGS_DIR = ROOT_DIR / "batch_logs"  # 日志目录
 
 
@@ -68,6 +68,7 @@ class TestResult:
     mape: Optional[float] = None
     error_message: str = ""
     runtime_seconds: float = 0.0
+    exp_id: int = 0
 
     def to_dict(self) -> dict:
         return {
@@ -79,6 +80,7 @@ class TestResult:
             "MAPE": self.mape,
             "error": self.error_message,
             "runtime_s": self.runtime_seconds,
+            "exp_id": self.exp_id,
         }
 
 
@@ -231,11 +233,11 @@ class BatchRunner:
 
         # 检查模型是否已存在于 LibCity
         model_file = LIBCITY_DIR / "libcity" / "model" / "traffic_speed_prediction" / f"{paper.model_name}.py"
-        '''if model_file.exists():
+        if model_file.exists():
             print(f"[INFO] Model {paper.model_name} already exists in LibCity")
             async with self._lock:
                 self.migration_status[paper.model_name] = "exists"
-            return True'''
+            return True
 
         # 构建 paper dict，与 catalog.json 格式一致
         paper_dict = {
@@ -288,7 +290,7 @@ asyncio.run(run())
                 print(f"[ERROR] Migration timeout for {paper.model_name} (log: {log_file})")
                 return False
             else:
-                self.migration_status[paper.model_name] = f"failed: {stderr[:200]}"
+                self.migration_status[paper.model_name] = f"failed: {stderr}"
                 print(f"[ERROR] Migration failed for {paper.model_name} (log: {log_file})")
                 return False
 
@@ -352,7 +354,7 @@ asyncio.run(run())
                 print(f"[ERROR] Tuning timeout for {paper.model_name} (log: {log_file})")
                 return False
             else:
-                self.tuning_status[paper.model_name] = f"failed: {stderr[:200]}"
+                self.tuning_status[paper.model_name] = f"failed: {stderr}"
                 print(f"[ERROR] Tuning failed for {paper.model_name} (log: {log_file})")
                 return False
 
@@ -367,7 +369,8 @@ asyncio.run(run())
         log_file = LOGS_DIR / f"{paper.model_name}_test.log"
 
         start_time = datetime.now()
-
+        import random
+        exp_id = random.randint(50000, 100000)
         cmd = [
             sys.executable,
             "run_model.py",
@@ -377,6 +380,7 @@ asyncio.run(run())
             "--train", "true",
             "--max_epoch", str(self.config.max_epochs),
             "--gpu_id", "0",
+            "--exp_id", str(exp_id),
         ]
 
         returncode, stdout, stderr = await self._run_subprocess(
@@ -389,7 +393,7 @@ asyncio.run(run())
 
         if returncode == 0:
             # 解析输出获取指标
-            mae, rmse, mape = self._parse_metrics(stdout + stderr)
+            mae, rmse, mape = self._parse_metrics(exp_id)
             return TestResult(
                 model_name=paper.model_name,
                 dataset=dataset,
@@ -398,6 +402,7 @@ asyncio.run(run())
                 rmse=rmse,
                 mape=mape,
                 runtime_seconds=runtime,
+                exp_id=exp_id
             )
         elif returncode == -1 and stderr == "Timeout":
             return TestResult(
@@ -406,14 +411,16 @@ asyncio.run(run())
                 success=False,
                 error_message="Timeout",
                 runtime_seconds=self.config.timeout_seconds,
+                exp_id=exp_id
             )
         else:
             return TestResult(
                 model_name=paper.model_name,
                 dataset=dataset,
                 success=False,
-                error_message=stderr[:500],
+                error_message=stderr,
                 runtime_seconds=runtime,
+                exp_id=exp_id
             )
 
     def _normalize_dataset_name(self, dataset: str) -> str:
@@ -440,15 +447,25 @@ asyncio.run(run())
         }
         return mappings.get(dataset, dataset.replace("-", "_"))
 
-    def _parse_metrics(self, output: str) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+    def _parse_metrics(self, exp_id) -> Tuple[Optional[float], Optional[float], Optional[float]]:
         """
         从混合了日志和表格的复杂输出中提取第12行的指标。
         策略：行遍历 + 严格特征匹配
         """
         mae, rmse, mape = None, None, None
-
+        log_dir = LIBCITY_DIR / "libcity" / "cache" / str(exp_id) / "evaluate_cache"
+        #import pdb; pdb.set_trace()
+        for files in log_dir.iterdir():
+            if files.suffix == '.csv':
+                output = pd.read_csv(log_dir / files)
+                break
+        if 'output' not in locals():
+            return mae, rmse, mape
+        mae = output['masked_MAE'].iloc[11]
+        rmse = output['masked_RMSE'].iloc[11]
+        mape = output['masked_MAPE'].iloc[11]
+        return mae, rmse, mape
         lines = output.strip().split('\n')
-
         for line in lines:
             line = line.strip()
         
@@ -496,7 +513,7 @@ asyncio.run(run())
             if result.success:
                 print(f"  [OK] {dataset}: MAE={result.mae}, RMSE={result.rmse}, MAPE={result.mape}")
             else:
-                print(f"  [FAIL] {dataset}: {result.error_message[:100]}")
+                print(f"  [FAIL] {dataset}: {result.error_message}")
 
         return results
 
@@ -510,8 +527,8 @@ asyncio.run(run())
         migration_ok = await self.run_migration(paper)
 
         # 2. 运行调参
-        if migration_ok:
-            await self.run_tuning(paper)
+        '''if migration_ok:
+            await self.run_tuning(paper)'''
 
         # 3. 运行测试
         if migration_ok:
@@ -545,6 +562,7 @@ asyncio.run(run())
                     "Test_MAE": test_result.mae if test_result else None,
                     "Test_RMSE": test_result.rmse if test_result else None,
                     "Test_MAPE": test_result.mape if test_result else None,
+                    "exp_id": test_result.exp_id if test_result else None,
                     # 状态
                     "Test_Status": "Success" if test_result and test_result.success else "Failed" if test_result else "Not Run",
                     "Migration_Status": self.migration_status.get(paper.model_name, "N/A"),
@@ -566,11 +584,11 @@ asyncio.run(run())
         df = pd.DataFrame(comparison_data)
 
         # 创建 Excel writer
-        with pd.ExcelWriter(self.config.output_path, engine="openpyxl") as writer:
+        #with pd.ExcelWriter(self.config.output_path, engine="openpyxl") as writer:
             # 主对比表
-            df.to_excel(writer, sheet_name="Comparison", index=False)
+        df.to_csv(self.config.output_path, index=False)
 
-            # 摘要表
+        '''# 摘要表
             summary_data = []
             for paper in self.papers:
                 summary_data.append({
@@ -590,7 +608,7 @@ asyncio.run(run())
             # 测试结果明细
             if self.test_results:
                 results_df = pd.DataFrame([r.to_dict() for r in self.test_results])
-                results_df.to_excel(writer, sheet_name="Test_Results", index=False)
+                results_df.to_excel(writer, sheet_name="Test_Results", index=False)'''
 
         print(f"[OK] Excel report saved to: {self.config.output_path}")
 
@@ -676,7 +694,10 @@ asyncio.run(run())
             process_with_semaphore(paper, i)
             for i, paper in enumerate(self.papers, 1)
         ]
-        await asyncio.gather(*tasks)
+        try:
+            await asyncio.gather(*tasks)
+        except Exception as e:
+            print(f"[ERROR] Error during async processing: {e}")
 
         # 生成报告
         self.generate_excel_report()
@@ -736,7 +757,7 @@ def main():
     parser.add_argument(
         "--timeout",
         type=int,
-        default=5000,
+        default=20000,
         help="每个任务的超时时间（秒）(default: 3600)",
     )
     parser.add_argument(

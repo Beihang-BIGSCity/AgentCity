@@ -70,6 +70,7 @@ class TrajLocPredEvaluator(AbstractEvaluator):
             recall = self.intermediate_result['hit'] \
                      / self.intermediate_result['total']
             self.result[recall_key] = recall
+            self.result['ACC@{}'.format(self.topk)] = recall
             if 'F1' in self.metrics:
                 f1_key = 'F1@{}'.format(self.topk)
                 if precision + recall == 0:
@@ -89,6 +90,7 @@ class TrajLocPredEvaluator(AbstractEvaluator):
                 ndcg_key = 'NDCG@{}'.format(self.topk)
                 self.result[ndcg_key] = self.intermediate_result['dcg'] \
                                         / self.intermediate_result['total']
+            
         elif(type(self.topk) == type([])):
             for k in self.topk:
                 precision_key = 'Precision@{}'.format(k)
@@ -101,6 +103,7 @@ class TrajLocPredEvaluator(AbstractEvaluator):
                 recall = self.intermediate_result['hit' + str(k)] \
                          / self.intermediate_result['total']
                 self.result[recall_key] = recall
+                self.result['ACC@{}'.format(k)] = recall
                 if 'F1' in self.metrics:
                     f1_key = 'F1@{}'.format(k)
                     if precision + recall == 0:
@@ -112,6 +115,7 @@ class TrajLocPredEvaluator(AbstractEvaluator):
                     mrr_key = 'MRR@{}'.format(k)
                     self.result[mrr_key] = self.intermediate_result['rank' + str(k)] \
                                            / self.intermediate_result['total']
+                    self.result["MRR"] = self.result[mrr_key]
                 if 'MAP' in self.metrics:
                     map_key = 'MAP@{}'.format(k)
                     self.result[map_key] = self.intermediate_result['rank' + str(k)] \

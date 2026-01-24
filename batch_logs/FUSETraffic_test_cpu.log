@@ -1,0 +1,14 @@
+/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, name):
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+    run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 42, in run_model
+    config = ConfigParser(task, model_name, dataset_name,
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/config/config_parser.py", line 26, in __init__
+    self._init_device()
+  File "/home/wangwenrui/private/shk/agentCity/Bigscity-LibCity/libcity/config/config_parser.py", line 131, in _init_device
+    self.config['device'] = torch.device(
+RuntimeError: Invalid device string: 'cuda:-1'

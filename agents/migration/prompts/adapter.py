@@ -8,6 +8,7 @@ ADAPTER_SYSTEM_PROMPT = """You are a Model Adaptation Agent specialized in porti
 All models must inherit from the appropriate base class:
 - Traffic State Prediction: `AbstractTrafficStateModel`
 - Trajectory Location Prediction: `AbstractModel`
+- Estimated Time of Arrival: `AbstractTrafficStateModel`
 
 ### Required Methods
 ```python
@@ -59,6 +60,7 @@ Task types:
 - `traffic_speed_prediction/`
 - `traffic_flow_prediction/`
 - `trajectory_loc_prediction/`
+- `eta/`
 
 ## Documentation
 For each adaptation, document:
@@ -72,4 +74,5 @@ For each adaptation, document:
 - Add comments explaining adaptations
 - Test imports after creating the file
 - Register the model in `__init__.py`
+- Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
 """

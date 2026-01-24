@@ -1,0 +1,99 @@
+
+============================================================
+Timestamp: 2026-01-24 15:44:58
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python -c 
+import asyncio
+import json
+from agents import AppPaths, setup_logger
+from agents.core.orchestrator import AgentOrchestrator
+
+async def run():
+    paths = AppPaths()
+    paths.ensure()
+    logger = setup_logger(paths.log_file)
+
+    orchestrator = AgentOrchestrator(paths=paths, logger=logger)
+
+    paper = json.loads('{"title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)", "model_name": "STSSDL", "repo_url": "", "datasets": ["METR-LA"], "conference": "NeurIPS", "year": 2025, "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf"}')
+    await orchestrator.run_migration([paper])
+
+asyncio.run(run())
+
+============================================================
+
+[ERR] Traceback (most recent call last):
+[ERR]   File "<string>", line 4, in <module>
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/__init__.py", line 3, in <module>
+[ERR]     from .core import (
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/core/__init__.py", line 10, in <module>
+[ERR]     from .orchestrator import AgentOrchestrator
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/core/orchestrator.py", line 12, in <module>
+[ERR]     from agents.tuning.workflow import get_tuning_workflow
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/tuning/__init__.py", line 1, in <module>
+[ERR]     from .workflow import get_tuning_workflow
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/tuning/workflow.py", line 12, in <module>
+[ERR]     from .prompts.lead_agent import build_tuning_lead_prompt
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/tuning/prompts/__init__.py", line 4, in <module>
+[ERR]     from .planner import PLANNER_SYSTEM_PROMPT
+[ERR] ModuleNotFoundError: No module named 'agents.tuning.prompts.planner'
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-01-24 15:53:49
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python -c 
+import asyncio
+import json
+from agents import AppPaths, setup_logger
+from agents.core.orchestrator import AgentOrchestrator
+
+async def run():
+    paths = AppPaths()
+    paths.ensure()
+    logger = setup_logger(paths.log_file)
+
+    orchestrator = AgentOrchestrator(paths=paths, logger=logger)
+
+    paper = json.loads('{"title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)", "model_name": "STSSDL", "repo_url": "", "datasets": ["METR-LA"], "conference": "NeurIPS", "year": 2025, "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf"}')
+    await orchestrator.run_migration([paper])
+
+asyncio.run(run())
+
+============================================================
+
+[ERR] Traceback (most recent call last):
+[ERR]   File "<string>", line 4, in <module>
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/__init__.py", line 3, in <module>
+[ERR]     from .core import (
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/core/__init__.py", line 10, in <module>
+[ERR]     from .orchestrator import AgentOrchestrator
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/core/orchestrator.py", line 10, in <module>
+[ERR]     from agents.migration.runtime import clear_active_paper, set_active_paper
+[ERR]   File "/home/wangwenrui/private/shk/agentCity/agents/migration/__init__.py", line 10, in <module>
+[ERR]     from .legacy_prompts import build_migration_prompt, build_validation_prompt
+[ERR] ModuleNotFoundError: No module named 'agents.migration.legacy_prompts'
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-01-24 15:54:48
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python -c 
+import asyncio
+import json
+from agents import AppPaths, setup_logger
+from agents.core.orchestrator import AgentOrchestrator
+
+async def run():
+    paths = AppPaths()
+    paths.ensure()
+    logger = setup_logger(paths.log_file)
+
+    orchestrator = AgentOrchestrator(paths=paths, logger=logger)
+
+    paper = json.loads('{"title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)", "model_name": "STSSDL", "repo_url": "", "datasets": ["METR-LA"], "conference": "NeurIPS", "year": 2025, "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf"}')
+    await orchestrator.run_migration([paper])
+
+asyncio.run(run())
+
+============================================================
+

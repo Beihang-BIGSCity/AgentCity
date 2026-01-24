@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.model.CandidateOpration import create_op
-from src.model.mode import Mode
+from libcity.model.traffic_speed_prediction.autostf_layers.candidate_operation import create_op
+from libcity.model.traffic_speed_prediction.autostf_layers.mode import Mode
 
 
 class TemporalLayerMixedOp(nn.Module):

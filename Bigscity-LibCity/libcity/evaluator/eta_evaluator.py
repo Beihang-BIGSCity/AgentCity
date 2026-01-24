@@ -73,10 +73,10 @@ class ETAEvaluator(AbstractEvaluator):
                     loss.masked_mape_torch(y_pred, y_true).item())
             elif metric == 'R2':
                 self.intermediate_result[metric].append(
-                    loss.r2_score_torch(y_pred, y_true).item())
+                    loss.r2_score_torch(y_pred, y_true))
             elif metric == 'EVAR':
                 self.intermediate_result[metric].append(
-                    loss.explained_variance_score_torch(y_pred, y_true).item())
+                    loss.explained_variance_score_torch(y_pred, y_true))
 
     def evaluate(self):
         """
