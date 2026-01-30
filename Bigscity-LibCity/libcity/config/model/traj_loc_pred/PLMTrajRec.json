@@ -1,0 +1,35 @@
+{
+    "model": "PLMTrajRec",
+    "task": "traj_loc_pred",
+
+    "hidden_dim": 512,
+    "conv_kernel": 9,
+    "soft_traj_num": 128,
+    "road_candi": true,
+    "dropout": 0.3,
+    "lambda1": 10,
+
+    "bert_model_path": "bert-base-uncased",
+    "use_lora": true,
+    "lora_r": 8,
+    "lora_alpha": 32,
+    "lora_dropout": 0.01,
+
+    "default_keep_ratio": 0.125,
+
+    "id_size": 2505,
+    "grid_size": 64,
+    "time_slots": 24,
+
+    "batch_size": 64,
+    "learning_rate": 0.0001,
+    "max_epoch": 50,
+    "optimizer": "adamw",
+    "clip": 1.0,
+    "lr_step": 10,
+    "lr_decay": 0.5,
+    "lr_scheduler": "steplr",
+    "log_every": 1,
+    "load_best_epoch": true,
+    "hyper_tune": false
+}

@@ -1,0 +1,6 @@
+{
+  "metrics": ["Accuracy", "Recall", "F1", "MRR", "MAP", "NDCG"],
+  "topk": [1, 5, 10],
+  "evaluate_method": "all",
+  "mode": "test"
+}

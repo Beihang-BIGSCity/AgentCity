@@ -1,0 +1,19 @@
+{
+    "llm_model_path": "Qwen/Qwen2.5-1.5B-Instruct",
+    "api_base_url": "http://localhost:7863/v1",
+    "api_key": "EMPTY",
+    "temperature": 0.0,
+    "max_tokens": 512,
+    "profiler_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "forecaster_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "predictor_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "top_k": 10,
+    "num_candidate": 25,
+    "use_rag": false,
+    "fallback_mode": true,
+    "batch_size": 1,
+    "learning_rate": 0.0,
+    "max_epoch": 1,
+    "train": false,
+    "evaluate_method": "ranking"
+}

@@ -64,18 +64,22 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
         exp_id, model_name, dataset_name)
     model = get_model(config, data_feature)
     if model_name == 'UniST':
-        print('Loading pretrained weights for UniST...')
-        ckpt = torch.load('model_Emb.pkl')
-        new_ckpt = {'model.' + k: v for k, v in ckpt.items()}
-        filtered_dict = {}
-        model_dict = model.state_dict()
-        for k, v in new_ckpt.items():
-            if k in model_dict and v.shape == model_dict[k].shape:
-                filtered_dict[k] = v
-            else:
-                print(f"[SKIP] {k}: checkpoint shape {v.shape} != model shape {model_dict[k].shape if k in model_dict else 'NOT FOUND'}")
-        model.load_state_dict(filtered_dict,strict=False)
-        print('Pretrained weights loaded.')
+        pretrain_file = config.get('pretrained_weights', None) or 'model_Emb.pkl'
+        if os.path.exists(pretrain_file):
+            print(f'Loading pretrained weights for UniST from {pretrain_file}...')
+            ckpt = torch.load(pretrain_file)
+            new_ckpt = {'model.' + k: v for k, v in ckpt.items()}
+            filtered_dict = {}
+            model_dict = model.state_dict()
+            for k, v in new_ckpt.items():
+                if k in model_dict and v.shape == model_dict[k].shape:
+                    filtered_dict[k] = v
+                else:
+                    print(f"[SKIP] {k}: checkpoint shape {v.shape} != model shape {model_dict[k].shape if k in model_dict else 'NOT FOUND'}")
+            model.load_state_dict(filtered_dict, strict=False)
+            print('Pretrained weights loaded.')
+        else:
+            print(f'No pretrained weights found at {pretrain_file}, training from scratch.')
     executor = get_executor(config, model, data_feature)
     # 训练
     if train:

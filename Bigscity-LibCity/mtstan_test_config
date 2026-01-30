@@ -1,0 +1,1 @@
+{"max_epoch": 3, "batch_size": 32, "gpu": true}

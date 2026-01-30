@@ -175,3 +175,11 @@ def smooth_l1_loss(preds, labels, beta=1.0):
     small_res = 0.5 * (residual ** 2 / beta)
     large_res = abs_residual - (0.5 * beta)
     return torch.mean(torch.where(condition, small_res, large_res))
+
+
+def l2_reg_loss(model):
+    """Returns the squared L2 norm of output layer of given model"""
+    for name, param in model.named_parameters():
+        if name == 'linear.weight':
+            return torch.sum(torch.square(param))
+    return torch.tensor(0.0)

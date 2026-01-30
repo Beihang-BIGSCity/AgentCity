@@ -1,0 +1,33 @@
+{
+    "model": "DutyTTE",
+
+    "segment_dims": 12693,
+    "node_dims": 4601,
+    "id_embed_dim": 20,
+    "slice_dims": 145,
+    "slice_embed_dim": 20,
+    "hidden_size": 256,
+    "num_experts": 8,
+    "top_k": 4,
+    "n_embed": 256,
+    "m": 5,
+    "alpha": 0.1,
+    "load_balance_weight": 0.01,
+    "dropout": 0.1,
+
+    "output_pred": false,
+
+    "max_epoch": 100,
+    "batch_size": 128,
+    "learner": "adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "lr_decay": true,
+    "lr_scheduler": "ReduceLROnPlateau",
+    "lr_decay_ratio": 0.5,
+    "lr_patience": 5,
+    "clip_grad_norm": true,
+    "max_grad_norm": 5.0,
+    "use_early_stop": true,
+    "patience": 20
+}

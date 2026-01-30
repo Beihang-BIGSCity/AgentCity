@@ -25,6 +25,7 @@ import shutil
 import pandas as pd
 import concurrent.futures
 import itertools
+from pathlib import Path
 list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet']
 # 项目根目录
 ROOT_DIR = Path(__file__).resolve().parent
@@ -112,20 +113,34 @@ async def _run_subprocess(
             print(f"[{prefix}] EXCEPTION: {str(e)}")
             return -1, "", str(e)
 
-
+def _parse_metrics(task, model_name, dataset, exp_id):
+        log_dir = LIBCITY_DIR / "libcity" / "cache" / str(exp_id) / "evaluate_cache"
+        #import pdb; pdb.set_trace()
+        for file in log_dir.iterdir():
+            if file.suffix == '.csv' or file.suffix == '.json' or file.suffix == '.jsonl':
+                print(file)
+                new_name = f'{model_name}{file.suffix}'   # 随意改名字
+                target_dir = Path(ROOT_DIR) / 'result' / task / dataset
+                target_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(file, target_dir / new_name)
 
 async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_pred'):
         """运行单个测试"""
         print(f"[INFO] Testing {model_name} on {dataset}...")
 
         # 标准化数据集名称
-
+        target_path = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.csv'
+        target_path1 = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.json'
+        target_path2 = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.jsonl'
+        if target_path.exists() and target_path1.exists() and target_path2.exists():
+            print(f"[INFO] Result for {model_name} on {dataset} already exists. Skipping...")
+            return
         # 日志文件
         log_file = LOGS_DIR / f"{model_name}_test.log"
 
         start_time = datetime.now()
         import random
-        exp_id = random.randint(50000, 200000)
+        exp_id = random.randint(100000, 300000)
         cmd = [
             sys.executable,
             "run_model.py",
@@ -144,7 +159,7 @@ async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_p
             prefix=f"{model_name}:test:{dataset}",
         )
         while returncode < 0:
-            time.sleep(3600)
+            time.sleep(1600)
             returncode, stdout, stderr = await _run_subprocess(
             cmd, LIBCITY_DIR,
             log_file=log_file,
@@ -152,26 +167,7 @@ async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_p
         )
 
         runtime = (datetime.now() - start_time).total_seconds()
-
-        if returncode == 0:
-            # 解析输出获取指标
-            _parse_metrics(exp_id)
-
-
-def _parse_metrics(self, task, model_name, dataset, exp_id) -> Tuple[Optional[float], Optional[float], Optional[float]]:
-        """
-        从混合了日志和表格的复杂输出中提取第12行的指标。
-        策略：行遍历 + 严格特征匹配
-        """
-        mae, rmse, mape = None, None, None
-        log_dir = LIBCITY_DIR / "libcity" / "cache" / str(exp_id) / "evaluate_cache"
-        #import pdb; pdb.set_trace()
-        for file in log_dir.iterdir():
-            if file.suffix == '.csv' or file.suffix == '.json' or file.suffix == '.jsonl':
-                new_name = f'{model_name}{file.suffix}'   # 随意改名字
-                target_dir = os.path.join(ROOT_DIR,'result', task, dataset)
-                target_dir.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(file, target_dir / new_name)
+        _parse_metrics(task, model_name, dataset, exp_id)
 
 def worker(model, dataset, gpu_id, max_epochs=35):
     """线程入口：捕获异常，防止一个任务崩掉整个池"""
@@ -187,18 +183,13 @@ def run_test_process(args):
 
 def main():
 
-    model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet']
+    #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet',''ASeer']
+    model_list = ['GriddedTNP','MLCAFormer','PatchSTG', 'HSTWAVE','STHSepNet','BigST','DSTMamba','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN']
     task = 'traffic_state_pred'
     dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
+    tasks = [(m, d, i % 3+1) for i, (m, d) in enumerate(itertools.product(model_list, dataset_list))]
     
-    '''for model in model_list:
-        for i in range(len(dataset_list)):
-            dataset = dataset_list[i]
-            gpu_id = i % 4
-            run_test(model,dataset,gpu_id,max_epochs=35)'''
-    tasks = [(m, d, i % 4) for i, (m, d) in enumerate(itertools.product(model_list, dataset_list))]
-    
-    with Pool(processes=8) as pool:  # 4个进程对应4张卡
+    with Pool(processes=4) as pool:  # 4个进程对应4张卡
         results = pool.map(run_test_process, tasks)
 
 

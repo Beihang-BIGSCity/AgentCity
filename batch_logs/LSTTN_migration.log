@@ -765,3 +765,33 @@ asyncio.run(run())
 [ERR] Error output: Check stderr output for details
 
 [Return Code: 1]
+
+============================================================
+Timestamp: 2026-01-30 09:29:37
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python -c 
+import asyncio
+import json
+from agents import AppPaths, setup_logger
+from agents.core.orchestrator import AgentOrchestrator
+
+async def run():
+    paths = AppPaths()
+    paths.ensure()
+    logger = setup_logger(paths.log_file)
+
+    orchestrator = AgentOrchestrator(paths=paths, logger=logger)
+
+    paper = json.loads('{"title": "LSTTN: A Long-Short Term Transformer-based Spatio-temporal Neural Network for Traffic Flow Forecasting", "model_name": "LSTTN", "repo_url": "https://github.com/GeoX-Lab/LSTTN", "datasets": ["METR_LA"], "conference": "Knowledge-Based Systems", "year": 2024, "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ArXiv2024_LSTTN.pdf"}')
+    await orchestrator.run_migration([paper])
+
+asyncio.run(run())
+
+============================================================
+
+[ERR] 2026-01-30 09:29:44 | INFO | === Workflow: migration ===
+[ERR] 2026-01-30 09:29:44 | INFO | Starting multi-agent stage: Model Migration (migration)
+[ERR] 2026-01-30 09:32:49 | INFO | Assistant: API Error: Connection error.
+[ERR] 2026-01-30 09:32:49 | INFO | Completed multi-agent stage: Model Migration
+[ERR] 2026-01-30 09:32:49 | INFO | === Completed workflow: migration ===
+
+[Return Code: 0]

@@ -36,6 +36,21 @@ from libcity.model.traffic_speed_prediction.STDMAE import STDMAE
 from libcity.model.traffic_speed_prediction.AutoSTF import AutoSTF
 from libcity.model.traffic_speed_prediction.STSSDL import STSSDL
 from libcity.model.traffic_speed_prediction.LightST import LightST
+from libcity.model.traffic_speed_prediction.BigST import BigST
+from libcity.model.traffic_speed_prediction.STWave import STWave
+from libcity.model.eta.MTSTAN import MTSTAN
+try:
+    from libcity.model.traffic_speed_prediction.DSTMamba import DSTMamba
+except ImportError:
+    DSTMamba = None  # mamba_ssm not installed
+try:
+    from libcity.model.traffic_speed_prediction.UrbanDiT import UrbanDiT
+except ImportError:
+    UrbanDiT = None  # einops not installed
+try:
+    from libcity.model.traffic_speed_prediction.UniST import UniST
+except ImportError:
+    UniST = None  # timm not installed
 
 __all__ = [
     "DCRNN",
@@ -76,4 +91,10 @@ __all__ = [
     "AutoSTF",
     "STSSDL",
     "LightST",
+    "BigST",
+    "STWave",
+    "MTSTAN",
+    "DSTMamba",
+    "UrbanDiT",
+    "UniST",
 ]

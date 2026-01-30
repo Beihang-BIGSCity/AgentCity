@@ -232,8 +232,14 @@ class BatchRunner:
         print(f"[INFO] Running migration for {paper.model_name}...")
 
         # 检查模型是否已存在于 LibCity
-        model_file = LIBCITY_DIR / "libcity" / "model" / "traffic_speed_prediction" / f"{paper.model_name}.py"
-        if model_file.exists():
+        model_file_1 = LIBCITY_DIR / "libcity" / "model" / "traffic_speed_prediction" / f"{paper.model_name}.py"
+        model_file_2 = LIBCITY_DIR / "libcity" / "model" / "traffic_flow_prediction" / f"{paper.model_name}.py"
+        model_file_3 = LIBCITY_DIR / "libcity" / "model" / "eta" / f"{paper.model_name}.py"
+        model_file_4 = LIBCITY_DIR / "libcity" / "model" / "trajectory_loc_prediction" / f"{paper.model_name}.py"
+        model_file_5 = LIBCITY_DIR / "libcity" / "model" / "map_matching" / f"{paper.model_name}.py"
+        model_file_6 = LIBCITY_DIR / "libcity" / "model" / "road_representation" / f"{paper.model_name}.py"
+        model_file_7 = LIBCITY_DIR / "libcity" / "model" / "trajectory_embedding" / f"{paper.model_name}.py"
+        if any(model_file.exists() for model_file in [model_file_1, model_file_2, model_file_3, model_file_4, model_file_5, model_file_6, model_file_7]):
             print(f"[INFO] Model {paper.model_name} already exists in LibCity")
             async with self._lock:
                 self.migration_status[paper.model_name] = "exists"
@@ -700,7 +706,7 @@ asyncio.run(run())
             print(f"[ERROR] Error during async processing: {e}")
 
         # 生成报告
-        self.generate_excel_report()
+        #self.generate_excel_report()
 
         print("\n" + "=" * 60)
         print("Batch Run Complete!")
@@ -734,12 +740,12 @@ def main():
     )
     parser.add_argument(
         "--skip-tuning",
-        action="store_true",
+        default=True,
         help="跳过调参步骤",
     )
     parser.add_argument(
         "--skip-test",
-        action="store_true",
+        default=True,
         help="跳过测试步骤（仅生成报告框架）",
     )
     parser.add_argument(

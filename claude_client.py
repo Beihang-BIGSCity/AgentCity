@@ -290,11 +290,12 @@ async def evaluate_paper_relevance(args):
 @tool(
     "test_migration",
     "Run the LibCity benchmark with the provided model and dataset (supports GPU acceleration)",
-    {"model_name": str, "dataset": str, "paper_title": str, "gpu": str},
+    {"model_name": str, "dataset": str, "task": str, "paper_title": str, "gpu": str},
 )
 async def test_migration(args):
     model_name = args.get("model_name")
-    dataset = args.get("dataset", "PEMSD8")
+    dataset = args.get("dataset", "METR_LA")
+    task = args.get("task", "traffic_state_pred")
     gpu = args.get("gpu", "0")  # Default to cuda:0
     if not model_name:
         return {
@@ -311,7 +312,7 @@ async def test_migration(args):
         "python",
         "run_model.py",
         "--task",
-        "traffic_state_pred",
+        task,
         "--model",
         model_name,
         "--dataset",

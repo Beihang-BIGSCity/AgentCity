@@ -10,7 +10,12 @@ from libcity.model.trajectory_loc_prediction.STAN import STAN
 from libcity.model.trajectory_loc_prediction.CARA import CARA
 from libcity.model.trajectory_loc_prediction.GeoSAN import GeoSAN
 from libcity.model.trajectory_loc_prediction.HSTLSTM import HSTLSTM
-from libcity.model.trajectory_loc_prediction.LightPath import LightPath
+from libcity.model.trajectory_loc_prediction.GETNext import GETNext
+from libcity.model.trajectory_loc_prediction.LoTNext import LoTNext
+from libcity.model.trajectory_loc_prediction.DiffTraj import DiffTraj
+from libcity.model.trajectory_loc_prediction.PLMTrajRec import PLMTrajRec
+from libcity.model.trajectory_loc_prediction.GNPRSID import GNPRSID
+from libcity.model.trajectory_loc_prediction.CoMaPOI import CoMaPOI
 __all__ = [
     "DeepMove",
     "RNN",
@@ -24,5 +29,10 @@ __all__ = [
     "CARA",
     "GeoSAN",
     "HSTLSTM",
-    "LightPath"
+    "GETNext",
+    "LoTNext",
+    "DiffTraj",
+    "PLMTrajRec",
+    "GNPRSID",
+    "CoMaPOI"
 ]

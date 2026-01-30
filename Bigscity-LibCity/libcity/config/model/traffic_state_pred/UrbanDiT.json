@@ -1,0 +1,46 @@
+{
+  "model": "UrbanDiT",
+  "task": "traffic_state_pred",
+
+  "max_epoch": 200,
+  "batch_size": 4,
+  "scaler": "standard",
+
+  "learner": "adam",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0,
+
+  "lr_decay": true,
+  "lr_scheduler": "ReduceLROnPlateau",
+  "lr_decay_ratio": 0.5,
+  "lr_patience": 10,
+  "lr_threshold": 0.001,
+
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 30,
+
+  "input_window": 12,
+  "output_window": 12,
+
+  "hidden_size": 384,
+  "depth": 6,
+  "num_heads": 6,
+  "mlp_ratio": 2,
+  "patch_size": 2,
+  "t_patch_len": 2,
+  "stride": 2,
+  "is_spatial": 1,
+  "is_prompt": 0,
+  "prompt_content": "psptpfpm",
+  "num_memory": 512,
+
+  "diffusion_steps": 200,
+  "num_inference_steps": 20,
+  "weighting_scheme": "logit_normal",
+  "precondition_outputs": 1,
+
+  "grid_height": null,
+  "grid_width": null
+}

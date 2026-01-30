@@ -9,6 +9,7 @@ All models must inherit from the appropriate base class:
 - Traffic State Prediction: `AbstractTrafficStateModel`
 - Trajectory Location Prediction: `AbstractModel`
 - Estimated Time of Arrival: `AbstractTrafficStateModel`
+- Trajectory Embedding: `AbstractModel`
 
 ### Required Methods
 ```python

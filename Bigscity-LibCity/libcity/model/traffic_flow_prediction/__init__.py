@@ -39,10 +39,25 @@ from libcity.model.traffic_flow_prediction.ASTGNN import ASTGNN
 from libcity.model.traffic_flow_prediction.ASTGNNCommon import ASTGNNCommon
 from libcity.model.traffic_flow_prediction.FreTS import FreTS
 from libcity.model.traffic_flow_prediction.LSTTN import LSTTN
+try:
+    from libcity.model.traffic_flow_prediction.ASeer import ASeer
+except Exception:
+    ASeer = None  # dgl not installed or broken
+try:
+    from libcity.model.traffic_flow_prediction.STHSepNet import STHSepNet
+except Exception:
+    STHSepNet = None  # dgl not installed or broken
+try:
+    from libcity.model.traffic_flow_prediction.HSTWAVE import HSTWAVE
+except Exception:
+    HSTWAVE = None  # dgl not installed or broken
 # from libcity.model.traffic_flow_prediction.LightST import LightST
 
 
 __all__ = [
+    "HSTWAVE",
+    "STHSepNet",
+    "ASeer",
     "FreTS",
     "LSTTN",
     # "LightST",

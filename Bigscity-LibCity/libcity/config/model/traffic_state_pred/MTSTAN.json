@@ -1,0 +1,30 @@
+{
+  "model": "MTSTAN",
+  "emb_size": 64,
+  "input_window": 12,
+  "output_window": 12,
+  "input_length": 12,
+  "output_length": 12,
+  "num_heads": 4,
+  "num_blocks": 1,
+  "dropout": 0.0,
+  "feature_dim": 1,
+
+  "alpha1": 0.3,
+  "alpha2": 0.4,
+  "alpha3": 0.3,
+
+  "max_epoch": 50,
+  "batch_size": 64,
+  "learner": "adam",
+  "learning_rate": 5e-4,
+  "lr_decay": false,
+  "clip_grad_norm": false,
+  "use_early_stop": true,
+  "patience": 10,
+
+  "scaler": "standard",
+  "load_external": false,
+
+  "_comment": "WORKAROUND: Original paper uses output_window=6 and output_length=6, but LibCity framework has a limitation in data/utils.py that causes ValueError when input_window != output_window. Both are set to 12 as a temporary workaround until the framework issue is resolved."
+}

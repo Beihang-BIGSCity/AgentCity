@@ -1,0 +1,68 @@
+{
+    "model": "BERTContrastiveLM",
+
+    "_comment": "BERT with both Contrastive Learning and Masked Language Model",
+
+    "_comment_model_architecture": "=== Model Architecture Parameters ===",
+    "d_model": 768,
+    "n_layers": 12,
+    "attn_heads": 12,
+    "mlp_ratio": 4,
+    "dropout": 0.1,
+    "drop_path": 0.3,
+    "attn_drop": 0.1,
+    "type_ln": "pre",
+    "future_mask": false,
+    "add_cls": false,
+    "pooling": "mean",
+
+    "_comment_embedding": "=== Embedding Parameters ===",
+    "add_time_in_day": true,
+    "add_day_in_week": true,
+    "add_pe": true,
+
+    "_comment_gat": "=== Graph Attention Network Parameters ===",
+    "add_gat": true,
+    "gat_heads_per_layer": [8, 1],
+    "gat_features_per_layer": [16, 768],
+    "gat_dropout": 0.6,
+    "gat_avg_last": true,
+    "load_trans_prob": false,
+
+    "_comment_temporal": "=== Temporal Bias Parameters ===",
+    "add_temporal_bias": true,
+    "temporal_bias_dim": 64,
+    "use_mins_interval": false,
+
+    "_comment_augmentation": "=== Data Augmentation Parameters ===",
+    "cutoff_row_rate": 0.2,
+    "cutoff_column_rate": 0.2,
+    "cutoff_random_rate": 0.2,
+    "sample_rate": 0.2,
+    "data_argument1": ["shuffle_position"],
+    "data_argument2": ["shuffle_position"],
+
+    "_comment_masking": "=== Masked Language Model Parameters ===",
+    "masking_ratio": 0.2,
+    "masking_mode": "together",
+    "distribution": "random",
+    "avg_mask_len": 3,
+
+    "_comment_loss": "=== Loss Function Parameters ===",
+    "mlm_ratio": 0.6,
+    "contra_ratio": 0.4,
+    "temperature": 0.05,
+    "contra_loss_type": "simclr",
+
+    "_comment_training": "=== Training Parameters ===",
+    "seq_len": 128,
+    "batch_size": 32,
+    "epochs": 100,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.01,
+    "clip_grad_norm": true,
+    "max_grad_norm": 1.0,
+    "patience": 10,
+    "use_early_stop": true,
+    "load_best_epoch": true
+}

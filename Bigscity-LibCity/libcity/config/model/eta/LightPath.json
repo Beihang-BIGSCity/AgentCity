@@ -1,0 +1,48 @@
+{
+  "model": "LightPath",
+
+  "embed_dim": 128,
+  "num_patches": 100,
+  "depth": 12,
+  "num_heads": 8,
+  "decoder_embed_dim": 128,
+  "decoder_depth": 1,
+  "decoder_num_heads": 8,
+  "mlp_ratio": 4.0,
+  "norm_pix_loss": false,
+
+  "mask_ratio1": 0.7,
+  "mask_ratio2": 0.8,
+  "mask_ratio_eval": 0.0,
+
+  "rec_weight": 1.0,
+  "rr_weight": 1.0,
+  "eta_weight": 1.0,
+
+  "train_mode": "finetune",
+
+  "use_pretrained_embeddings": false,
+  "node2vec_path": null,
+  "time2vec_path": null,
+
+  "vocab_size": 90000,
+  "time_size": 10000,
+
+  "eta_hidden_dim": 128,
+
+  "output_pred": false,
+
+  "max_epoch": 100,
+  "batch_size": 64,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.00001,
+  "lr_decay": true,
+  "lr_scheduler": "ReduceLROnPlateau",
+  "lr_decay_ratio": 0.5,
+  "lr_patience": 5,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5.0,
+  "use_early_stop": true,
+  "patience": 15
+}

@@ -13,6 +13,7 @@ Use the `test_migration` tool with GPU acceleration (cuda:0 by default):
 test_migration(
     model_name="YourModel",
     dataset="METR_LA",
+    task="traffic_state_pred",
     paper_title="Paper Title",
     gpu="0"  # Use cuda:0 for faster testing
 )

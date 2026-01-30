@@ -1,0 +1,19 @@
+{
+    "hidden_size": 256,
+    "loc_emb_size": 256,
+    "tim_emb_size": 64,
+    "num_layers": 4,
+    "num_heads": 8,
+    "dropout": 0.1,
+
+    "num_diffusion_timesteps": 100,
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+    "beta_schedule": "linear",
+    "inference_steps": 10,
+
+    "batch_size": 64,
+    "learning_rate": 1e-4,
+    "max_epoch": 100,
+    "evaluate_method": "prob"
+}

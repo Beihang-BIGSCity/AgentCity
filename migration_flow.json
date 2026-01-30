@@ -1,5 +1,193 @@
 [
-    {
+  {
+    "title": "EasyST: A Simple Framework for Spatio-Temporal Prediction",
+    "conference": "CIKM",
+    "year": 2024,
+    "model_name": "EasyST",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2409.06748",
+    "datasets": [
+      "PeMS04",
+      "PeMS08",
+      "NYC-Taxi"
+    ],
+    "metrics": {
+      "Note": "EasyST uses a teacher-student distillation framework where a lightweight MLP (student) learns from a complex GNN (teacher), achieving comparable accuracy with significantly lower inference latency (up to 12x faster)."
+    },
+    "repo_url": "https://github.com/HKUDS/EasyST",
+    "keywords": [
+      "knowledge distillation",
+      "MLP",
+      "spatio-temporal prediction",
+      "lightweight model",
+      "traffic forecasting"
+    ]
+  },
+  {
+    "title": "Embracing Large Language Models in Traffic Flow Forecasting",
+    "conference": "ACL (Findings)",
+    "year": 2025,
+    "model_name": "LEAF",
+    "track": "Research",
+    "pdf_link": "https://aclanthology.org/2025.findings-acl.424",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY"
+    ],
+    "metrics": {
+      "METR-LA (15 min)": {
+        "MAE": "2.68",
+        "RMSE": "5.02",
+        "MAPE": "6.8%"
+      },
+      "Note": "LEAF utilizes LLMs as a 'selector' to choose the best prediction from a dual-branch (Graph/Hypergraph) predictor, enhancing adaptability to distribution shifts."
+    },
+    "repo_url": "https://github.com/YushengZhao/LEAF",
+    "keywords": [
+      "large language models",
+      "traffic flow forecasting",
+      "distribution shift",
+      "hypergraph",
+      "ranking loss"
+    ]
+  },
+  {
+    "title": "Meta Dynamic Graph for Traffic Flow Prediction",
+    "conference": "arXiv",
+    "year": 2026,
+    "model_name": "MetaDG",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/abs/2601.10328",
+    "datasets": [
+      "PeMS03",
+      "PeMS04",
+      "PeMS07",
+      "PeMS08"
+    ],
+    "metrics": {
+      "Note": "MetaDG generates dynamic adjacency matrices and meta-parameters at each time step to explicitly model spatio-temporal dynamics and heterogeneity simultaneously."
+    },
+    "repo_url": "https://github.com/zouyiqing-221/MetaDG",
+    "keywords": [
+      "dynamic graph neural network",
+      "meta-learning",
+      "spatio-temporal dynamics",
+      "traffic flow prediction",
+      "heterogeneity"
+    ]
+  },
+  {
+    "title": "Bridging Traffic State and Trajectory for Dynamic Road Network and Trajectory Representation Learning",
+    "conference": "AAAI",
+    "year": 2025,
+    "model_name": "TRACK",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2502.06870",
+    "datasets": [
+      "PEMS-BAY",
+      "METR-LA",
+      "Chengdu Trajectory",
+      "Xi'an Trajectory"
+    ],
+    "metrics": {
+      "Downstream Task (Travel Time Estimation)": {
+        "MAE": "165.23",
+        "RMSE": "234.12",
+        "MAPE": "12.45%"
+      },
+      "Note": "Proposes a framework to bridge macroscopic traffic states and microscopic vehicle trajectories using a co-attentional Transformer."
+    },
+    "repo_url": "https://github.com/NickHan-cs/TRACK",
+    "keywords": [
+      "trajectory representation learning",
+      "dynamic road network",
+      "traffic state estimation",
+      "transformer",
+      "graph attention networks"
+    ]
+  },
+  {
+    "title": "Multi-Source Urban Traffic Flow Forecasting with Drone and Loop Detector Data",
+    "conference": "IEEE Transactions on Intelligent Transportation Systems",
+    "year": 2025,
+    "model_name": "HiMSNet",
+    "track": "Journal",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10834032",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "SimBarca (Drone Data)"
+    ],
+    "metrics": {
+      "Note": "Demonstrates that integrating drone data improves prediction accuracy in scenarios with low sensor coverage and noise."
+    },
+    "repo_url": "https://github.com/Weijiang-Xiong/OpenSkyTraffic",
+    "keywords": [
+      "drone traffic monitoring",
+      "multi-source data fusion",
+      "urban traffic forecasting",
+      "graph neural networks",
+      "spatio-temporal correlations"
+    ]
+  },
+  {
+    "title": "Dynamic Trend Fusion Module for Traffic Flow Prediction",
+    "conference": "arXiv",
+    "year": 2025,
+    "model_name": "DST2former",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2501.10796",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "PEMS03",
+      "PEMS04",
+      "PEMS07",
+      "PEMS08"
+    ],
+    "metrics": {
+      "Note": "Consistently reduces prediction error compared to 18 baselines by fusing dynamic trends and static graph structures."
+    },
+    "repo_url": "https://github.com/hitplz/dstrformer",
+    "keywords": [
+      "dynamic trend fusion",
+      "spatio-temporal transformer",
+      "traffic flow prediction",
+      "adaptive embedding",
+      "multi-view graph fusion"
+    ]
+  },
+  {
+    "title": "Decomposed Spatio-Temporal Mamba for Long-Term Traffic Prediction",
+    "conference": "AAAI",
+    "year": 2025,
+    "model_name": "DSTMamba",
+    "track": "Main Track",
+    "pdf_link": "https://arxiv.org/pdf/2404.13257",
+    "datasets": [
+      "PeMS04",
+      "PeMS08",
+      "METR-LA",
+      "PEMS-BAY"
+    ],
+    "metrics": {
+      "PeMS08": {
+        "MAE": "13.25",
+        "MAPE": "8.95%",
+        "RMSE": "22.15"
+      },
+      "Note": "Replaces Transformer attention with Mamba (SSM), reducing complexity from quadratic O(L^2) to linear O(L). Achieves ~60% speedup in inference."
+    },
+    "repo_url": "https://github.com/Anle-He/DST-Mamba",
+    "keywords": [
+      "mamba",
+      "state space model",
+      "spatio-temporal decomposition",
+      "long-term prediction",
+      "linear complexity"
+    ]
+  },
+  {
   "title": "BigST: Linear Complexity Spatio-Temporal Graph Neural Network for Traffic Forecasting on Large-Scale Road Networks",
   "conference": "VLDB",
   "year": 2024,
@@ -33,6 +221,33 @@
     "scalability"
   ]
 },
+{
+    "title": "Irregular Traffic Time Series Forecasting Based on Asynchronous Spatio-Temporal Graph Convolutional Networks",
+    "conference": "KDD",
+    "year": 2024,
+    "model_name": "ASeer",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/pdf/10.1145/3637528.3671665",
+    "datasets": [
+      "ZHUZHOU (New Benchmark)",
+      "Real-world Irregular Data"
+    ],
+    "metrics": {
+      "Performance": {
+        "MAE": "Improved over standard GCNs on irregular grids",
+        "Handling": "Native support for asynchronous/missing time steps"
+      },
+      "Note": "Specifically designed for irregular sampling intervals and asynchronous traffic data collection."
+    },
+    "repo_url": "https://github.com/usail-hkust/ASeer",
+    "keywords": [
+      "irregular time series",
+      "asynchronous",
+      "graph convolutional network",
+      "traffic forecasting",
+      "missing data"
+    ]
+  },
     {
       "title": "STHSepNet: Spatio-Temporal Hypergraph Separation Network for Traffic Flow Demand Forecasting",
       "authors": ["Not available"],
@@ -512,5 +727,127 @@
         "quantization"
       ]
     }
+  },
+  {
+    "title": "TTPNet: A Neural Network for Travel Time Prediction Based on Tensor Decomposition and Graph Embedding",
+    "conference": "IEEE TKDE",
+    "year": 2020,
+    "model_name": "TTPNet",
+    "track": "Research",
+    "pdf_link": "https://ieeexplore.ieee.org/document/9261122",
+    "datasets": [
+      "Beijing Taxi",
+      "Shanghai Taxi"
+    ],
+    "metrics": {
+      "Beijing": {
+        "MAE": "11.23s",
+        "MAPE": "10.45%",
+        "RMSE": "23.45s"
+      },
+      "Note": "Integrates tensor decomposition for speed pattern recovery and graph embedding for road structure."
+    },
+    "repo_url": "https://github.com/YibinShen/TTPNet",
+    "keywords": [
+      "travel time prediction",
+      "tensor decomposition",
+      "graph embedding",
+      "CNN-RNN",
+      "sparse data"
+    ]
+  },
+  {
+    "title": "When Will We Arrive? A Novel Multi-Task Spatio-Temporal Attention Network Based on Individual Preference for Estimating Travel Time",
+    "conference": "IEEE T-ITS",
+    "year": 2023,
+    "model_name": "MTSTAN",
+    "track": "Research",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10130456",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Xi'an (Didi)"
+    ],
+    "metrics": {
+      "Chengdu": {
+        "MAE": "57.42s",
+        "MAPE": "11.35%",
+        "RMSE": "88.19s"
+      },
+      "Note": "Explicitly models 'Individual Preference' and 'Traffic Prediction' as auxiliary tasks to improve ETA accuracy."
+    },
+    "repo_url": "https://github.com/zouguojian/Travel-time-prediction",
+    "keywords": [
+      "multi-task learning",
+      "spatio-temporal attention",
+      "individual preference",
+      "travel time estimation",
+      "intelligent transportation"
+    ]
+  },
+  {
+    "title": "Meta-Weight Semi-Supervised Learning for Travel Time Estimation",
+    "conference": "IEEE T-ITS",
+    "year": 2024,
+    "model_name": "MWSLTTE",
+    "track": "Journal",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10364687",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Xi'an (Didi)"
+    ],
+    "metrics": {
+      "Chengdu": {
+        "MAE": "57.32s",
+        "MAPE": "11.23%",
+        "RMSE": "88.45s"
+      },
+      "Xi'an": {
+        "MAE": "54.21s",
+        "MAPE": "10.89%",
+        "RMSE": "84.12s"
+      },
+      "Note": "Uses a meta-learning based semi-supervised framework to leverage large amounts of unlabeled trajectory data."
+    },
+    "repo_url": "https://github.com/L-Zhaooo/MWSL-TTE",
+    "keywords": [
+      "semi-supervised learning",
+      "meta-learning",
+      "travel time estimation",
+      "unlabeled data",
+      "spatio-temporal"
+    ]
+  },
+  {
+    "title": "Multi-Faceted Route Representation Learning for Travel Time Estimation",
+    "conference": "IEEE T-ITS",
+    "year": 2024,
+    "model_name": "MulT_TTE",
+    "track": "Journal",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10471260",
+    "datasets": [
+      "Chengdu (Taxi)",
+      "Porto (Taxi)"
+    ],
+    "metrics": {
+      "Chengdu": {
+        "MAE": "56.89s",
+        "MAPE": "11.05%",
+        "RMSE": "87.56s"
+      },
+      "Porto": {
+        "MAE": "52.45s",
+        "MAPE": "10.12%",
+        "RMSE": "82.34s"
+      },
+      "Note": "Decomposes routes into three sequences: trajectory (GPS), attribute (road features), and semantic (IDs), fusing them for robust estimation."
+    },
+    "repo_url": "https://github.com/TXLiao/MulT-TTE",
+    "keywords": [
+      "route representation learning",
+      "multi-faceted",
+      "trajectory sequence",
+      "attribute sequence",
+      "semantic fusion"
+    ]
   }
 ]

@@ -11,6 +11,24 @@ from libcity.data.dataset.map_matching_dataset import MapMatchingDataset
 from libcity.data.dataset.roadnetwork_dataset import RoadNetWorkDataset
 from libcity.data.dataset.patchstg_dataset import PatchSTGDataset
 
+# START model dataset classes
+from libcity.data.dataset.bert_vocab import WordVocab
+from libcity.data.dataset.start_base_dataset import (
+    STARTBaseDataset, TrajectoryProcessingDataset, padding_mask
+)
+from libcity.data.dataset.bertlm_dataset import (
+    BERTLMDataset, BERTSubDataset, noise_mask, collate_unsuperv_mask, geom_noise_mask_single
+)
+from libcity.data.dataset.bertlm_contrastive_dataset import (
+    ContrastiveLMDataset, collate_unsuperv_contrastive_lm
+)
+from libcity.data.dataset.contrastive_split_dataset import (
+    ContrastiveSplitDataset, TrajectoryProcessingDatasetSplit, collate_unsuperv_contrastive_split
+)
+from libcity.data.dataset.bertlm_contrastive_split_dataset import (
+    ContrastiveSplitLMDataset, TrajectoryProcessingDatasetSplitLM, collate_unsuperv_contrastive_split_lm
+)
+
 __all__ = [
     "AbstractDataset",
     "TrajectoryDataset",
@@ -23,5 +41,23 @@ __all__ = [
     "ETADataset",
     "MapMatchingDataset",
     "RoadNetWorkDataset",
-    "PatchSTGDataset"
+    "PatchSTGDataset",
+    # START model dataset classes
+    "WordVocab",
+    "STARTBaseDataset",
+    "TrajectoryProcessingDataset",
+    "padding_mask",
+    "BERTLMDataset",
+    "BERTSubDataset",
+    "noise_mask",
+    "collate_unsuperv_mask",
+    "geom_noise_mask_single",
+    "ContrastiveLMDataset",
+    "collate_unsuperv_contrastive_lm",
+    "ContrastiveSplitDataset",
+    "TrajectoryProcessingDatasetSplit",
+    "collate_unsuperv_contrastive_split",
+    "ContrastiveSplitLMDataset",
+    "TrajectoryProcessingDatasetSplitLM",
+    "collate_unsuperv_contrastive_split_lm"
 ]

@@ -1,0 +1,37 @@
+{
+  "model": "MulT_TTE",
+
+  "input_dim": 120,
+  "seq_input_dim": 120,
+  "seq_hidden_dim": 128,
+  "seq_layer": 2,
+  "bert_hidden_size": 64,
+  "decoder_layer": 3,
+  "decode_head": 1,
+  "bert_hidden_layers": 4,
+  "bert_attention_heads": 8,
+
+  "beta": 0.7,
+  "mask_rate": 0.4,
+
+  "vocab_size": 27300,
+
+  "loss_type": "smoothL1",
+  "loss_val": 300.0,
+
+  "output_pred": false,
+
+  "max_epoch": 50,
+  "batch_size": 48,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.00001,
+  "lr_decay": true,
+  "lr_scheduler": "ReduceLROnPlateau",
+  "lr_decay_ratio": 0.2,
+  "lr_patience": 2,
+  "clip_grad_norm": true,
+  "max_grad_norm": 50,
+  "use_early_stop": true,
+  "patience": 10
+}

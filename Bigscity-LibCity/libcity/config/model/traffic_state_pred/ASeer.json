@@ -1,0 +1,28 @@
+{
+  "hidden_dim": 64,
+  "time_emb_dim": 16,
+  "n_output": 12,
+  "beta": 1.0,
+  "dropout": 0.0,
+  "te_mode": "combine",
+  "decoder_type": "SEU",
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+
+  "max_epoch": 200,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "lr_decay": true,
+  "lr_scheduler": "steplr",
+  "lr_decay_ratio": 0.5,
+  "step_size": 10,
+  "clip_grad_norm": false,
+  "use_early_stop": true,
+  "patience": 10,
+  "batch_size": 1
+}

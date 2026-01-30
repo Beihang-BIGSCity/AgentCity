@@ -1,0 +1,10 @@
+{
+  "model": "MulT_TTE",
+  "dataset": "Chengdu_Taxi_Sample1",
+  "task": "eta",
+  "max_epoch": 2,
+  "batch_size": 16,
+  "train_rate": 0.1,
+  "eval_rate": 0.05,
+  "gpu_id": 0
+}

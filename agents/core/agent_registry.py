@@ -80,7 +80,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Bash", "Glob", "Read"],
             prompt=CLONER_SYSTEM_PROMPT,
-            model="haiku",
+            model="sonnet",
         ),
         "model-adapter": AgentDefinition(
             name="model-adapter",
@@ -148,7 +148,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["tune_migration_model", "Bash", "Read"],
             prompt=EXECUTOR_SYSTEM_PROMPT,
-            model="haiku",
+            model="sonnet",
         ),
         "result-analyzer": AgentDefinition(
             name="result-analyzer",
