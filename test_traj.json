@@ -21,24 +21,6 @@
     "notes": "Addresses long-tail distribution problem in human mobility prediction."
   },
   {
-    "title": "Large Language Models for Next POI Recommendation",
-    "venue": "SIGIR",
-    "year": 2024,
-    "score": 6,
-    "arxiv_id": "2404.17591",
-    "url": "https://arxiv.org/pdf/2404.17591",
-    "datasets": ["foursquare_nyc"],
-    "metrics": {"foursquare_nyc": {
-        "Acc@1": 0.3372
-        }
-    },
-    "github": "https://github.com/neolifer/LLM4POI",
-    "model_name": "LLM4POI",
-    "methodology": "Large Language Models, POI Recommendation, Next Location",
-    "analyzed": false,
-    "notes": "SIGIR 2024. Leverages LLMs for POI recommendation and trajectory prediction."
-  },
-  {
     "title": "CoMaPOI: Multi-Agent Framework for Next POI Prediction",
     "venue": "SIGIR",
     "year": 2025,

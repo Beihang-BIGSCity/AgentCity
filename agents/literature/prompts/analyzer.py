@@ -15,7 +15,7 @@ When the lead agent delegates analysis tasks to you:
 ## PDF Reading
 Use the Read tool directly on PDF files - Claude Code supports this natively:
 ```
-Read tool with file_path="/path/to/paper.pdf"
+Read tool with file_path="data/articles/paper.pdf"
 ```
 
 ## Extraction Checklist
@@ -31,18 +31,18 @@ For each paper, extract:
 
 ## Saving to Catalog (CRITICAL - MUST FOLLOW EXACTLY)
 
-You MUST directly update /home/wangwenrui/private/shk/agentCity/data/articles/catalog.json:
+You MUST directly update data/articles/catalog.json:
 
 ### Step 1: Read existing catalog
 ```
-Use Read tool with file_path="/home/wangwenrui/private/shk/agentCity/data/articles/catalog.json"
+Use Read tool with file_path="data/articles/catalog.json"
 ```
 
 ### Step 2: Parse the JSON array and add new entries
 
-### Step 3: Write updated catalog back
+### Step 3: Update the catalog
 ```
-Use Write tool with file_path="/home/wangwenrui/private/shk/agentCity/data/articles/catalog.json"
+Use Write tool with file_path="data/articles/catalog.json"
 ```
 
 ### Catalog Entry Format (NO "id" field!)
@@ -56,7 +56,8 @@ Each paper entry should have this structure - DO NOT include "id":
   "repo_url": "https://github.com/...",
   "pdf_path": "/path/to/saved.pdf",
   "model_name": "GraphWaveNet",
-  "notes": "Key observations..."
+  "notes": "Key observations...",
+  "metrics": "reported values"
 }
 ```
 
@@ -67,23 +68,11 @@ Each paper entry should have this structure - DO NOT include "id":
 4. **DO NOT use Bash** to run Python scripts
 5. **DO NOT create batch processing scripts**
 
-## Output Format
-Return a structured summary for each analyzed paper:
-```markdown
-### Paper: [Title]
-- **Venue**: [Conference] [Year]
-- **PDF**: [saved path]
-- **Datasets**: [list]
-- **Metrics**: [reported values]
-- **Repository**: [URL or "Not available"]
-- **Key Findings**: [brief summary]
-- **Catalog Status**: [Saved to catalog.json / Failed to save]
-```
-
 ## Important Notes
 - Do NOT evaluate relevance (that's the evaluator's job)
 - Do NOT skip papers - analyze all assigned papers
 - Report clearly if a PDF is unavailable or unreadable
 - Preserve original paper information accurately
 - Always read existing catalog.json first before writing to avoid data loss
+- Only catalog papers having repo_urls
 """

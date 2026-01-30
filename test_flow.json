@@ -15,10 +15,7 @@
     "arxiv": "2206.09112",
     "github": "https://github.com/SYLan2019/DSTAGNN",
     "datasets": [
-      "PEMSD3",
-      "PEMSD4",
-      "PEMSD7",
-      "PEMSD8"
+      "PEMSD4"
     ],
     "model_name": "DSTAGNN",
     "key_contributions": [
@@ -32,11 +29,6 @@
         "MAE": 19.30,
         "MAPE": "12.70%",
         "RMSE": 31.46
-      },
-      "PEMSD7": {
-        "MAE": 21.42,
-        "MAPE": "9.01%",
-        "RMSE": 31.51
       }
     },
     "abstract": "Proposes dynamic ST-aware GNN with learnable graph structure at each time step. Captures both static topology and dynamic correlations. Strong performance but LargeST reveals scalability limitations on large graphs.",
@@ -51,9 +43,7 @@
     "pdf_link": "https://openreview.net/attachment?id=pqSLcEbk5X&name=pdf",
     "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ICML2025_RSTIB.pdf",
     "datasets": [
-      "PEMSD4",
-      "PEMSD7",
-      "PEMSD8"
+      "PEMSD7"
     ],
     "model_name": "RSTIB",
     "metrics": {
@@ -118,9 +108,7 @@
     "arxiv": "2403.16495",
     "github": "https://github.com/GeoX-Lab/LSTTN",
     "datasets": [
-      "METR_LA",
-      "PEMSD4",
-      "PEMSD8"
+      "METR_LA"
     ],
     "model_name": "LSTTN",
     "key_contributions": [
@@ -204,7 +192,6 @@
     "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/AAAI2025_LightST.pdf",
     "model_name":"LightST",
     "datasets": [
-      "PEMSD4",
       "PEMSD7"
     ],
     "metrics": {

@@ -43,7 +43,7 @@ def build_literature_agents(context: AgentContext) -> Dict[str, AgentDefinition]
             ),
             tools=["Read", "Write", "Glob"],
             prompt=ANALYZER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="opus",
         ),
         "paper-evaluator": AgentDefinition(
             name="paper-evaluator",
@@ -54,7 +54,7 @@ def build_literature_agents(context: AgentContext) -> Dict[str, AgentDefinition]
             ),
             tools=["Read", "evaluate_paper_relevance"],
             prompt=EVALUATOR_SYSTEM_PROMPT,
-            model="haiku",
+            model="sonnet",
         ),
     }
 
@@ -91,7 +91,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Edit", "Glob", "Grep"],
             prompt=ADAPTER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="opus",
         ),
         "config-migrator": AgentDefinition(
             name="config-migrator",
@@ -102,7 +102,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Edit", "Glob"],
             prompt=CONFIG_SYSTEM_PROMPT,
-            model="haiku",
+            model="sonnet",
         ),
         "migration-tester": AgentDefinition(
             name="migration-tester",
@@ -113,7 +113,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["test_migration", "Bash", "Read"],
             prompt=TESTER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="opus",
         ),
     }
 
@@ -137,7 +137,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Glob", "Grep"],
             prompt=PLANNER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="opus",
         ),
         "tuning-executor": AgentDefinition(
             name="tuning-executor",
@@ -159,7 +159,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Glob"],
             prompt=ANALYZER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="opus",
         ),
     }
 

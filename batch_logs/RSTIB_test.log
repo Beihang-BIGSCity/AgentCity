@@ -1749,3 +1749,43 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] [12 rows x 10 columns]
 
 [Return Code: 0]
+
+============================================================
+Timestamp: 2026-01-29 18:40:08
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model RSTIB --dataset PEMSD7 --train true --max_epoch 20 --gpu_id 0 --exp_id 61952
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-29 18:40:12,697 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-29 18:40:12,697 - INFO - Begin pipeline, task=traffic_state_pred, model_name=RSTIB, dataset_name=PEMSD7, exp_id=61952
+[OUT] 2026-01-29 18:40:12,697 - INFO - {'task': 'traffic_state_pred', 'model': 'RSTIB', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '61952', 'seed': 0, 'gpu_id': 0, 'max_epoch': 20, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 12, 'output_window': 12, 'input_dim': 1, 'embed_dim': 64, 'num_layer': 2, 'node_dim': 64, 'temp_dim_tid': 64, 'temp_dim_diw': 64, 'if_spatial': True, 'if_time_in_day': True, 'if_day_in_week': True, 'if_dne': True, 'mid_dim': 128, 'dne_act': 'softmax', 'info_beta': 0.0001, 'n_sample': 1, 'n_sample_avg': 12, 'use_difficulty_weighting': False, 'use_ib_loss': True, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': True, 'time_intervals': 300, 'learner': 'adam', 'learning_rate': 0.001, 'lr_decay': True, 'lr_decay_ratio': 0.5, 'steps': [1, 20, 50, 75, 100, 150, 200], 'lr_scheduler': 'multisteplr', 'clip_grad_norm': False, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 20, 'log_every': 1, 'train_loss': 'masked_mae', 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'output_dim': 1, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-01-29 18:40:12,705 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-01-29 18:40:12,707 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-01-29 18:40:12,707 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-01-29 18:40:12,711 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-01-29 18:40:12,711 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.7_0.1_standard_64_True_True_True_True.npz
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 60, in run_model
+[ERR]     train_data, valid_data, test_data = dataset.get_data()
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/data/dataset/traffic_state_datatset.py", line 967, in get_data
+[ERR]     x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/data/dataset/traffic_state_datatset.py", line 884, in _load_cache_train_val_test
+[ERR]     x_train = cat_data['x_train']
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/numpy/lib/npyio.py", line 256, in __getitem__
+[ERR]     return format.read_array(bytes,
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/numpy/lib/format.py", line 831, in read_array
+[ERR]     data = _read_bytes(fp, read_size, "array data")
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/numpy/lib/format.py", line 966, in _read_bytes
+[ERR]     r = fp.read(size - len(data))
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/zipfile.py", line 946, in read
+[ERR]     data = self._read1(n)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/zipfile.py", line 1022, in _read1
+[ERR]     data = self._decompressor.decompress(data, n)
+[ERR] zlib.error: Error -3 while decompressing data: invalid stored block lengths
+
+[Return Code: 1]

@@ -4065,3 +4065,547 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-01-24 15:43:34,359 - INFO - epoch complete!
 [OUT] 2026-01-24 15:43:34,359 - INFO - evaluating now!
 [OUT] 2026-01-24 15:43:45,720 - INFO - Epoch [1/20] train_loss: 4.5248, val_loss: 4.6323, lr: 0.002000, 117.80s
+
+============================================================
+Timestamp: 2026-01-29 19:42:53
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset METR_LA --train true --max_epoch 20 --gpu_id 0 --exp_id 89632
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-29 19:42:57,961 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-29 19:42:57,961 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=METR_LA, exp_id=89632
+[OUT] 2026-01-29 19:42:57,961 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '89632', 'seed': 0, 'gpu_id': 0, 'max_epoch': 20, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-01-29 19:42:57,967 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-29 19:42:57,975 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-29 19:42:57,975 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-29 19:42:57,992 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-29 19:42:57,992 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-29 19:42:57,992 - INFO - Loading ./libcity/cache/dataset_cache/point_based_METR_LA_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-01-29 19:43:05,643 - INFO - train	x: (23974, 12, 207, 2), y: (23974, 12, 207, 2)
+[OUT] 2026-01-29 19:43:05,643 - INFO - eval	x: (3425, 12, 207, 2), y: (3425, 12, 207, 2)
+[OUT] 2026-01-29 19:43:05,643 - INFO - test	x: (6850, 12, 207, 2), y: (6850, 12, 207, 2)
+[OUT] 2026-01-29 19:43:06,060 - INFO - StandardScaler mean: 54.40592829587626, std: 19.493739270573094
+[OUT] 2026-01-29 19:43:06,060 - INFO - NoneScaler
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_version_cpu.so: undefined symbol: _ZN3c106detail14torchCheckFailEPKcS2_jRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+[ERR]   import torch_geometric.typing
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+[ERR]   warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
+[OUT] 2026-01-29 19:43:11,664 - INFO - STDMAE(
+[OUT]   (tmae): Mask(
+[OUT]     (encoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (decoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (patch_embedding): PatchEmbedding(
+[OUT]       (input_embedding): Conv2d(1, 96, kernel_size=(12, 1), stride=(12, 1))
+[OUT]       (norm_layer): Identity()
+[OUT]     )
+[OUT]     (positional_encoding): PositionalEncoding()
+[OUT]     (encoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0-3): 4 x TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (enc_2_dec_emb): Linear(in_features=96, out_features=96, bias=True)
+[OUT]     (decoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0): TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (output_layer): Linear(in_features=96, out_features=12, bias=True)
+[OUT]   )
+[OUT]   (smae): Mask(
+[OUT]     (encoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (decoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (patch_embedding): PatchEmbedding(
+[OUT]       (input_embedding): Conv2d(1, 96, kernel_size=(12, 1), stride=(12, 1))
+[OUT]       (norm_layer): Identity()
+[OUT]     )
+[OUT]     (positional_encoding): PositionalEncoding()
+[OUT]     (encoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0-3): 4 x TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (enc_2_dec_emb): Linear(in_features=96, out_features=96, bias=True)
+[OUT]     (decoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0): TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (output_layer): Linear(in_features=96, out_features=12, bias=True)
+[OUT]   )
+[OUT]   (backend): GraphWaveNet(
+[OUT]     (filter_convs): ModuleList(
+[OUT]       (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]     )
+[OUT]     (gate_convs): ModuleList(
+[OUT]       (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]     )
+[OUT]     (residual_convs): ModuleList(
+[OUT]       (0-7): 8 x Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     )
+[OUT]     (skip_convs): ModuleList(
+[OUT]       (0-7): 8 x Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     )
+[OUT]     (bn): ModuleList(
+[OUT]       (0-7): 8 x BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[OUT]     )
+[OUT]     (gconv): ModuleList(
+[OUT]       (0-7): 8 x gcn(
+[OUT]         (nconv): nconv()
+[OUT]         (mlp): linear(
+[OUT]           (mlp): Conv2d(160, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (fc_his_t): Sequential(
+[OUT]       (0): Linear(in_features=96, out_features=512, bias=True)
+[OUT]       (1): ReLU()
+[OUT]       (2): Linear(in_features=512, out_features=256, bias=True)
+[OUT]       (3): ReLU()
+[OUT]     )
+[OUT]     (fc_his_s): Sequential(
+[OUT]       (0): Linear(in_features=96, out_features=512, bias=True)
+[OUT]       (1): ReLU()
+[OUT]       (2): Linear(in_features=512, out_features=256, bias=True)
+[OUT]       (3): ReLU()
+[OUT]     )
+[OUT]     (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   )
+[OUT] )
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.mask_token	torch.Size([1, 1, 1, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.encoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.encoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.decoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.decoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.patch_embedding.input_embedding.weight	torch.Size([96, 1, 12, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.patch_embedding.input_embedding.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,666 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.1.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,667 - INFO - tmae.encoder.transformer_encoder.layers.2.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.2.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.encoder.transformer_encoder.layers.3.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.enc_2_dec_emb.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.enc_2_dec_emb.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,668 - INFO - tmae.decoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.decoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.output_layer.weight	torch.Size([12, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - tmae.output_layer.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.mask_token	torch.Size([1, 1, 1, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.decoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.decoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.patch_embedding.input_embedding.weight	torch.Size([96, 1, 12, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.patch_embedding.input_embedding.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,669 - INFO - smae.encoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.1.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.2.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,670 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.encoder.transformer_encoder.layers.3.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.enc_2_dec_emb.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.enc_2_dec_emb.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.decoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.output_layer.weight	torch.Size([12, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - smae.output_layer.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,671 - INFO - backend.nodevec1	torch.Size([207, 10])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.nodevec2	torch.Size([10, 207])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.filter_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,672 - INFO - backend.gate_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.gate_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.residual_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.0.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.1.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,673 - INFO - backend.skip_convs.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.3.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.4.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.5.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.6.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.skip_convs.7.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.0.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.1.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.2.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.3.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.4.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.5.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.6.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.7.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.bn.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,674 - INFO - backend.gconv.0.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.1.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.2.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.3.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.4.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.5.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.6.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.7.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_t.0.weight	torch.Size([512, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_t.0.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_t.2.weight	torch.Size([256, 512])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_t.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_s.0.weight	torch.Size([512, 96])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_s.0.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_s.2.weight	torch.Size([256, 512])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.fc_his_s.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.start_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,675 - INFO - backend.end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,676 - INFO - backend.end_conv_1.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,676 - INFO - backend.end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,676 - INFO - backend.end_conv_2.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-01-29 19:43:11,676 - INFO - Total parameter numbers: 1797808
+[OUT] 2026-01-29 19:43:11,676 - INFO - You select `adam` optimizer.
+[OUT] 2026-01-29 19:43:11,677 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-01-29 19:43:11,677 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-01-29 19:43:11,678 - INFO - Start training ...
+[OUT] 2026-01-29 19:43:11,678 - INFO - num_batches:2997
+[OUT] 2026-01-29 19:47:39,582 - INFO - epoch complete!
+[OUT] 2026-01-29 19:47:39,583 - INFO - evaluating now!
+[OUT] 2026-01-29 19:47:58,548 - INFO - Epoch [0/20] train_loss: 3.7089, val_loss: 3.2480, lr: 0.002000, 286.87s
+[OUT] 2026-01-29 19:47:58,619 - INFO - Saved model at 0
+[OUT] 2026-01-29 19:47:58,619 - INFO - Val loss decrease from inf to 3.2480, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch0.tar
+[OUT] 2026-01-29 19:52:22,699 - INFO - epoch complete!
+[OUT] 2026-01-29 19:52:22,700 - INFO - evaluating now!
+[OUT] 2026-01-29 19:52:42,221 - INFO - Epoch [1/20] train_loss: 3.3562, val_loss: 3.0934, lr: 0.002000, 283.60s
+[OUT] 2026-01-29 19:52:42,287 - INFO - Saved model at 1
+[OUT] 2026-01-29 19:52:42,288 - INFO - Val loss decrease from 3.2480 to 3.0934, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch1.tar
+[OUT] 2026-01-29 19:57:08,236 - INFO - epoch complete!
+[OUT] 2026-01-29 19:57:08,236 - INFO - evaluating now!
+[OUT] 2026-01-29 19:57:27,651 - INFO - Epoch [2/20] train_loss: 3.2198, val_loss: 3.0397, lr: 0.002000, 285.36s
+[OUT] 2026-01-29 19:57:27,733 - INFO - Saved model at 2
+[OUT] 2026-01-29 19:57:27,734 - INFO - Val loss decrease from 3.0934 to 3.0397, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch2.tar
+[OUT] 2026-01-29 20:01:53,865 - INFO - epoch complete!
+[OUT] 2026-01-29 20:01:53,865 - INFO - evaluating now!
+[OUT] 2026-01-29 20:02:13,796 - INFO - Epoch [3/20] train_loss: 3.1495, val_loss: 3.0514, lr: 0.002000, 286.06s
+[OUT] 2026-01-29 20:06:42,266 - INFO - epoch complete!
+[OUT] 2026-01-29 20:06:42,266 - INFO - evaluating now!
+[OUT] 2026-01-29 20:07:01,798 - INFO - Epoch [4/20] train_loss: 3.1075, val_loss: 2.9693, lr: 0.001000, 288.00s
+[OUT] 2026-01-29 20:07:01,885 - INFO - Saved model at 4
+[OUT] 2026-01-29 20:07:01,885 - INFO - Val loss decrease from 3.0397 to 2.9693, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch4.tar
+[OUT] 2026-01-29 20:11:33,891 - INFO - epoch complete!
+[OUT] 2026-01-29 20:11:33,892 - INFO - evaluating now!
+[OUT] 2026-01-29 20:11:53,028 - INFO - Epoch [5/20] train_loss: 3.0191, val_loss: 2.9365, lr: 0.001000, 291.14s
+[OUT] 2026-01-29 20:11:53,119 - INFO - Saved model at 5
+[OUT] 2026-01-29 20:11:53,120 - INFO - Val loss decrease from 2.9693 to 2.9365, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch5.tar
+[OUT] 2026-01-29 20:16:25,592 - INFO - epoch complete!
+[OUT] 2026-01-29 20:16:25,593 - INFO - evaluating now!
+[OUT] 2026-01-29 20:16:44,632 - INFO - Epoch [6/20] train_loss: 2.9929, val_loss: 2.8926, lr: 0.001000, 291.51s
+[OUT] 2026-01-29 20:16:44,719 - INFO - Saved model at 6
+[OUT] 2026-01-29 20:16:44,719 - INFO - Val loss decrease from 2.9365 to 2.8926, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch6.tar
+[OUT] 2026-01-29 20:21:15,519 - INFO - epoch complete!
+[OUT] 2026-01-29 20:21:15,520 - INFO - evaluating now!
+[OUT] 2026-01-29 20:21:34,723 - INFO - Epoch [7/20] train_loss: 2.9795, val_loss: 2.9263, lr: 0.001000, 290.00s
+[OUT] 2026-01-29 20:26:00,915 - INFO - epoch complete!
+[OUT] 2026-01-29 20:26:00,916 - INFO - evaluating now!
+[OUT] 2026-01-29 20:26:20,210 - INFO - Epoch [8/20] train_loss: 2.9630, val_loss: 2.8940, lr: 0.001000, 285.49s
+[OUT] 2026-01-29 20:30:47,012 - INFO - epoch complete!
+[OUT] 2026-01-29 20:30:47,012 - INFO - evaluating now!
+[OUT] 2026-01-29 20:31:06,586 - INFO - Epoch [9/20] train_loss: 2.9517, val_loss: 2.8851, lr: 0.001000, 286.37s
+[OUT] 2026-01-29 20:31:06,670 - INFO - Saved model at 9
+[OUT] 2026-01-29 20:31:06,670 - INFO - Val loss decrease from 2.8926 to 2.8851, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch9.tar
+[OUT] 2026-01-29 20:35:29,164 - INFO - epoch complete!
+[OUT] 2026-01-29 20:35:29,165 - INFO - evaluating now!
+[OUT] 2026-01-29 20:35:47,985 - INFO - Epoch [10/20] train_loss: 2.9426, val_loss: 2.8997, lr: 0.001000, 281.31s
+[OUT] 2026-01-29 20:40:08,772 - INFO - epoch complete!
+[OUT] 2026-01-29 20:40:08,773 - INFO - evaluating now!
+[OUT] 2026-01-29 20:40:27,121 - INFO - Epoch [11/20] train_loss: 2.9321, val_loss: 2.8749, lr: 0.001000, 279.13s
+[OUT] 2026-01-29 20:40:27,194 - INFO - Saved model at 11
+[OUT] 2026-01-29 20:40:27,194 - INFO - Val loss decrease from 2.8851 to 2.8749, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch11.tar
+[OUT] 2026-01-29 20:44:37,808 - INFO - epoch complete!
+[OUT] 2026-01-29 20:44:37,809 - INFO - evaluating now!
+[OUT] 2026-01-29 20:44:56,262 - INFO - Epoch [12/20] train_loss: 2.9237, val_loss: 2.9005, lr: 0.001000, 269.07s
+[OUT] 2026-01-29 20:49:12,037 - INFO - epoch complete!
+[OUT] 2026-01-29 20:49:12,038 - INFO - evaluating now!
+[OUT] 2026-01-29 20:49:29,549 - INFO - Epoch [13/20] train_loss: 2.9142, val_loss: 2.8944, lr: 0.001000, 273.29s
+[OUT] 2026-01-29 20:53:29,416 - INFO - epoch complete!
+[OUT] 2026-01-29 20:53:29,417 - INFO - evaluating now!
+[OUT] 2026-01-29 20:53:45,161 - INFO - Epoch [14/20] train_loss: 2.9069, val_loss: 2.8633, lr: 0.001000, 255.61s
+[OUT] 2026-01-29 20:53:45,234 - INFO - Saved model at 14
+[OUT] 2026-01-29 20:53:45,234 - INFO - Val loss decrease from 2.8749 to 2.8633, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch14.tar
+[OUT] 2026-01-29 20:57:48,281 - INFO - epoch complete!
+[OUT] 2026-01-29 20:57:48,282 - INFO - evaluating now!
+[OUT] 2026-01-29 20:58:04,022 - INFO - Epoch [15/20] train_loss: 2.9002, val_loss: 2.8891, lr: 0.001000, 258.79s
+[OUT] 2026-01-29 21:02:09,227 - INFO - epoch complete!
+[OUT] 2026-01-29 21:02:09,228 - INFO - evaluating now!
+[OUT] 2026-01-29 21:02:25,375 - INFO - Epoch [16/20] train_loss: 2.8946, val_loss: 2.8798, lr: 0.001000, 261.35s
+[OUT] 2026-01-29 21:06:29,420 - INFO - epoch complete!
+[OUT] 2026-01-29 21:06:29,421 - INFO - evaluating now!
+[OUT] 2026-01-29 21:06:45,181 - INFO - Epoch [17/20] train_loss: 2.8865, val_loss: 2.9179, lr: 0.001000, 259.80s
+[OUT] 2026-01-29 21:10:49,296 - INFO - epoch complete!
+[OUT] 2026-01-29 21:10:49,297 - INFO - evaluating now!
+[OUT] 2026-01-29 21:11:05,224 - INFO - Epoch [18/20] train_loss: 2.8823, val_loss: 2.8659, lr: 0.001000, 260.04s
+[OUT] 2026-01-29 21:15:14,693 - INFO - epoch complete!
+[OUT] 2026-01-29 21:15:14,694 - INFO - evaluating now!
+[OUT] 2026-01-29 21:15:30,215 - INFO - Epoch [19/20] train_loss: 2.8772, val_loss: 2.8622, lr: 0.000500, 264.99s
+[OUT] 2026-01-29 21:15:30,285 - INFO - Saved model at 19
+[OUT] 2026-01-29 21:15:30,286 - INFO - Val loss decrease from 2.8633 to 2.8622, saving to ./libcity/cache/89632/model_cache/STDMAE_METR_LA_epoch19.tar
+[OUT] 2026-01-29 21:15:30,286 - INFO - Trained totally 20 epochs, average train time is 258.810s, average eval time is 18.079s
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py:127: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+[ERR]   checkpoint = torch.load(model_path)
+[OUT] 2026-01-29 21:15:30,394 - INFO - Loaded model at 19
+[OUT] 2026-01-29 21:15:30,395 - INFO - Saved model at ./libcity/cache/89632/model_cache/STDMAE_METR_LA.m
+[OUT] 2026-01-29 21:15:30,460 - INFO - Start evaluating ...
+[OUT] 2026-01-29 21:16:09,500 - INFO - Note that you select the single mode to evaluate!
+[OUT] 2026-01-29 21:16:09,508 - INFO - Evaluate result is saved at ./libcity/cache/89632/evaluate_cache/2026_01_29_21_16_09_STDMAE_METR_LA.csv
+[OUT] 2026-01-29 21:16:09,524 - INFO -
+[OUT]           MAE  MAPE         MSE  ...  masked_RMSE        R2      EVAR
+[OUT] 1    9.265413   inf  456.400940  ...     4.063440  0.119471  0.231127
+[OUT] 2    9.514153   inf  464.186279  ...     4.904976  0.104473  0.216896
+[OUT] 3    9.668696   inf  468.931763  ...     5.427447  0.095334  0.208521
+[OUT] 4    9.786546   inf  472.231628  ...     5.834805  0.089007  0.202178
+[OUT] 5    9.896989   inf  476.246338  ...     6.159984  0.081275  0.196061
+[OUT] 6    9.997506   inf  480.310089  ...     6.436944  0.073428  0.191169
+[OUT] 7   10.066407   inf  482.082001  ...     6.666422  0.070061  0.186764
+[OUT] 8   10.145382   inf  485.738281  ...     6.876194  0.063029  0.181884
+[OUT] 9   10.208276   inf  487.034271  ...     7.035760  0.060561  0.179615
+[OUT] 10  10.284702   inf  490.476501  ...     7.188300  0.053960  0.175269
+[OUT] 11  10.330944   inf  491.738068  ...     7.321031  0.051558  0.172252
+[OUT] 12  10.386552   inf  493.258514  ...     7.444026  0.048652  0.169276
+[OUT] 
+[OUT] [12 rows x 10 columns]
+
+[Return Code: 0]

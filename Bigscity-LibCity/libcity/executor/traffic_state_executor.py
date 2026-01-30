@@ -124,7 +124,7 @@ class TrafficStateExecutor(AbstractExecutor):
         """
         model_path = self.cache_dir + '/' + self.config['model'] + '_' + self.config['dataset'] + '_epoch%d.tar' % epoch
         assert os.path.exists(model_path), 'Weights at epoch %d not found' % epoch
-        checkpoint = torch.load(model_path, map_location='cpu')
+        checkpoint = torch.load(model_path)
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         self._logger.info("Loaded model at {}".format(epoch))

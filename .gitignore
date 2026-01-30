@@ -6,6 +6,5 @@ data/
 raw_data/
 cache/
 /claude_code.log
-/Bigscity-LibCity/
 /.claude/
 /batch_logs/

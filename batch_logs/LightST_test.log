@@ -550,3 +550,312 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] [12 rows x 10 columns]
 
 [Return Code: 0]
+
+============================================================
+Timestamp: 2026-01-29 23:42:01
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LightST --dataset PEMSD7 --train true --max_epoch 20 --gpu_id 0 --exp_id 70943
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-29 23:42:06,078 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-29 23:42:06,078 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LightST, dataset_name=PEMSD7, exp_id=70943
+[OUT] 2026-01-29 23:42:06,078 - INFO - {'task': 'traffic_state_pred', 'model': 'LightST', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '70943', 'seed': 0, 'gpu_id': 0, 'max_epoch': 20, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 12, 'output_window': 12, 'output_dim': 1, 'gcn_true': False, 'buildA_true': True, 'gcn_depth': 2, 'dropout': 0.3, 'subgraph_size': 20, 'node_dim': 40, 'dilation_exponential': 1, 'conv_channels': 32, 'residual_channels': 32, 'skip_channels': 64, 'end_channels': 128, 'layers': 3, 'propalpha': 0.05, 'tanhalpha': 3, 'layer_norm_affline': True, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.001, 'weight_decay': 0.0001, 'lr_decay': False, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 50, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-01-29 23:42:06,086 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-01-29 23:42:06,089 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-01-29 23:42:06,089 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-01-29 23:42:06,092 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-01-29 23:42:06,092 - INFO - Loading file PEMSD7.dyna
+[OUT] 2026-01-29 23:42:27,527 - INFO - Loaded file PEMSD7.dyna, shape=(28224, 883, 1)
+[OUT] (28224, 883, 1)
+[OUT] 2026-01-29 23:42:42,877 - INFO - Dataset created
+[OUT] 2026-01-29 23:42:42,878 - INFO - x shape: (28201, 12, 883, 2), y shape: (28201, 12, 883, 2)
+[OUT] 2026-01-29 23:42:42,897 - INFO - train	x: (19741, 12, 883, 2), y: (19741, 12, 883, 2)
+[OUT] 2026-01-29 23:42:42,897 - INFO - eval	x: (2820, 12, 883, 2), y: (2820, 12, 883, 2)
+[OUT] 2026-01-29 23:42:42,897 - INFO - test	x: (5640, 12, 883, 2), y: (5640, 12, 883, 2)
+[OUT] 2026-01-29 23:46:21,739 - INFO - Saved at ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-01-29 23:46:23,839 - INFO - StandardScaler mean: 308.4280360596107, std: 188.77957026274376
+[OUT] 2026-01-29 23:46:23,839 - INFO - NoneScaler
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_version_cpu.so: undefined symbol: _ZN3c106detail14torchCheckFailEPKcS2_jRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+[ERR]   import torch_geometric.typing
+[OUT] 2026-01-29 23:46:36,049 - INFO - LightST receptive_field: 19
+[OUT] 2026-01-29 23:46:36,173 - INFO - LightST(
+[OUT]   (filter_convs): ModuleList(
+[OUT]     (0-2): 3 x DilatedInception(
+[OUT]       (tconv): ModuleList(
+[OUT]         (0): Conv2d(32, 8, kernel_size=(1, 2), stride=(1, 1))
+[OUT]         (1): Conv2d(32, 8, kernel_size=(1, 3), stride=(1, 1))
+[OUT]         (2): Conv2d(32, 8, kernel_size=(1, 6), stride=(1, 1))
+[OUT]         (3): Conv2d(32, 8, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (gate_convs): ModuleList(
+[OUT]     (0-2): 3 x DilatedInception(
+[OUT]       (tconv): ModuleList(
+[OUT]         (0): Conv2d(32, 8, kernel_size=(1, 2), stride=(1, 1))
+[OUT]         (1): Conv2d(32, 8, kernel_size=(1, 3), stride=(1, 1))
+[OUT]         (2): Conv2d(32, 8, kernel_size=(1, 6), stride=(1, 1))
+[OUT]         (3): Conv2d(32, 8, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (residual_convs): ModuleList(
+[OUT]     (0-2): 3 x Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   )
+[OUT]   (skip_convs): ModuleList(
+[OUT]     (0): Conv2d(32, 64, kernel_size=(1, 13), stride=(1, 1))
+[OUT]     (1): Conv2d(32, 64, kernel_size=(1, 7), stride=(1, 1))
+[OUT]     (2): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   )
+[OUT]   (norm): ModuleList(
+[OUT]     (0): LayerNorm((32, 883, 13), eps=1e-05, elementwise_affine=True)
+[OUT]     (1): LayerNorm((32, 883, 7), eps=1e-05, elementwise_affine=True)
+[OUT]     (2): LayerNorm((32, 883, 1), eps=1e-05, elementwise_affine=True)
+[OUT]   )
+[OUT]   (stu_mlp): ModuleList(
+[OUT]     (0): Sequential(
+[OUT]       (0): Linear(in_features=13, out_features=13, bias=True)
+[OUT]       (1): Linear(in_features=13, out_features=13, bias=True)
+[OUT]       (2): Linear(in_features=13, out_features=13, bias=True)
+[OUT]     )
+[OUT]     (1): Sequential(
+[OUT]       (0): Linear(in_features=7, out_features=7, bias=True)
+[OUT]       (1): Linear(in_features=7, out_features=7, bias=True)
+[OUT]       (2): Linear(in_features=7, out_features=7, bias=True)
+[OUT]     )
+[OUT]     (2): Sequential(
+[OUT]       (0): Linear(in_features=1, out_features=1, bias=True)
+[OUT]       (1): Linear(in_features=1, out_features=1, bias=True)
+[OUT]       (2): Linear(in_features=1, out_features=1, bias=True)
+[OUT]     )
+[OUT]   )
+[OUT]   (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   (gc): GraphConstructor(
+[OUT]     (emb1): Embedding(883, 40)
+[OUT]     (emb2): Embedding(883, 40)
+[OUT]     (lin1): Linear(in_features=40, out_features=40, bias=True)
+[OUT]     (lin2): Linear(in_features=40, out_features=40, bias=True)
+[OUT]   )
+[OUT]   (end_conv_1): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   (end_conv_2): Conv2d(128, 12, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   (skip0): Conv2d(2, 64, kernel_size=(1, 19), stride=(1, 1))
+[OUT]   (skipE): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1))
+[OUT] )
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.0.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.1.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,174 - INFO - filter_convs.1.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.1.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - filter_convs.2.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.0.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.1.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.1.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.1.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,175 - INFO - gate_convs.1.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.1.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.1.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.1.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.1.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.0.weight	torch.Size([8, 32, 1, 2])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.0.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.1.weight	torch.Size([8, 32, 1, 3])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.1.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.2.weight	torch.Size([8, 32, 1, 6])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.2.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.3.weight	torch.Size([8, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - gate_convs.2.tconv.3.bias	torch.Size([8])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - residual_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.0.weight	torch.Size([64, 32, 1, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.0.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.1.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.1.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.2.weight	torch.Size([64, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - skip_convs.2.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - norm.0.weight	torch.Size([32, 883, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,176 - INFO - norm.0.bias	torch.Size([32, 883, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - norm.1.weight	torch.Size([32, 883, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - norm.1.bias	torch.Size([32, 883, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - norm.2.weight	torch.Size([32, 883, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - norm.2.bias	torch.Size([32, 883, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.0.weight	torch.Size([13, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.0.bias	torch.Size([13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.1.weight	torch.Size([13, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.1.bias	torch.Size([13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.2.weight	torch.Size([13, 13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.0.2.bias	torch.Size([13])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.0.weight	torch.Size([7, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.0.bias	torch.Size([7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.1.weight	torch.Size([7, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.1.bias	torch.Size([7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.2.weight	torch.Size([7, 7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.1.2.bias	torch.Size([7])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.0.weight	torch.Size([1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.1.weight	torch.Size([1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.1.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.2.weight	torch.Size([1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,177 - INFO - stu_mlp.2.2.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - start_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.emb1.weight	torch.Size([883, 40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.emb2.weight	torch.Size([883, 40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.lin1.weight	torch.Size([40, 40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.lin1.bias	torch.Size([40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.lin2.weight	torch.Size([40, 40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - gc.lin2.bias	torch.Size([40])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - end_conv_1.weight	torch.Size([128, 64, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - end_conv_1.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - end_conv_2.weight	torch.Size([12, 128, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - end_conv_2.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - skip0.weight	torch.Size([64, 2, 1, 19])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - skip0.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - skipE.weight	torch.Size([64, 32, 1, 1])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - skipE.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-01-29 23:46:36,178 - INFO - Total parameter numbers: 1350172
+[OUT] 2026-01-29 23:46:36,178 - INFO - You select `adam` optimizer.
+[OUT] 2026-01-29 23:46:36,179 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-01-29 23:46:36,179 - INFO - Start training ...
+[OUT] 2026-01-29 23:46:36,179 - INFO - num_batches:309
+[OUT] 2026-01-29 23:47:06,633 - INFO - epoch complete!
+[OUT] 2026-01-29 23:47:06,633 - INFO - evaluating now!
+[OUT] 2026-01-29 23:47:08,952 - INFO - Epoch [0/20] train_loss: 35.5619, val_loss: 28.0678, lr: 0.001000, 32.77s
+[OUT] 2026-01-29 23:47:08,989 - INFO - Saved model at 0
+[OUT] 2026-01-29 23:47:08,990 - INFO - Val loss decrease from inf to 28.0678, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch0.tar
+[OUT] 2026-01-29 23:47:38,557 - INFO - epoch complete!
+[OUT] 2026-01-29 23:47:38,558 - INFO - evaluating now!
+[OUT] 2026-01-29 23:47:41,011 - INFO - Epoch [1/20] train_loss: 27.4421, val_loss: 25.6972, lr: 0.001000, 32.02s
+[OUT] 2026-01-29 23:47:41,048 - INFO - Saved model at 1
+[OUT] 2026-01-29 23:47:41,048 - INFO - Val loss decrease from 28.0678 to 25.6972, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch1.tar
+[OUT] 2026-01-29 23:48:10,737 - INFO - epoch complete!
+[OUT] 2026-01-29 23:48:10,738 - INFO - evaluating now!
+[OUT] 2026-01-29 23:48:13,080 - INFO - Epoch [2/20] train_loss: 26.3817, val_loss: 24.7010, lr: 0.001000, 32.03s
+[OUT] 2026-01-29 23:48:13,118 - INFO - Saved model at 2
+[OUT] 2026-01-29 23:48:13,118 - INFO - Val loss decrease from 25.6972 to 24.7010, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch2.tar
+[OUT] 2026-01-29 23:48:42,786 - INFO - epoch complete!
+[OUT] 2026-01-29 23:48:42,787 - INFO - evaluating now!
+[OUT] 2026-01-29 23:48:45,071 - INFO - Epoch [3/20] train_loss: 25.6148, val_loss: 24.6944, lr: 0.001000, 31.95s
+[OUT] 2026-01-29 23:48:45,111 - INFO - Saved model at 3
+[OUT] 2026-01-29 23:48:45,111 - INFO - Val loss decrease from 24.7010 to 24.6944, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch3.tar
+[OUT] 2026-01-29 23:49:14,905 - INFO - epoch complete!
+[OUT] 2026-01-29 23:49:14,906 - INFO - evaluating now!
+[OUT] 2026-01-29 23:49:17,476 - INFO - Epoch [4/20] train_loss: 25.2708, val_loss: 24.8691, lr: 0.001000, 32.36s
+[OUT] 2026-01-29 23:49:47,327 - INFO - epoch complete!
+[OUT] 2026-01-29 23:49:47,327 - INFO - evaluating now!
+[OUT] 2026-01-29 23:49:49,647 - INFO - Epoch [5/20] train_loss: 25.0225, val_loss: 23.9691, lr: 0.001000, 32.17s
+[OUT] 2026-01-29 23:49:49,684 - INFO - Saved model at 5
+[OUT] 2026-01-29 23:49:49,684 - INFO - Val loss decrease from 24.6944 to 23.9691, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch5.tar
+[OUT] 2026-01-29 23:50:19,538 - INFO - epoch complete!
+[OUT] 2026-01-29 23:50:19,538 - INFO - evaluating now!
+[OUT] 2026-01-29 23:50:21,851 - INFO - Epoch [6/20] train_loss: 24.7309, val_loss: 24.2099, lr: 0.001000, 32.17s
+[OUT] 2026-01-29 23:50:51,705 - INFO - epoch complete!
+[OUT] 2026-01-29 23:50:51,706 - INFO - evaluating now!
+[OUT] 2026-01-29 23:50:53,996 - INFO - Epoch [7/20] train_loss: 24.5134, val_loss: 23.6269, lr: 0.001000, 32.15s
+[OUT] 2026-01-29 23:50:54,042 - INFO - Saved model at 7
+[OUT] 2026-01-29 23:50:54,042 - INFO - Val loss decrease from 23.9691 to 23.6269, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch7.tar
+[OUT] 2026-01-29 23:51:23,921 - INFO - epoch complete!
+[OUT] 2026-01-29 23:51:23,921 - INFO - evaluating now!
+[OUT] 2026-01-29 23:51:26,221 - INFO - Epoch [8/20] train_loss: 24.2757, val_loss: 23.7582, lr: 0.001000, 32.18s
+[OUT] 2026-01-29 23:51:56,085 - INFO - epoch complete!
+[OUT] 2026-01-29 23:51:56,086 - INFO - evaluating now!
+[OUT] 2026-01-29 23:51:58,436 - INFO - Epoch [9/20] train_loss: 24.0382, val_loss: 23.0712, lr: 0.001000, 32.21s
+[OUT] 2026-01-29 23:51:58,474 - INFO - Saved model at 9
+[OUT] 2026-01-29 23:51:58,474 - INFO - Val loss decrease from 23.6269 to 23.0712, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch9.tar
+[OUT] 2026-01-29 23:52:28,284 - INFO - epoch complete!
+[OUT] 2026-01-29 23:52:28,284 - INFO - evaluating now!
+[OUT] 2026-01-29 23:52:30,581 - INFO - Epoch [10/20] train_loss: 23.8105, val_loss: 23.4797, lr: 0.001000, 32.11s
+[OUT] 2026-01-29 23:53:00,424 - INFO - epoch complete!
+[OUT] 2026-01-29 23:53:00,425 - INFO - evaluating now!
+[OUT] 2026-01-29 23:53:02,809 - INFO - Epoch [11/20] train_loss: 23.7387, val_loss: 23.2492, lr: 0.001000, 32.23s
+[OUT] 2026-01-29 23:53:32,668 - INFO - epoch complete!
+[OUT] 2026-01-29 23:53:32,668 - INFO - evaluating now!
+[OUT] 2026-01-29 23:53:34,951 - INFO - Epoch [12/20] train_loss: 23.5982, val_loss: 23.0373, lr: 0.001000, 32.14s
+[OUT] 2026-01-29 23:53:34,990 - INFO - Saved model at 12
+[OUT] 2026-01-29 23:53:34,990 - INFO - Val loss decrease from 23.0712 to 23.0373, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch12.tar
+[OUT] 2026-01-29 23:54:04,743 - INFO - epoch complete!
+[OUT] 2026-01-29 23:54:04,744 - INFO - evaluating now!
+[OUT] 2026-01-29 23:54:07,056 - INFO - Epoch [13/20] train_loss: 23.3906, val_loss: 22.6970, lr: 0.001000, 32.07s
+[OUT] 2026-01-29 23:54:07,093 - INFO - Saved model at 13
+[OUT] 2026-01-29 23:54:07,093 - INFO - Val loss decrease from 23.0373 to 22.6970, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch13.tar
+[OUT] 2026-01-29 23:54:36,802 - INFO - epoch complete!
+[OUT] 2026-01-29 23:54:36,803 - INFO - evaluating now!
+[OUT] 2026-01-29 23:54:39,101 - INFO - Epoch [14/20] train_loss: 23.2785, val_loss: 22.4643, lr: 0.001000, 32.01s
+[OUT] 2026-01-29 23:54:39,138 - INFO - Saved model at 14
+[OUT] 2026-01-29 23:54:39,139 - INFO - Val loss decrease from 22.6970 to 22.4643, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch14.tar
+[OUT] 2026-01-29 23:55:08,953 - INFO - epoch complete!
+[OUT] 2026-01-29 23:55:08,953 - INFO - evaluating now!
+[OUT] 2026-01-29 23:55:11,244 - INFO - Epoch [15/20] train_loss: 23.1324, val_loss: 22.5037, lr: 0.001000, 32.10s
+[OUT] 2026-01-29 23:55:41,062 - INFO - epoch complete!
+[OUT] 2026-01-29 23:55:41,063 - INFO - evaluating now!
+[OUT] 2026-01-29 23:55:43,487 - INFO - Epoch [16/20] train_loss: 23.0238, val_loss: 22.2464, lr: 0.001000, 32.24s
+[OUT] 2026-01-29 23:55:43,524 - INFO - Saved model at 16
+[OUT] 2026-01-29 23:55:43,524 - INFO - Val loss decrease from 22.4643 to 22.2464, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch16.tar
+[OUT] 2026-01-29 23:56:13,323 - INFO - epoch complete!
+[OUT] 2026-01-29 23:56:13,324 - INFO - evaluating now!
+[OUT] 2026-01-29 23:56:15,663 - INFO - Epoch [17/20] train_loss: 23.0022, val_loss: 22.4475, lr: 0.001000, 32.14s
+[OUT] 2026-01-29 23:56:45,445 - INFO - epoch complete!
+[OUT] 2026-01-29 23:56:45,445 - INFO - evaluating now!
+[OUT] 2026-01-29 23:56:47,721 - INFO - Epoch [18/20] train_loss: 22.9182, val_loss: 22.2961, lr: 0.001000, 32.06s
+[OUT] 2026-01-29 23:57:17,594 - INFO - epoch complete!
+[OUT] 2026-01-29 23:57:17,595 - INFO - evaluating now!
+[OUT] 2026-01-29 23:57:19,893 - INFO - Epoch [19/20] train_loss: 22.8360, val_loss: 22.0480, lr: 0.001000, 32.17s
+[OUT] 2026-01-29 23:57:19,930 - INFO - Saved model at 19
+[OUT] 2026-01-29 23:57:19,930 - INFO - Val loss decrease from 22.2464 to 22.0480, saving to ./libcity/cache/70943/model_cache/LightST_PEMSD7_epoch19.tar
+[OUT] 2026-01-29 23:57:19,931 - INFO - Trained totally 20 epochs, average train time is 29.826s, average eval time is 2.337s
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py:127: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+[ERR]   checkpoint = torch.load(model_path)
+[OUT] 2026-01-29 23:57:19,978 - INFO - Loaded model at 19
+[OUT] 2026-01-29 23:57:19,978 - INFO - Saved model at ./libcity/cache/70943/model_cache/LightST_PEMSD7.m
+[OUT] 2026-01-29 23:57:20,013 - INFO - Start evaluating ...
+[OUT] 2026-01-29 23:58:27,347 - INFO - Note that you select the single mode to evaluate!
+[OUT] 2026-01-29 23:58:27,353 - INFO - Evaluate result is saved at ./libcity/cache/70943/evaluate_cache/2026_01_29_23_58_27_LightST_PEMSD7.csv
+[OUT] 2026-01-29 23:58:27,366 - INFO -
+[OUT]           MAE  MAPE          MSE  ...  masked_RMSE        R2      EVAR
+[OUT] 1   18.215971   inf   810.462646  ...    28.465670  0.976701  0.976701
+[OUT] 2   19.684885   inf   955.583374  ...    30.903259  0.972537  0.972554
+[OUT] 3   20.680721   inf  1051.813843  ...    32.419651  0.969775  0.969794
+[OUT] 4   21.392103   inf  1116.930054  ...    33.401688  0.967905  0.967936
+[OUT] 5   21.967806   inf  1176.237671  ...    34.275810  0.966216  0.966230
+[OUT] 6   22.457737   inf  1229.184082  ...    35.038067  0.964694  0.964698
+[OUT] 7   22.917652   inf  1280.406982  ...    35.762890  0.963227  0.963237
+[OUT] 8   23.332851   inf  1330.334106  ...    36.454643  0.961808  0.961842
+[OUT] 9   23.695757   inf  1370.741821  ...    37.004009  0.960655  0.960691
+[OUT] 10  24.071100   inf  1413.565063  ...    37.573895  0.959432  0.959450
+[OUT] 11  24.546692   inf  1464.898315  ...    38.246944  0.957975  0.958008
+[OUT] 12  25.236252   inf  1535.809204  ...    39.162266  0.955962  0.956015
+[OUT] 
+[OUT] [12 rows x 10 columns]
+
+[Return Code: 0]

@@ -1,0 +1,516 @@
+[
+    {
+  "title": "BigST: Linear Complexity Spatio-Temporal Graph Neural Network for Traffic Forecasting on Large-Scale Road Networks",
+  "conference": "VLDB",
+  "year": 2024,
+  "model_name": "BigST",
+  "track": "Research",
+  "pdf_link": "https://www.vldb.org/pvldb/vol17/p1081-han.pdf",
+  "datasets": [
+    "CA-District5 (8,806 nodes)",
+    "CA-State (28,735 nodes)",
+    "PeMS"
+  ],
+  "metrics": {
+    "CA-District5": {
+      "MAE": "1.83",
+      "RMSE": "3.42",
+      "MAPE": "8.87%"
+    },
+    "CA-State": {
+      "MAE": "1.52",
+      "RMSE": "3.05",
+      "MAPE": "7.54%"
+    },
+    "Note": "Achieves linear complexity O(N), significantly faster training/inference on large-scale graphs compared to standard GNNs."
+  },
+  "repo_url": "https://github.com/usail-hkust/BigST",
+  "keywords": [
+    "linear complexity",
+    "spatio-temporal graph neural network",
+    "large-scale traffic forecasting",
+    "long-range dependencies",
+    "scalability"
+  ]
+},
+    {
+      "title": "STHSepNet: Spatio-Temporal Hypergraph Separation Network for Traffic Flow Demand Forecasting",
+      "authors": ["Not available"],
+      "venue": "KDD",
+      "year": 2025,
+      "relevance_score": 9,
+      "abstract": "Uses hypergraph representations for modeling higher-order spatial relationships in traffic flow demand forecasting.",
+      "datasets": ["NYC-Taxi", "NYC-Bike"],
+      "metrics": ["MAE", "RMSE"],
+      "repository_url": "https://github.com/jiawenchen10/STHSepNet",
+      "pdf_url": "Not available",
+      "arxiv_id": "Not available",
+      "model_name": "STHSepNet",
+      "key_contributions": ["Hypergraph modeling for traffic ST", "Higher-order spatial relationships", "Separation network architecture"],
+      "method_type": "Hypergraph Neural Network"
+    },
+    {
+      "title": "STWave: When Spatio-Temporal Meet Wavelets - Disentangled Traffic Forecasting via Efficient Spectral Graph Attention Networks",
+      "authors": ["Yuchen Fang", "Yanjun Qin", "Haiyong Luo", "Fang Zhao", "Bingbing Xu", "Liang Zeng", "Chenxing Wang"],
+      "venue": "ICDE",
+      "year": 2023,
+      "relevance_score": 7,
+      "abstract": "Combines wavelets with ST prediction for multi-scale temporal pattern analysis in traffic forecasting.",
+      "datasets": ["METR-LA", "PEMS-BAY"],
+      "metrics": ["MAE", "RMSE", "MAPE"],
+      "repository_url": "https://github.com/LMissher/STWave",
+      "pdf_url": "Not available",
+      "arxiv_id": "Not available",
+      "model_name": "STWave",
+      "key_contributions": ["Wavelet analysis for ST data", "Multi-scale frequency analysis", "Non-stationary pattern detection"],
+      "method_type": "Signal Processing + ST"
+    },
+    {
+      "title": "Riding the Wave: Multi-Scale Spatial-Temporal Graph Learning",
+      "authors": ["Not available"],
+      "venue": "IJCAI",
+      "year": 2025,
+      "relevance_score": 8,
+      "abstract": "Addresses multi-scale ST graph learning for capturing patterns at multiple temporal and spatial resolutions.",
+      "datasets": ["METR-LA", "PEMS-BAY"],
+      "metrics": ["MAE", "RMSE", "MAPE"],
+      "repository_url": "https://github.com/luck-seu/HST-WAVE",
+      "pdf_url": "https://www.ijcai.org/proceedings/2025/0369.pdf",
+      "arxiv_id": "Not available",
+      "model_name": "HSTWAVE",
+      "key_contributions": ["Multi-scale ST graph learning", "Hierarchical spatial-temporal modeling", "Multi-resolution patterns"],
+      "method_type": "Multi-scale GNN"
+    },
+    {
+    "title": "UniST: A Prompt-Empowered Universal Model for Urban Spatio-Temporal Prediction",
+    "conference": "KDD",
+    "year": 2024,
+    "model_name": "UniST",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2402.11838",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "PEMS04",
+      "PEMS08"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": "2.60",
+        "MAPE": "6.85%",
+        "RMSE": "5.25"
+      },
+      "Note": "Achieves state-of-the-art performance by using masked spatio-temporal pre-training."
+    },
+    "repo_url": "https://github.com/tsinghua-fib-lab/UniST",
+    "keywords": [
+      "universal model",
+      "spatio-temporal pre-training",
+      "prompt learning",
+      "cross-city generalization",
+      "traffic prediction"
+    ]
+},
+{
+    "title": "UrbanDiT: A Foundation Model for Open-World Urban Spatio-Temporal Learning",
+    "conference": "NeurIPS",
+    "year": 2025,
+    "model_name": "UrbanDiT",
+    "track": "Main",
+    "pdf_link": "https://arxiv.org/pdf/2410.15062",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "TaxiBJ",
+      "BikeNYC"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": "2.55 (Zero-shot capable)",
+        "MAPE": "6.50%",
+        "RMSE": "5.10"
+      },
+      "Note": "Foundation model leveraging Diffusion Transformers; supports zero-shot prediction and imputation."
+    },
+    "repo_url": "https://github.com/tsinghua-fib-lab/UrbanDiT",
+    "keywords": [
+      "diffusion transformer",
+      "foundation model",
+      "open-world learning",
+      "spatio-temporal generation",
+      "zero-shot forecasting"
+    ]
+  },
+    {
+    "id": 10,
+    "title": "DSTAGNN: Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting",
+    "authors": [
+      "Shiyong Lan",
+      "Yitong Ma",
+      "Weikang Huang",
+      "Wenwu Wang",
+      "Hongyu Yang",
+      "Pyang Li"
+    ],
+    "venue": "ICML",
+    "year": 2022,
+    "score": 9,
+    "arxiv": "2206.09112",
+    "github": "https://github.com/SYLan2019/DSTAGNN",
+    "datasets": [
+      "PEMSD4"
+    ],
+    "model_name": "DSTAGNN",
+    "key_contributions": [
+      "Dynamic spatial-temporal aware graph construction",
+      "Captures time-varying correlations at each time step",
+      "Multi-head attention for ST dependencies",
+      "Significant improvements over static graph methods"
+    ],
+    "metrics": {
+      "PEMSD4": {
+        "MAE": 19.30,
+        "MAPE": "12.70%",
+        "RMSE": 31.46
+      }
+    },
+    "abstract": "Proposes dynamic ST-aware GNN with learnable graph structure at each time step. Captures both static topology and dynamic correlations. Strong performance but LargeST reveals scalability limitations on large graphs.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/pdfs/dstagnn.pdf",
+    "notes": "ICML 2022. Strong performance on medium datasets. LargeST benchmark shows it cannot scale to GLA/CA due to memory requirements from dynamic graph generation."
+  },
+  {
+    "title": "Information Bottleneck-guided MLPs for Robust Spatial-temporal Forecasting",
+    "conference": "ICML",
+    "year": 2025,
+    "track": "Poster",
+    "pdf_link": "https://openreview.net/attachment?id=pqSLcEbk5X&name=pdf",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ICML2025_RSTIB.pdf",
+    "datasets": [
+      "PEMSD7"
+    ],
+    "model_name": "RSTIB",
+    "metrics": {
+      "PEMSD7": {
+        "MAE": 19.84,
+        "MAPE": "8.33%",
+        "RMSE": 33.90
+      }
+    },
+    "github": "https://github.com/mchen644/RSTIB",
+    "keywords": [
+      "spatial-temporal",
+      "traffic-speed-forecast",
+      "information bottleneck",
+      "MLP",
+      "robustness"
+    ]
+  },
+  {
+    "title": "LSTTN: A Long-Short Term Transformer-based Spatio-temporal Neural Network for Traffic Flow Forecasting",
+    "authors": [
+      "Qinyao Luo",
+      "Silu He",
+      "Xing Han",
+      "Yuhan Wang",
+      "Haifeng Li"
+    ],
+    "venue": "Knowledge-Based Systems",
+    "year": 2024,
+    "arxiv": "2403.16495",
+    "github": "https://github.com/GeoX-Lab/LSTTN",
+    "datasets": [
+      "METR_LA"
+    ],
+    "model_name": "LSTTN",
+    "key_contributions": [
+      "Masked subseries Transformer to learn compressed contextual temporal representations from long historical series",
+      "Long-term trend extractor using stacked 1D dilated convolutions",
+      "Periodicity extractor using dynamic graph convolution for weekly and daily patterns",
+      "Short-term trend extractor using existing STGNNs for fine-grained predictions",
+      "Integrates long-term trends, periodic features, and short-term features comprehensively"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 2.96,
+        "MAPE": "7.93%",
+        "RMSE": 5.92
+      }
+    },
+    "abstract": "LSTTN addresses limitations of existing STGNNs that only utilize short-range traffic data by comprehensively considering long- and short-term features. Uses masked subseries Transformer for efficient learning of compressed temporal representations from long series, extracts long-term trends and periodic features, then fuses with short-term features from STGNNs for accurate predictions.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/ArXiv2024_LSTTN.pdf",
+    "notes": "Published in Knowledge-Based Systems 2024 (293: 111637). Central South University and Xiangjiang Laboratory. Uses two-week historical data (4032 timesteps for 5-min intervals). Mask reconstruction with 75% random masking. Graph WaveNet adopted as short-term trend extractor. Demonstrates robustness to missing data and superior sensing of sudden traffic changes."
+  },
+  {
+    "title": "Efficient Traffic Prediction Through Spatio-Temporal Distillation",
+    "conference": "AAAI",
+    "year": 2025,
+    "track": "Conference",
+    "pdf_link": "https://arxiv.org/pdf/2501.10459",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/AAAI2025_LightST.pdf",
+    "model_name":"LightST",
+    "datasets": [
+      "PEMSD7"
+    ],
+    "metrics": {
+      "PEMSD7": {
+        "MAE": 20.78,
+        "MAPE": " 8.98%",
+        "RMSE": 33.95
+      }
+    },
+    "repo_url": "https://github.com/lizzyhku/TP",
+    "keywords": [
+      "spatial-temporal",
+      "knowledge distillation",
+      "traffic prediction",
+      "efficiency",
+      "lightweight"
+    ]
+  },
+  {
+    "title": "Taming the Long Tail in Human Mobility Prediction",
+    "venue": "NeurIPS",
+    "year": 2024,
+    "score": 7,
+    "arxiv_id": "2410.14970",
+    "datasets": ["gowalla"],
+    "metrics": {
+        "gowalla": {
+            "Acc@1": 0.1668,
+            "Acc@5": 0.3605,
+            "Acc@10": 0.4429,
+            "MRR": 0.2591
+        }
+    },
+    "github": "https://github.com/Yukayo/LoTNext",
+    "model_name": "LoTNext",
+    "methodology": "Long-tail Distribution Learning, Human Mobility, Domain Adaptation",
+    "analyzed": false,
+    "notes": "Addresses long-tail distribution problem in human mobility prediction."
+  },
+  {
+    "title": "CoMaPOI: Multi-Agent Framework for Next POI Prediction",
+    "venue": "SIGIR",
+    "year": 2025,
+    "score": 6,
+    "datasets": ["foursquare_tky"],
+    "metrics": {"foursquare_tky": {
+        "NDCG@5":0.3448,
+        "MRR": 0.3182
+        }
+    },
+    "github": "https://github.com/Chips98/CoMaPOI",
+    "model_name": "CoMaPOI",
+    "methodology": "Multi-agent Systems, POI Prediction, Collaborative Learning",
+    "analyzed": false,
+    "notes": "SIGIR 2025. Multi-agent approach for POI prediction."
+  },
+  {
+    "title": "GETNext: Trajectory Flow Map Enhanced Transformer for Next POI Recommendation",
+    "venue": "SIGIR",
+    "year": 2022,
+    "datasets": ["foursquare_nyc"],
+    "metrics": {"foursquare_nyc": {
+        "Acc@1": 0.2435,
+        "Acc@5": 0.5089,
+        "Acc@10": 0.6143,
+        "MRR":  0.3621 
+        }
+    },
+    "github": "https://github.com/songyangco/GETNext",
+    "model_name": "GETNext",
+    "analyzed": false,
+    "notes": "SIGIR 2022."
+  },
+  {
+    "title": "DiffTraj: Generating GPS Trajectory with Diffusion Probabilistic Models",
+    "conference": "ICLR",
+    "year": 2024,
+    "model_name": "DiffTraj",
+    "track": "Main",
+    "pdf_link": "https://arxiv.org/pdf/2304.11582",
+    "datasets": [
+      "GeoLife",
+      "TaxiBJ",
+      "Porto"
+    ],
+    "metrics": {
+      "Porto": {
+        "JSD": "0.012",
+        "ADE": "180.5m (Generation)",
+        "FDE": "320.1m"
+      },
+      "Note": "Leverages diffusion models for high-fidelity trajectory generation and next-location forecasting."
+    },
+    "repo_url": "https://github.com/Yasoz/DiffTraj",
+    "keywords": [
+      "diffusion models",
+      "trajectory generation",
+      "spatio-temporal",
+      "generative AI",
+      "GPS trajectory"
+    ]
+  },
+  {
+    "title": "LightPath: Lightweight and Scalable Path Representation Learning",
+    "conference": "KDD",
+    "year": 2023,
+    "model_name": "LightPath",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2307.10171",
+    "datasets": [
+      "Aalborg (Denmark)",
+      "Chengdu (China)"
+    ],
+    "metrics": {
+      "Aalborg": {
+        "MAE": "85.76 (Travel Time Estimation)",
+        "Path_Ranking": "0.13 (Metric)"
+      },
+      "Note": "Outperforms supervised baselines like HierETA while being unsupervised and lightweight."
+    },
+    "repo_url": "https://github.com/Sean-Bin-Yang/LightPath",
+    "keywords": [
+      "path representation learning",
+      "lightweight model",
+      "scalable",
+      "sparse auto-encoder",
+      "knowledge distillation"
+    ]
+  },
+  {
+    "title": "PLMTrajRec: A Scalable and Generalizable Trajectory Recovery Method with Pre-trained Language Models",
+    "conference": "arXiv",
+    "year": 2024,
+    "model_name": "PLMTrajRec",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/pdf/2410.14281",
+    "datasets": [
+      "Porto",
+      "Geolife"
+    ],
+    "metrics": {
+      "Performance": {
+        "Improvement": "Significantly outperforms interpolation and RNN baselines",
+        "Generalization": "Zero-shot transfer capable across cities"
+      },
+      "Note": "Converts trajectory recovery into a language modeling task using dual prompts (Explicit & Implicit)."
+    },
+    "repo_url": "https://github.com/wtl52656/PLMTrajRec",
+    "keywords": [
+      "trajectory recovery",
+      "pre-trained language models",
+      "prompt learning",
+      "spatio-temporal",
+      "missing data imputation"
+    ]
+  },
+  {
+    "title": "Self-supervised Trajectory Representation Learning with Temporal Regularities and Travel Semantics",
+    "conference": "ICDE",
+    "year": 2023,
+    "model_name": "START",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2211.09510",
+    "datasets": [
+      "Porto (Taxi)",
+      "Beijing (Taxi)"
+    ],
+    "metrics": {
+      "Downstream_Tasks": {
+        "Similarity_Search": "SOTA performance",
+        "Destination_Prediction": "High accuracy in low-data regimes"
+      },
+      "Note": "Uses two self-supervised tasks: Span-Masked Trajectory Recovery & Trajectory Contrastive Learning."
+    },
+    "repo_url": "https://github.com/aptx1231/START",
+    "keywords": [
+      "self-supervised learning",
+      "trajectory representation",
+      "contrastive learning",
+      "temporal regularities",
+      "travel semantics"
+    ]
+  },
+  {
+    "title": "Origin-Destination Travel Time Oracle for Map-based Services",
+    "conference": "SIGMOD",
+    "year": 2024,
+    "model_name": "DOT",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2405.15062",
+    "datasets": [
+      "DiDi-Chengdu",
+      "DiDi-Xi'an"
+    ],
+    "metrics": {
+      "Chengdu": {
+        "MAE": "53.68s",
+        "MAPE": "10.42%",
+        "RMSE": "84.21s"
+      },
+      "Note": "DOT uses a diffusion-based approach to infer 'pixelated trajectories' (PiT) first, then estimates time, outperforming end-to-end regression models."
+    },
+    "repo_url": "https://github.com/Logan-Lin/DOT",
+    "keywords": [
+      "travel time estimation",
+      "diffusion models",
+      "origin-destination",
+      "pixelated trajectory",
+      "map-based services"
+    ]
+  },
+  {
+    "title": "DutyTTE: Deciphering Uncertainty in Origin-Destination Travel Time Estimation",
+    "conference": "AAAI",
+    "year": 2025,
+    "model_name": "DutyTTE",
+    "track": "Main",
+    "pdf_link": "https://ojs.aaai.org/index.php/AAAI/article/view/33350/35505",
+    "datasets": [
+      "Large-scale Ride-hailing Data (Private)"
+    ],
+    "metrics": {
+      "Performance": {
+        "Improvement": "~5-10% over DOT/ProbTTE",
+        "Method": "RL-based Path Alignment + MoE Uncertainty"
+      },
+      "Note": "Proposes a Reinforcement Learning method to align predicted paths with ground truth and a Mixture-of-Experts (MoE) for uncertainty."
+    },
+    "repo_url": "https://github.com/maoxiaowei97/DutyTTE",
+    "keywords": [
+      "uncertainty deciphering",
+      "reinforcement learning",
+      "mixture of experts",
+      "origin-destination",
+      "robust ETA"
+    ]
+  },
+  {
+    "title": "Generative Next POI Recommendation with Semantic ID",
+    "conference": "KDD",
+    "year": 2025,
+    "model_name": "GNPRSID",
+    "track": "Research",
+    "datasets": [
+      "NYC",
+      "TKY (Tokyo)",
+      "CA (Check-in)"
+    ],
+    "metrics": {
+      "NYC": {
+        "Hit@1": "22.5% (Approx)",
+        "NDCG@1": "14.2%",
+        "Note": "Uses RQ-VAE to quantize POI coordinates into Semantic IDs for LLM generation."
+      },
+      "repo_url": "https://github.com/wds1996/GNPR-SID",
+      "keywords": [
+        "next POI recommendation",
+        "generative model",
+        "semantic ID",
+        "large language model",
+        "quantization"
+      ]
+    }
+  }
+]

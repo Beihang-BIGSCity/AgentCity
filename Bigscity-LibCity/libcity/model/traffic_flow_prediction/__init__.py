@@ -38,11 +38,13 @@ from libcity.model.traffic_flow_prediction.STGNCDE import STGNCDE
 from libcity.model.traffic_flow_prediction.ASTGNN import ASTGNN
 from libcity.model.traffic_flow_prediction.ASTGNNCommon import ASTGNNCommon
 from libcity.model.traffic_flow_prediction.FreTS import FreTS
+from libcity.model.traffic_flow_prediction.LSTTN import LSTTN
 # from libcity.model.traffic_flow_prediction.LightST import LightST
 
 
 __all__ = [
     "FreTS",
+    "LSTTN",
     # "LightST",
     "AGCRN",
     "ASTGCN",

@@ -54,7 +54,7 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
         Delegate to `paper-searcher` with instructions to:
         - Generate 3-5 diverse search queries from the keywords
         - Execute multiple searches to gather 30-50 candidate papers
-        - Return raw paper metadata (title, abstract, arxiv_id, URLs)
+        - Return raw paper metadata (title, abstract, URLs)
 
         ### Phase 2: Evaluate
         Delegate to `paper-evaluator` with the search results to:
@@ -66,6 +66,7 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
         Delegate to `paper-analyzer` with the filtered papers to:
         - Download PDFs for high-scoring papers
         - Extract datasets, metrics, and repository URLs
+        - Integrate paper information from `paper-searcher`
         - Catalog all papers to data/articles/catalog.json
 
         ## Output Requirements
