@@ -1,0 +1,30 @@
+{
+  "hidden_dim": 64,
+  "dropout": 0.0,
+  "stgcn_num_layers": 7,
+  "use_hypergraph": false,
+  "hgnn_num_backbone_layers": 6,
+  "hgnn_num_head_layers": 1,
+  "hgnn_num_hyper_edge": 32,
+  "bidir_adj_mx": true,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "max_epoch": 300,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "lr_decay": true,
+  "lr_scheduler": "reducelronplateau",
+  "lr_reduce_factor": 0.5,
+  "lr_patience": 20,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 50
+}

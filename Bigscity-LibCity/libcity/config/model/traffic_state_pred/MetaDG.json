@@ -1,0 +1,33 @@
+{
+  "node_emb_dim": 16,
+  "tod_emb_dim": 8,
+  "dow_emb_dim": 8,
+  "continuous_time_emb_dim": 8,
+  "hidden_dim": 64,
+  "layer_num": 1,
+  "hop_num_k": 1,
+  "use_curriculum_learning": true,
+  "cl_decay_steps": 6000,
+  "use_mask": true,
+  "refine_dynamic_node": true,
+  "refine_dynamic_graph": true,
+  "corr_enhance_mode": "ST",
+
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "batch_size": 8,
+  "max_epoch": 100,
+  "learner": "adam",
+  "learning_rate": 0.003,
+  "weight_decay": 0.0,
+  "lr_decay": false,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 50
+}

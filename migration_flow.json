@@ -1,5 +1,104 @@
 [
   {
+    "title": "Make Graph Neural Networks Great Again: A Generic Integration Paradigm of Topology-Free Patterns for Traffic Speed Prediction",
+    "conference": "IJCAI",
+    "year": 2024,
+    "model_name": "DCST",
+    "track": "Research",
+    "pdf_link": "https://www.ijcai.org/proceedings/2024/0288.pdf",
+    "datasets": [
+      "PeMS03",
+      "PeMS04",
+      "PeMS07",
+      "PeMS08"
+    ],
+    "metrics": {
+      "Note": "Proposes a distillation-style learning framework where a GNN 'teacher' injects topology-regularized patterns into a Dual Cross-Scale Transformer (DCST) 'student' to capture topology-free dynamics."
+    },
+    "repo_url": "https://github.com/ibizatomorrow/DCST",
+    "keywords": [
+      "topology-free patterns",
+      "graph neural networks",
+      "distillation",
+      "traffic speed prediction",
+      "dual cross-scale transformer"
+    ]
+  },
+  {
+    "title": "Spatial-Temporal Large Language Model for Traffic Prediction",
+    "conference": "IEEE MDM",
+    "year": 2024,
+    "model_name": "STLLM",
+    "track": "Research",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10591642",
+    "datasets": [
+      "PeMS04",
+      "PeMS08",
+      "NYCTaxi"
+    ],
+    "metrics": {
+      "Note": "Treats traffic prediction as a language modeling task by defining timesteps as tokens and using a partially frozen attention strategy to adapt LLMs for spatial-temporal dependencies."
+    },
+    "repo_url": "https://github.com/ChenxiLiu-HNU/ST-LLM",
+    "keywords": [
+      "large language models",
+      "spatial-temporal embedding",
+      "traffic prediction",
+      "transfer learning",
+      "tokenization"
+    ]
+  },
+  {
+    "title": "T-Graphormer: Using Transformers for Spatiotemporal Forecasting",
+    "conference": "arXiv",
+    "year": 2024,
+    "model_name": "TGraphormer",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2309.02703",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY"
+    ],
+    "metrics": {
+      "Note": "Enhances the Graphormer architecture with temporal encodings, allowing each node to attend to all other tokens in the graph sequence to capture rich spacetime patterns."
+    },
+    "repo_url": "https://github.com/rdh1115/T-Graphormer",
+    "keywords": [
+      "transformer",
+      "graphormer",
+      "spatiotemporal forecasting",
+      "traffic prediction",
+      "attention mechanism"
+    ]
+  },
+  {
+    "title": "Context-aware knowledge graph framework for traffic speed forecasting using graph neural network",
+    "conference": "Scientific Reports / ResearchGate",
+    "year": 2024,
+    "model_name": "CKGGNN",
+    "track": "Research",
+    "pdf_link": "https://www.nature.com/articles/s41598-024-51368-6",
+    "datasets": [
+      "Shenzhen Traffic Speed",
+      "Urban Context Data"
+    ],
+    "metrics": {
+      "Shenzhen (10-120 min)": {
+        "MAE": "3.46",
+        "MAPE": "14.76%"
+      },
+      "Note": "Integrates a Context-aware Knowledge Graph (CKG) with GNNs using a relation-dependent integration strategy to model urban context dependencies."
+    },
+    "repo_url": "https://github.com/mie-lab/CKG-traffic-forecasting",
+    "keywords": [
+      "knowledge graph",
+      "context-aware",
+      "graph neural network",
+      "traffic speed forecasting",
+      "urban computing"
+    ]
+  },
+  {
     "title": "EasyST: A Simple Framework for Spatio-Temporal Prediction",
     "conference": "CIKM",
     "year": 2024,

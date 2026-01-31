@@ -251,7 +251,16 @@
             "DSTMamba",
             "STHSepNet",
             "HSTWAVE",
-            "MTSTAN"
+            "MTSTAN",
+            "STLLM",
+            "TGraphormer",
+            "DCST",
+            "CKGGNN",
+            "EasyST",
+            "LEAF",
+            "MetaDG",
+            "HiMSNet",
+            "TRACK"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -788,6 +797,51 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "MTSTAN": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "STLLM": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "TGraphormer": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "DCST": {
+            "dataset_class": "STAEformerDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "CKGGNN": {
+            "dataset_class": "TrafficStateContextKGDataset",
+            "executor": "KgContextExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "EasyST": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "LEAF": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "MetaDG": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "HiMSNet": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "TRACK": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

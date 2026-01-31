@@ -1,0 +1,39 @@
+{
+  "model": "STLLM",
+  "task": "traffic_state_pred",
+
+  "input_window": 12,
+  "output_window": 12,
+
+  "llm_layer": 6,
+  "pfa_U": 1,
+  "gpt_channel": 256,
+  "time_intervals": 300,
+
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "batch_size": 64,
+  "max_epoch": 100,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.1,
+  "steps": [100, 200],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 20,
+
+  "_comment_time_intervals": "Use 300 for PEMS datasets (288 time slots/day). Use 1800 for datasets with 48 time slots/day (e.g., bike/taxi).",
+  "_comment_llm_layer": "Number of GPT-2 transformer layers. Default is 6 from paper.",
+  "_comment_pfa_U": "Number of unfrozen attention layers in Parameter-Frozen Attention (PFA). Default is 1 from paper.",
+  "_comment_gpt_channel": "GPT-2 hidden dimension/channel size. Default is 256 from paper.",
+  "_comment_lr_schedule": "Learning rate decays to 10% at epochs 100 and 200 as per paper settings."
+}

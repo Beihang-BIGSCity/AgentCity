@@ -38,6 +38,9 @@ from libcity.model.traffic_speed_prediction.STSSDL import STSSDL
 from libcity.model.traffic_speed_prediction.LightST import LightST
 from libcity.model.traffic_speed_prediction.BigST import BigST
 from libcity.model.traffic_speed_prediction.STWave import STWave
+from libcity.model.traffic_speed_prediction.DCST import DCST
+from libcity.model.traffic_speed_prediction.CKGGNN import CKGGNN
+from libcity.model.traffic_speed_prediction.EasyST import EasyST
 from libcity.model.eta.MTSTAN import MTSTAN
 try:
     from libcity.model.traffic_speed_prediction.DSTMamba import DSTMamba
@@ -51,6 +54,13 @@ try:
     from libcity.model.traffic_speed_prediction.UniST import UniST
 except ImportError:
     UniST = None  # timm not installed
+try:
+    from libcity.model.traffic_speed_prediction.STLLM import STLLM
+except ImportError:
+    STLLM = None  # transformers not installed
+from libcity.model.traffic_speed_prediction.TGraphormer import TGraphormer
+from libcity.model.traffic_speed_prediction.LEAF import LEAF
+from libcity.model.traffic_speed_prediction.TRACK import TRACK
 
 __all__ = [
     "DCRNN",
@@ -97,4 +107,11 @@ __all__ = [
     "DSTMamba",
     "UrbanDiT",
     "UniST",
+    "STLLM",
+    "TGraphormer",
+    "DCST",
+    "CKGGNN",
+    "EasyST",
+    "LEAF",
+    "TRACK",
 ]

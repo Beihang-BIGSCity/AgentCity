@@ -127,3 +127,66 @@ def generate_dataloader_pad(train_data, eval_data, test_data, feature_name,
                                  num_workers=num_workers, collate_fn=collator,
                                  shuffle=shuffle)
     return train_dataloader, eval_dataloader, test_dataloader
+
+
+def context_data_padding(train_data, eval_data, test_data, batch_size):
+    """
+    Pad data to be divisible by batch_size for context-aware datasets.
+
+    Args:
+        train_data: Training data list
+        eval_data: Evaluation data list
+        test_data: Test data list
+        batch_size: Batch size
+
+    Returns:
+        tuple: Padded (train_data, eval_data, test_data)
+    """
+    num_padding = (batch_size - (len(train_data) % batch_size)) % batch_size
+    data_padding = np.repeat(train_data[-1:], num_padding, axis=0)
+    train_data = np.concatenate([train_data, data_padding], axis=0)
+    num_padding = (batch_size - (len(eval_data) % batch_size)) % batch_size
+    data_padding = np.repeat(eval_data[-1:], num_padding, axis=0)
+    eval_data = np.concatenate([eval_data, data_padding], axis=0)
+    num_padding = (batch_size - (len(test_data) % batch_size)) % batch_size
+    data_padding = np.repeat(test_data[-1:], num_padding, axis=0)
+    test_data = np.concatenate([test_data, data_padding], axis=0)
+    return train_data, eval_data, test_data
+
+
+def generate_dataloader_context(train_dataset, eval_dataset, test_dataset, context_feature_name,
+                                batch_size, num_workers, shuffle=True, pad_with_last_sample=False):
+    """
+    Create dataloader for context-aware datasets (train/test/eval).
+
+    Args:
+        train_dataset(Dataset): Training dataset (e.g., Traffic_Context_Dataset)
+        eval_dataset(Dataset): Evaluation dataset
+        test_dataset(Dataset): Test dataset
+        context_feature_name(dict): Feature name mapping, e.g., {'X_goal': 'float', 'y_goal': 'float',
+                                    'X_auxi': 'float', 'y_auxi': 'float'}
+        batch_size(int): Batch size
+        num_workers(int): Number of workers
+        shuffle(bool): Whether to shuffle data
+        pad_with_last_sample(bool): Unused, kept for API compatibility
+
+    Returns:
+        tuple: (train_dataloader, eval_dataloader, test_dataloader)
+    """
+
+    def collator(indices):
+        batch = Batch(context_feature_name)
+        for item in indices:
+            batch.append(copy.deepcopy(item))
+        return batch
+
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size=batch_size,
+                                  num_workers=num_workers, collate_fn=collator,
+                                  shuffle=shuffle)
+    eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=batch_size,
+                                 num_workers=num_workers, collate_fn=collator,
+                                 shuffle=shuffle)
+    test_dataloader = DataLoader(dataset=test_dataset, batch_size=batch_size,
+                                 num_workers=num_workers, collate_fn=collator,
+                                 shuffle=False)
+    return train_dataloader, eval_dataloader, test_dataloader

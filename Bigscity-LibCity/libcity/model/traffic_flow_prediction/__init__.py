@@ -39,6 +39,11 @@ from libcity.model.traffic_flow_prediction.ASTGNN import ASTGNN
 from libcity.model.traffic_flow_prediction.ASTGNNCommon import ASTGNNCommon
 from libcity.model.traffic_flow_prediction.FreTS import FreTS
 from libcity.model.traffic_flow_prediction.LSTTN import LSTTN
+from libcity.model.traffic_flow_prediction.MetaDG import MetaDG
+try:
+    from libcity.model.traffic_flow_prediction.HiMSNet import HiMSNet
+except Exception:
+    HiMSNet = None  # torch_geometric or einops not installed
 try:
     from libcity.model.traffic_flow_prediction.ASeer import ASeer
 except Exception:
@@ -100,4 +105,6 @@ __all__ = [
     "STGNCDE",
     "ASTGNN",
     "ASTGNNCommon",
+    "MetaDG",
+    "HiMSNet",
 ]

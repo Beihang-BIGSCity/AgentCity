@@ -1,0 +1,31 @@
+{
+  "model": "HiMSNet",
+  "d_model": 64,
+  "dropout": 0.1,
+  "adjacency_hop": 5,
+  "num_regions": 4,
+  "layernorm": true,
+  "use_global": true,
+  "global_downsample_factor": 1,
+  "attn_agg": true,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+  "bidir_adj_mx": true,
+
+  "max_epoch": 100,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.5,
+  "steps": [20, 40, 60, 80],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5.0,
+  "use_early_stop": true,
+  "patience": 20
+}

@@ -1,0 +1,128 @@
+{
+  "_comment": "TGraphormer: Traffic Graphormer for Spatiotemporal Traffic Speed Prediction",
+  "_paper": "TGraphormer: A Graph Transformer for Traffic Forecasting",
+  "_source": "https://github.com/QTMdeHUB/TGraphormer",
+
+  "_model_size": "Model size variant - determines embed_dim, depth, and heads",
+  "model_size": "mini",
+
+  "_model_architecture": "Automatically configured based on model_size",
+  "embed_dim": 128,
+  "depth": 6,
+  "heads": 4,
+  "dropout": 0.1,
+  "end_channel": 512,
+  "use_conv": true,
+  "act_fn": "gelu",
+
+  "_graph_encoding": "Graph structure features - centrality and spatial position encoding",
+  "num_spatial": 512,
+  "num_in_degree": 512,
+  "num_out_degree": 512,
+  "spatial_pos_max": 20,
+  "cls_token": true,
+  "attention_bias": true,
+  "centrality_encoding": true,
+  "sep_pos_embed": false,
+
+  "_data_preprocessing": "Data normalization and feature engineering",
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+
+  "_temporal_windows": "Paper recommendation: 12 steps input/output (1 hour with 5-min intervals)",
+  "input_window": 12,
+  "output_window": 12,
+
+  "_training_general": "General training parameters",
+  "max_epoch": 100,
+  "batch_size": 64,
+  "learner": "adam",
+  "learning_rate": 0.001,
+
+  "_training_metr_la": "For METR-LA: lr=1e-3, epochs=100, warmup_epochs=10-30",
+  "_training_pems_bay": "For PEMS-BAY: lr=3e-3, epochs=50, warmup_epochs=10-30",
+
+  "_regularization": "Weight decay and gradient clipping from paper",
+  "weight_decay": 0.0001,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+
+  "_lr_scheduling": "Cosine annealing with warm restarts",
+  "lr_decay": true,
+  "lr_scheduler": "cosineannealinglr",
+  "_lr_scheduler_note": "Changed from 'cosinelr' to 'cosineannealinglr' - LibCity standard scheduler. Custom 'cosinelr' only available in PDFormer executor.",
+  "lr_eta_min": 0.00001,
+  "lr_T_max": 100,
+  "_lr_T_max_note": "Set to max_epoch for full cosine annealing cycle. Adjust based on dataset (e.g., 50 for PEMS-BAY).",
+  "warmup_epochs": 10,
+  "_warmup_note": "Warmup not supported by standard TrafficStateExecutor. Consider custom executor if warmup is critical.",
+
+  "_early_stopping": "Early stopping to prevent overfitting",
+  "use_early_stop": true,
+  "patience": 10,
+
+  "_dataset_compatibility": "Works with TrafficStatePointDataset - compatible with METR_LA, PEMS_BAY, PEMSD3-8, etc.",
+  "_requirements": "Requires adjacency matrix (adj_mx) in data_feature for graph structure encoding",
+  "_loss_function": "Huber loss (smooth L1) as used in original implementation",
+
+  "_size_variants": {
+    "_description": "Configure model_size parameter to select variant",
+    "micro": {
+      "embed_dim": 64,
+      "depth": 6,
+      "heads": 2,
+      "_params": "~0.5M"
+    },
+    "mini": {
+      "embed_dim": 128,
+      "depth": 6,
+      "heads": 4,
+      "_params": "~1.76M (default)"
+    },
+    "small": {
+      "embed_dim": 192,
+      "depth": 8,
+      "heads": 6,
+      "_params": "~4.44M"
+    },
+    "med": {
+      "embed_dim": 384,
+      "depth": 10,
+      "heads": 8,
+      "_params": "~15M"
+    },
+    "big": {
+      "embed_dim": 768,
+      "depth": 12,
+      "heads": 12,
+      "_params": "~50M"
+    },
+    "large": {
+      "embed_dim": 1024,
+      "depth": 24,
+      "heads": 16,
+      "_params": "~200M"
+    },
+    "xl": {
+      "embed_dim": 1280,
+      "depth": 32,
+      "heads": 16,
+      "_params": "~350M"
+    },
+    "_note": "Larger models may require reduced batch_size and learning_rate adjustment"
+  },
+
+  "_hyperparameter_tuning": {
+    "_gradient_clip_range": "1.0-5.0 depending on dataset",
+    "_warmup_epochs_range": "10-30 for stable training",
+    "_lr_metr_la": "1e-3 (default)",
+    "_lr_pems_bay": "3e-3 (increase for PEMS-BAY)",
+    "_epochs_metr_la": "100",
+    "_epochs_pems_bay": "50",
+    "_batch_size_range": "64 for mini/small, 32 for med, 16 for big/large/xl"
+  }
+}

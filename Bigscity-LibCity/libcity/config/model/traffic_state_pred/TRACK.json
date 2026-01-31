@@ -1,0 +1,67 @@
+{
+  "_comment": "TRACK: Dynamic Road Network and Trajectory Representation Learning",
+  "_paper": "TRACK: Learning to Track and Represent Trajectories for Traffic Forecasting",
+  "_source": "Adapted from TRACK repository",
+
+  "_model_architecture": "DRNRL encoder with spatial-temporal attention",
+  "embed_dim": 64,
+  "d_model": 64,
+  "enc_depth": 6,
+  "s_num_heads": 2,
+  "t_num_heads": 6,
+  "mlp_ratio": 4,
+  "qkv_bias": true,
+
+  "_regularization": "Dropout and drop path for regularization",
+  "traf_drop": 0.0,
+  "traf_attn_drop": 0.0,
+  "drop_path": 0.3,
+
+  "_layer_norm": "Type of layer normalization - 'pre' or 'post'",
+  "type_ln": "post",
+
+  "_spatial_encoding": "GAT layers for spatial feature extraction",
+  "gat_heads_per_layer": [8, 16, 1],
+  "gat_features_per_layer": [16, 16, 64],
+  "gat_dropout": 0.1,
+
+  "_temporal_features": "Time-based embeddings",
+  "time_intervals": 300,
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "_temporal_windows": "Input/output sequence lengths (default: 12 steps = 1 hour with 5-min intervals)",
+  "input_window": 12,
+  "output_window": 12,
+
+  "_data_preprocessing": "Data normalization and feature handling",
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+
+  "_training_general": "General training parameters",
+  "max_epoch": 100,
+  "batch_size": 64,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+
+  "_lr_scheduling": "Multi-step learning rate decay",
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.5,
+  "steps": [25, 50, 75],
+
+  "_gradient_clipping": "Gradient norm clipping to stabilize training",
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+
+  "_early_stopping": "Early stopping to prevent overfitting",
+  "use_early_stop": true,
+  "patience": 15,
+
+  "_dataset_compatibility": "Works with TrafficStatePointDataset - compatible with METR_LA, PEMS_BAY, PEMSD3-8, etc.",
+  "_requirements": "Requires adjacency matrix (adj_mx) in data_feature for graph structure. Optional: node_features for enhanced spatial encoding",
+  "_loss_function": "Default masked MAE loss from TrafficStateExecutor"
+}

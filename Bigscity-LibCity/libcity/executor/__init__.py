@@ -28,6 +28,12 @@ from libcity.executor.bert_executor import BertBaseExecutor
 from libcity.executor.contrastive_executor import ContrastiveExecutor
 from libcity.executor.contra_mlm_executor import ContrastiveMLMExecutor
 from libcity.executor.contrastive_split_mlm_executor import ContrastiveSplitMLMExecutor
+try:
+    from libcity.executor.kg_context_executor import KgContextExecutor
+except (ImportError, OSError) as e:
+    import warnings
+    warnings.warn(f"KgContextExecutor not available due to missing dependencies: {e}")
+    KgContextExecutor = None
 
 __all__ = [
     "TrajLocPredExecutor",
@@ -61,4 +67,5 @@ __all__ = [
     "ContrastiveExecutor",
     "ContrastiveMLMExecutor",
     "ContrastiveSplitMLMExecutor",
+    "KgContextExecutor",
 ]
