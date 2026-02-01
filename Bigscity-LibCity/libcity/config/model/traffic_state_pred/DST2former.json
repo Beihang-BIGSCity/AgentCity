@@ -1,0 +1,47 @@
+{
+  "max_epoch": 80,
+
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "lr_epsilon": 1e-8,
+  "weight_decay": 0.0015,
+
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.1,
+  "steps": [25, 45, 65],
+
+  "use_early_stop": true,
+  "patience": 20,
+
+  "batch_size": 16,
+  "clip_grad_norm": false,
+
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "input_window": 12,
+  "output_window": 12,
+  "steps_per_day": 288,
+  "input_dim": 1,
+  "output_dim": 1,
+  "input_embedding_dim": 24,
+  "tod_embedding_dim": 24,
+  "dow_embedding_dim": 24,
+  "ts_embedding_dim": 28,
+  "time_embedding_dim": 0,
+  "adaptive_embedding_dim": 100,
+  "node_dim": 64,
+  "feed_forward_dim": 256,
+  "out_feed_forward_dim": 256,
+  "num_heads": 4,
+  "num_layers": 2,
+  "num_layers_m": 1,
+  "mlp_num_layers": 2,
+  "dropout": 0.1,
+  "use_mixed_proj": true
+}

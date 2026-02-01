@@ -61,6 +61,9 @@ except ImportError:
 from libcity.model.traffic_speed_prediction.TGraphormer import TGraphormer
 from libcity.model.traffic_speed_prediction.LEAF import LEAF
 from libcity.model.traffic_speed_prediction.TRACK import TRACK
+from libcity.model.traffic_speed_prediction.TimeMixerPP import TimeMixerPP
+from libcity.model.traffic_speed_prediction.TimeMixer import TimeMixer
+from libcity.model.traffic_speed_prediction.PatchTST import PatchTST
 
 __all__ = [
     "DCRNN",
@@ -114,4 +117,7 @@ __all__ = [
     "EasyST",
     "LEAF",
     "TRACK",
+    "TimeMixerPP",
+    "TimeMixer",
+    "PatchTST",
 ]

@@ -2767,3 +2767,647 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] [12 rows x 10 columns]
 
 [Return Code: 0]
+
+============================================================
+Timestamp: 2026-01-31 14:44:44
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 14:44:52,024 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 14:44:52,025 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 14:44:52,026 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 14:44:52,091 - INFO - Using opt_einsum
+[OUT] 2026-01-31 14:44:52,517 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 14:44:52,532 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 14:44:52,533 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 14:44:52,568 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 14:44:52,568 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 14:44:52,570 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 14:45:01,240 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 15:21:02
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 15:21:19,295 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 15:21:19,295 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 15:21:19,295 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 15:21:19,608 - INFO - Using opt_einsum
+[OUT] 2026-01-31 15:21:20,189 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 15:21:20,241 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 15:21:20,241 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 15:21:20,324 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 15:21:20,325 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 15:21:20,329 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 15:21:34,099 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 15:52:34
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 15:52:51,101 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 15:52:51,102 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 15:52:51,102 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 15:52:51,389 - INFO - Using opt_einsum
+[OUT] 2026-01-31 15:52:52,407 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 15:52:52,430 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 15:52:52,430 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 15:52:52,475 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 15:52:52,475 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 15:52:52,478 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 15:53:05,045 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 16:23:35
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 16:23:52,964 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 16:23:52,965 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 16:23:52,966 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 16:23:53,297 - INFO - Using opt_einsum
+[OUT] 2026-01-31 16:23:54,570 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 16:23:54,585 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 16:23:54,585 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 16:23:54,630 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 16:23:54,631 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 16:23:54,638 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 16:24:06,208 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 16:54:25
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 16:54:43,336 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 16:54:43,337 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 16:54:43,337 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 16:54:43,615 - INFO - Using opt_einsum
+[OUT] 2026-01-31 16:54:44,329 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 16:54:44,351 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 16:54:44,352 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 16:54:44,394 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 16:54:44,394 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 16:54:44,396 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 16:54:56,397 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 17:24:42
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 17:25:00,418 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 17:25:00,428 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 17:25:00,429 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 17:25:00,785 - INFO - Using opt_einsum
+[OUT] 2026-01-31 17:25:02,073 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 17:25:02,101 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 17:25:02,101 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 17:25:02,152 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 17:25:02,152 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 17:25:02,156 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 17:25:14,008 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 17:54:50
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 17:55:08,217 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 17:55:08,218 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 17:55:08,218 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 17:55:08,420 - INFO - Using opt_einsum
+[OUT] 2026-01-31 17:55:09,190 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 17:55:09,212 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 17:55:09,212 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 17:55:09,257 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 17:55:09,257 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 17:55:09,259 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 17:55:23,319 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 18:26:06
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 18:26:23,248 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 18:26:23,249 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 18:26:23,249 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 18:26:23,483 - INFO - Using opt_einsum
+[OUT] 2026-01-31 18:26:24,563 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 18:26:24,598 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 18:26:24,598 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 18:26:24,643 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 18:26:24,644 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 18:26:24,663 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 18:26:37,444 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 18:56:54
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 18:57:11,883 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 18:57:11,886 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 18:57:11,886 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 18:57:12,367 - INFO - Using opt_einsum
+[OUT] 2026-01-31 18:57:13,234 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 18:57:13,266 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 18:57:13,267 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 18:57:13,312 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 18:57:13,312 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 18:57:13,314 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 18:57:24,784 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 19:27:22
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 19:27:30,470 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 19:27:30,471 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 19:27:30,472 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 19:27:30,540 - INFO - Using opt_einsum
+[OUT] 2026-01-31 19:27:31,049 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 19:27:31,073 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 19:27:31,089 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 19:27:31,168 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 19:27:31,169 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 19:27:31,170 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 19:27:43,963 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 19:57:56
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 19:58:13,056 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 19:58:13,056 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 19:58:13,056 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 19:58:13,276 - INFO - Using opt_einsum
+[OUT] 2026-01-31 19:58:14,185 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 19:58:14,212 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 19:58:14,213 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 19:58:14,263 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 19:58:14,264 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 19:58:14,267 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 19:58:28,086 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 20:27:58
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 20:28:17,200 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 20:28:17,201 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 20:28:17,201 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 20:28:17,421 - INFO - Using opt_einsum
+[OUT] 2026-01-31 20:28:18,620 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 20:28:18,646 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 20:28:18,646 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 20:28:18,679 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 20:28:18,679 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 20:28:18,681 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 20:28:31,869 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 20:58:36
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 20:58:53,966 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 20:58:53,967 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 20:58:53,967 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 20:58:54,175 - INFO - Using opt_einsum
+[OUT] 2026-01-31 20:58:54,635 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 20:58:54,647 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 20:58:54,648 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 20:58:54,672 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 20:58:54,672 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 20:58:54,674 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 20:59:08,087 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 21:30:31
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 21:30:49,774 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 21:30:49,775 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 21:30:49,775 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 21:30:50,132 - INFO - Using opt_einsum
+[OUT] 2026-01-31 21:30:51,172 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 21:30:51,185 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 21:30:51,185 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 21:30:51,211 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 21:30:51,212 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 21:30:51,215 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 21:31:05,050 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 22:01:13
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 22:01:30,473 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 22:01:30,474 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 22:01:30,474 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 22:01:30,852 - INFO - Using opt_einsum
+[OUT] 2026-01-31 22:01:31,574 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 22:01:31,591 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 22:01:31,591 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 22:01:31,615 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 22:01:31,616 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 22:01:31,618 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 22:01:45,447 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 22:31:55
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 22:32:13,829 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 22:32:13,830 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 22:32:13,830 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 22:32:14,093 - INFO - Using opt_einsum
+[OUT] 2026-01-31 22:32:14,798 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 22:32:14,811 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 22:32:14,811 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 22:32:14,839 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 22:32:14,839 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 22:32:14,840 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 22:32:27,089 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 23:02:45
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 23:03:04,210 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 23:03:04,211 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 23:03:04,211 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 23:03:04,422 - INFO - Using opt_einsum
+[OUT] 2026-01-31 23:03:05,292 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 23:03:05,365 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 23:03:05,365 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 23:03:05,446 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 23:03:05,446 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 23:03:05,448 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 23:03:17,625 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-01-31 23:34:48
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-01-31 23:34:57,434 - INFO - Log directory: ./libcity/log
+[OUT] 2026-01-31 23:34:57,435 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-01-31 23:34:57,435 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-01-31 23:34:57,485 - INFO - Using opt_einsum
+[OUT] 2026-01-31 23:34:57,808 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-01-31 23:34:57,822 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-01-31 23:34:57,822 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-01-31 23:34:57,856 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-01-31 23:34:57,857 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-01-31 23:34:57,858 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-01-31 23:35:08,747 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 00:05:55
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 00:06:03,102 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 00:06:03,103 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 00:06:03,103 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 00:06:03,217 - INFO - Using opt_einsum
+[OUT] 2026-02-01 00:06:03,972 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 00:06:03,992 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 00:06:03,992 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 00:06:04,061 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 00:06:04,061 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 00:06:04,063 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 00:06:17,547 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 00:36:37
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 00:36:46,149 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 00:36:46,150 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 00:36:46,150 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 00:36:46,209 - INFO - Using opt_einsum
+[OUT] 2026-02-01 00:36:46,613 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 00:36:46,632 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 00:36:46,632 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 00:36:46,670 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 00:36:46,670 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 00:36:46,672 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 00:36:55,907 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 01:08:55
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 01:09:06,305 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 01:09:06,306 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 01:09:06,306 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 01:09:06,484 - INFO - Using opt_einsum
+[OUT] 2026-02-01 01:09:07,199 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 01:09:07,213 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 01:09:07,213 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 01:09:07,271 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 01:09:07,272 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 01:09:07,279 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 01:09:19,016 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 01:40:14
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 01:40:22,363 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 01:40:22,364 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 01:40:22,364 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 01:40:22,403 - INFO - Using opt_einsum
+[OUT] 2026-02-01 01:40:22,677 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 01:40:22,688 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 01:40:22,688 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 01:40:22,710 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 01:40:22,710 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 01:40:22,712 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 01:40:34,322 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 02:13:54
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 02:14:03,516 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 02:14:03,518 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 02:14:03,518 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 02:14:03,584 - INFO - Using opt_einsum
+[OUT] 2026-02-01 02:14:03,942 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 02:14:03,956 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 02:14:03,956 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 02:14:03,987 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 02:14:03,987 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 02:14:03,989 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 02:14:12,657 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 02:47:07
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 02:47:25,487 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 02:47:25,488 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 02:47:25,488 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 02:47:25,846 - INFO - Using opt_einsum
+[OUT] 2026-02-01 02:47:26,607 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 02:47:26,623 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 02:47:26,623 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 02:47:26,668 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 02:47:26,669 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 02:47:26,672 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 02:47:44,153 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 03:20:06
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 03:20:28,335 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 03:20:28,337 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 03:20:28,337 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 03:20:28,632 - INFO - Using opt_einsum
+[OUT] 2026-02-01 03:20:29,361 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 03:20:29,375 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 03:20:29,375 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 03:20:29,405 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 03:20:29,405 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 03:20:29,407 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 03:20:44,740 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 03:59:19
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 03:59:39,798 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 03:59:39,799 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 03:59:39,799 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 03:59:40,075 - INFO - Using opt_einsum
+[OUT] 2026-02-01 03:59:41,483 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 03:59:41,504 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 03:59:41,505 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 03:59:41,530 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 03:59:41,530 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 03:59:41,532 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 03:59:55,569 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 04:35:37
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 04:35:56,952 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 04:35:56,953 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 04:35:56,953 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 04:35:57,192 - INFO - Using opt_einsum
+[OUT] 2026-02-01 04:35:57,893 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 04:35:57,918 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 04:35:57,918 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 04:35:57,963 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 04:35:57,964 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 04:35:57,969 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 04:36:11,923 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-01 05:11:47
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 1 --exp_id 194039
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[OUT] 2026-02-01 05:12:05,744 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-01 05:12:05,745 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=194039
+[OUT] 2026-02-01 05:12:05,745 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '194039', 'seed': 0, 'gpu_id': 1, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=1)}
+[OUT] 2026-02-01 05:12:06,166 - INFO - Using opt_einsum
+[OUT] 2026-02-01 05:12:07,177 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-01 05:12:07,230 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-01 05:12:07,231 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-01 05:12:07,310 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-01 05:12:07,311 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-01 05:12:07,313 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-01 05:12:20,564 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]

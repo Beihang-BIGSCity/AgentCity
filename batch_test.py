@@ -184,7 +184,7 @@ def run_test_process(args):
 def main():
 
     #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet',''ASeer']
-    model_list = ['GriddedTNP','MLCAFormer','PatchSTG', 'HSTWAVE','STHSepNet','BigST','DSTMamba','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN']
+    model_list = ['GriddedTNP','MLCAFormer','PatchSTG', 'HSTWAVE','STHSepNet','BigST','DSTMamba','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN','STID','TimeMixer++','PatchTST']
     task = 'traffic_state_pred'
     dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
     tasks = [(m, d, i % 3+1) for i, (m, d) in enumerate(itertools.product(model_list, dataset_list))]

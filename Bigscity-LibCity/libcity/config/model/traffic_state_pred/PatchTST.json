@@ -1,0 +1,52 @@
+{
+  "max_epoch": 100,
+
+  "learner": "adam",
+  "learning_rate": 0.0001,
+  "lr_epsilon": 1e-8,
+  "weight_decay": 0,
+
+  "lr_decay": true,
+  "lr_scheduler": "cosinelr",
+
+  "use_early_stop": false,
+
+  "input_window": 336,
+  "output_window": 96,
+
+  "e_layers": 3,
+  "n_heads": 4,
+  "d_model": 16,
+  "d_ff": 128,
+  "dropout": 0.3,
+  "fc_dropout": 0.3,
+  "head_dropout": 0.0,
+
+  "patch_len": 16,
+  "stride": 8,
+
+  "revin": 1,
+  "affine": 0,
+  "subtract_last": 0,
+
+  "decomposition": 0,
+  "kernel_size": 25,
+
+  "individual": 0,
+
+  "padding_patch": "end",
+
+  "pe": "zeros",
+  "learn_pe": true,
+  "attn_dropout": 0.0,
+  "res_attention": true,
+  "pre_norm": false,
+  "norm": "BatchNorm",
+
+  "scaler": "none",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false
+}

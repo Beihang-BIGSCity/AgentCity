@@ -69,7 +69,7 @@ If errors occur:
 ## Test Results: <ModelName>
 
 ### Command
-test_migration(model="<name>", dataset="<dataset>", gpu="0")
+test_migration(model="<name>", dataset="<dataset>", test="<test>", gpu="0")
 
 ### Status: <SUCCESS/FAILED>
 
@@ -93,7 +93,8 @@ test_migration(model="<name>", dataset="<dataset>", gpu="0")
 ## Important
 - Always use gpu="0" for faster testing (CUDA acceleration)
 - Run with small epoch count for validation (epochs=1-2)
-- Use standard datasets first (METR_LA, PEMS_BAY)
+- Use METR_LA dataset for traffic state prediction task, foursquare_nyc for trajectory location prediction, Chengdu_Taxi_Sample1 for estimated time of arrival task, xa for trajectory embedding task.
+- Focus on diagnosing migration issues, not model performance tuning
 - Capture full error traceback
 - Don't attempt fixes directly - report findings
 - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories

@@ -16,6 +16,11 @@ from libcity.model.trajectory_loc_prediction.DiffTraj import DiffTraj
 from libcity.model.trajectory_loc_prediction.PLMTrajRec import PLMTrajRec
 from libcity.model.trajectory_loc_prediction.GNPRSID import GNPRSID
 from libcity.model.trajectory_loc_prediction.CoMaPOI import CoMaPOI
+from libcity.model.trajectory_loc_prediction.ROTAN import ROTAN
+from libcity.model.trajectory_loc_prediction.CLSPRec import CLSPRec
+from libcity.model.trajectory_loc_prediction.AGRAN import AGRAN
+from libcity.model.trajectory_loc_prediction.PLSPL import PLSPL
+from libcity.model.trajectory_loc_prediction.PRME import PRME
 __all__ = [
     "DeepMove",
     "RNN",
@@ -34,5 +39,10 @@ __all__ = [
     "DiffTraj",
     "PLMTrajRec",
     "GNPRSID",
-    "CoMaPOI"
+    "CoMaPOI",
+    "ROTAN",
+    "CLSPRec",
+    "AGRAN",
+    "PLSPL",
+    "PRME"
 ]

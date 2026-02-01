@@ -30,7 +30,6 @@ from libcity.model.traffic_flow_prediction.DSTAGNN import DSTAGNN
 from libcity.model.traffic_flow_prediction.STPGCN import STPGCN
 from libcity.model.traffic_flow_prediction.MultiSPANS import MultiSPANS
 from libcity.model.traffic_flow_prediction.SimST import SimST
-from libcity.model.traffic_flow_prediction.TimeMixer import TimeMixer
 from libcity.model.traffic_flow_prediction.STSSL import STSSL
 from libcity.model.traffic_flow_prediction.STWave import STWave
 from libcity.model.traffic_flow_prediction.PDFormer import PDFormer
@@ -40,6 +39,7 @@ from libcity.model.traffic_flow_prediction.ASTGNNCommon import ASTGNNCommon
 from libcity.model.traffic_flow_prediction.FreTS import FreTS
 from libcity.model.traffic_flow_prediction.LSTTN import LSTTN
 from libcity.model.traffic_flow_prediction.MetaDG import MetaDG
+from libcity.model.traffic_flow_prediction.DST2former import DST2former
 try:
     from libcity.model.traffic_flow_prediction.HiMSNet import HiMSNet
 except Exception:
@@ -98,7 +98,6 @@ __all__ = [
     "STPGCN",
     "MultiSPANS",
     "SimST",
-    "TimeMixer",
     "STSSL",
     "STWave",
     "PDFormer",
@@ -107,4 +106,5 @@ __all__ = [
     "ASTGNNCommon",
     "MetaDG",
     "HiMSNet",
+    "DST2former",
 ]

@@ -21,7 +21,12 @@
             "DiffTraj",
             "PLMTrajRec",
             "GNPRSID",
-            "CoMaPOI"
+            "CoMaPOI",
+            "ROTAN",
+            "CLSPRec",
+            "AGRAN",
+            "PLSPL",
+            "PRME"
         ],
         "allowed_dataset": [
             "foursquare_tky",
@@ -149,6 +154,36 @@
             "executor": "TrajLocPredExecutor",
             "evaluator": "TrajLocPredEvaluator",
             "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "ROTAN": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "CLSPRec": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "AGRAN": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "PLSPL": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "PRME": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
         }
     },
     "traffic_state_pred": {
@@ -260,7 +295,9 @@
             "LEAF",
             "MetaDG",
             "HiMSNet",
-            "TRACK"
+            "TRACK",
+            "TimeMixerPP",
+            "DST2former"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -362,8 +399,8 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "TimeMixer": {
-            "dataset_class": "TrafficStateGridDataset",
-            "executor": "TimeMixerExecutor",
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
         "SimST": {
@@ -845,6 +882,16 @@
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
+        },
+        "TimeMixerPP": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "DST2former": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
         }
     },
     "eta": {
@@ -982,7 +1029,8 @@
         "allowed_dataset": [
             "geolife",
             "porto",
-            "bj_taxi"
+            "bj_taxi",
+            "xa"
         ],
         "START": {
             "dataset_class": "ContrastiveSplitLMDataset",

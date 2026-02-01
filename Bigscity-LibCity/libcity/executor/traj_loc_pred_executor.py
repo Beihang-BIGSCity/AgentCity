@@ -36,6 +36,9 @@ class TrajLocPredExecutor(AbstractExecutor):
         metrics['loss'] = []
         lr = self.config['learning_rate']
         for epoch in range(self.config['max_epoch']):
+            # Notify model of current epoch (used for AGCN caching in AGRAN)
+            if hasattr(self.model, 'set_epoch'):
+                self.model.set_epoch(epoch)
             self._logger.info('start train')
             self.model, avg_loss = self.run(train_dataloader, self.model,
                                             self.config['learning_rate'], self.config['clip'])

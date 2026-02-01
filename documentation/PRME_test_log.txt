@@ -1,0 +1,166 @@
+================================================================================
+PRME MODEL MIGRATION TEST LOG
+================================================================================
+Date: 2026-01-31
+Task: traj_loc_pred
+Dataset: foursquare_tky
+Max Epochs: 5
+GPU: cuda:0
+
+================================================================================
+COMMAND EXECUTED
+================================================================================
+cd /home/wangwenrui/shk/AgentCity/Bigscity-LibCity
+python run_model.py --task traj_loc_pred --model PRME --dataset foursquare_tky --max_epoch 5
+
+================================================================================
+TEST STATUS: FAILED
+================================================================================
+
+================================================================================
+ERROR TRACEBACK
+================================================================================
+Traceback (most recent call last):
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+    run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+    executor.train(train_data, valid_data)
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traj_loc_pred_executor.py", line 40, in train
+    self.model, avg_loss = self.run(train_dataloader, self.model,
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traj_loc_pred_executor.py", line 150, in run
+    loss = loss_func(batch)
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/PRME.py", line 410, in calculate_loss
+    if 'uid' in batch:
+  File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/data/batch.py", line 23, in __getitem__
+    raise KeyError('{} is not in the batch'.format(key))
+KeyError: '0 is not in the batch'
+
+================================================================================
+DIAGNOSIS
+================================================================================
+
+ROOT CAUSE:
+The PRME model uses incorrect batch key checking syntax. The LibCity Batch class
+does NOT implement __contains__ method, so using 'key in batch' causes Python
+to iterate through the batch using __getitem__(0), __getitem__(1), etc.
+
+PROBLEM LOCATIONS IN /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/PRME.py:
+- Line 249: if 'uid' in batch:
+- Line 410: if 'uid' in batch:
+
+CORRECT PATTERN (used by other models like AGRAN, PLSPL, GETNext, etc.):
+- Use 'uid' in batch.data instead of 'uid' in batch
+
+SIMILAR ISSUES TO FIX:
+- Line 437: if 'current_tim' in batch:     -> should be: if 'current_tim' in batch.data:
+- Line 446: if 'target_tim' in batch:      -> should be: if 'target_tim' in batch.data:
+
+================================================================================
+SUGGESTED FIX
+================================================================================
+
+In file: /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/PRME.py
+
+Replace all occurrences of 'key in batch' with 'key in batch.data':
+
+Line 249:
+  BEFORE: if 'uid' in batch:
+  AFTER:  if 'uid' in batch.data:
+
+Line 410:
+  BEFORE: if 'uid' in batch:
+  AFTER:  if 'uid' in batch.data:
+
+Line 437:
+  BEFORE: if 'current_tim' in batch:
+  AFTER:  if 'current_tim' in batch.data:
+
+Line 446:
+  BEFORE: if 'target_tim' in batch:
+  AFTER:  if 'target_tim' in batch.data:
+
+================================================================================
+MODEL REGISTRATION STATUS
+================================================================================
+- Import in __init__.py: OK (Line 23: from libcity.model.trajectory_loc_prediction.PRME import PRME)
+- Listed in __all__: OK (Line 47: "PRME")
+- Config file exists: OK (/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/traj_loc_pred/PRME.json)
+
+================================================================================
+SUMMARY
+================================================================================
+The PRME model migration has a critical bug in batch data access pattern.
+The model uses 'key in batch' syntax which is incompatible with LibCity's
+Batch class. This needs to be changed to 'key in batch.data' throughout
+the model code.
+
+Component needing fix: MODEL (PRME.py)
+Estimated effort: Low (simple string replacement)
+Blocking: Yes (prevents model training)
+================================================================================
+PRME Model Test Log - Iteration 1
+Date: 2026-01-31
+================================================================================
+
+## Test Configuration
+- Model: PRME
+- Task: traj_loc_pred
+- Dataset: foursquare_tky
+- Max Epochs: 3
+- Device: cuda:0
+- Batch Size: 64
+- Learning Rate: 0.001
+- Embedding Dim: 50
+
+## Command
+cd /home/wangwenrui/shk/AgentCity/Bigscity-LibCity && python run_model.py --task traj_loc_pred --model PRME --dataset foursquare_tky --max_epoch 3
+
+## Status: SUCCESS
+
+## Training Results
+- Epoch 0: Train Loss=0.70626, Eval Acc=0.01077, Eval Loss=0.70605
+- Epoch 1: Train Loss=0.70595, Eval Acc=0.01096, Eval Loss=0.70601
+- Epoch 2: Train Loss=0.70595, Eval Acc=0.01059, Eval Loss=0.70609
+
+## Evaluation Metrics (Test Set)
+- Recall@1: 0.0109
+- Recall@5: 0.0147
+- Recall@10: 0.0169
+- Recall@20: 0.0199
+- MRR: 0.0128
+- MRR@1: 0.0109
+- MRR@5: 0.0124
+- MRR@10: 0.0126
+- MRR@20: 0.0128
+- NDCG@1: 0.0109
+- NDCG@5: 0.0129
+- NDCG@10: 0.0136
+- NDCG@20: 0.0144
+- MAP@1: 0.0109
+- MAP@5: 0.0124
+- MAP@10: 0.0126
+- MAP@20: 0.0128
+- F1@1: 0.0109
+- F1@5: 0.0049
+- F1@10: 0.0031
+- F1@20: 0.0019
+
+## Diagnosis
+The batch access bug fix was SUCCESSFUL. The model now correctly:
+1. Loads and processes training data
+2. Computes loss and performs backpropagation
+3. Evaluates on validation set
+4. Saves and loads model checkpoints
+5. Produces evaluation metrics on test set
+
+## Notes
+- Loss decreased slightly from epoch 0 to epochs 1-2 (0.70626 -> 0.70595)
+- Evaluation accuracy peaked at epoch 1 (0.01096)
+- Model correctly loaded best epoch (epoch 1) for final evaluation
+- All metrics computed successfully without errors
+
+## Previous Issue: RESOLVED
+The batch data access pattern bug that was previously identified has been fixed.
+The model now properly accesses batch data using the correct interface.
+
+================================================================================

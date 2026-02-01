@@ -1,0 +1,28 @@
+{
+    "model": "PRME",
+    "dataset_class": "TrajectoryDataset",
+    "executor": "TrajLocPredExecutor",
+    "evaluator": "TrajLocPredEvaluator",
+
+    "embedding_dim": 50,
+    "alpha": 0.5,
+    "tau": 3.0,
+    "num_negative": 10,
+    "regularization": 0.03,
+
+    "learning_rate": 0.001,
+    "max_epoch": 100,
+    "batch_size": 64,
+    "learner": "adam",
+    "lr_decay": false,
+    "lr_scheduler": "multisteplr",
+    "lr_decay_ratio": 0.1,
+    "steps": [50, 80],
+    "clip_grad_norm": false,
+    "use_early_stop": true,
+    "patience": 10,
+
+    "device": "cpu",
+    "gpu": true,
+    "gpu_id": 0
+}
