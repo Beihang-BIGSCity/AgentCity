@@ -1,0 +1,7 @@
+{
+    "max_epoch": 3,
+    "batch_size": 8,
+    "gpu": true,
+    "train_rate": 0.6,
+    "eval_rate": 0.2
+}

@@ -7,6 +7,7 @@ from libcity.model.eta.DutyTTE import DutyTTE
 from libcity.model.eta.MDTI import MDTI
 from libcity.model.eta.HierETA import HierETA
 from libcity.model.eta.HetETA import HetETA
+from libcity.model.eta.ProbETA import ProbETA
 
 __all__ = [
     "DeepTTE",
@@ -18,4 +19,5 @@ __all__ = [
     "MDTI",
     "HierETA",
     "HetETA",
+    "ProbETA",
 ]

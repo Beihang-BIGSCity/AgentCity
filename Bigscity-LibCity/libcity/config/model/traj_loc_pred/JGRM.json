@@ -1,4 +1,5 @@
 {
+    "model_name": "JGRM",
     "route_max_len": 100,
     "road_feat_num": 1,
     "road_embed_size": 128,
@@ -19,9 +20,14 @@
     "route_transformer_heads": 8,
     "shared_transformer_layers": 2,
     "shared_transformer_heads": 4,
-    "learning_rate": 0.003,
+    "queue_size": 2048,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0005,
     "weight_decay": 1e-6,
+    "lr_scheduler": "linear_warmup",
+    "warmup_step": 1000,
     "batch_size": 64,
-    "epochs": 20,
-    "warmup_step": 1000
+    "epochs": 100,
+    "output_dim": 1,
+    "embed_dim": 32
 }

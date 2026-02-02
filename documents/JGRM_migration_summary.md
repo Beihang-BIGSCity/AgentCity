@@ -113,6 +113,11 @@ Adapted to use LibCity's batch dictionary format with keys:
 | mode | "x" | "p" for pretrain embeddings, "x" for GAT |
 | mlm_loss_weight | 1.0 | Weight for MLM losses |
 | match_loss_weight | 2.0 | Weight for matching loss |
+| queue_size | 2048 | Size of contrastive learning queue |
+| route_transformer_layers | 4 | Number of route Transformer layers |
+| route_transformer_heads | 8 | Number of route Transformer heads |
+| shared_transformer_layers | 2 | Number of shared Transformer layers |
+| shared_transformer_heads | 4 | Number of shared Transformer heads |
 
 ## Required Data Features
 

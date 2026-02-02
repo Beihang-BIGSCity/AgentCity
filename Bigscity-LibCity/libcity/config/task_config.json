@@ -30,7 +30,9 @@
             "CANOE",
             "DCHL",
             "JGRM",
-            "TrajSDE"
+            "TrajSDE",
+            "RNTrajRec",
+            "GraphMM"
         ],
         "allowed_dataset": [
             "foursquare_tky",
@@ -208,6 +210,18 @@
             "traj_encoder": "JGRMEncoder"
         },
         "TrajSDE": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "RNTrajRec": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "GraphMM": {
             "dataset_class": "TrajectoryDataset",
             "executor": "TrajLocPredExecutor",
             "evaluator": "TrajLocPredEvaluator",
@@ -968,7 +982,8 @@
             "DutyTTE",
             "MDTI",
             "HierETA",
-            "HetETA"
+            "HetETA",
+            "ProbETA"
         ],
         "allowed_dataset": [
             "Chengdu_Taxi_Sample1",
@@ -1027,6 +1042,12 @@
             "executor": "ETAExecutor",
             "evaluator": "ETAEvaluator",
             "eta_encoder": "HetETAEncoder"
+        },
+        "ProbETA": {
+            "dataset_class": "ETADataset",
+            "executor": "ETAExecutor",
+            "evaluator": "ETAEvaluator",
+            "eta_encoder": "ProbETAEncoder"
         }
     },
     "map_matching": {
@@ -1035,7 +1056,10 @@
             "IVMM",
             "HMMM",
             "FMM",
-            "STMatch"
+            "STMatch",
+            "DeepMM",
+            "DiffMM",
+            "TRMMA"
         ],
         "allowed_dataset": [
             "global",
@@ -1064,6 +1088,21 @@
         "STMatch": {
             "dataset_class": "MapMatchingDataset",
             "executor": "MapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "DeepMM": {
+            "dataset_class": "MapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "DiffMM": {
+            "dataset_class": "MapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "TRMMA": {
+            "dataset_class": "MapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
             "evaluator": "MapMatchingEvaluator"
         }
     },

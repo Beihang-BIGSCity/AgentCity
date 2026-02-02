@@ -5,6 +5,7 @@ from libcity.executor.geosan_executor import GeoSANExecutor
 from libcity.executor.hyper_tuning import HyperTuning
 from libcity.executor.line_executor import LINEExecutor
 from libcity.executor.map_matching_executor import MapMatchingExecutor
+from libcity.executor.deep_map_matching_executor import DeepMapMatchingExecutor
 from libcity.executor.mtgnn_executor import MTGNNExecutor
 from libcity.executor.sttsnet_executor import STTSNetExecutor
 from libcity.executor.traffic_state_executor import TrafficStateExecutor
@@ -43,6 +44,7 @@ __all__ = [
     "HyperTuning",
     "GeoSANExecutor",
     "MapMatchingExecutor",
+    "DeepMapMatchingExecutor",
     "GEMLExecutor",
     "AbstractTraditionExecutor",
     "ChebConvExecutor",

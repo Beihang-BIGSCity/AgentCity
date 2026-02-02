@@ -6,6 +6,8 @@
     "dropout": 0.3,
     "temperature": 0.1,
     "lambda_cl": 0.1,
+    "keep_rate": 1.0,
+    "keep_rate_poi": 1.0,
     "distance_threshold": 2.5,
     "learning_rate": 0.001,
     "lr_decay": 0.1,

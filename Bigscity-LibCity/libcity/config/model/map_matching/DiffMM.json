@@ -1,0 +1,20 @@
+{
+    "model_name": "DiffMM",
+    "hid_dim": 256,
+    "num_units": 512,
+    "transformer_layers": 2,
+    "depth": 2,
+    "timesteps": 2,
+    "samplingsteps": 1,
+    "dropout": 0.1,
+    "bootstrap_every": 8,
+    "num_heads": 4,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 1e-6,
+    "lr_scheduler": "none",
+    "batch_size": 4,
+    "max_epoch": 30,
+    "clip_grad_norm": 1.0,
+    "evaluate_method": "segment"
+}

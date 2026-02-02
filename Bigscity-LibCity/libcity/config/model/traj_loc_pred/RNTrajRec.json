@@ -1,0 +1,27 @@
+{
+    "model": "RNTrajRec",
+    "task": "traj_loc_pred",
+
+    "hid_dim": 512,
+    "loc_emb_dim": 512,
+    "transformer_layers": 2,
+    "num_heads": 8,
+    "dropout": 0.1,
+    "use_attention": true,
+    "use_time": true,
+    "tim_emb_dim": 64,
+    "teacher_forcing_ratio": 0.5,
+    "max_output_len": 128,
+
+    "batch_size": 64,
+    "learning_rate": 0.0001,
+    "max_epoch": 50,
+    "optimizer": "adam",
+    "clip": 5.0,
+    "lr_step": 10,
+    "lr_decay": 0.5,
+    "lr_scheduler": "steplr",
+    "log_every": 1,
+    "load_best_epoch": true,
+    "hyper_tune": false
+}

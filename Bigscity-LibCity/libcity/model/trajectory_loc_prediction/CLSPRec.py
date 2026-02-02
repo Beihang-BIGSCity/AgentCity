@@ -1,71 +1,77 @@
-# coding: utf-8
 """
-CLSPRec: Contrastive Learning for Sequential POI Recommendation
+CLSPRec: Contrastive Learning for Long and Short-term Preference Recommendation
+Adapted for LibCity Framework
 
-This module adapts the CLSPRec model from the original repository for LibCity framework.
+Original source: repos/CLSPRec/CLSPRec.py
+Key components preserved:
+- CheckInEmbedding: 5 features (POI, category, user, hour, day)
+- TransformerEncoder: Custom implementation with SelfAttention and EncoderBlock
+- LSTM: Short-term sequence modeling
+- Attention: Custom attention for prediction
+- Contrastive Learning: InfoNCE loss for long/short-term alignment
 
-Original paper: "Contrastive Learning with Short-Long Term Preferences for Next POI Recommendation"
-
-Key adaptations made for LibCity:
-1. Inherited from AbstractModel instead of nn.Module
-2. Adapted data handling to use LibCity's batch dictionary format
-3. Implemented predict() and calculate_loss() methods following LibCity conventions
-4. Extracted hyperparameters from config dictionary instead of settings module
-5. Handled device management via config.get('device')
-
-Required data_feature keys:
-- loc_size: Number of POI locations
-- uid_size: Number of users
-- cat_size: Number of categories
-- tim_size: Number of time slots (hours typically 24)
-- day_size: Number of day types (typically 7 for weekdays)
+Key adaptations:
+- Inherited from AbstractModel
+- Adapted __init__() to use LibCity's config and data_feature parameters
+- Implemented predict() method following LibCity conventions
+- Implemented calculate_loss() method (cross-entropy + contrastive learning)
+- Preserved dual-preference modeling (long-term + short-term sequences)
+- Adapted batch format for LibCity's data loading conventions
 
 Required config parameters:
-- f_embed_size: Feature embedding dimension (default: 60)
-- num_encoder_layers: Number of transformer encoder layers (default: 1)
-- num_lstm_layers: Number of LSTM layers (default: 1)
-- num_heads: Number of attention heads (default: 1)
-- forward_expansion: Feed-forward expansion ratio (default: 4)
-- dropout_p: Dropout probability (default: 0.2)
-- neg_weight: Weight for contrastive loss (default: 1.0)
-- mask_prop: Proportion of features to mask (default: 0.1)
-- enable_ssl: Enable self-supervised contrastive learning (default: True)
-- enable_random_mask: Enable random feature masking (default: True)
-- neg_sample_count: Number of negative samples (default: 5)
+    - f_embed_size: Feature embedding dimension (default: 60)
+    - num_encoder_layers: Number of transformer encoder layers (default: 1)
+    - num_lstm_layers: Number of LSTM layers (default: 1)
+    - num_heads: Number of attention heads (default: 1)
+    - forward_expansion: Feed-forward expansion factor (default: 4)
+    - dropout_p: Dropout probability (default: 0.2)
+    - neg_weight: Weight for contrastive loss (default: 1.0)
+    - mask_prop: Proportion of features to mask (default: 0.1)
+    - enable_ssl: Whether to enable contrastive learning (default: True)
+    - enable_random_mask: Whether to enable random masking (default: True)
+
+Required data_feature parameters:
+    - loc_size: Number of unique POI locations
+    - cat_size: Number of unique categories
+    - uid_size: Number of unique users
+    - tim_size: Number of time slots (typically 48 for LibCity)
 """
 
 import torch
 from torch import nn
 import torch.nn.functional as F
+
 from libcity.model.abstract_model import AbstractModel
 
 
 class CheckInEmbedding(nn.Module):
     """
-    Multi-feature embedding layer for check-in data.
-    Embeds POI, category, user, hour, and day features.
+    Embedding layer for check-in data with 5 features:
+    POI, category, user, hour, and day of week.
     """
+
     def __init__(self, f_embed_size, vocab_size):
         super().__init__()
         self.embed_size = f_embed_size
-        self.poi_num = vocab_size["POI"]
-        self.cat_num = vocab_size["cat"]
-        self.user_num = vocab_size["user"]
-        self.hour_num = vocab_size["hour"]
-        self.day_num = vocab_size["day"]
+        poi_num = vocab_size["POI"]
+        cat_num = vocab_size["cat"]
+        user_num = vocab_size["user"]
+        hour_num = vocab_size["hour"]
+        day_num = vocab_size["day"]
 
-        self.poi_embed = nn.Embedding(self.poi_num + 1, self.embed_size, padding_idx=self.poi_num)
-        self.cat_embed = nn.Embedding(self.cat_num + 1, self.embed_size, padding_idx=self.cat_num)
-        self.user_embed = nn.Embedding(self.user_num + 1, self.embed_size, padding_idx=self.user_num)
-        self.hour_embed = nn.Embedding(self.hour_num + 1, self.embed_size, padding_idx=self.hour_num)
-        self.day_embed = nn.Embedding(self.day_num + 1, self.embed_size, padding_idx=self.day_num)
+        self.poi_embed = nn.Embedding(poi_num + 1, self.embed_size, padding_idx=poi_num)
+        self.cat_embed = nn.Embedding(cat_num + 1, self.embed_size, padding_idx=cat_num)
+        self.user_embed = nn.Embedding(user_num + 1, self.embed_size, padding_idx=user_num)
+        self.hour_embed = nn.Embedding(hour_num + 1, self.embed_size, padding_idx=hour_num)
+        self.day_embed = nn.Embedding(day_num + 1, self.embed_size, padding_idx=day_num)
 
     def forward(self, x):
         """
         Args:
-            x: Tuple of (poi, cat, user, hour, day) tensors, each of shape (seq_len,) or (batch, seq_len)
+            x: tuple of 5 tensors (poi, cat, user, hour, day), each of shape [seq_len]
+
         Returns:
-            Concatenated embeddings of shape (seq_len, 5*embed_size) or (batch, seq_len, 5*embed_size)
+            Concatenated embeddings of shape [seq_len, embed_size * 5]
         """
         poi_emb = self.poi_embed(x[0])
         cat_emb = self.cat_embed(x[1])
@@ -77,7 +83,8 @@ class CheckInEmbedding(nn.Module):
 
 
 class SelfAttention(nn.Module):
-    """Multi-head self-attention layer."""
+    """Multi-head self-attention mechanism."""
+
     def __init__(self, embed_size, heads):
         super(SelfAttention, self).__init__()
         self.embed_size = embed_size
@@ -94,55 +101,32 @@ class SelfAttention(nn.Module):
         self.fc_out = nn.Linear(self.heads * self.head_dim, self.embed_size)
 
     def forward(self, values, keys, query):
-        """
-        Args:
-            values: (seq_len, embed_size) or (batch, seq_len, embed_size)
-            keys: (seq_len, embed_size) or (batch, seq_len, embed_size)
-            query: (seq_len, embed_size) or (batch, seq_len, embed_size)
-        """
-        # Handle both 2D (seq_len, embed) and 3D (batch, seq_len, embed) inputs
-        if values.dim() == 2:
-            value_len, key_len, query_len = values.shape[0], keys.shape[0], query.shape[0]
+        value_len, key_len, query_len = values.shape[0], keys.shape[0], query.shape[0]
 
-            values = self.values(values)
-            keys = self.keys(keys)
-            queries = self.queries(query)
+        values = self.values(values)
+        keys = self.keys(keys)
+        queries = self.queries(query)
 
-            values = values.reshape(value_len, self.heads, self.head_dim)
-            keys = keys.reshape(key_len, self.heads, self.head_dim)
-            queries = queries.reshape(query_len, self.heads, self.head_dim)
+        values = values.reshape(value_len, self.heads, self.head_dim)
+        keys = keys.reshape(key_len, self.heads, self.head_dim)
+        queries = queries.reshape(query_len, self.heads, self.head_dim)
 
-            energy = torch.einsum("qhd,khd->hqk", [queries, keys])
-            attention = torch.softmax(energy / (self.embed_size ** (1 / 2)), dim=2)
+        energy = torch.einsum("qhd,khd->hqk", [queries, keys])
 
-            out = torch.einsum("hql,lhd->qhd", [attention, values]).reshape(
-                query_len, self.heads * self.head_dim
-            )
-        else:
-            # Batched version
-            batch_size, seq_len, _ = values.shape
+        attention = torch.softmax(energy / (self.embed_size ** (1 / 2)), dim=2)
 
-            values = self.values(values)
-            keys = self.keys(keys)
-            queries = self.queries(query)
-
-            values = values.reshape(batch_size, seq_len, self.heads, self.head_dim)
-            keys = keys.reshape(batch_size, -1, self.heads, self.head_dim)
-            queries = queries.reshape(batch_size, -1, self.heads, self.head_dim)
-
-            energy = torch.einsum("bqhd,bkhd->bhqk", [queries, keys])
-            attention = torch.softmax(energy / (self.embed_size ** (1 / 2)), dim=3)
-
-            out = torch.einsum("bhql,blhd->bqhd", [attention, values]).reshape(
-                batch_size, -1, self.heads * self.head_dim
-            )
+        out = torch.einsum("hql,lhd->qhd", [attention, values]).reshape(
+            query_len, self.heads * self.head_dim
+        )
 
         out = self.fc_out(out)
+
         return out
 
 
 class EncoderBlock(nn.Module):
     """Transformer encoder block with self-attention and feed-forward network."""
+
     def __init__(self, embed_size, heads, dropout, forward_expansion):
         super(EncoderBlock, self).__init__()
         self.embed_size = embed_size
@@ -160,6 +144,8 @@ class EncoderBlock(nn.Module):
 
     def forward(self, value, key, query):
         attention = self.attention(value, key, query)
+
+        # Add skip connection, run through normalization and finally dropout
         x = self.dropout(self.norm1(attention + query))
         forward = self.feed_forward(x)
         out = self.dropout(self.norm2(forward + x))
@@ -167,7 +153,8 @@ class EncoderBlock(nn.Module):
 
 
 class TransformerEncoder(nn.Module):
-    """Transformer encoder for sequence encoding."""
+    """Custom Transformer encoder with embedding layer."""
+
     def __init__(
             self,
             embedding_layer,
@@ -199,9 +186,10 @@ class TransformerEncoder(nn.Module):
     def forward(self, feature_seq):
         """
         Args:
-            feature_seq: Tuple of feature tensors (poi, cat, user, hour, day)
+            feature_seq: tuple of 5 tensors (poi, cat, user, hour, day)
+
         Returns:
-            Encoded sequence of shape (seq_len, embed_size) or (batch, seq_len, embed_size)
+            Encoded sequence of shape [seq_len, embed_size]
         """
         embedding = self.embedding_layer(feature_seq)
         out = self.dropout(embedding)
@@ -214,74 +202,42 @@ class TransformerEncoder(nn.Module):
 
 class Attention(nn.Module):
     """Attention mechanism for query and key with different dimensions."""
+
     def __init__(self, qdim, kdim):
         super().__init__()
+        # Resize q's dimension to k
         self.expansion = nn.Linear(qdim, kdim)
 
     def forward(self, query, key, value):
-        """
-        Args:
-            query: (embed_size,) or (batch, embed_size)
-            key: (seq_len, embed_size) or (batch, seq_len, embed_size)
-            value: (seq_len, embed_size) or (batch, seq_len, embed_size)
-        """
         q = self.expansion(query)
-
-        if q.dim() == 1:
-            # Single sample processing
-            temp = torch.inner(q, key)
-            weight = torch.softmax(temp, dim=0)
-            weight = torch.unsqueeze(weight, 1)
-            temp2 = torch.mul(value, weight)
-            out = torch.sum(temp2, 0)
-        else:
-            # Batched processing
-            # q: (batch, kdim), key: (batch, seq_len, kdim)
-            temp = torch.bmm(key, q.unsqueeze(-1)).squeeze(-1)  # (batch, seq_len)
-            weight = torch.softmax(temp, dim=1).unsqueeze(-1)  # (batch, seq_len, 1)
-            temp2 = torch.mul(value, weight)  # (batch, seq_len, kdim)
-            out = torch.sum(temp2, dim=1)  # (batch, kdim)
+        temp = torch.inner(q, key)
+        weight = torch.softmax(temp, dim=0)
+        weight = torch.unsqueeze(weight, 1)
+        temp2 = torch.mul(value, weight)
+        out = torch.sum(temp2, 0)
 
         return out
 
 
 class CLSPRec(AbstractModel):
     """
-    CLSPRec: Contrastive Learning for Sequential POI Recommendation
+    CLSPRec: Contrastive Learning for Long and Short-term Preference Recommendation
 
-    This model combines:
-    1. Multi-feature embeddings (POI, Category, User, Hour, Day)
-    2. Transformer encoder for long-term and short-term sequences
-    3. LSTM for user enhancement
-    4. Contrastive learning with InfoNCE loss
-    5. Attention mechanism for final prediction
+    This model captures both long-term and short-term user preferences for
+    next POI recommendation using:
+    1. Transformer encoder for long-term sequence modeling
+    2. LSTM for short-term sequence modeling
+    3. Contrastive learning (InfoNCE) to align long and short-term representations
 
-    The model supports:
-    - Random feature masking for data augmentation
-    - Self-supervised contrastive learning between long-term and short-term preferences
-    - User-enhanced representation via LSTM
+    The model processes check-in sequences with 5 features per check-in:
+    POI location, category, user ID, hour of day, and day of week.
     """
 
     def __init__(self, config, data_feature):
         super(CLSPRec, self).__init__(config, data_feature)
 
-        self.device = config.get('device', 'cpu')
-
-        # Data dimensions from data_feature
-        self.loc_size = data_feature.get('loc_size', 1000)
-        self.uid_size = data_feature.get('uid_size', 100)
-        self.cat_size = data_feature.get('cat_size', 50)
-        self.tim_size = data_feature.get('tim_size', 24)  # hours
-        self.day_size = data_feature.get('day_size', 7)  # weekdays
-
-        # Build vocab_size dictionary for compatibility with original architecture
-        self.vocab_size = {
-            "POI": self.loc_size,
-            "cat": self.cat_size,
-            "user": self.uid_size,
-            "hour": self.tim_size,
-            "day": self.day_size
-        }
+        # Get device
+        self.device = config.get('device', torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 
         # Model hyperparameters from config
         self.f_embed_size = config.get('f_embed_size', 60)
@@ -296,23 +252,26 @@ class CLSPRec(AbstractModel):
         self.mask_prop = config.get('mask_prop', 0.1)
         self.enable_ssl = config.get('enable_ssl', True)
         self.enable_random_mask = config.get('enable_random_mask', True)
-        self.neg_sample_count = config.get('neg_sample_count', 5)
+        self.temperature = config.get('temperature', 0.07)
 
-        # Total embedding size (5 features concatenated)
+        # Vocabulary sizes from data_feature
+        # LibCity provides loc_size, cat_size (if available), uid_size, tim_size
+        self.vocab_size = {
+            "POI": data_feature.get('loc_size', 100),
+            "cat": data_feature.get('cat_size', 50),
+            "user": data_feature.get('uid_size', 10),
+            "hour": 24,  # Hours are 0-23
+            "day": 7,    # Days are 0-6
+        }
+
         self.total_embed_size = self.f_embed_size * 5
 
         # Build model layers
-        self._build_model()
-
-    def _build_model(self):
-        """Build all model layers."""
-        # Embedding layer
         self.embedding = CheckInEmbedding(
             self.f_embed_size,
             self.vocab_size
         )
 
-        # Transformer encoder
         self.encoder = TransformerEncoder(
             self.embedding,
             self.total_embed_size,
@@ -322,367 +281,269 @@ class CLSPRec(AbstractModel):
             self.dropout_p,
         )
 
-        # LSTM for user enhancement
         self.lstm = nn.LSTM(
             input_size=self.total_embed_size,
             hidden_size=self.total_embed_size,
             num_layers=self.num_lstm_layers,
-            dropout=0,
-            batch_first=True
+            dropout=0
         )
 
-        # Final attention layer
         self.final_attention = Attention(
             qdim=self.f_embed_size,
             kdim=self.total_embed_size
         )
 
-        # Output layer
         self.out_linear = nn.Sequential(
             nn.Linear(self.total_embed_size, self.total_embed_size * self.forward_expansion),
             nn.LeakyReLU(),
             nn.Dropout(self.dropout_p),
-            nn.Linear(self.total_embed_size * self.forward_expansion, self.loc_size)
+            nn.Linear(self.total_embed_size * self.forward_expansion, self.vocab_size["POI"])
         )
 
-        # Loss function
         self.loss_func = nn.CrossEntropyLoss()
 
-        # User enhancement layers
+        # User enhancement layer
         self.tryone_line2 = nn.Linear(self.total_embed_size, self.f_embed_size)
         self.enhance_val = nn.Parameter(torch.tensor(0.5))
 
     def feature_mask(self, features, mask_prop):
         """
-        Apply random feature masking for data augmentation.
+        Apply random masking to features for data augmentation.
 
         Args:
-            features: Dictionary containing feature tensors
+            features: Feature tensor of shape [5, seq_len]
             mask_prop: Proportion of positions to mask
+
         Returns:
-            Masked features dictionary
+            Masked feature tensor
         """
         if not self.enable_random_mask or not self.training:
             return features
 
-        masked_features = {}
-        for key, val in features.items():
-            masked_features[key] = val.clone()
+        features = features.clone()
+        seq_len = features.shape[1]
+        mask_count = int(torch.ceil(mask_prop * torch.tensor(seq_len)).item())
 
-        seq_len = masked_features['current_loc'].shape[-1]
-        if seq_len > 1:
-            mask_count = max(1, int(mask_prop * seq_len))
-            # Generate mask indices (avoid masking the last position which is for prediction)
-            masked_index = torch.randperm(seq_len - 1, device=self.device)[:mask_count]
+        if mask_count > 0 and seq_len > 1:
+            masked_index = torch.randperm(seq_len - 1, device=features.device) + 1
+            masked_index = masked_index[:mask_count]
 
-            # Apply masking using padding indices
-            masked_features['current_loc'][:, masked_index] = self.vocab_size["POI"]
-            if 'current_cat' in masked_features:
-                masked_features['current_cat'][:, masked_index] = self.vocab_size["cat"]
-            if 'current_hour' in masked_features:
-                masked_features['current_hour'][:, masked_index] = self.vocab_size["hour"]
-            if 'current_day' in masked_features:
-                masked_features['current_day'][:, masked_index] = self.vocab_size["day"]
+            features[0, masked_index] = self.vocab_size["POI"]   # mask POI
+            features[1, masked_index] = self.vocab_size["cat"]   # mask category
+            features[3, masked_index] = self.vocab_size["hour"]  # mask hour
+            features[4, masked_index] = self.vocab_size["day"]   # mask day
 
-        return masked_features
+        return features
 
     def ssl_loss(self, embedding_1, embedding_2, neg_embedding):
         """
-        Compute self-supervised contrastive loss using InfoNCE.
+        Compute InfoNCE contrastive loss for self-supervised learning.
 
         Args:
-            embedding_1: Short-term sequence embedding
-            embedding_2: Long-term sequence embedding
+            embedding_1: Long-term embedding
+            embedding_2: Short-term embedding
             neg_embedding: Negative sample embedding
+
         Returns:
             Contrastive loss scalar
         """
         def score(x1, x2):
-            return torch.mean(torch.mul(x1, x2), dim=-1)
+            return torch.mean(torch.mul(x1, x2))
 
         pos = score(embedding_1, embedding_2)
         neg1 = score(embedding_1, neg_embedding)
         neg2 = score(embedding_2, neg_embedding)
         neg = (neg1 + neg2) / 2
 
-        one = torch.ones_like(neg)
-        con_loss = torch.sum(-torch.log(1e-8 + torch.sigmoid(pos)) - torch.log(1e-8 + (one - torch.sigmoid(neg))))
-
+        one = torch.tensor([1.0], device=self.device)
+        con_loss = torch.sum(
+            -torch.log(1e-8 + torch.sigmoid(pos)) -
+            torch.log(1e-8 + (one - torch.sigmoid(neg)))
+        )
         return con_loss
 
     def _extract_features_from_batch(self, batch):
         """
-        Extract feature tensors from LibCity batch format.
+        Extract and prepare features from LibCity batch format.
 
-        Args:
-            batch: LibCity Batch object containing trajectory data
+        LibCity batch contains:
+        - current_loc: [batch_size, seq_len] - POI locations
+        - current_tim: [batch_size, seq_len] - Time slots (0-47)
+        - uid: [batch_size] - User IDs
+        - target: [batch_size] - Target POI
+        - history_loc (optional): Historical location sequences
+        - category (optional): POI categories
+
         Returns:
-            Dictionary of feature tensors
+            Tuple of (features_list, target, neg_features_list)
+            where features_list contains feature tuples for each sample
         """
-        features = {}
+        current_loc = batch['current_loc']  # [batch_size, seq_len]
+        current_tim = batch['current_tim']  # [batch_size, seq_len]
+        uid = batch['uid']                  # [batch_size]
+        target = batch['target']            # [batch_size]
 
-        # Get current location (POI)
-        if hasattr(batch, 'data'):
-            features['current_loc'] = batch['current_loc']  # (batch, seq_len)
+        batch_size, seq_len = current_loc.shape
+
+        # Convert time to hour (0-23) and day (0-6)
+        # LibCity time encoding: 0-23 for weekday hours, 24-47 for weekend hours
+        hour = current_tim % 24
+        day = (current_tim >= 24).long()  # 0 for weekday, 1 for weekend
+        # Expand day to 0-6 range if we have day information
+        if 'day' in batch.data:
+            day = batch['day']
+
+        # Get category if available, otherwise use location as proxy
+        if 'category' in batch.data:
+            category = batch['category']
+        elif 'cat' in batch.data:
+            category = batch['cat']
         else:
-            features['current_loc'] = batch.get('current_loc', None)
+            # Use location as category proxy (will be learned)
+            category = current_loc % self.vocab_size["cat"]
 
-        # Get user IDs
-        if 'uid' in batch.data if hasattr(batch, 'data') else 'uid' in batch:
-            uid = batch['uid']
-            if uid.dim() == 1:
-                uid = uid.unsqueeze(1).expand(-1, features['current_loc'].shape[1])
-            features['uid'] = uid
-        else:
-            features['uid'] = torch.zeros_like(features['current_loc'])
+        # Expand user ID to match sequence length
+        user = uid.unsqueeze(1).expand(-1, seq_len)
 
-        # Get time features
-        if 'current_tim' in (batch.data if hasattr(batch, 'data') else batch):
-            features['current_hour'] = batch['current_tim']
-        else:
-            features['current_hour'] = torch.zeros_like(features['current_loc'])
-
-        # Get day features
-        if 'current_day' in (batch.data if hasattr(batch, 'data') else batch):
-            features['current_day'] = batch['current_day']
-        else:
-            features['current_day'] = torch.zeros_like(features['current_loc'])
-
-        # Get category features
-        if 'current_cat' in (batch.data if hasattr(batch, 'data') else batch):
-            features['current_cat'] = batch['current_cat']
-        else:
-            features['current_cat'] = torch.zeros_like(features['current_loc'])
-
-        return features
-
-    def _get_feature_tuple(self, features, idx=None):
-        """
-        Convert features dictionary to tuple format for embedding layer.
-
-        Args:
-            features: Dictionary of feature tensors
-            idx: Optional slice indices for selecting portion of sequence
-        Returns:
-            Tuple of (poi, cat, user, hour, day) tensors
-        """
-        if idx is not None:
-            return (
-                features['current_loc'][:, idx],
-                features['current_cat'][:, idx],
-                features['uid'][:, idx] if features['uid'].dim() > 1 else features['uid'],
-                features['current_hour'][:, idx],
-                features['current_day'][:, idx]
-            )
-        else:
-            return (
-                features['current_loc'],
-                features['current_cat'],
-                features['uid'] if features['uid'].dim() > 1 else features['uid'].unsqueeze(1).expand(-1, features['current_loc'].shape[1]),
-                features['current_hour'],
-                features['current_day']
-            )
-
-    def _encode_sequence(self, feature_tuple):
-        """
-        Encode a sequence using the transformer encoder.
-
-        Args:
-            feature_tuple: Tuple of (poi, cat, user, hour, day) tensors
-        Returns:
-            Encoded sequence of shape (batch, seq_len, total_embed_size)
-        """
-        return self.encoder(feature_tuple)
+        return current_loc, category, user, hour, day, target
 
     def forward(self, batch):
         """
-        Forward pass for training.
+        Forward pass for CLSPRec model.
+
+        This method adapts the original CLSPRec forward pass to work with
+        LibCity's batch format while preserving the dual-preference modeling.
 
         Args:
-            batch: LibCity Batch object containing:
-                - 'current_loc': (batch_size, seq_len) - POI indices
-                - 'current_tim': (batch_size, seq_len) - hour indices (optional, defaults to zeros)
-                - 'current_day': (batch_size, seq_len) - day indices (optional, defaults to zeros)
-                - 'current_cat': (batch_size, seq_len) - category indices (optional, defaults to zeros)
-                - 'uid': (batch_size,) - user indices (1D tensor from StandardTrajectoryEncoder)
-                - 'history_loc': (batch_size, history_len) - historical POI sequence (2D tensor from StandardTrajectoryEncoder)
-                - 'target': (batch_size,) - target POI indices
-
-        Note:
-            LibCity's StandardTrajectoryEncoder provides:
-            - history_loc as 2D tensor (batch, history_len), NOT 3D
-            - uid as 1D tensor (batch,), NOT 2D
-            - No current_cat, current_day features by default
-
-            This model handles these formats by:
-            - Treating history_loc as a single concatenated sequence
-            - Creating dummy zeros for missing category/day features
-            - Broadcasting uid to match sequence lengths
+            batch: LibCity Batch object
 
         Returns:
-            Tuple of (ssl_loss, output) where:
-                - ssl_loss: Contrastive learning loss (0 if SSL disabled or no neg samples)
-                - output: (batch_size, loc_size) prediction logits
+            Tuple of (loss, output_logits) during training
+            Output logits of shape [batch_size, num_locations] during inference
         """
-        features = self._extract_features_from_batch(batch)
-        batch_size = features['current_loc'].shape[0]
-        seq_len = features['current_loc'].shape[1]
+        current_loc, category, user, hour, day, target = self._extract_features_from_batch(batch)
 
-        # Short-term features (exclude the last position which is the target)
-        short_term_idx = slice(0, -1) if seq_len > 1 else slice(None)
-        short_term_tuple = self._get_feature_tuple(features, short_term_idx)
+        batch_size, seq_len = current_loc.shape
 
-        # Encode short-term sequence
-        short_term_state = self._encode_sequence(short_term_tuple)  # (batch, seq_len-1, embed)
+        outputs = []
+        losses = []
 
-        # Process long-term history if available
-        # LibCity StandardTrajectoryEncoder provides history_loc as 2D tensor (batch, history_len)
-        if 'history_loc' in (batch.data if hasattr(batch, 'data') else batch):
-            history_loc = batch['history_loc']  # (batch, history_len) - 2D tensor from LibCity
+        for i in range(batch_size):
+            # Extract features for this sample
+            # Shape: [5, seq_len] where 5 = (poi, cat, user, hour, day)
+            features = torch.stack([
+                current_loc[i],
+                category[i],
+                user[i],
+                hour[i],
+                day[i]
+            ], dim=0)
 
-            # Handle both 2D (LibCity standard) and 3D (legacy) formats
-            if history_loc.dim() == 2:
-                # LibCity StandardTrajectoryEncoder format: (batch, history_len)
-                # Treat the entire history as a single concatenated sequence
-                hist_len = history_loc.shape[1]
+            # Split into input and target
+            input_features = features[:, :-1]  # All but last for input
+            sample_target = current_loc[i, -1]  # Last POI as target
+            user_id = user[i, 0]
 
-                # Create dummy features for category and day since they are not provided
-                # by StandardTrajectoryEncoder
-                hist_features = {
-                    'current_loc': history_loc,  # (batch, history_len)
-                    'current_cat': torch.zeros_like(history_loc),  # dummy zeros
-                    'current_hour': torch.zeros_like(history_loc),  # dummy zeros
-                    'current_day': torch.zeros_like(history_loc),  # dummy zeros
-                }
-
-                # Handle uid - expand to match history length if needed
-                if features['uid'].dim() == 1:
-                    hist_features['uid'] = features['uid'].unsqueeze(1).expand(-1, hist_len)
-                else:
-                    # If uid is already 2D, expand or truncate to match history length
-                    uid_len = features['uid'].shape[1]
-                    if uid_len >= hist_len:
-                        hist_features['uid'] = features['uid'][:, :hist_len]
-                    else:
-                        # Expand by repeating
-                        hist_features['uid'] = features['uid'][:, 0:1].expand(-1, hist_len)
-
-                # Apply masking for data augmentation during training
-                if self.training:
-                    hist_features = self.feature_mask(hist_features, self.mask_prop)
-
-                hist_tuple = self._get_feature_tuple(hist_features)
-                long_term_catted = self._encode_sequence(hist_tuple)  # (batch, history_len, embed)
-
-            elif history_loc.dim() == 3:
-                # Legacy 3D format: (batch, hist_sessions, seq_len)
-                # Encode each historical session separately
-                long_term_states = []
-                for i in range(history_loc.shape[1]):
-                    hist_features = {
-                        'current_loc': history_loc[:, i, :],
-                        'current_cat': batch.get('history_cat', torch.zeros_like(history_loc))[:, i, :] if 'history_cat' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(history_loc[:, i, :]),
-                        'uid': features['uid'][:, :history_loc.shape[2]] if features['uid'].dim() > 1 else features['uid'].unsqueeze(1).expand(-1, history_loc.shape[2]),
-                        'current_hour': batch.get('history_tim', torch.zeros_like(history_loc))[:, i, :] if 'history_tim' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(history_loc[:, i, :]),
-                        'current_day': batch.get('history_day', torch.zeros_like(history_loc))[:, i, :] if 'history_day' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(history_loc[:, i, :])
-                    }
-                    # Apply masking
-                    if self.training:
-                        hist_features = self.feature_mask(hist_features, self.mask_prop)
-
-                    hist_tuple = self._get_feature_tuple(hist_features)
-                    hist_encoded = self._encode_sequence(hist_tuple)  # (batch, seq_len, embed)
-                    long_term_states.append(hist_encoded)
-
-                # Concatenate all history
-                long_term_catted = torch.cat(long_term_states, dim=1)  # (batch, total_hist_len, embed)
+            # Apply masking for long-term (data augmentation)
+            if self.training and self.enable_random_mask:
+                masked_features = self.feature_mask(input_features, self.mask_prop)
             else:
-                # Fallback: use short-term as long-term
-                long_term_catted = short_term_state
+                masked_features = input_features
+
+            # Long-term encoding via Transformer
+            # Feature tuple for embedding: (poi, cat, user, hour, day)
+            feature_tuple = (
+                masked_features[0],
+                masked_features[1],
+                masked_features[2],
+                masked_features[3],
+                masked_features[4]
+            )
+            long_term_out = self.encoder(feature_seq=feature_tuple)
+
+            # Short-term encoding via LSTM
+            short_feature_tuple = (
+                input_features[0],
+                input_features[1],
+                input_features[2],
+                input_features[3],
+                input_features[4]
+            )
+            short_term_state = self.encoder(feature_seq=short_feature_tuple)
+
+            # User enhancement
+            user_embed = self.embedding.user_embed(user_id)
+            embedding_seq = self.embedding(short_feature_tuple)
+            embedding_seq = torch.unsqueeze(embedding_seq, 0)  # Add batch dim for LSTM
+            output, _ = self.lstm(embedding_seq)
+            short_term_enhance = torch.squeeze(output)
+
+            user_embed = (
+                self.enhance_val * user_embed +
+                (1 - self.enhance_val) * self.tryone_line2(torch.mean(short_term_enhance, dim=0))
+            )
+
+            # Combine long and short term representations
+            h_all = torch.cat((short_term_state, long_term_out))
+            final_att = self.final_attention(user_embed, h_all, h_all)
+            output = self.out_linear(final_att)
+
+            outputs.append(output)
+
+            # Calculate prediction loss
+            if self.training:
+                label = sample_target.unsqueeze(0)
+                pred = output.unsqueeze(0)
+                pred_loss = self.loss_func(pred, label)
+
+                # Contrastive loss
+                ssl_loss = torch.tensor(0.0, device=self.device)
+                if self.enable_ssl:
+                    short_embed_mean = torch.mean(short_term_state, dim=0)
+                    long_embed_mean = torch.mean(long_term_out, dim=0)
+                    # Use a shifted version of embeddings as negative samples
+                    neg_embed_mean = torch.roll(short_embed_mean, shifts=1, dims=0)
+                    ssl_loss = self.ssl_loss(short_embed_mean, long_embed_mean, neg_embed_mean)
+
+                total_loss = pred_loss + ssl_loss * self.neg_weight
+                losses.append(total_loss)
+
+        # Stack outputs
+        output_tensor = torch.stack(outputs, dim=0)  # [batch_size, num_locations]
+
+        if self.training:
+            avg_loss = torch.mean(torch.stack(losses))
+            return avg_loss, output_tensor
         else:
-            # Use short-term as long-term if no history available
-            long_term_catted = short_term_state
-
-        # User enhancement using LSTM
-        user_id = features['uid'][:, 0] if features['uid'].dim() > 1 else features['uid']
-        user_embed_raw = self.embedding.user_embed(user_id)  # (batch, f_embed_size)
-
-        # LSTM encoding of short-term sequence
-        short_term_embedding = self.embedding(short_term_tuple)  # (batch, seq_len-1, total_embed)
-        lstm_out, _ = self.lstm(short_term_embedding)  # (batch, seq_len-1, total_embed)
-        short_term_enhance = lstm_out.mean(dim=1)  # (batch, total_embed)
-
-        user_embed = self.enhance_val * user_embed_raw + (1 - self.enhance_val) * self.tryone_line2(short_term_enhance)
-
-        # Contrastive learning loss
-        ssl_loss_val = torch.tensor(0.0, device=self.device)
-        if self.enable_ssl and self.training:
-            if 'neg_loc' in (batch.data if hasattr(batch, 'data') else batch):
-                neg_loc = batch['neg_loc']  # (batch, neg_count, seq_len)
-
-                # Encode negative samples
-                neg_states = []
-                for i in range(neg_loc.shape[1]):
-                    neg_features = {
-                        'current_loc': neg_loc[:, i, :],
-                        'current_cat': batch.get('neg_cat', torch.zeros_like(neg_loc))[:, i, :] if 'neg_cat' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(neg_loc[:, i, :]),
-                        'uid': torch.zeros(batch_size, neg_loc.shape[2], dtype=torch.long, device=self.device),
-                        'current_hour': batch.get('neg_tim', torch.zeros_like(neg_loc))[:, i, :] if 'neg_tim' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(neg_loc[:, i, :]),
-                        'current_day': batch.get('neg_day', torch.zeros_like(neg_loc))[:, i, :] if 'neg_day' in (batch.data if hasattr(batch, 'data') else batch) else torch.zeros_like(neg_loc[:, i, :])
-                    }
-                    neg_tuple = self._get_feature_tuple(neg_features)
-                    neg_encoded = self._encode_sequence(neg_tuple)  # (batch, seq_len, embed)
-                    neg_states.append(neg_encoded.mean(dim=1))  # (batch, embed)
-
-                neg_embed_mean = torch.stack(neg_states, dim=0).mean(dim=0)  # (batch, embed)
-                short_embed_mean = short_term_state.mean(dim=1)  # (batch, embed)
-                long_embed_mean = long_term_catted.mean(dim=1)  # (batch, embed)
-
-                ssl_loss_val = self.ssl_loss(short_embed_mean, long_embed_mean, neg_embed_mean)
-
-        # Final prediction
-        h_all = torch.cat((short_term_state, long_term_catted), dim=1)  # (batch, total_len, embed)
-        final_att = self.final_attention(user_embed, h_all, h_all)  # (batch, total_embed)
-        output = self.out_linear(final_att)  # (batch, loc_size)
-
-        return ssl_loss_val, output
+            return output_tensor
 
     def predict(self, batch):
         """
-        Predict next POI location.
+        Predict next locations for the given batch.
 
         Args:
-            batch: LibCity Batch object containing input data
+            batch: LibCity Batch object
 
         Returns:
-            torch.Tensor: POI prediction scores of shape (batch_size, loc_size)
+            Location prediction scores [batch_size, num_locations]
         """
         self.eval()
         with torch.no_grad():
-            _, output = self.forward(batch)
+            output = self.forward(batch)
+            if isinstance(output, tuple):
+                output = output[1]
         return output
 
     def calculate_loss(self, batch):
         """
-        Calculate combined prediction and contrastive loss.
+        Calculate the combined loss (cross-entropy + contrastive learning).
 
         Args:
-            batch: LibCity Batch object containing:
-                - Input features (see forward method)
-                - 'target': (batch_size,) - target POI indices
+            batch: LibCity Batch object
 
         Returns:
-            torch.Tensor: Total loss scalar
+            Combined loss tensor
         """
-        ssl_loss_val, output = self.forward(batch)
-
-        # Get target
-        target = batch['target']  # (batch_size,)
-
-        # Prediction loss
-        pred_loss = self.loss_func(output, target)
-
-        # Combined loss
-        total_loss = pred_loss + ssl_loss_val * self.neg_weight
-
-        return total_loss
+        self.train()
+        loss, _ = self.forward(batch)
+        return loss

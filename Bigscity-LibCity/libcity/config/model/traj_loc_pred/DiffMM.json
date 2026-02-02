@@ -1,0 +1,5 @@
+{
+    "_notice": "DEPRECATED: DiffMM moved to map_matching task",
+    "_redirect": "Use Bigscity-LibCity/libcity/config/model/map_matching/DiffMM.json instead",
+    "_reason": "DiffMM is a map matching model (GPS-to-road segment), not trajectory location prediction"
+}

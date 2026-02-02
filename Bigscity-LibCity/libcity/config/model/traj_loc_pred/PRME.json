@@ -5,12 +5,12 @@
     "evaluator": "TrajLocPredEvaluator",
 
     "embedding_dim": 50,
-    "alpha": 0.5,
+    "alpha": 0.02,
     "tau": 3.0,
     "num_negative": 10,
     "regularization": 0.03,
 
-    "learning_rate": 0.001,
+    "learning_rate": 0.005,
     "max_epoch": 100,
     "batch_size": 64,
     "learner": "adam",
