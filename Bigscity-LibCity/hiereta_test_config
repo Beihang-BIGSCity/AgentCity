@@ -1,0 +1,7 @@
+{
+  "max_epoch": 2,
+  "batch_size": 8,
+  "link_num": 31,
+  "segment_num": 50,
+  "segments_per_link": 10
+}

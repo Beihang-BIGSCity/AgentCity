@@ -1,0 +1,37 @@
+{
+  "hidden_dim": 64,
+  "dropout": 0.1,
+  "aggregation_function": "mean",
+  "num_vehicles": 1,
+  "num_time_features": 4,
+  "num_weather_features": 3,
+  "use_node_encoding": true,
+  "num_lags": 2,
+  "lag_feature_dim": 1,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "input_window": 12,
+  "output_window": 12,
+
+  "max_epoch": 200,
+  "learner": "adam",
+  "learning_rate": 0.0003,
+  "weight_decay": 0.00005,
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.1,
+  "steps": [50, 100],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 20,
+  "batch_size": 1024,
+
+  "bidir_adj_mx": true
+}

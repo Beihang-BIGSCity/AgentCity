@@ -1,0 +1,50 @@
+{
+  "_comment": "PatchSTG configuration optimized for PEMS_BAY dataset (325 nodes)",
+  "_dataset": "PEMS_BAY",
+  "_num_nodes": 325,
+
+  "tps": 12,
+  "tpn": 1,
+
+  "recur": 8,
+  "sps": 2,
+  "spn": 256,
+  "factors": 16,
+
+  "layers": 5,
+
+  "id": 64,
+  "nd": 64,
+  "td": 32,
+  "dd": 32,
+
+  "tod": 288,
+  "_tod_note": "PEMS_BAY uses 5-minute intervals = 288 slots per day",
+  "dow": 7,
+
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "metrics": ["MAE", "MAPE", "MSE", "RMSE", "masked_MAE", "masked_MAPE", "masked_MSE", "masked_RMSE"],
+
+  "max_epoch": 100,
+  "batch_size": 16,
+
+  "learner": "adamw",
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.5,
+  "steps": [1, 35, 40],
+
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+
+  "use_early_stop": false
+}

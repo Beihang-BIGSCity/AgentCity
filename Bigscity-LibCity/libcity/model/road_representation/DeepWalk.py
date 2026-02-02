@@ -6,7 +6,11 @@ from libcity.model.abstract_traffic_tradition_model import AbstractTraditionMode
 
 from io import open
 from time import time
-from collections import defaultdict, Iterable
+from collections import defaultdict
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 import random
 
 

@@ -1,0 +1,17 @@
+{
+    "dim": 16,
+    "topic_num": 0,
+    "bandwidth": 1.0,
+    "model_type": "tc",
+    "encoder": "trans",
+    "at": "osc",
+    "max_seq_length": 64,
+    "lambda_loc": 0.9,
+    "lambda_time": 0.4,
+    "lambda_rank": 0.6,
+    "seq_len": 20,
+    "learning_rate": 0.001,
+    "lr_decay": 0.5,
+    "batch_size": 32,
+    "max_epoch": 2
+}

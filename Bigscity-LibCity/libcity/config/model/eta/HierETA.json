@@ -1,0 +1,42 @@
+{
+  "model": "HierETA",
+  "output_pred": false,
+
+  "segment_num": 50,
+  "link_num": 31,
+  "win_size": 3,
+  "Lambda": 0.4,
+
+  "seg_hidden_dim": 128,
+  "link_hidden_dim": 192,
+  "cross_hidden_dim": 64,
+
+  "week_vocab_size": 8,
+  "time_vocab_size": 1441,
+  "driver_vocab_size": 200141,
+  "seg_vocab_size": 1376567,
+  "func_level_vocab_size": 9,
+  "road_state_vocab_size": 6,
+  "lane_num_vocab_size": 7,
+  "road_level_vocab_size": 8,
+  "cross_vocab_size": 101009,
+
+  "week_emb_dim": 3,
+  "time_emb_dim": 5,
+  "driver_emb_dim": 16,
+  "seg_emb_dim": 16,
+  "func_level_emb_dim": 2,
+  "road_state_emb_dim": 2,
+  "lane_num_emb_dim": 2,
+  "road_level_emb_dim": 2,
+  "cross_emb_dim": 15,
+
+  "max_epoch": 100,
+  "batch_size": 32,
+  "learner": "adam",
+  "learning_rate": 1e-4,
+  "lr_decay": false,
+  "clip_grad_norm": false,
+  "use_early_stop": true,
+  "patience": 20
+}

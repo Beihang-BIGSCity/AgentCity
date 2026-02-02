@@ -1,0 +1,36 @@
+{
+  "model_name": "FCNNBus",
+
+  "conv1_filters": 32,
+  "conv1_kernel": 3,
+  "conv2_filters": 64,
+  "conv2_kernel": 2,
+  "pool_size": 2,
+  "hidden_size": 128,
+  "loss_type": "mse",
+
+  "scaler": "standard",
+  "load_external": true,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+
+  "max_epoch": 20,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "lr_decay": false,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.1,
+  "weight_decay": 0.0,
+  "steps": [
+    20,
+    40,
+    70
+  ],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 5,
+  "batch_size": 32
+}

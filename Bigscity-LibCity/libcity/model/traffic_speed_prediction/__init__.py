@@ -25,7 +25,6 @@ from libcity.model.traffic_speed_prediction.STAEformer import STAEformer
 from libcity.model.traffic_speed_prediction.TESTAM import TESTAM
 from libcity.model.traffic_speed_prediction.MegaCRN import MegaCRN
 from libcity.model.traffic_speed_prediction.Trafformer import Trafformer
-from libcity.model.traffic_speed_prediction.PatchSTG import PatchSTG
 from libcity.model.traffic_speed_prediction.LSTGAN import LSTGAN
 from libcity.model.traffic_speed_prediction.MLCAFormer import MLCAFormer
 from libcity.model.traffic_speed_prediction.RSTIB import RSTIB
@@ -41,6 +40,7 @@ from libcity.model.traffic_speed_prediction.STWave import STWave
 from libcity.model.traffic_speed_prediction.DCST import DCST
 from libcity.model.traffic_speed_prediction.CKGGNN import CKGGNN
 from libcity.model.traffic_speed_prediction.EasyST import EasyST
+from libcity.model.traffic_speed_prediction.FlashST import FlashST
 from libcity.model.eta.MTSTAN import MTSTAN
 try:
     from libcity.model.traffic_speed_prediction.DSTMamba import DSTMamba
@@ -64,6 +64,18 @@ from libcity.model.traffic_speed_prediction.TRACK import TRACK
 from libcity.model.traffic_speed_prediction.TimeMixerPP import TimeMixerPP
 from libcity.model.traffic_speed_prediction.TimeMixer import TimeMixer
 from libcity.model.traffic_speed_prediction.PatchTST import PatchTST
+from libcity.model.traffic_speed_prediction.ConvTimeNet import ConvTimeNet
+from libcity.model.traffic_speed_prediction.Pathformer import Pathformer
+try:
+    from libcity.model.traffic_speed_prediction.Fredformer import Fredformer
+except ImportError:
+    Fredformer = None  # einops not installed
+try:
+    from libcity.model.traffic_speed_prediction.PatchSTG import PatchSTG
+except ImportError:
+    PatchSTG = None  # timm not installed
+from libcity.model.traffic_speed_prediction.GNNRF import GNNRF
+from libcity.model.traffic_speed_prediction.FCNNBus import FCNNBus
 
 __all__ = [
     "DCRNN",
@@ -93,7 +105,6 @@ __all__ = [
     "TESTAM",
     "MegaCRN",
     "Trafformer",
-    "PatchSTG",
     "LSTGAN",
     "MLCAFormer",
     "RSTIB",
@@ -115,9 +126,16 @@ __all__ = [
     "DCST",
     "CKGGNN",
     "EasyST",
+    "FlashST",
     "LEAF",
     "TRACK",
     "TimeMixerPP",
     "TimeMixer",
     "PatchTST",
+    "ConvTimeNet",
+    "Fredformer",
+    "PatchSTG",
+    "Pathformer",
+    "GNNRF",
+    "FCNNBus",
 ]

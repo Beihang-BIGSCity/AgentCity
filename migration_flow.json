@@ -1,5 +1,138 @@
 [
   {
+  "title": "Efficient Large-Scale Traffic Forecasting with Transformers: A Spatial Data Management Perspective",
+  "conference": "KDD",
+  "year": 2025,
+  "model_name": "PatchSTG",
+  "track": "Research",
+  "pdf_link": "https://arxiv.org/abs/2412.09972",
+  "datasets": [
+    "CA (California, 8600 nodes)",
+    "GBA (Greater Bay Area, 2352 nodes)",
+    "GLA (Greater Los Angeles, 3356 nodes)",
+    "SD (San Diego, 716 nodes)"
+  ],
+  "metrics": {
+    "CA": {
+      "MAE": "17.35",
+      "RMSE": "31.05",
+      "MAPE": "9.23%"
+    },
+    "GBA": {
+      "MAE": "19.50",
+      "RMSE": "33.25",
+      "MAPE": "9.85%"
+    },
+    "Note": "PatchSTG uses 'Spatial Patching' to partition large-scale road networks into non-overlapping subgraphs, reducing the quadratic complexity of attention to linear, achieving 2x-5x training speedup compared to baselines like D2STGNN and ST-Mixer."
+  },
+  "repo_url": "https://github.com/LMissher/PatchSTG",
+  "keywords": [
+    "spatial patching",
+    "large-scale traffic forecasting",
+    "transformer",
+    "spatial data management",
+    "efficiency"
+  ]
+},
+  {
+  "title": "FlashST: A Simple and Universal Prompt-Tuning Framework for Traffic Prediction",
+  "conference": "ICML",
+  "year": 2024,
+  "model_name": "FlashST",
+  "track": "Research",
+  "pdf_link": "https://arxiv.org/pdf/2405.17898",
+  "datasets": [
+    "PEMS07M",
+    "CA_District5",
+    "METR-LA",
+    "PEMS-BAY"
+  ],
+  "metrics": {
+    "Note": "FlashST employs a lightweight spatio-temporal prompt network and distribution mapping to adapt pre-trained models to downstream tasks. It reduces training time by 20-80% compared to full fine-tuning while significantly improving generalization on distribution-shifted data."
+  },
+  "repo_url": "https://github.com/HKUDS/FlashST",
+  "keywords": [
+    "prompt tuning",
+    "spatio-temporal forecasting",
+    "traffic prediction",
+    "distribution shift",
+    "in-context learning"
+  ]
+},
+  {
+    "title": "ConvTimeNet: A Deep Hierarchical Fully Convolutional Model for Multivariate Time Series Analysis",
+    "conference": "KDD",
+    "year": 2024,
+    "model_name": "ConvTimeNet",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2404.14810",
+    "datasets": [
+      "ETTh1",
+      "Traffic",
+      "Electricity"
+    ],
+    "metrics": {
+      "Note": "Designed as a deep hierarchical fully convolutional network that captures both global and local temporal patterns effectively, offering a strong alternative to Transformer-based models."
+    },
+    "repo_url": "https://github.com/Mingyue-Cheng/ConvTimeNet",
+    "keywords": [
+      "convolutional neural networks",
+      "multivariate time series",
+      "hierarchical modeling",
+      "long-term forecasting",
+      "efficiency"
+    ]
+  },
+  {
+    "title": "Fredformer: Frequency Debiased Transformer for Time Series Forecasting",
+    "conference": "KDD",
+    "year": 2024,
+    "model_name": "Fredformer",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2406.09068",
+    "datasets": [
+      "Exchange",
+      "Weather",
+      "ILI"
+    ],
+    "metrics": {
+      "Note": "Addresses the frequency bias issue in Transformers by incorporating a frequency-debiased attention mechanism, improving performance on datasets with complex periodic patterns."
+    },
+    "repo_url": "https://github.com/chenzRG/Fredformer",
+    "keywords": [
+      "transformer",
+      "frequency bias",
+      "spectral analysis",
+      "time series forecasting",
+      "debiasing"
+    ]
+  },
+  {
+    "title": "Pathformer: Multi-scale Transformers with Adaptive Pathways for Time Series Forecasting",
+    "conference": "ICLR",
+    "year": 2024,
+    "model_name": "Pathformer",
+    "track": "Research",
+    "pdf_link": "https://openreview.net/pdf?id=6GfkN15Yy5",
+    "datasets": [
+      "Weather",
+      "Traffic",
+      "Electricity",
+      "ILI"
+    ],
+    "metrics": {
+      "Note": "Proposed a multi-scale transformer with adaptive pathways to capture temporal dynamics at different resolutions, outperforming PatchTST on several long-term forecasting tasks."
+    },
+    "repo_url": "https://github.com/decisionintelligence/pathformer",
+    "keywords": [
+      "multi-scale transformer",
+      "adaptive pathways",
+      "time series forecasting",
+      "temporal resolution",
+      "long-term forecasting"
+    ]
+  },
+  {
     "title": "A novel hybrid time-varying graph neural network for traffic flow forecasting",
     "conference": "arXiv",
     "year": 2024,
@@ -22,31 +155,6 @@
       "hybrid neural network",
       "traffic flow forecasting",
       "attention mechanism"
-    ]
-  },
-  {
-    "title": "TimeMixer++: A General Time Series Pattern Machine for Universal Predictive Analysis",
-    "conference": "ICLR",
-    "year": 2025,
-    "model_name": "TimeMixer++",
-    "track": "Research",
-    "pdf_link": "https://openreview.net/pdf?id=1CLzLXSFNn",
-    "datasets": [
-      "PEMS (Traffic)",
-      "M4 (Forecasting)",
-      "UEA (Classification)",
-      "Anomaly Detection Benchmarks"
-    ],
-    "metrics": {
-      "Note": "TimeMixer++ is a general-purpose 'Pattern Machine' that achieves SOTA performance across 8 diverse tasks (forecasting, classification, anomaly detection, imputation, etc.) by using Multi-Resolution Time Imaging (MRTI) and dual-axis mixing."
-    },
-    "repo_url": "https://github.com/kwuking/TimeMixer",
-    "keywords": [
-      "universal predictive analysis",
-      "multi-resolution time imaging",
-      "pattern machine",
-      "time image decomposition",
-      "general time series model"
     ]
   },
   {
@@ -502,36 +610,6 @@
       "traffic prediction"
     ]
 },
-{
-    "title": "UrbanDiT: A Foundation Model for Open-World Urban Spatio-Temporal Learning",
-    "conference": "NeurIPS",
-    "year": 2025,
-    "model_name": "UrbanDiT",
-    "track": "Main",
-    "pdf_link": "https://arxiv.org/pdf/2410.15062",
-    "datasets": [
-      "METR-LA",
-      "PEMS-BAY",
-      "TaxiBJ",
-      "BikeNYC"
-    ],
-    "metrics": {
-      "METR_LA": {
-        "MAE": "2.55 (Zero-shot capable)",
-        "MAPE": "6.50%",
-        "RMSE": "5.10"
-      },
-      "Note": "Foundation model leveraging Diffusion Transformers; supports zero-shot prediction and imputation."
-    },
-    "repo_url": "https://github.com/tsinghua-fib-lab/UrbanDiT",
-    "keywords": [
-      "diffusion transformer",
-      "foundation model",
-      "open-world learning",
-      "spatio-temporal generation",
-      "zero-shot forecasting"
-    ]
-  },
     {
     "id": 10,
     "title": "DSTAGNN: Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting",
@@ -714,33 +792,22 @@
     "notes": "SIGIR 2022."
   },
   {
-    "title": "DiffTraj: Generating GPS Trajectory with Diffusion Probabilistic Models",
-    "conference": "ICLR",
-    "year": 2024,
-    "model_name": "DiffTraj",
-    "track": "Main",
-    "pdf_link": "https://arxiv.org/pdf/2304.11582",
-    "datasets": [
-      "GeoLife",
-      "TaxiBJ",
-      "Porto"
-    ],
+    "title": "Beyond Regularity: Modeling Chaotic Mobility Patterns for Next Location Prediction",
+    "conference": "WWW",
+    "year": 2025,
+    "model_name": "CANOE",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2509.11713",
+    "datasets": ["Traffic Camera", "Mobile Phone"],
     "metrics": {
-      "Porto": {
-        "JSD": "0.012",
-        "ADE": "180.5m (Generation)",
-        "FDE": "320.1m"
+      "Traffic Camera": {
+        "Acc@1": "Improved by 13.11%",
+        "MRR": "Improved by 10.49%"
       },
-      "Note": "Leverages diffusion models for high-fidelity trajectory generation and next-location forecasting."
+      "Note": "Proposes CANOE, a model with Chaotic Neural Oscillatory Attention to handle the dynamic imbalance between periodic and chaotic mobility patterns."
     },
-    "repo_url": "https://github.com/Yasoz/DiffTraj",
-    "keywords": [
-      "diffusion models",
-      "trajectory generation",
-      "spatio-temporal",
-      "generative AI",
-      "GPS trajectory"
-    ]
+    "repo_url": "https://github.com/yuqian2003/CANOE",
+    "keywords": ["chaotic mobility", "neural oscillator", "next location prediction", "attention mechanism"]
   },
   {
     "title": "ROTAN: A Rotation-based Temporal Attention Network for Time-Specific Next POI Recommendation",
@@ -883,6 +950,54 @@
       "scalable",
       "sparse auto-encoder",
       "knowledge distillation"
+    ]
+  },
+  {
+    "title": "Improving Transferability for Cross-domain Trajectory Prediction via Neural Stochastic Differential Equation",
+    "conference": "AAAI",
+    "year": 2024,
+    "model_name": "TrajSDE",
+    "track": "Research",
+    "pdf_link": "https://ojs.aaai.org/index.php/AAAI/article/view/28879",
+    "datasets": [
+      "nuScenes",
+      "Argoverse",
+      "Lyft",
+      "Waymo Open Motion Dataset"
+    ],
+    "metrics": {
+      "Note": "TrajSDE utilizes continuous and stochastic representations of Neural SDEs to alleviate discrepancies caused by different data acquisition strategies, significantly improving transferability across different autonomous driving datasets."
+    },
+    "repo_url": "https://github.com/daeheepark/TrajSDE",
+    "keywords": [
+      "cross-domain",
+      "neural stochastic differential equation",
+      "transfer learning",
+      "trajectory prediction",
+      "diffusion network"
+    ]
+  },
+  {
+    "title": "Disentangled Contrastive Hypergraph Learning for Next POI Recommendation",
+    "conference": "SIGIR",
+    "year": 2024,
+    "model_name": "DCHL",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3626772.3657726",
+    "datasets": [
+      "Foursquare",
+      "Gowalla"
+    ],
+    "metrics": {
+      "Note": "DCHL constructs three distinct hypergraphs (collaborative, transitional, geographical) and employs a multi-view disentangled hypergraph learning component with cross-view contrastive learning to capture complex user-POI interactions."
+    },
+    "repo_url": "https://github.com/icmpnorequest/SIGIR2024_DCHL",
+    "keywords": [
+      "hypergraph learning",
+      "disentangled representation",
+      "contrastive learning",
+      "next POI recommendation",
+      "multi-view learning"
     ]
   },
   {
@@ -1141,5 +1256,340 @@
       "attribute sequence",
       "semantic fusion"
     ]
+  },
+  {
+    "title": "Multimodal Trajectory Representation Learning for Travel Time Estimation",
+    "conference": "arXiv",
+    "year": 2025,
+    "model_name": "MDTI",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/abs/2510.05840",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Xi'an (Didi)",
+      "Porto (Taxi)"
+    ],
+    "metrics": {
+      "Chengdu": {
+        "MAE": "58.42s",
+        "MAPE": "10.23%",
+        "RMSE": "89.12s"
+      },
+      "Note": "MDTI integrates GPS sequences, grid trajectories, and road network constraints using a multimodal fusion module to enhance trajectory representation for TTE."
+    },
+    "repo_url": "https://github.com/City-Computing/MDTI",
+    "keywords": [
+      "multimodal representation",
+      "trajectory learning",
+      "travel time estimation",
+      "dynamic fusion",
+      "cross-modal interaction"
+    ]
+  },
+  {
+    "title": "Link Representation Learning for Probabilistic Travel Time Estimation",
+    "conference": "arXiv",
+    "year": 2024,
+    "model_name": "ProbETA",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/abs/2407.05895",
+    "datasets": [
+      "Harbin",
+      "Chengdu"
+    ],
+    "metrics": {
+      "Performance": {
+        "Improvement": "Outperforms SOTA probabilistic methods by >13%",
+        "Method": "Low-rank multivariate Gaussian + Empirical Bayes"
+      },
+      "Note": "Models the joint distribution of travel times across multiple trips using learnable link representations to capture inter-trip and intra-trip correlations."
+    },
+    "repo_url": "https://github.com/ChenXu02/ProbETA",
+    "keywords": [
+      "probabilistic travel time estimation",
+      "link representation learning",
+      "joint distribution",
+      "uncertainty quantification",
+      "empirical bayes"
+    ]
+  },
+  {
+    "title": "Arrival Time Prediction for Autonomous Shuttle Services in the Real World: Evidence from Five Cities",
+    "conference": "IEEE Transactions on Intelligent Transportation Systems",
+    "year": 2026,
+    "model_name": "GNNRF",
+    "track": "Journal",
+    "pdf_link": "https://arxiv.org/abs/2401.05322",
+    "datasets": [
+      "Real-world shuttle data (5 cities)",
+      "Tampere",
+      "Linköping",
+      "Oslo"
+    ],
+    "metrics": {
+      "Note": "Proposes a hierarchical model combining Random Forest (for stop skipping classification) and Graph Neural Networks (for travel time regression) to handle the uncertainty of autonomous shuttle operations."
+    },
+    "repo_url": "https://github.com/carolinssc/Arrival-time-prediction-autonomous-shuttles",
+    "keywords": [
+      "autonomous shuttles",
+      "arrival time prediction",
+      "graph neural networks",
+      "hierarchical modeling",
+      "public transport"
+    ]
+  },
+  {
+    "title": "Real-Time Bus Arrival Prediction: A Deep Learning Approach for Enhanced Urban Mobility",
+    "conference": "ICORES / arXiv",
+    "year": 2024,
+    "model_name": "FCNNBus",
+    "track": "Conference",
+    "pdf_link": "https://arxiv.org/abs/2303.15495",
+    "datasets": [
+      "New York City Bus Dataset (>200 lines)"
+    ],
+    "metrics": {
+      "Error Margin": "< 40 seconds",
+      "Note": "Uses a unified Fully Connected Neural Network (FCNN) to predict arrival times across multiple bus lines, outperforming traditional regression models."
+    },
+    "repo_url": "https://github.com/deshithagallage/Bus-Arrival-Time-Prediction-Model",
+    "keywords": [
+      "bus arrival prediction",
+      "deep learning",
+      "urban mobility",
+      "fully connected neural network",
+      "public transit"
+    ]
+  },
+  {
+    "title": "More Than Routing: Joint GPS and Route Modeling for Refine Trajectory Representation Learning",
+    "conference": "WWW",
+    "year": 2024,
+    "model_name": "JGRM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2402.16915",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Xi'an (Didi)"
+    ],
+    "metrics": {
+      "Note": "JGRM proposes a joint GPS and Route modeling framework for trajectory representation learning, utilizing a hierarchical GPS encoder and a route encoder with self-supervised tasks (masked language modeling and contrastive learning) to capture fine-grained motion details and road topology."
+    },
+    "repo_url": "https://github.com/mamazi0131/JGRM",
+    "keywords": [
+      "trajectory representation learning",
+      "joint modeling",
+      "GPS and route",
+      "self-supervised learning",
+      "contrastive learning"
+    ]
+  },
+  {
+    "title": "Interpreting Trajectories from Multiple Views: A Hierarchical Self-Attention Network for Estimating the Time of Arrival",
+    "conference": "KDD",
+    "year": 2022,
+    "model_name": "HierETA",
+    "track": "Applied Data Science",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3534678.3539167",
+    "datasets": [
+      "Didi Chuxing (Large-scale)"
+    ],
+    "metrics": {
+      "Note": "HierETA employs a hierarchical self-attention network to model trajectories from three views: segment (local traffic), link (common patterns), and intersection (indirect influence), achieving superior interpretability and accuracy over state-of-the-art baselines."
+    },
+    "repo_url": "https://github.com/YuejiaoGong/HierETA",
+    "keywords": [
+      "estimated time of arrival",
+      "hierarchical self-attention",
+      "multi-view learning",
+      "trajectory interpretation",
+      "intelligent transportation"
+    ]
+  },
+  {
+    "title": "HetETA: Heterogeneous Information Network Embedding for Estimating Time of Arrival",
+    "conference": "KDD",
+    "year": 2020,
+    "model_name": "HetETA",
+    "track": "Applied Data Science",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3394486.3403294",
+    "datasets": [
+      "Didi Chuxing (Beijing, Chengdu)"
+    ],
+    "metrics": {
+      "Note": "HetETA constructs a Heterogeneous Information Network (HIN) from the road map and vehicle trajectories, utilizing graph neural networks to learn representations of spatio-temporal heterogeneous information (recent, daily, and weekly periods) for accurate ETA prediction."
+    },
+    "repo_url": "https://github.com/didi/heteta",
+    "keywords": [
+      "heterogeneous information network",
+      "estimated time of arrival",
+      "graph neural networks",
+      "spatio-temporal embedding",
+      "multi-relational network"
+    ]
+  },
+  {
+    "title": "Fast map matching, an algorithm integrating hidden Markov model with precomputation",
+    "conference": "IJGIS (International Journal of Geographical Information Science)",
+    "year": 2018,
+    "model_name": "FMM",
+    "track": "Journal",
+    "pdf_link": "https://www.tandfonline.com/doi/full/10.1080/13658816.2017.1400548",
+    "datasets": [
+      "Porto (Taxi)",
+      "Seattle (Uber)",
+      "OpenStreetMap"
+    ],
+    "metrics": {
+      "Performance": {
+        "Speed": "40x-100x faster than traditional HMM",
+        "Accuracy": "Comparable to advanced HMM"
+      },
+      "Note": "FMM is a high-performance open-source map matching framework implemented in C++ and Python, widely used in industry and academia."
+    },
+    "repo_url": "https://github.com/cyang-kth/fmm",
+    "keywords": [
+      "fast map matching",
+      "hidden markov model",
+      "precomputation",
+      "open source framework",
+      "GPS trajectory"
+    ]
+  },
+  {
+    "title": "DeepMM: Deep Learning Based Map Matching with Data Augmentation",
+    "conference": "IEEE TMC / SIGSPATIAL",
+    "year": 2020,
+    "model_name": "DeepMM",
+    "track": "Journal/Conference",
+    "pdf_link": "https://ieeexplore.ieee.org/document/9288879",
+    "datasets": [
+      "Porto (Taxi)",
+      "Shanghai (Taxi)"
+    ],
+    "metrics": {
+      "Accuracy": "Outperforms HMM baselines by >10%",
+      "Note": "Uses a seq2seq architecture with attention to map sparse and noisy trajectories to road segments in a latent space, augmented by a data generation mechanism."
+    },
+    "repo_url": "https://github.com/vonfeng/DeepMapMatching",
+    "keywords": [
+      "deep learning",
+      "map matching",
+      "data augmentation",
+      "seq2seq",
+      "trajectory"
+    ]
+  },
+  {
+    "title": "GraphMM: Graph-Based Vehicular Map Matching by Leveraging Trajectory and Road Correlations",
+    "conference": "IEEE TKDE",
+    "year": 2023,
+    "model_name": "GraphMM",
+    "track": "Journal",
+    "pdf_link": "https://ieeexplore.ieee.org/abstract/document/10158034",
+    "datasets": [
+      "Tencent (Large-scale)",
+      "Porto"
+    ],
+    "metrics": {
+      "Note": "GraphMM leverages Graph Neural Networks (GNN) to explicitly model the topology correlations between the trajectory graph and the road network graph for accurate matching."
+    },
+    "repo_url": "https://github.com/GraphAlgoX/GraphMM-Master",
+    "keywords": [
+      "graph neural networks",
+      "map matching",
+      "road correlations",
+      "trajectory graph",
+      "vehicular data"
+    ]
+  },
+  {
+    "title": "RNTrajRec: Road Network Enhanced Trajectory Recovery with Spatial-Temporal Transformer",
+    "conference": "ICDE",
+    "year": 2023,
+    "model_name": "RNTrajRec",
+    "track": "Research",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10184589",
+    "datasets": [
+      "Porto",
+      "Shanghai",
+      "Chengdu"
+    ],
+    "metrics": {
+      "Performance": {
+        "F1-Score": "Significant improvement over seq2seq baselines",
+        "Recovery Rate": "High accuracy on low-sampling rate data"
+      },
+      "Note": "Combines a GridGNN for road segment embedding and a Spatial-Temporal Transformer to recover high-resolution trajectories from sparse GPS points."
+    },
+    "repo_url": "https://github.com/chenyuqi990215/RNTrajRec",
+    "keywords": [
+      "trajectory recovery",
+      "spatial-temporal transformer",
+      "road network embedding",
+      "grid gnn",
+      "sparse trajectory"
+    ]
+  },
+  {
+    "title": "DiffMM: Efficient Method for Accurate Noisy and Sparse Trajectory Map Matching via One Step Diffusion",
+    "conference": "AAAI",
+    "year": 2026,
+    "model_name": "DiffMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2601.08482",
+    "datasets": [
+      "Beijing",
+      "Porto"
+    ],
+    "metrics": {
+      "Note": "DiffMM is the first to model map matching through a conditional diffusion paradigm. It uses a one-step diffusion process for efficiency, significantly outperforming HMM and previous Deep Learning methods on sparse/noisy data."
+    },
+    "repo_url": "https://github.com/decisionintelligence/DiffMM",
+    "keywords": [
+      "diffusion model",
+      "map matching",
+      "one-step diffusion",
+      "sparse trajectory",
+      "conditional generation"
+    ]
+  },
+  {
+    "title": "Efficient Methods for Accurate Sparse Trajectory Recovery and Map Matching",
+    "conference": "IEEE (ICDE/Similar)",
+    "year": 2025,
+    "model_name": "TRMMA",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2508.10460",
+    "datasets": [
+      "Chengdu",
+      "Shanghai",
+      "Porto",
+      "Harbin"
+    ],
+    "metrics": {
+      "F1-Score": "Consistently achieves best result quality compared to baselines.",
+      "Speed": "Orders of magnitude faster than competitors during training and inference."
+    },
+    "note": "Proposes a two-stage framework: MMA (Map Matching) formulates point-to-segment matching as a classification task over a small candidate set, and TRMMA (Trajectory Recovery) uses a dual-transformer to infer missing points along the matched route.",
+    "repo_url": "https://github.com/derekwtian/TRMMA"
+  },
+  {
+    "title": "Driving with Context: Online Map Matching for Complex Roads Using Lane Markings and Scenario Recognition",
+    "conference": "IEEE RA-L (Under Review) / arXiv",
+    "year": 2025,
+    "model_name": "LMSROMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2505.05007",
+    "datasets": [
+      "Zenseact Open Dataset",
+      "Shanghai Multilevel Road Data"
+    ],
+    "metrics": {
+      "F1 Score": "98.04% (Zenseact), 94.60% (Shanghai Complex Roads)",
+      "Improvement": "Significantly outperforms benchmarks in multilevel/complex areas."
+    },
+    "note": "An online SD map matching method that integrates lane markings (via ICP registration) and driving scenario recognition into an HMM framework to handle complex urban environments like elevated roads.",
+    "repo_url": "https://github.com/TRV-Lab/LMSR-OMM"
   }
 ]

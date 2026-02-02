@@ -4,6 +4,9 @@ from libcity.model.eta.MulT_TTE import MulT_TTE
 from libcity.model.eta.LightPath import LightPath
 from libcity.model.eta.DOT import DOT
 from libcity.model.eta.DutyTTE import DutyTTE
+from libcity.model.eta.MDTI import MDTI
+from libcity.model.eta.HierETA import HierETA
+from libcity.model.eta.HetETA import HetETA
 
 __all__ = [
     "DeepTTE",
@@ -12,4 +15,7 @@ __all__ = [
     "LightPath",
     "DOT",
     "DutyTTE",
+    "MDTI",
+    "HierETA",
+    "HetETA",
 ]

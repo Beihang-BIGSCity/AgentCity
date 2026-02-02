@@ -1,0 +1,86 @@
+{
+    "model": "MDTI",
+    "eta_encoder": "MDTIEncoder",
+    "grid_size": 100,
+
+    "hidden_emb_dim": 256,
+    "out_emb_dim": 256,
+    "pe_dropout": 0.1,
+
+    "grid_in_channel": 3,
+    "grid_out_channel": 64,
+    "grid_H": 114,
+    "grid_W": 52,
+    "grid_trm_head": 4,
+    "grid_trm_layer": 2,
+    "grid_trm_dropout": 0.1,
+    "grid_ffn_dim": 1024,
+
+    "gat_hidden_channels": 128,
+    "gat_num_heads": 3,
+    "gat_num_layers": 3,
+    "gat_dropout": 0.6,
+
+    "road_type": 8,
+    "road_trm_head": 4,
+    "road_trm_layer": 4,
+    "road_trm_dropout": 0.1,
+    "road_ffn_dim": 1024,
+
+    "g_fea_size": 64,
+    "g_dim_per_layer": [256, 256, 256],
+    "g_heads_per_layer": [4, 4, 4],
+    "g_num_layers": 3,
+    "g_dropout": 0.1,
+
+    "inter_trm_head": 2,
+    "inter_trm_layer": 2,
+    "inter_trm_dropout": 0.1,
+    "inter_ffn_dim": 1024,
+
+    "road_num": 10000,
+    "road_special_tokens": {
+        "padding_token": 0,
+        "cls_token": 1,
+        "mask_token": 2
+    },
+    "grid_special_tokens": {
+        "padding_token": 0,
+        "cls_token": 1
+    },
+
+    "mask_ratio": 0.15,
+    "mode": "tte",
+    "tuning_all": true,
+
+    "w_cl": 1.0,
+    "w_mlm": 0.7,
+    "w_eta": 1.0,
+    "w_step": 0.3,
+    "w_mono": 0.1,
+
+    "eta_target_scale": 60,
+    "lambda_cross_modal_relation": 0.5,
+    "cm_w_step": 1.0,
+    "cm_w_rel": 1.0,
+    "cm_w_cos": 1.0,
+
+    "prediction_length": 5,
+
+    "max_epoch": 100,
+    "batch_size": 32,
+    "learner": "adam",
+    "learning_rate": 2e-4,
+    "lr_decay": true,
+    "lr_scheduler": "cosine",
+    "lr_decay_ratio": 0.1,
+    "warmup_epoch": 10,
+    "warmup_lr_init": 1e-6,
+    "lr_min": 1e-6,
+    "use_early_stop": true,
+    "patience": 5,
+    "weight_decay": 0.02,
+
+    "clip_grad_norm": true,
+    "max_grad_norm": 1.0
+}

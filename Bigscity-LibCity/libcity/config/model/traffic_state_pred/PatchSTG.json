@@ -1,33 +1,88 @@
 {
+  "_comment": "PatchSTG: Patch-based Spatial-Temporal Graph Neural Network",
+  "_description": "Official LibCity configuration for PatchSTG model with KDTree-based spatial patching",
+  "_source": "Original implementation adapted from https://github.com/PatchSTG/PatchSTG",
+  "_requirements": "timm>=1.0.12 for Vision Transformer attention components",
+
+  "_temporal_patching": "Configuration for temporal dimension",
   "tps": 12,
+  "_tps_desc": "Temporal patch size (input_window should be divisible by tps)",
   "tpn": 1,
+  "_tpn_desc": "Number of temporal patches (= input_window / tps)",
+
+  "_spatial_patching": "Configuration for spatial dimension via KDTree",
   "recur": 7,
+  "_recur_desc": "KDTree recursion depth. Adjust based on dataset: 7 for ~200 nodes, 8 for ~300 nodes, 9 for ~700+ nodes",
   "sps": 2,
+  "_sps_desc": "Spatial patch size (nodes per patch after padding)",
   "spn": 128,
+  "_spn_desc": "Spatial patch number (2^recur). Must match recur: recur=7→128, recur=8→256, recur=9→512",
   "factors": 16,
+  "_factors_desc": "Merging factor for leaf nodes in dual attention (spn/factors patches with sps*factors size each)",
+
+  "_architecture": "Model architecture configuration",
   "layers": 5,
+  "_layers_desc": "Number of WindowAttBlock encoder layers",
+
+  "_embeddings": "Embedding dimensions",
   "id": 64,
+  "_id_desc": "Input embedding dimension (from Conv2d temporal patching)",
   "nd": 64,
+  "_nd_desc": "Node (spatial) embedding dimension",
   "td": 32,
+  "_td_desc": "Time-of-day embedding dimension",
   "dd": 32,
+  "_dd_desc": "Day-of-week embedding dimension",
+
+  "_temporal_encoding": "Temporal encoding configuration",
   "tod": 96,
+  "_tod_desc": "Time slots per day (288 for 5min, 96 for 15min, 48 for 30min)",
   "dow": 7,
+  "_dow_desc": "Days per week (always 7)",
+
+  "_data_preprocessing": "Data preprocessing settings",
   "scaler": "standard",
   "load_external": true,
   "normal_external": false,
   "ext_scaler": "none",
   "add_time_in_day": true,
   "add_day_in_week": true,
+
+  "_evaluation": "Evaluation metrics",
   "metrics": ["MAE", "MAPE", "MSE", "RMSE", "masked_MAE", "masked_MAPE", "masked_MSE", "masked_RMSE"],
-  "max_epoch": 10,
+
+  "_training": "Training hyperparameters (from original paper)",
+  "max_epoch": 100,
+  "_max_epoch_desc": "Reduced to 10 for quick testing, use 100 for full training",
+  "batch_size": 16,
+  "_batch_size_desc": "Batch size (adjust based on GPU memory)",
+
   "learner": "adamw",
   "learning_rate": 0.002,
+  "_lr_desc": "Initial learning rate from original paper",
   "weight_decay": 0.0001,
+  "_weight_decay_desc": "L2 regularization weight",
+
   "lr_decay": true,
   "lr_scheduler": "multisteplr",
   "lr_decay_ratio": 0.5,
   "steps": [1, 35, 40],
+  "_steps_desc": "Learning rate decay steps (epochs)",
+
   "clip_grad_norm": true,
   "max_grad_norm": 5,
-  "use_early_stop": false
+  "_grad_clip_desc": "Gradient clipping for stable training",
+
+  "use_early_stop": false,
+  "_early_stop_desc": "Set to true to enable early stopping based on validation loss",
+
+  "_dataset_notes": "Dataset compatibility notes",
+  "_compatible_datasets": "METR_LA (207 nodes), PEMS_BAY (325 nodes), PEMSD4 (307 nodes), PEMSD7 (883 nodes)",
+  "_required_features": "Geo coordinates (.geo file) required for KDTree spatial partitioning",
+  "_recommended_settings": {
+    "METR_LA": "recur=7, spn=128, sps=2 (207 nodes)",
+    "PEMS_BAY": "recur=8, spn=256, sps=2 (325 nodes)",
+    "PEMSD4": "recur=8, spn=256, sps=2 (307 nodes)",
+    "PEMSD7": "recur=9, spn=512, sps=2 (883 nodes)"
+  }
 }

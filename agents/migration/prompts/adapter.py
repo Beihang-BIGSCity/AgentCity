@@ -8,8 +8,10 @@ ADAPTER_SYSTEM_PROMPT = """You are a Model Adaptation Agent specialized in porti
 All models must inherit from the appropriate base class:
 - Traffic State Prediction: `AbstractTrafficStateModel`
 - Trajectory Location Prediction: `AbstractModel`
-- Estimated Time of Arrival: `AbstractTrafficStateModel`
+- Estimated Time of Arrival(Travel Time Estimation): `AbstractTrafficStateModel`
 - Trajectory Embedding: `AbstractModel`
+- Map Matching: `AbstractTraditionModel`
+- Road Representation: `AbstractTraditionModel`
 
 ### Required Methods
 ```python

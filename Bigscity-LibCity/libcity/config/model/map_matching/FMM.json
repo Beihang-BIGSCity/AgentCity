@@ -1,0 +1,8 @@
+{
+  "k": 8,
+  "r": 300,
+  "gps_error": 50,
+  "delta": 3000,
+  "reverse_tolerance": 0.0,
+  "use_ubodt": true
+}

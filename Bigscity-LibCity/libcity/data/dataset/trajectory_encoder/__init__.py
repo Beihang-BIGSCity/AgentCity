@@ -7,6 +7,7 @@ from .hstlstm_encoder import HstlstmEncoder
 from .strnn_encoder import StrnnEncoder
 from .cara_encoder import CARATrajectoryEncoder
 from .plmtrajrec_encoder import PLMTrajRecEncoder
+from .jgrm_encoder import JGRMEncoder
 
 __all__ = [
     "StandardTrajectoryEncoder",
@@ -17,5 +18,6 @@ __all__ = [
     "HstlstmEncoder",
     "StrnnEncoder",
     "CARATrajectoryEncoder",
-    "PLMTrajRecEncoder"
+    "PLMTrajRecEncoder",
+    "JGRMEncoder"
 ]

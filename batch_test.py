@@ -26,6 +26,9 @@ import pandas as pd
 import concurrent.futures
 import itertools
 from pathlib import Path
+from multiprocessing import Pool, Manager
+import pynvml
+
 list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet']
 # 项目根目录
 ROOT_DIR = Path(__file__).resolve().parent
@@ -129,10 +132,10 @@ async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_p
         print(f"[INFO] Testing {model_name} on {dataset}...")
 
         # 标准化数据集名称
-        target_path = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.csv'
-        target_path1 = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.json'
-        target_path2 = Path(ROOT_DIR) / 'result' / task / dataset / f'model_name.jsonl'
-        if target_path.exists() and target_path1.exists() and target_path2.exists():
+        target_path = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.csv'
+        target_path1 = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.json'
+        target_path2 = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.jsonl'
+        if target_path.exists() or target_path1.exists() or target_path2.exists():
             print(f"[INFO] Result for {model_name} on {dataset} already exists. Skipping...")
             return
         # 日志文件
@@ -176,20 +179,77 @@ def worker(model, dataset, gpu_id, max_epochs=35):
     except Exception as e:
         print(f"[Error] {model}-{dataset} on GPU{gpu_id}: {e}")
 
+def get_gpu_free_memory():
+    """获取所有GPU的空闲显存(GB)，返回 [(gpu_id, free_memory), ...]"""
+    try:
+        pynvml.nvmlInit()
+        gpu_count = pynvml.nvmlDeviceGetCount()
+        gpu_info = []
+        for i in range(gpu_count):
+            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+            info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+            free_gb = info.free / 1024**3
+            gpu_info.append((i, free_gb))
+        # 按空闲显存从大到小排序
+        return sorted(gpu_info, key=lambda x: x[1], reverse=True)
+    except Exception as e:
+        print(f"警告: 无法获取GPU显存信息: {e}")
+        return [(0, 0), (1, 0), (2, 0), (3,0)]  # 默认3卡
+    
 def run_test_process(args):
-    model, dataset, gpu_id = args
-    #os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-    return asyncio.run(run_test(model, dataset, gpu_id, max_epochs=35))
+    model, dataset, task, gpu_queue = args
+    
+    # 从队列阻塞式获取GPU（自动等待直到有可用）
+    gpu_id = gpu_queue.get()
+    
+    try:
+        # 关键：必须在import torch之前设置！
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+        
+        # 延迟导入torch，确保环境变量生效
+        import torch
+        torch.cuda.set_device(0)  # 因为设置了VISIBLE_DEVICES，这里永远是0
+        
+        print(f"[{model}-{dataset}] 运行在 GPU {gpu_id} (剩余显存: {torch.cuda.get_device_properties(0).total_memory/1024**3:.1f}GB)")
+        
+        # 执行你的异步任务
+        result = asyncio.run(run_test(model, dataset, 0, task=task, max_epochs=35))
+        return result
+        
+    except Exception as e:
+        print(f"[{model}-{dataset}] GPU {gpu_id} 出错: {str(e)[:100]}")
+        raise
+    finally:
+        # 任务完成，归还GPU到队列，让下一个任务自动获取
+        gpu_queue.put(gpu_id)
+        print(f"[{model}-{dataset}] 释放 GPU {gpu_id}")
 
 def main():
 
     #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet',''ASeer']
-    model_list = ['GriddedTNP','MLCAFormer','PatchSTG', 'HSTWAVE','STHSepNet','BigST','DSTMamba','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN','STID','TimeMixer++','PatchTST']
+    #model_list = ['GriddedTNP','STHSepNet','BigST','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN','STID']
+    model_list = ["PatchTST","DCST","STLLM","TGraphormer","CKGGNN","EasyST","LEAF","MetaDG","TRACK","HiMSNet","DST2former"]
     task = 'traffic_state_pred'
     dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
-    tasks = [(m, d, i % 3+1) for i, (m, d) in enumerate(itertools.product(model_list, dataset_list))]
+    manager = Manager()
+    gpu_queue = manager.Queue()
     
-    with Pool(processes=4) as pool:  # 4个进程对应4张卡
+    # 查询当前GPU状态，按空闲显存排序后初始化队列
+    # 这样显存占用小的GPU会先被分配
+    gpu_status = get_gpu_free_memory()
+    print(f"GPU状态 (ID: 空闲显存): {gpu_status}")
+    
+    for gpu_id, free_mem in gpu_status:
+        gpu_queue.put(gpu_id)
+        print(f"GPU {gpu_id} 已加入队列 (空闲 {free_mem:.1f}GB)")
+    
+    # 构建任务列表，传入共享队列
+    tasks = [(m, d, task, gpu_queue) 
+             for m, d in itertools.product(model_list, dataset_list)]
+    
+    # 进程数 = GPU数量，确保每个GPU同一时间只跑一个任务
+    num_gpus = 3
+    with Pool(processes=num_gpus) as pool:
         results = pool.map(run_test_process, tasks)
 
 
