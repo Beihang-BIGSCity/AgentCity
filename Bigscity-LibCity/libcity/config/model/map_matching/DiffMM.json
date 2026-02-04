@@ -1,5 +1,6 @@
 {
     "model_name": "DiffMM",
+    "dataset_class": "DiffMMDataset",
     "hid_dim": 256,
     "num_units": 512,
     "transformer_layers": 2,
@@ -16,5 +17,11 @@
     "batch_size": 4,
     "max_epoch": 30,
     "clip_grad_norm": 1.0,
-    "evaluate_method": "segment"
+    "evaluate_method": "segment",
+    "num_cands": 10,
+    "cand_search_radius": 100,
+    "max_seq_len": 100,
+    "min_seq_len": 5,
+    "train_rate": 0.7,
+    "eval_rate": 0.15
 }

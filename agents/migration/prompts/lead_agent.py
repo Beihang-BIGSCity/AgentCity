@@ -118,7 +118,7 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         ## Critical Rules
         - Use Task tool to delegate - do NOT migrate code directly
         - Process papers sequentially (complete one before starting next)
-        - Maximum 3 fix iterations per paper before marking as failed
+        - Maximum 10 fix iterations per paper before marking as failed
         - Document everything in ./documentation/<model>_migration_summary.md
         - Keep responses concise between delegations
         - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories

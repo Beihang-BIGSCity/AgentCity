@@ -1,0 +1,38 @@
+{
+  "model_name": "MVGRL",
+
+  "hidden_dim": 512,
+  "num_gcn_layers": 2,
+  "ppr_alpha": 0.2,
+  "use_contrastive_loss": false,
+  "contrastive_weight": 0.1,
+  "temporal_type": "conv",
+  "dropout": 0.1,
+
+  "bidir_adj_mx": true,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+
+  "batch_size": 64,
+  "max_epoch": 100,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0,
+  "lr_decay": true,
+  "lr_scheduler": "steplr",
+  "lr_decay_ratio": 0.7,
+  "step_size": 10,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 20,
+
+  "input_window": 12,
+  "output_window": 12,
+  "output_dim": 1
+}

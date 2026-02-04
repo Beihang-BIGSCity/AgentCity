@@ -521,3 +521,618 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] [12 rows x 10 columns]
 
 [Return Code: 0]
+
+============================================================
+Timestamp: 2026-02-03 11:28:29
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 110890
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-03 11:28:34,643 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-03 11:28:34,643 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=METR_LA, exp_id=110890
+[OUT] 2026-02-03 11:28:34,643 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '110890', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-03 11:28:35,743 - INFO - Using opt_einsum
+[OUT] 2026-02-03 11:28:38,407 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-03 11:28:38,414 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-03 11:28:38,414 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-03 11:28:38,432 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-03 11:28:38,432 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-03 11:28:38,437 - INFO - Loading ./libcity/cache/dataset_cache/point_based_METR_LA_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-03 11:28:48,063 - INFO - train	x: (23974, 12, 207, 2), y: (23974, 12, 207, 2)
+[OUT] 2026-02-03 11:28:48,064 - INFO - eval	x: (3425, 12, 207, 2), y: (3425, 12, 207, 2)
+[OUT] 2026-02-03 11:28:48,064 - INFO - test	x: (6850, 12, 207, 2), y: (6850, 12, 207, 2)
+[OUT] 2026-02-03 11:28:48,507 - INFO - StandardScaler mean: 54.40592829587626, std: 19.493739270573094
+[OUT] 2026-02-03 11:28:48,508 - INFO - NoneScaler
+[OUT] 2026-02-03 11:28:53,747 - INFO - STSSDL initialized with 207 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-03 11:28:54,507 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-03 11:28:54,508 - INFO - adaptive_embedding	torch.Size([12, 207, 48])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - node_embedding	torch.Size([207, 20])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-03 11:28:54,508 - INFO - Total parameter numbers: 1130551
+[OUT] 2026-02-03 11:28:54,508 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-03 11:28:54,509 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-03 11:28:54,509 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-03 11:28:54,509 - INFO - Start training ...
+[OUT] 2026-02-03 11:28:54,509 - INFO - num_batches:375
+[OUT] 2026-02-03 11:34:01,020 - INFO - epoch complete!
+[OUT] 2026-02-03 11:34:01,024 - INFO - evaluating now!
+[OUT] 2026-02-03 11:34:29,473 - INFO - Epoch [0/35] train_loss: 2.6955, val_loss: 1.4610, lr: 0.010000, 334.96s
+[OUT] 2026-02-03 11:34:29,547 - INFO - Saved model at 0
+[OUT] 2026-02-03 11:34:29,547 - INFO - Val loss decrease from inf to 1.4610, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch0.tar
+[OUT] 2026-02-03 11:39:03,167 - INFO - epoch complete!
+[OUT] 2026-02-03 11:39:03,168 - INFO - evaluating now!
+[OUT] 2026-02-03 11:39:32,199 - INFO - Epoch [1/35] train_loss: 2.1254, val_loss: 1.0765, lr: 0.010000, 302.65s
+[OUT] 2026-02-03 11:39:32,224 - INFO - Saved model at 1
+[OUT] 2026-02-03 11:39:32,224 - INFO - Val loss decrease from 1.4610 to 1.0765, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch1.tar
+[OUT] 2026-02-03 11:44:04,477 - INFO - epoch complete!
+[OUT] 2026-02-03 11:44:04,478 - INFO - evaluating now!
+[OUT] 2026-02-03 11:44:32,657 - INFO - Epoch [2/35] train_loss: 2.3219, val_loss: 2.3299, lr: 0.010000, 300.43s
+[OUT] 2026-02-03 11:49:02,630 - INFO - epoch complete!
+[OUT] 2026-02-03 11:49:02,631 - INFO - evaluating now!
+[OUT] 2026-02-03 11:49:32,249 - INFO - Epoch [3/35] train_loss: 2.2683, val_loss: 0.8839, lr: 0.010000, 299.59s
+[OUT] 2026-02-03 11:49:32,274 - INFO - Saved model at 3
+[OUT] 2026-02-03 11:49:32,274 - INFO - Val loss decrease from 1.0765 to 0.8839, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch3.tar
+[OUT] 2026-02-03 11:57:20,294 - INFO - epoch complete!
+[OUT] 2026-02-03 11:57:20,297 - INFO - evaluating now!
+[OUT] 2026-02-03 11:57:48,093 - INFO - Epoch [4/35] train_loss: 2.3137, val_loss: 2.2647, lr: 0.010000, 495.82s
+[OUT] 2026-02-03 12:02:25,745 - INFO - epoch complete!
+[OUT] 2026-02-03 12:02:25,746 - INFO - evaluating now!
+[OUT] 2026-02-03 12:02:55,325 - INFO - Epoch [5/35] train_loss: 2.2822, val_loss: 1.6851, lr: 0.010000, 307.23s
+[OUT] 2026-02-03 12:07:20,886 - INFO - epoch complete!
+[OUT] 2026-02-03 12:07:20,887 - INFO - evaluating now!
+[OUT] 2026-02-03 12:07:49,018 - INFO - Epoch [6/35] train_loss: 2.2398, val_loss: 1.4443, lr: 0.010000, 293.69s
+[OUT] 2026-02-03 12:12:17,749 - INFO - epoch complete!
+[OUT] 2026-02-03 12:12:17,749 - INFO - evaluating now!
+[OUT] 2026-02-03 12:12:46,780 - INFO - Epoch [7/35] train_loss: 2.2015, val_loss: 1.7967, lr: 0.010000, 297.76s
+[OUT] 2026-02-03 12:17:10,605 - INFO - epoch complete!
+[OUT] 2026-02-03 12:17:10,606 - INFO - evaluating now!
+[OUT] 2026-02-03 12:17:38,309 - INFO - Epoch [8/35] train_loss: 2.1852, val_loss: 1.3457, lr: 0.010000, 291.53s
+[OUT] 2026-02-03 12:22:09,231 - INFO - epoch complete!
+[OUT] 2026-02-03 12:22:09,232 - INFO - evaluating now!
+[OUT] 2026-02-03 12:22:37,314 - INFO - Epoch [9/35] train_loss: 2.1817, val_loss: 1.8283, lr: 0.010000, 299.00s
+[OUT] 2026-02-03 12:28:38,526 - INFO - epoch complete!
+[OUT] 2026-02-03 12:28:38,527 - INFO - evaluating now!
+[OUT] 2026-02-03 12:29:06,712 - INFO - Epoch [10/35] train_loss: 2.1616, val_loss: 1.3364, lr: 0.010000, 389.40s
+[OUT] 2026-02-03 12:33:44,571 - INFO - epoch complete!
+[OUT] 2026-02-03 12:33:44,572 - INFO - evaluating now!
+[OUT] 2026-02-03 12:34:12,757 - INFO - Epoch [11/35] train_loss: 2.1726, val_loss: 1.7822, lr: 0.010000, 306.04s
+[OUT] 2026-02-03 12:38:34,166 - INFO - epoch complete!
+[OUT] 2026-02-03 12:38:34,167 - INFO - evaluating now!
+[OUT] 2026-02-03 12:39:03,442 - INFO - Epoch [12/35] train_loss: 2.1627, val_loss: 1.3559, lr: 0.010000, 290.68s
+[OUT] 2026-02-03 12:43:29,173 - INFO - epoch complete!
+[OUT] 2026-02-03 12:43:29,174 - INFO - evaluating now!
+[OUT] 2026-02-03 12:44:02,345 - INFO - Epoch [13/35] train_loss: 2.1645, val_loss: 1.4717, lr: 0.010000, 298.90s
+[OUT] 2026-02-03 12:50:14,559 - INFO - epoch complete!
+[OUT] 2026-02-03 12:50:14,560 - INFO - evaluating now!
+[OUT] 2026-02-03 12:50:54,858 - INFO - Epoch [14/35] train_loss: 2.1567, val_loss: 1.9884, lr: 0.010000, 412.51s
+[OUT] 2026-02-03 12:57:00,724 - INFO - epoch complete!
+[OUT] 2026-02-03 12:57:00,726 - INFO - evaluating now!
+[OUT] 2026-02-03 12:57:33,597 - INFO - Epoch [15/35] train_loss: 2.2630, val_loss: 1.0138, lr: 0.010000, 398.74s
+[OUT] 2026-02-03 13:02:58,011 - INFO - epoch complete!
+[OUT] 2026-02-03 13:02:58,015 - INFO - evaluating now!
+[OUT] 2026-02-03 13:03:28,909 - INFO - Epoch [16/35] train_loss: 2.1729, val_loss: 1.9341, lr: 0.010000, 355.31s
+[OUT] 2026-02-03 13:08:16,118 - INFO - epoch complete!
+[OUT] 2026-02-03 13:08:16,120 - INFO - evaluating now!
+[OUT] 2026-02-03 13:08:43,354 - INFO - Epoch [17/35] train_loss: 2.1480, val_loss: 1.0249, lr: 0.010000, 314.44s
+[OUT] 2026-02-03 13:13:03,800 - INFO - epoch complete!
+[OUT] 2026-02-03 13:13:03,801 - INFO - evaluating now!
+[OUT] 2026-02-03 13:13:33,158 - INFO - Epoch [18/35] train_loss: 2.1520, val_loss: 2.0524, lr: 0.010000, 289.80s
+[OUT] 2026-02-03 13:17:54,539 - INFO - epoch complete!
+[OUT] 2026-02-03 13:17:54,539 - INFO - evaluating now!
+[OUT] 2026-02-03 13:18:21,897 - INFO - Epoch [19/35] train_loss: 2.1658, val_loss: 1.1467, lr: 0.010000, 288.74s
+[OUT] 2026-02-03 13:22:44,947 - INFO - epoch complete!
+[OUT] 2026-02-03 13:22:44,948 - INFO - evaluating now!
+[OUT] 2026-02-03 13:23:13,039 - INFO - Epoch [20/35] train_loss: 2.1503, val_loss: 1.6876, lr: 0.010000, 291.14s
+[OUT] 2026-02-03 13:28:15,646 - INFO - epoch complete!
+[OUT] 2026-02-03 13:28:15,647 - INFO - evaluating now!
+[OUT] 2026-02-03 13:28:46,371 - INFO - Epoch [21/35] train_loss: 2.1367, val_loss: 0.8903, lr: 0.010000, 333.33s
+[OUT] 2026-02-03 13:33:18,489 - INFO - epoch complete!
+[OUT] 2026-02-03 13:33:18,490 - INFO - evaluating now!
+[OUT] 2026-02-03 13:33:47,711 - INFO - Epoch [22/35] train_loss: 2.1674, val_loss: 2.0172, lr: 0.010000, 301.34s
+[OUT] 2026-02-03 13:38:08,574 - INFO - epoch complete!
+[OUT] 2026-02-03 13:38:08,574 - INFO - evaluating now!
+[OUT] 2026-02-03 13:38:35,957 - INFO - Epoch [23/35] train_loss: 2.0910, val_loss: 1.3523, lr: 0.010000, 288.25s
+[OUT] 2026-02-03 13:42:56,551 - INFO - epoch complete!
+[OUT] 2026-02-03 13:42:56,552 - INFO - evaluating now!
+[OUT] 2026-02-03 13:43:24,656 - INFO - Epoch [24/35] train_loss: 2.0963, val_loss: 1.5414, lr: 0.010000, 288.70s
+[OUT] 2026-02-03 13:47:44,830 - INFO - epoch complete!
+[OUT] 2026-02-03 13:47:44,831 - INFO - evaluating now!
+[OUT] 2026-02-03 13:48:12,804 - INFO - Epoch [25/35] train_loss: 2.0873, val_loss: 0.9852, lr: 0.010000, 288.15s
+[OUT] 2026-02-03 13:52:35,032 - INFO - epoch complete!
+[OUT] 2026-02-03 13:52:35,033 - INFO - evaluating now!
+[OUT] 2026-02-03 13:53:02,583 - INFO - Epoch [26/35] train_loss: 2.1921, val_loss: 2.6055, lr: 0.010000, 289.78s
+[OUT] 2026-02-03 13:57:33,677 - INFO - epoch complete!
+[OUT] 2026-02-03 13:57:33,682 - INFO - evaluating now!
+[OUT] 2026-02-03 13:58:01,825 - INFO - Epoch [27/35] train_loss: 2.1156, val_loss: 3.0858, lr: 0.010000, 299.24s
+[OUT] 2026-02-03 14:02:35,790 - INFO - epoch complete!
+[OUT] 2026-02-03 14:02:35,794 - INFO - evaluating now!
+[OUT] 2026-02-03 14:03:03,098 - INFO - Epoch [28/35] train_loss: 2.0807, val_loss: 3.1432, lr: 0.010000, 301.27s
+[OUT] 2026-02-03 14:07:25,203 - INFO - epoch complete!
+[OUT] 2026-02-03 14:07:25,204 - INFO - evaluating now!
+[OUT] 2026-02-03 14:07:52,444 - INFO - Epoch [29/35] train_loss: 2.0729, val_loss: 2.3779, lr: 0.010000, 289.34s
+[OUT] 2026-02-03 14:12:27,851 - INFO - epoch complete!
+[OUT] 2026-02-03 14:12:27,852 - INFO - evaluating now!
+[OUT] 2026-02-03 14:13:04,518 - INFO - Epoch [30/35] train_loss: 2.0695, val_loss: 0.8483, lr: 0.010000, 312.07s
+[OUT] 2026-02-03 14:13:04,574 - INFO - Saved model at 30
+[OUT] 2026-02-03 14:13:04,574 - INFO - Val loss decrease from 0.8839 to 0.8483, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch30.tar
+[OUT] 2026-02-03 14:18:04,915 - INFO - epoch complete!
+[OUT] 2026-02-03 14:18:04,916 - INFO - evaluating now!
+[OUT] 2026-02-03 14:18:36,272 - INFO - Epoch [31/35] train_loss: 2.1256, val_loss: 2.4285, lr: 0.010000, 331.70s
+[OUT] 2026-02-03 14:29:33,020 - INFO - epoch complete!
+[OUT] 2026-02-03 14:29:33,022 - INFO - evaluating now!
+[OUT] 2026-02-03 14:30:51,763 - INFO - Epoch [32/35] train_loss: 2.0558, val_loss: 2.8751, lr: 0.010000, 735.49s
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-03 15:08:41
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 110890
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-03 15:08:52,624 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-03 15:08:52,624 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=METR_LA, exp_id=110890
+[OUT] 2026-02-03 15:08:52,624 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '110890', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-03 15:08:55,390 - INFO - Using opt_einsum
+[OUT] 2026-02-03 15:09:01,065 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-03 15:09:01,080 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-03 15:09:01,080 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-03 15:09:01,104 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-03 15:09:01,105 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-03 15:09:01,107 - INFO - Loading ./libcity/cache/dataset_cache/point_based_METR_LA_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-03 15:09:10,502 - INFO - train	x: (23974, 12, 207, 2), y: (23974, 12, 207, 2)
+[OUT] 2026-02-03 15:09:10,503 - INFO - eval	x: (3425, 12, 207, 2), y: (3425, 12, 207, 2)
+[OUT] 2026-02-03 15:09:10,503 - INFO - test	x: (6850, 12, 207, 2), y: (6850, 12, 207, 2)
+[OUT] 2026-02-03 15:09:10,953 - INFO - StandardScaler mean: 54.40592829587626, std: 19.493739270573094
+[OUT] 2026-02-03 15:09:10,953 - INFO - NoneScaler
+[OUT] 2026-02-03 15:09:16,117 - INFO - STSSDL initialized with 207 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-03 15:09:16,734 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-03 15:09:16,734 - INFO - adaptive_embedding	torch.Size([12, 207, 48])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,734 - INFO - node_embedding	torch.Size([207, 20])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,734 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,734 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,734 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,734 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-03 15:09:16,735 - INFO - Total parameter numbers: 1130551
+[OUT] 2026-02-03 15:09:16,735 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-03 15:09:16,735 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-03 15:09:16,736 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-03 15:09:16,736 - INFO - Start training ...
+[OUT] 2026-02-03 15:09:16,736 - INFO - num_batches:375
+[OUT] 2026-02-03 15:13:32,357 - INFO - epoch complete!
+[OUT] 2026-02-03 15:13:32,358 - INFO - evaluating now!
+[OUT] 2026-02-03 15:13:58,108 - INFO - Epoch [0/35] train_loss: 2.6955, val_loss: 1.4610, lr: 0.010000, 281.37s
+[OUT] 2026-02-03 15:13:58,171 - INFO - Saved model at 0
+[OUT] 2026-02-03 15:13:58,171 - INFO - Val loss decrease from inf to 1.4610, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch0.tar
+[OUT] 2026-02-03 15:18:08,829 - INFO - epoch complete!
+[OUT] 2026-02-03 15:18:08,830 - INFO - evaluating now!
+[OUT] 2026-02-03 15:18:34,122 - INFO - Epoch [1/35] train_loss: 2.1254, val_loss: 1.0765, lr: 0.010000, 275.95s
+[OUT] 2026-02-03 15:18:34,184 - INFO - Saved model at 1
+[OUT] 2026-02-03 15:18:34,184 - INFO - Val loss decrease from 1.4610 to 1.0765, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch1.tar
+[OUT] 2026-02-03 15:22:45,929 - INFO - epoch complete!
+[OUT] 2026-02-03 15:22:45,930 - INFO - evaluating now!
+[OUT] 2026-02-03 15:23:12,191 - INFO - Epoch [2/35] train_loss: 2.3219, val_loss: 2.3299, lr: 0.010000, 278.01s
+[OUT] 2026-02-03 15:27:18,920 - INFO - epoch complete!
+[OUT] 2026-02-03 15:27:18,920 - INFO - evaluating now!
+[OUT] 2026-02-03 15:27:45,240 - INFO - Epoch [3/35] train_loss: 2.2683, val_loss: 0.8839, lr: 0.010000, 273.05s
+[OUT] 2026-02-03 15:27:45,308 - INFO - Saved model at 3
+[OUT] 2026-02-03 15:27:45,308 - INFO - Val loss decrease from 1.0765 to 0.8839, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch3.tar
+[OUT] 2026-02-03 15:34:43,853 - INFO - epoch complete!
+[OUT] 2026-02-03 15:34:43,855 - INFO - evaluating now!
+[OUT] 2026-02-03 15:35:10,461 - INFO - Epoch [4/35] train_loss: 2.3137, val_loss: 2.2647, lr: 0.010000, 445.15s
+[OUT] 2026-02-03 15:39:44,685 - INFO - epoch complete!
+[OUT] 2026-02-03 15:39:44,689 - INFO - evaluating now!
+[OUT] 2026-02-03 15:40:10,074 - INFO - Epoch [5/35] train_loss: 2.2822, val_loss: 1.6851, lr: 0.010000, 299.61s
+[OUT] 2026-02-03 15:44:15,728 - INFO - epoch complete!
+[OUT] 2026-02-03 15:44:15,729 - INFO - evaluating now!
+[OUT] 2026-02-03 15:44:40,532 - INFO - Epoch [6/35] train_loss: 2.2398, val_loss: 1.4443, lr: 0.010000, 270.46s
+[OUT] 2026-02-03 15:48:42,274 - INFO - epoch complete!
+[OUT] 2026-02-03 15:48:42,275 - INFO - evaluating now!
+[OUT] 2026-02-03 15:49:08,218 - INFO - Epoch [7/35] train_loss: 2.2015, val_loss: 1.7967, lr: 0.010000, 267.68s
+[OUT] 2026-02-03 15:53:14,577 - INFO - epoch complete!
+[OUT] 2026-02-03 15:53:14,578 - INFO - evaluating now!
+[OUT] 2026-02-03 15:53:40,533 - INFO - Epoch [8/35] train_loss: 2.1852, val_loss: 1.3457, lr: 0.010000, 272.31s
+[OUT] 2026-02-03 15:57:44,727 - INFO - epoch complete!
+[OUT] 2026-02-03 15:57:44,728 - INFO - evaluating now!
+[OUT] 2026-02-03 15:58:10,606 - INFO - Epoch [9/35] train_loss: 2.1817, val_loss: 1.8283, lr: 0.010000, 270.07s
+[OUT] 2026-02-03 16:09:16,532 - INFO - epoch complete!
+[OUT] 2026-02-03 16:09:16,536 - INFO - evaluating now!
+[OUT] 2026-02-03 16:09:44,739 - INFO - Epoch [10/35] train_loss: 2.1616, val_loss: 1.3364, lr: 0.010000, 694.13s
+[OUT] 2026-02-03 16:14:50,383 - INFO - epoch complete!
+[OUT] 2026-02-03 16:14:50,387 - INFO - evaluating now!
+[OUT] 2026-02-03 16:15:12,727 - INFO - Epoch [11/35] train_loss: 2.1726, val_loss: 1.7822, lr: 0.010000, 327.99s
+[OUT] 2026-02-03 16:18:53,497 - INFO - epoch complete!
+[OUT] 2026-02-03 16:18:53,497 - INFO - evaluating now!
+[OUT] 2026-02-03 16:19:15,766 - INFO - Epoch [12/35] train_loss: 2.1627, val_loss: 1.3559, lr: 0.010000, 243.04s
+[OUT] 2026-02-03 16:22:57,471 - INFO - epoch complete!
+[OUT] 2026-02-03 16:22:57,472 - INFO - evaluating now!
+[OUT] 2026-02-03 16:23:19,299 - INFO - Epoch [13/35] train_loss: 2.1645, val_loss: 1.4717, lr: 0.010000, 243.53s
+[OUT] 2026-02-03 16:27:08,570 - INFO - epoch complete!
+[OUT] 2026-02-03 16:27:08,571 - INFO - evaluating now!
+[OUT] 2026-02-03 16:27:30,238 - INFO - Epoch [14/35] train_loss: 2.1567, val_loss: 1.9884, lr: 0.010000, 250.94s
+[OUT] 2026-02-03 16:31:20,717 - INFO - epoch complete!
+[OUT] 2026-02-03 16:31:20,718 - INFO - evaluating now!
+[OUT] 2026-02-03 16:31:44,825 - INFO - Epoch [15/35] train_loss: 2.2630, val_loss: 1.0138, lr: 0.010000, 254.59s
+[OUT] 2026-02-03 16:43:10,646 - INFO - epoch complete!
+[OUT] 2026-02-03 16:43:10,647 - INFO - evaluating now!
+[OUT] 2026-02-03 16:43:36,798 - INFO - Epoch [16/35] train_loss: 2.1729, val_loss: 1.9341, lr: 0.010000, 711.97s
+[OUT] 2026-02-03 16:47:39,139 - INFO - epoch complete!
+[OUT] 2026-02-03 16:47:39,140 - INFO - evaluating now!
+[OUT] 2026-02-03 16:48:03,945 - INFO - Epoch [17/35] train_loss: 2.1480, val_loss: 1.0249, lr: 0.010000, 267.15s
+[OUT] 2026-02-03 16:52:32,077 - INFO - epoch complete!
+[OUT] 2026-02-03 16:52:32,077 - INFO - evaluating now!
+[OUT] 2026-02-03 16:53:02,450 - INFO - Epoch [18/35] train_loss: 2.1520, val_loss: 2.0524, lr: 0.010000, 298.50s
+[OUT] 2026-02-03 16:57:44,229 - INFO - epoch complete!
+[OUT] 2026-02-03 16:57:44,229 - INFO - evaluating now!
+[OUT] 2026-02-03 16:58:12,487 - INFO - Epoch [19/35] train_loss: 2.1658, val_loss: 1.1467, lr: 0.010000, 310.04s
+[OUT] 2026-02-03 17:02:40,051 - INFO - epoch complete!
+[OUT] 2026-02-03 17:02:40,052 - INFO - evaluating now!
+[OUT] 2026-02-03 17:03:08,839 - INFO - Epoch [20/35] train_loss: 2.1503, val_loss: 1.6876, lr: 0.010000, 296.35s
+[OUT] 2026-02-03 17:10:10,809 - INFO - epoch complete!
+[OUT] 2026-02-03 17:10:10,813 - INFO - evaluating now!
+[OUT] 2026-02-03 17:10:41,489 - INFO - Epoch [21/35] train_loss: 2.1367, val_loss: 0.8903, lr: 0.010000, 452.65s
+[OUT] 2026-02-03 17:15:13,363 - INFO - epoch complete!
+[OUT] 2026-02-03 17:15:13,364 - INFO - evaluating now!
+[OUT] 2026-02-03 17:15:40,222 - INFO - Epoch [22/35] train_loss: 2.1674, val_loss: 2.0172, lr: 0.010000, 298.73s
+[OUT] 2026-02-03 17:20:03,264 - INFO - epoch complete!
+[OUT] 2026-02-03 17:20:03,265 - INFO - evaluating now!
+[OUT] 2026-02-03 17:20:33,681 - INFO - Epoch [23/35] train_loss: 2.0910, val_loss: 1.3523, lr: 0.010000, 293.46s
+[OUT] 2026-02-03 17:25:14,810 - INFO - epoch complete!
+[OUT] 2026-02-03 17:25:14,810 - INFO - evaluating now!
+[OUT] 2026-02-03 17:25:45,840 - INFO - Epoch [24/35] train_loss: 2.0963, val_loss: 1.5414, lr: 0.010000, 312.16s
+[OUT] 2026-02-03 17:30:11,099 - INFO - epoch complete!
+[OUT] 2026-02-03 17:30:11,100 - INFO - evaluating now!
+[OUT] 2026-02-03 17:30:38,275 - INFO - Epoch [25/35] train_loss: 2.0873, val_loss: 0.9852, lr: 0.010000, 292.43s
+[OUT] 2026-02-03 17:35:47,000 - INFO - epoch complete!
+[OUT] 2026-02-03 17:35:47,002 - INFO - evaluating now!
+[OUT] 2026-02-03 17:36:15,882 - INFO - Epoch [26/35] train_loss: 2.1921, val_loss: 2.6055, lr: 0.010000, 337.61s
+[OUT] 2026-02-03 17:41:52,798 - INFO - epoch complete!
+[OUT] 2026-02-03 17:41:52,803 - INFO - evaluating now!
+[OUT] 2026-02-03 17:42:24,086 - INFO - Epoch [27/35] train_loss: 2.1156, val_loss: 3.0858, lr: 0.010000, 368.20s
+[OUT] 2026-02-03 17:46:37,379 - INFO - epoch complete!
+[OUT] 2026-02-03 17:46:37,379 - INFO - evaluating now!
+[OUT] 2026-02-03 17:47:02,512 - INFO - Epoch [28/35] train_loss: 2.0807, val_loss: 3.1432, lr: 0.010000, 278.43s
+[OUT] 2026-02-03 17:51:05,729 - INFO - epoch complete!
+[OUT] 2026-02-03 17:51:05,730 - INFO - evaluating now!
+[OUT] 2026-02-03 17:51:32,711 - INFO - Epoch [29/35] train_loss: 2.0729, val_loss: 2.3779, lr: 0.010000, 270.20s
+[OUT] 2026-02-03 17:55:36,566 - INFO - epoch complete!
+[OUT] 2026-02-03 17:55:36,567 - INFO - evaluating now!
+[OUT] 2026-02-03 17:56:02,049 - INFO - Epoch [30/35] train_loss: 2.0695, val_loss: 0.8483, lr: 0.010000, 269.34s
+[OUT] 2026-02-03 17:56:02,124 - INFO - Saved model at 30
+[OUT] 2026-02-03 17:56:02,124 - INFO - Val loss decrease from 0.8839 to 0.8483, saving to ./libcity/cache/110890/model_cache/STSSDL_METR_LA_epoch30.tar
+[OUT] 2026-02-03 18:00:06,659 - INFO - epoch complete!
+[OUT] 2026-02-03 18:00:06,660 - INFO - evaluating now!
+[OUT] 2026-02-03 18:00:32,766 - INFO - Epoch [31/35] train_loss: 2.1256, val_loss: 2.4285, lr: 0.010000, 270.64s
+[OUT] 2026-02-03 18:09:11,661 - INFO - epoch complete!
+[OUT] 2026-02-03 18:09:11,665 - INFO - evaluating now!
+[OUT] 2026-02-03 18:09:34,256 - INFO - Epoch [32/35] train_loss: 2.0558, val_loss: 2.8751, lr: 0.010000, 541.49s
+[OUT] 2026-02-03 18:13:18,779 - INFO - epoch complete!
+[OUT] 2026-02-03 18:13:18,780 - INFO - evaluating now!
+[OUT] 2026-02-03 18:13:40,574 - INFO - Epoch [33/35] train_loss: 2.0389, val_loss: 2.4029, lr: 0.010000, 246.32s
+[OUT] 2026-02-03 18:17:19,477 - INFO - epoch complete!
+[OUT] 2026-02-03 18:17:19,477 - INFO - evaluating now!
+[OUT] 2026-02-03 18:17:41,207 - INFO - Epoch [34/35] train_loss: 2.0217, val_loss: 3.2438, lr: 0.010000, 240.63s
+[OUT] 2026-02-03 18:17:41,207 - INFO - Trained totally 35 epochs, average train time is 296.884s, average eval time is 26.088s
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py:127: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+[ERR]   checkpoint = torch.load(model_path)
+[OUT] 2026-02-03 18:17:41,327 - INFO - Loaded model at 30
+[OUT] 2026-02-03 18:17:41,328 - INFO - Saved model at ./libcity/cache/110890/model_cache/STSSDL_METR_LA.m
+[OUT] 2026-02-03 18:17:41,354 - INFO - Start evaluating ...
+[OUT] 2026-02-03 18:18:33,442 - INFO - Note that you select the single mode to evaluate!
+[OUT] 2026-02-03 18:18:33,486 - INFO - Evaluate result is saved at ./libcity/cache/110890/evaluate_cache/2026_02_03_18_18_33_STSSDL_METR_LA.csv
+[OUT] 2026-02-03 18:18:33,540 - INFO -
+[OUT]           MAE  MAPE          MSE  ...  masked_RMSE        R2      EVAR
+[OUT] 1   52.922554   inf  3246.520264  ...    60.713127 -5.288169  0.136623
+[OUT] 2   50.292728   inf  3010.946777  ...    58.501633 -4.831727  0.064963
+[OUT] 3   50.299007   inf  3011.923340  ...    58.511208 -4.833923  0.063501
+[OUT] 4   50.308849   inf  3013.337158  ...    58.525059 -4.835869  0.062105
+[OUT] 5   50.309921   inf  3013.727051  ...    58.528961 -4.837370  0.060690
+[OUT] 6   50.305084   inf  3013.438477  ...    58.526279 -4.838404  0.059319
+[OUT] 7   50.319664   inf  3015.369141  ...    58.545158 -4.840462  0.058050
+[OUT] 8   50.321308   inf  3015.843018  ...    58.549904 -4.841529  0.056807
+[OUT] 9   50.327087   inf  3016.779053  ...    58.559128 -4.842819  0.055563
+[OUT] 10  50.332550   inf  3017.688965  ...    58.568104 -4.843894  0.054500
+[OUT] 11  50.336742   inf  3018.437256  ...    58.575508 -4.845084  0.053477
+[OUT] 12  50.340038   inf  3019.078613  ...    58.581875 -4.846249  0.052464
+[OUT] 
+[OUT] [12 rows x 10 columns]
+
+[Return Code: 0]
+
+============================================================
+Timestamp: 2026-02-03 18:18:39
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMSD7 --train true --max_epoch 35 --gpu_id 0 --exp_id 142882
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-03 18:18:48,696 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-03 18:18:48,696 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMSD7, exp_id=142882
+[OUT] 2026-02-03 18:18:48,696 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '142882', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-03 18:18:51,439 - INFO - Using opt_einsum
+[OUT] 2026-02-03 18:18:57,743 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-02-03 18:18:57,746 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-02-03 18:18:57,746 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-02-03 18:18:57,752 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-02-03 18:18:57,753 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-03 18:19:23,630 - INFO - train	x: (19741, 12, 883, 2), y: (19741, 12, 883, 2)
+[OUT] 2026-02-03 18:19:23,630 - INFO - eval	x: (2820, 12, 883, 2), y: (2820, 12, 883, 2)
+[OUT] 2026-02-03 18:19:23,630 - INFO - test	x: (5640, 12, 883, 2), y: (5640, 12, 883, 2)
+[OUT] 2026-02-03 18:19:25,128 - INFO - StandardScaler mean: 308.4280360596107, std: 188.77957026274376
+[OUT] 2026-02-03 18:19:25,128 - INFO - NoneScaler
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py:297: RuntimeWarning: divide by zero encountered in power
+[ERR]   d_inv_sqrt = np.power(rowsum, -0.5).flatten()
+[OUT] 2026-02-03 18:19:50,917 - INFO - STSSDL initialized with 883 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-03 18:19:51,519 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-03 18:19:51,519 - INFO - adaptive_embedding	torch.Size([12, 883, 48])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,519 - INFO - node_embedding	torch.Size([883, 20])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,519 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,519 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-03 18:19:51,520 - INFO - Total parameter numbers: 1533447
+[OUT] 2026-02-03 18:19:51,521 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-03 18:19:51,521 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-03 18:19:51,522 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-03 18:19:51,522 - INFO - Start training ...
+[OUT] 2026-02-03 18:19:51,522 - INFO - num_batches:309
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+[ERR]     executor.train(train_data, valid_data)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 297, in train
+[ERR]     losses = self._train_epoch(train_dataloader, epoch_idx, self.loss_func)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 369, in _train_epoch
+[ERR]     loss = loss_func(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 564, in calculate_loss
+[ERR]     output, query, pos, neg, mask, latent_dis, prototype_dis = self._forward_with_aux(
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 480, in _forward_with_aux
+[ERR]     h_de, ht_list = self.decoder(go, ht_list, supports_de)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 163, in forward
+[ERR]     state = self.dcrnn_cells[i](current_inputs, init_state[i], supports)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 100, in forward
+[ERR]     hc = torch.tanh(self.update(candidate, supports))
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 74, in forward
+[ERR]     support_ks = [torch.eye(support.shape[1]).repeat(support.shape[0], 1, 1).to(support.device), support]
+[ERR] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 192.00 MiB. GPU 0 has a total capacity of 23.49 GiB of which 176.75 MiB is free. Including non-PyTorch memory, this process has 23.29 GiB memory in use. Of the allocated memory 21.80 GiB is allocated by PyTorch, and 1.19 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-02-03 18:19:55
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 101828
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-03 18:20:02,461 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-03 18:20:02,462 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMS_BAY, exp_id=101828
+[OUT] 2026-02-03 18:20:02,462 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '101828', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-03 18:20:04,504 - INFO - Using opt_einsum
+[OUT] 2026-02-03 18:20:08,253 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-03 18:20:08,260 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-03 18:20:08,260 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-03 18:20:08,273 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-03 18:20:08,274 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-03 18:20:08,276 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-03 18:20:27,126 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-03 18:20:27,126 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-03 18:20:27,126 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-03 18:20:28,122 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-03 18:20:28,122 - INFO - NoneScaler
+[OUT] 2026-02-03 18:20:37,069 - INFO - STSSDL initialized with 325 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-03 18:20:37,396 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-03 18:20:37,396 - INFO - adaptive_embedding	torch.Size([12, 325, 48])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - node_embedding	torch.Size([325, 20])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,397 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,398 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,398 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,398 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-03 18:20:37,398 - INFO - Total parameter numbers: 1200879
+[OUT] 2026-02-03 18:20:37,398 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-03 18:20:37,398 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-03 18:20:37,399 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-03 18:20:37,399 - INFO - Start training ...
+[OUT] 2026-02-03 18:20:37,399 - INFO - num_batches:570

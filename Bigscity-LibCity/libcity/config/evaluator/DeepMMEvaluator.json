@@ -1,0 +1,7 @@
+{
+  "metrics": ["accuracy", "edit_distance", "lcs_ratio", "seq_accuracy"],
+  "save_modes": ["csv", "json"],
+  "pad_token": 1,
+  "sos_token": 0,
+  "eos_token": 2
+}

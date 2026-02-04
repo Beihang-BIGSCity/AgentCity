@@ -23,7 +23,7 @@
   "lr_threshold": 1e-4,
   "clip_grad_norm": false,
   "max_grad_norm": 1.0,
-  "use_early_stop": false,
+  "use_early_stop": true,
   "patience": 50,
   "log_level": "INFO",
   "log_every": 1,

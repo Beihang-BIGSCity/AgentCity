@@ -698,38 +698,42 @@ class GraphData:
         # Road adjacency
         road_adj = data_feature.get('road_adj', data_feature.get('road_edge_index', None))
         if road_adj is not None:
-            # Check if road_adj is in edge index format (2, num_edges)
-            is_edge_index_format = False
-            if isinstance(road_adj, tuple):
-                is_edge_index_format = True
-            elif isinstance(road_adj, torch.Tensor) and road_adj.dim() == 2 and road_adj.shape[0] == 2:
-                is_edge_index_format = True
-            elif isinstance(road_adj, np.ndarray) and road_adj.ndim == 2 and road_adj.shape[0] == 2:
-                is_edge_index_format = True
-
-            if is_edge_index_format:
-                # Edge index format
-                if isinstance(road_adj, tuple):
-                    row, col = road_adj
-                else:
-                    row, col = road_adj[0], road_adj[1]
-                # Ensure row and col are torch tensors
-                if not isinstance(row, torch.Tensor):
-                    row = torch.LongTensor(np.asarray(row))
-                if not isinstance(col, torch.Tensor):
-                    col = torch.LongTensor(np.asarray(col))
-                if HAS_TORCH_SPARSE:
-                    gdata.road_adj = SparseTensor(
-                        row=row, col=col,
-                        sparse_sizes=(gdata.num_roads, gdata.num_roads)
-                    ).to(device)
-                else:
-                    gdata.road_adj = torch.stack([row, col]).to(device)
-            else:
-                # Dense adjacency matrix format
-                if not isinstance(road_adj, torch.Tensor):
-                    road_adj = torch.FloatTensor(np.asarray(road_adj))
+            # Check if road_adj is already a SparseTensor (e.g., from cached dataset)
+            if HAS_TORCH_SPARSE and isinstance(road_adj, SparseTensor):
                 gdata.road_adj = road_adj.to(device)
+            else:
+                # Check if road_adj is in edge index format (2, num_edges)
+                is_edge_index_format = False
+                if isinstance(road_adj, tuple):
+                    is_edge_index_format = True
+                elif isinstance(road_adj, torch.Tensor) and road_adj.dim() == 2 and road_adj.shape[0] == 2:
+                    is_edge_index_format = True
+                elif isinstance(road_adj, np.ndarray) and road_adj.ndim == 2 and road_adj.shape[0] == 2:
+                    is_edge_index_format = True
+
+                if is_edge_index_format:
+                    # Edge index format
+                    if isinstance(road_adj, tuple):
+                        row, col = road_adj
+                    else:
+                        row, col = road_adj[0], road_adj[1]
+                    # Ensure row and col are torch tensors
+                    if not isinstance(row, torch.Tensor):
+                        row = torch.LongTensor(np.asarray(row))
+                    if not isinstance(col, torch.Tensor):
+                        col = torch.LongTensor(np.asarray(col))
+                    if HAS_TORCH_SPARSE:
+                        gdata.road_adj = SparseTensor(
+                            row=row, col=col,
+                            sparse_sizes=(gdata.num_roads, gdata.num_roads)
+                        ).to(device)
+                    else:
+                        gdata.road_adj = torch.stack([row, col]).to(device)
+                else:
+                    # Dense adjacency matrix format
+                    if not isinstance(road_adj, torch.Tensor):
+                        road_adj = torch.FloatTensor(np.asarray(road_adj))
+                    gdata.road_adj = road_adj.to(device)
         else:
             # Default: self-loops
             indices = torch.arange(gdata.num_roads)

@@ -97,7 +97,7 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
         - Review planner's analysis
         - Design refined search space
         - Re-execute with new parameters
-        Maximum 2 tuning iterations per model.
+        Maximum 5 tuning iterations per model.
 
         ## Output Requirements
         After completing all models, provide:

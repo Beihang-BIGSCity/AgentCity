@@ -93,7 +93,7 @@ test_migration(model="<name>", dataset="<dataset>", test="<test>", gpu="0")
 ## Important
 - Always use gpu="0" for faster testing (CUDA acceleration)
 - Run with small epoch count for validation (epochs=1-2)
-- Use METR_LA dataset for traffic state prediction task, foursquare_nyc for trajectory location prediction, Chengdu_Taxi_Sample1 for estimated time of arrival task, porto for trajectory embedding task, Seattle for map matching task, BJ_roadmap for road representation task.
+- Use METR_LA dataset for traffic state prediction task, foursquare_nyc for trajectory location prediction, Chengdu_Taxi_Sample1 for estimated time of arrival task, porto for trajectory embedding task, Neftekamsk for map matching task, BJ_roadmap for road representation task.
 - Focus on diagnosing migration issues, not model performance tuning
 - Capture full error traceback
 - Don't attempt fixes directly - report findings

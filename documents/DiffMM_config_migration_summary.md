@@ -360,6 +360,80 @@ executor.evaluate(model)
 
 ---
 
-**Configuration Status**: COMPLETE ✓
+**Configuration Status**: COMPLETE ✓ (Updated 2026-02-03)
 **Ready for Testing**: YES
-**Date**: 2026-02-02
+**Last Updated**: 2026-02-03
+
+---
+
+## Update Log (2026-02-03)
+
+### Configuration Updates
+1. **Updated Model Config** (`DiffMM.json`):
+   - Added missing diffusion parameters: `objective`, `beta_schedule`, `beta_start`, `beta_end`
+   - Changed `max_epoch` from 30 to 100 (original paper default)
+   - All parameters now match original paper specifications
+
+2. **Verified Task Registration**:
+   - Confirmed DiffMM is in `traj_loc_pred.allowed_model` (line 35)
+   - Confirmed model-specific config block exists (lines 224-229)
+   - Verified JSON syntax is valid
+
+3. **Dual Task Support**:
+   - DiffMM is registered in BOTH `traj_loc_pred` and `map_matching` tasks
+   - Use `traj_loc_pred` for POI/trajectory prediction adapted to segments
+   - Use `map_matching` for true GPS-to-road matching
+
+### Updated Configuration Parameters
+
+The complete DiffMM.json now includes:
+
+```json
+{
+    "model": "DiffMM",
+    "task": "traj_loc_pred",
+    "hid_dim": 256,
+    "num_units": 512,
+    "transformer_layers": 2,
+    "depth": 2,
+    "num_heads": 4,
+    "dropout": 0.1,
+    "timesteps": 2,
+    "samplingsteps": 1,
+    "bootstrap_every": 8,
+    "objective": "pred_v",
+    "beta_schedule": "sqrt",
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+    "batch_size": 4,
+    "learning_rate": 0.001,
+    "max_epoch": 100,
+    "optimizer": "adamw",
+    "weight_decay": 1e-6,
+    "clip_grad_norm": 1.0,
+    "lr_scheduler": "none",
+    "log_every": 1,
+    "load_best_epoch": true,
+    "hyper_tune": false,
+    "evaluate_method": "segment"
+}
+```
+
+### Available Datasets
+
+#### traj_loc_pred Task Datasets
+- foursquare_tky
+- foursquare_nyc
+- gowalla
+- foursquare_serm
+- Proto
+
+#### map_matching Task Datasets
+- global
+- Seattle
+- Neftekamsk
+- Valky
+- Ruzhany
+- Santander
+- Spaichingen
+- NovoHamburgo

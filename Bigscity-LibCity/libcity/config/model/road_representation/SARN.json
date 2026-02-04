@@ -1,0 +1,40 @@
+{
+  "output_dim": 128,
+  "feat_dim": 176,
+  "out_dim": 32,
+
+  "num_layers": 2,
+  "nheads": 4,
+
+  "highway_dim": 16,
+  "length_dim": 16,
+  "radian_dim": 16,
+  "lonlat_dim": 32,
+
+  "nhighway_code": 20,
+  "nlength_code": 200,
+  "nradian_code": 50,
+  "nlon_code": 500,
+  "nlat_code": 500,
+
+  "moco_queue_size": 100,
+  "moco_temperature": 0.05,
+  "moco_loss_local_weight": 0.4,
+  "moco_nqueue": 10,
+
+  "break_edge_prob": 0.2,
+
+  "scaler": "none",
+
+  "max_epoch": 200,
+  "learner": "adam",
+  "learning_rate": 0.005,
+  "weight_decay": 0.0001,
+  "lr_decay": true,
+  "lr_scheduler": "reducelronplateau",
+  "lr_decay_ratio": 0.7,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 20
+}

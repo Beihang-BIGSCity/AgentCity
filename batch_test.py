@@ -228,7 +228,10 @@ def main():
 
     #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet',''ASeer']
     #model_list = ['GriddedTNP','STHSepNet','BigST','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN','STID']
-    model_list = ["PatchTST","DCST","STLLM","TGraphormer","CKGGNN","EasyST","LEAF","MetaDG","TRACK","HiMSNet","DST2former"]
+    #model_list = ["PatchTST","DCST","STLLM","TGraphormer","CKGGNN","EasyST","LEAF","MetaDG","TRACK","HiMSNet","DST2former"]
+    model_list = ["AutoSTF", "STSSDL", "STDMAE", "LSTTN","UniST","STID","ConvTimeNet","FlashST","Fredformer","GNNRF","PatchSTG","PatchTST","RevIN"
+                  ,"Trafformer",'DMSTGCN','GWNET','STAEformer','STMGAT','TGCLSTM','STID','Trafformer','D2STGNN'
+                  ,'STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet']
     task = 'traffic_state_pred'
     dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
     manager = Manager()

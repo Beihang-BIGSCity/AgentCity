@@ -8,6 +8,7 @@ from .mdti_encoder import MDTIEncoder
 from .hiereta_encoder import HierETAEncoder
 from .heteta_encoder import HetETAEncoder
 from .probeta_encoder import ProbETAEncoder
+from .mvstm_encoder import MVSTMEncoder
 
 __all__ = [
     "DeeptteEncoder",
@@ -20,4 +21,5 @@ __all__ = [
     "HierETAEncoder",
     "HetETAEncoder",
     "ProbETAEncoder",
+    "MVSTMEncoder",
 ]

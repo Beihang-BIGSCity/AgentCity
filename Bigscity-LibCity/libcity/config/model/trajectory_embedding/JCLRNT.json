@@ -1,0 +1,55 @@
+{
+    "model": "JCLRNT",
+
+    "_comment": "JCLRNT - Jointly Contrastive Representation Learning on Road Network and Trajectory (CIKM 2022)",
+
+    "_comment_model_architecture": "=== Model Architecture Parameters ===",
+    "embed_size": 128,
+    "hidden_size": 128,
+    "num_heads": 4,
+    "num_transformer_layers": 2,
+    "num_graph_layers": 2,
+
+    "_comment_dropout": "=== Dropout and Regularization Parameters ===",
+    "drop_rate": 0.2,
+    "drop_edge_rate": 0.2,
+    "drop_road_rate": 0.2,
+
+    "_comment_loss": "=== Loss Function Parameters ===",
+    "lambda_st": 0.8,
+    "loss_measure": "jsd",
+    "weighted_loss": false,
+
+    "_comment_encoding": "=== Encoding Mode ===",
+    "mode": "s",
+    "activation": "relu",
+
+    "_comment_training": "=== Training Parameters ===",
+    "learning_rate": 0.001,
+    "weight_decay": 0.000001,
+    "batch_size": 64,
+    "num_epochs": 5,
+    "epochs": 5,
+
+    "_comment_optimization": "=== Optimizer Settings ===",
+    "clip_grad_norm": false,
+    "max_grad_norm": 1.0,
+    "patience": 10,
+    "use_early_stop": true,
+    "load_best_epoch": true,
+
+    "_comment_notes": "=== Parameter Notes ===",
+    "_note_embed_size": "Embedding dimension for road segments (from paper)",
+    "_note_hidden_size": "Hidden dimension for transformer and graph encoder (from paper)",
+    "_note_num_heads": "Number of attention heads in transformer encoder (from paper)",
+    "_note_num_transformer_layers": "Number of transformer encoder layers (from paper)",
+    "_note_num_graph_layers": "Number of GNN layers for road network encoding (from paper)",
+    "_note_drop_rate": "Dropout rate for transformer (from paper)",
+    "_note_drop_edge_rate": "Edge dropout rate for graph augmentation (from paper)",
+    "_note_drop_road_rate": "Road masking rate for sequence augmentation (from paper)",
+    "_note_lambda_st": "Weight for spatial-temporal (node-trajectory) loss, l_ss=l_tt=0.5*(1-lambda_st) (from paper)",
+    "_note_loss_measure": "Contrastive loss type: 'jsd' (Jensen-Shannon Divergence), 'nce', or 'ntx' (from paper)",
+    "_note_mode": "Encoding mode: 's' (structural with GNN) or 'p' (pure embeddings) (from paper)",
+    "_note_weighted_loss": "Whether to use weighted node-sequence loss (from paper)",
+    "_note_activation": "Activation function: 'relu' or 'prelu' (from paper)"
+}

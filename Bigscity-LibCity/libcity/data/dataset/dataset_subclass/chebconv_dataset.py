@@ -105,7 +105,7 @@ class ChebConvDataset(AbstractDataset):
             min_ = d.min()
             max_ = d.max()
             dnew = (d - min_) / (max_ - min_)
-            node_features = node_features.drop(k, 1)
+            node_features = node_features.drop(k, axis=1)
             node_features.insert(v, k, dnew)
 
         # 对部分列进行独热编码
@@ -115,7 +115,7 @@ class ChebConvDataset(AbstractDataset):
             node_features = node_features.drop(col, axis=1)
             node_features = pd.concat([node_features, dum_col], axis=1)
 
-        node_features = node_features.values
+        node_features = node_features.values.astype(np.float32)
         np.save(self.cache_file_folder + '{}_node_features.npy'.format(self.dataset), node_features)
 
         # mask 索引

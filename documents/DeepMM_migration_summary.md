@@ -54,8 +54,8 @@ DeepMM is a deep learning-based map matching model that uses a sequence-to-seque
 - No hardcoded CUDA calls
 
 ### 4. Loss Calculation
-- Uses `nn.CrossEntropyLoss` with `ignore_index` for padding tokens
-- Expects batch to contain `target` key with ground truth sequences
+- Uses `nn.CrossEntropyLoss` with weight mask for padding tokens
+- Supports both `output_trg` and `target` keys for ground truth sequences
 
 ## Configuration Parameters
 
@@ -68,10 +68,13 @@ DeepMM is a deep learning-based map matching model that uses a sequence-to-seque
 | `trg_hidden_dim` | 512 | Decoder hidden dimension |
 | `bidirectional` | true | Use bidirectional encoder |
 | `nlayers_src` | 2 | Number of encoder layers |
-| `dropout` | 0.1 | Dropout rate |
+| `dropout` | 0.5 | Dropout rate |
 | `time_encoding` | "NoEncoding" | Time encoding: NoEncoding, OneEncoding, TwoEncoding |
 | `rnn_type` | "LSTM" | RNN type: LSTM or GRU |
 | `attn_type` | "dot" | Attention type: dot, general, mlp |
+| `learning_rate` | 0.001 | Learning rate |
+| `max_epoch` | 100 | Maximum training epochs |
+| `clip` | 5.0 | Gradient clipping threshold |
 
 ## Required Data Features
 
@@ -91,7 +94,7 @@ DeepMM is a deep learning-based map matching model that uses a sequence-to-seque
 batch = {
     'input_src': torch.LongTensor,  # (batch, src_len) - GPS locations
     'input_trg': torch.LongTensor,  # (batch, trg_len) - Target segments (teacher forcing)
-    'target': torch.LongTensor,     # (batch, trg_len) - Ground truth (input_trg shifted by 1)
+    'output_trg': torch.LongTensor, # (batch, trg_len) - Ground truth (alternative: 'target')
     'input_time': torch.LongTensor, # Optional: time features for time encoding
 }
 ```
@@ -109,15 +112,23 @@ Returns predicted token indices: `(batch, seq_len)`
 ### `calculate_loss(batch)`
 Computes CrossEntropyLoss between predictions and targets.
 Ignores padding tokens in loss computation.
+Supports both `output_trg` and `target` keys.
 
-### `greedy_decode(batch, max_len=100, sos_idx=1, eos_idx=2)`
+### `greedy_decode(batch, max_len=100, sos_idx=0, eos_idx=2)`
 Inference-time greedy decoding without teacher forcing.
 Returns generated sequences: `(batch, decoded_len)`
+
+## Task Configuration
+
+The model is registered under `map_matching` task in `task_config.json`:
+- **Dataset class**: `MapMatchingDataset`
+- **Executor**: `DeepMapMatchingExecutor`
+- **Evaluator**: `MapMatchingEvaluator`
 
 ## Assumptions and Limitations
 
 1. **Teacher Forcing**: Training uses teacher forcing (ground truth target as decoder input)
-2. **Special Tokens**: Assumes SOS=1, EOS=2, PAD=0 for greedy decoding (configurable)
+2. **Special Tokens**: Assumes SOS=0, EOS=2, PAD=1 for greedy decoding (configurable)
 3. **Time Encoding**: Complex time encoding (TwoEncoding) requires properly structured data features
 4. **Bidirectional**: Hidden dimension is split between forward and backward directions
 
@@ -136,8 +147,8 @@ config = {
 data_feature = {
     'src_loc_vocab_size': 10000,
     'trg_seg_vocab_size': 5000,
-    'pad_token_src_loc': 0,
-    'pad_token_trg': 0
+    'pad_token_src_loc': 1,
+    'pad_token_trg': 1
 }
 
 model = DeepMM(config, data_feature)
@@ -148,3 +159,4 @@ model = DeepMM(config, data_feature)
 - DeepMM is the first deep learning-based map matching model in LibCity's map_matching module
 - Previous map_matching models (HMMM, STMatching, etc.) are tradition/rule-based models using `AbstractTraditionModel`
 - This model uses `AbstractModel` as it requires gradient-based training
+- The model has been updated on 2026-02-03 to include `greedy_decode` method for inference

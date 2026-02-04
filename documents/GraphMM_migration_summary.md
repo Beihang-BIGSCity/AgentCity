@@ -386,6 +386,59 @@ sample_Idx = batch.get('sample_Idx') or batch.get('sample_idx')
 
 **Status**: ✅ RESOLVED
 
+### Issue 5: GPS-Road Data Alignment (Critical Fix - 2026-02-03)
+**Severity**: Critical
+
+**Description**: LibCity stores GPS trajectories (e.g., 2503 points) and road sequences (e.g., 179 segments) separately with different lengths. The original implementation incorrectly assumed GPS and road sequences had the same length, causing:
+- Invalid samples with `len(roads) == 0`
+- Training failure with: `IndexError: index 0 is out of bounds for dimension 1 with size 0`
+
+**Error Message**:
+```
+IndexError: index 0 is out of bounds for dimension 1 with size 0
+```
+
+**Root Cause**: The `_cut_trajectory()` method cut trajectories based on GPS point count but indexed roads with the same indices, which is incorrect when `len(gps_points) >> len(roads)`.
+
+**Original Behavior**:
+```python
+# Incorrect: cutting based on GPS length, applying same indices to roads
+n = len(traces)  # GPS points (e.g., 2503)
+seg_roads = roads[start:end]  # Using GPS indices on roads (179 items)
+```
+
+**Fix Applied**: Implemented road-centric trajectory processing in `DeepMapMatchingDataset`:
+
+1. **`_cut_trajectory_road_centric()`**: New method that cuts trajectories based on road sequence length (not GPS length)
+
+2. **`_sample_gps_for_roads()`**: New method that proportionally samples GPS points to match road segments using the GPS-to-road ratio
+
+3. **Validation in `MapMatchingTorchDataset`**: Added filtering during initialization to remove any invalid samples with empty sequences
+
+4. **Validation in `padding_collate_fn()`**: Added safety filtering to handle edge cases during batching
+
+**Key Changes**:
+```python
+# Now: cutting based on ROAD length, sampling GPS proportionally
+n_roads = len(roads)  # 179 segments
+gps_road_ratio = n_gps / n_roads  # e.g., 2503/179 = 13.98
+
+# For each road segment range, sample corresponding GPS points
+gps_start = int(road_start * gps_road_ratio)
+gps_end = int(road_end * gps_road_ratio)
+```
+
+**Cache Invalidation**: Changed cache file naming to include version `v2` to ensure old caches are not reused:
+```python
+self._cache_version = 'v2'  # v2 = road-centric alignment fix
+'deep_map_matching_{}_{}_{}.pkl'.format(dataset, downsample_rate, cache_version)
+```
+
+**Files Modified**:
+- `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/data/dataset/deep_map_matching_dataset.py`
+
+**Status**: FIXED
+
 ## Dependencies
 
 ### Required Dependencies

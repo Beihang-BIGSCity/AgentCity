@@ -1,0 +1,22 @@
+{
+  "hidden_size": 128,
+  "time_emb_dim": 128,
+  "week_emb_dim": 128,
+  "num_hours": 24,
+  "num_weekdays": 7,
+  "spatial_input_dim": 2,
+  "num_gru_layers": 1,
+  "dropout": 0.0,
+  "bidirectional": false,
+  "rnn_type": "GRU",
+  "mlp_layers": [1024, 512, 256, 128],
+
+  "max_epoch": 100,
+  "batch_size": 64,
+  "learner": "adam",
+  "learning_rate": 1e-3,
+  "lr_decay": false,
+  "clip_grad_norm": false,
+  "use_early_stop": true,
+  "patience": 20
+}

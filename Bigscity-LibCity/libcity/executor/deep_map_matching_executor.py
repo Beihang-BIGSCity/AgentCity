@@ -44,7 +44,32 @@ class DeepMapMatchingExecutor(AbstractExecutor):
         self.scheduler = self._build_scheduler()
 
         # Metrics for map matching (based on config or defaults)
-        self.metrics = config.get('metrics', 'accuracy')  # Default metric for early stopping
+        # Get metrics configuration - could be string or list
+        metrics_config = config.get('metrics', 'accuracy')
+        if isinstance(metrics_config, list):
+            self.primary_metric = metrics_config[0] if metrics_config else 'accuracy'
+        else:
+            self.primary_metric = metrics_config
+        # Keep metrics config for potential other uses
+        self.metrics = metrics_config
+
+    def _move_batch_to_device(self, batch, device):
+        """Move batch dictionary tensors to specified device.
+
+        Args:
+            batch: Dictionary containing tensors and other data
+            device: Target device
+
+        Returns:
+            batch: Dictionary with tensors moved to device
+        """
+        result = {}
+        for key, value in batch.items():
+            if isinstance(value, torch.Tensor):
+                result[key] = value.to(device)
+            else:
+                result[key] = value
+        return result
 
     def train(self, train_dataloader, eval_dataloader):
         """Train the neural map matching model.
@@ -132,28 +157,112 @@ class DeepMapMatchingExecutor(AbstractExecutor):
     def evaluate(self, test_dataloader):
         """Evaluate the model on test data.
 
+        Calculates accuracy directly by comparing predictions with ground truth,
+        bypassing the incompatible MapMatchingEvaluator interface.
+
         Args:
             test_dataloader: DataLoader for test data
         """
+        import json
+        import datetime
+
         self.model.train(False)
-        self.evaluator.clear()
+        total_correct = 0
+        total_valid = 0
+        total_loss = []
+        loss_func = self.loss_func or self.model.calculate_loss
 
         for batch in test_dataloader:
             # Move batch to device
-            batch.to_tensor(device=self.config['device'])
+            if hasattr(batch, 'to_tensor'):
+                batch.to_tensor(device=self.config['device'])
+            else:
+                batch = self._move_batch_to_device(batch, self.config['device'])
 
             # Get predictions from model
             result = self.model.predict(batch)
 
-            # Collect predictions for evaluation
-            # The evaluator expects batch format compatible with MapMatchingEvaluator
-            evaluate_input = {
-                'result': result,
-                'batch': batch
-            }
-            self.evaluator.collect(evaluate_input)
+            # Calculate loss
+            loss = loss_func(batch)
+            total_loss.append(loss.data.cpu().numpy().tolist())
 
-        self.evaluator.save_result(self.evaluate_res_dir)
+            # Calculate accuracy by comparing predictions with ground truth
+            tgt_roads = batch.get('tgt_roads')
+            if tgt_roads is None:
+                tgt_roads = batch.get('target', batch.get('output_trg'))
+
+            if tgt_roads is not None:
+                # Convert result to tensor if needed
+                if not isinstance(result, torch.Tensor):
+                    result = torch.LongTensor(result).to(self.config['device'])
+
+                # Ensure same shape for comparison
+                if result.dim() == 1:
+                    result = result.unsqueeze(0)
+                if tgt_roads.dim() == 1:
+                    tgt_roads = tgt_roads.unsqueeze(0)
+
+                # Handle length mismatch by truncating to minimum
+                min_len = min(result.shape[1], tgt_roads.shape[1])
+                result_trimmed = result[:, :min_len]
+                tgt_trimmed = tgt_roads[:, :min_len]
+
+                # Create mask for valid positions (tgt_roads >= 0, ignoring padding -1)
+                valid_mask = tgt_trimmed >= 0
+
+                # Count correct predictions where mask is valid
+                correct = ((result_trimmed == tgt_trimmed) & valid_mask).sum().item()
+                valid_count = valid_mask.sum().item()
+
+                total_correct += correct
+                total_valid += valid_count
+
+        # Compute final metrics
+        if total_valid > 0:
+            accuracy = total_correct / total_valid
+        else:
+            accuracy = 0.0
+
+        avg_loss = np.mean(total_loss, dtype=np.float64) if total_loss else 0.0
+
+        # Build evaluation results
+        evaluate_result = {
+            'accuracy': accuracy,
+            'loss': float(avg_loss),
+            'total_correct': total_correct,
+            'total_valid': total_valid,
+            'num_batches': len(test_dataloader)
+        }
+
+        # Log results
+        self._logger.info('Test Evaluation Results:')
+        self._logger.info('  Accuracy: {:.4f}'.format(accuracy))
+        self._logger.info('  Loss: {:.4f}'.format(avg_loss))
+        self._logger.info('  Correct/Total: {}/{}'.format(total_correct, total_valid))
+
+        # Save results to file
+        if not os.path.exists(self.evaluate_res_dir):
+            os.makedirs(self.evaluate_res_dir)
+
+        timestamp = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+        model_name = self.config.get('model', 'DeepMM')
+        dataset_name = self.config.get('dataset', 'unknown')
+        filename = '{}_{}_{}_{}'.format(timestamp, model_name, dataset_name, 'evaluate')
+
+        # Save as JSON
+        json_path = os.path.join(self.evaluate_res_dir, '{}.json'.format(filename))
+        with open(json_path, 'w') as f:
+            json.dump(evaluate_result, f, indent=4)
+        self._logger.info('Evaluation results saved to {}'.format(json_path))
+
+        # Save as CSV
+        csv_path = os.path.join(self.evaluate_res_dir, '{}.csv'.format(filename))
+        with open(csv_path, 'w') as f:
+            headers = list(evaluate_result.keys())
+            f.write(','.join(headers) + '\n')
+            values = [str(evaluate_result[h]) for h in headers]
+            f.write(','.join(values) + '\n')
+        self._logger.info('Evaluation results saved to {}'.format(csv_path))
 
     def run(self, data_loader, model, lr, clip):
         """Training loop for one epoch.
@@ -180,7 +289,12 @@ class DeepMapMatchingExecutor(AbstractExecutor):
         for batch in data_loader:
             # One batch, one step
             self.optimizer.zero_grad()
-            batch.to_tensor(device=self.config['device'])
+            # Handle both LibCity Batch objects and plain dictionaries
+            if hasattr(batch, 'to_tensor'):
+                batch.to_tensor(device=self.config['device'])
+            else:
+                # Dictionary batch from DeepMapMatchingDataset - tensors already in batch
+                batch = self._move_batch_to_device(batch, self.config['device'])
             loss = loss_func(batch)
 
             if self.config['debug']:
@@ -204,47 +318,75 @@ class DeepMapMatchingExecutor(AbstractExecutor):
     def _valid_epoch(self, data_loader, model):
         """Validation loop for one epoch.
 
+        Calculates accuracy directly by comparing predictions with ground truth
+        (tgt_roads), bypassing the incompatible evaluator interface.
+
         Args:
             data_loader: DataLoader for validation data
             model: The neural network model
 
         Returns:
-            avg_acc: Average accuracy
+            avg_acc: Average accuracy (ratio of correct predictions)
             avg_loss: Average loss
         """
         model.train(False)
-        self.evaluator.clear()
         total_loss = []
+        total_correct = 0
+        total_valid = 0
         loss_func = self.loss_func or model.calculate_loss
 
         for batch in data_loader:
-            batch.to_tensor(device=self.config['device'])
+            if hasattr(batch, 'to_tensor'):
+                batch.to_tensor(device=self.config['device'])
+            else:
+                batch = self._move_batch_to_device(batch, self.config['device'])
 
-            # Get predictions
+            # Get predictions from model
+            # predict() returns road segment IDs [batch_size, seq_len]
             result = model.predict(batch)
 
             # Calculate loss
             loss = loss_func(batch)
             total_loss.append(loss.data.cpu().numpy().tolist())
 
-            # Collect for evaluation
-            evaluate_input = {
-                'result': result,
-                'batch': batch
-            }
-            self.evaluator.collect(evaluate_input)
+            # Calculate accuracy by comparing predictions with ground truth
+            # Ground truth is in 'tgt_roads' with -1 as padding mask
+            tgt_roads = batch.get('tgt_roads')
+            if tgt_roads is None:
+                # Fallback to other possible keys
+                tgt_roads = batch.get('target', batch.get('output_trg'))
 
-        # Get evaluation metrics
-        eval_results = self.evaluator.evaluate()
+            if tgt_roads is not None:
+                # Convert result to tensor if needed
+                if not isinstance(result, torch.Tensor):
+                    result = torch.LongTensor(result).to(self.config['device'])
 
-        # Extract accuracy metric (use first available metric if 'accuracy' not found)
-        if self.metrics in eval_results:
-            avg_acc = eval_results[self.metrics]
-        elif 'accuracy' in eval_results:
-            avg_acc = eval_results['accuracy']
+                # Ensure same shape for comparison
+                if result.dim() == 1:
+                    result = result.unsqueeze(0)
+                if tgt_roads.dim() == 1:
+                    tgt_roads = tgt_roads.unsqueeze(0)
+
+                # Handle length mismatch by truncating to minimum
+                min_len = min(result.shape[1], tgt_roads.shape[1])
+                result_trimmed = result[:, :min_len]
+                tgt_trimmed = tgt_roads[:, :min_len]
+
+                # Create mask for valid positions (tgt_roads >= 0, ignoring padding -1)
+                valid_mask = tgt_trimmed >= 0
+
+                # Count correct predictions where mask is valid
+                correct = ((result_trimmed == tgt_trimmed) & valid_mask).sum().item()
+                valid_count = valid_mask.sum().item()
+
+                total_correct += correct
+                total_valid += valid_count
+
+        # Compute average accuracy
+        if total_valid > 0:
+            avg_acc = total_correct / total_valid
         else:
-            # Use first metric available
-            avg_acc = list(eval_results.values())[0] if eval_results else 0.0
+            avg_acc = 0.0
 
         avg_loss = np.mean(total_loss, dtype=np.float64)
         return avg_acc, avg_loss

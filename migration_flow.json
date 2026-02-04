@@ -1,5 +1,91 @@
 [
   {
+    "title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)",
+    "conference": "NeurIPS",
+    "year": 2025,
+    "track": "Conference",
+    "model_name":"STSSDL",
+    "pdf_link": "https://arxiv.org/pdf/2510.04908",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/NeurIPS2025_ST-SSDL.pdf",
+    "datasets": [
+      "METR-LA"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.37,
+        "MAPE": " 9.48%",
+        "RMSE": 7.17
+      },
+    "repo_url": "https://github.com/Jimmy-7664/ST-SSDL",
+    "keywords": [
+      "spatial-temporal",
+      "traffic-speed-forecast",
+      "self-supervised learning",
+      "deviation learning",
+      "traffic management"
+    ]
+  }
+  },
+  {
+    "title": "AutoSTF: Decoupled Neural Architecture Search for Cost-Effective Automated Spatio-Temporal Forecasting",
+    "conference": "KDD",
+    "year": 2025,
+    "model_name":"AutoSTF",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2409.16586",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/KDD2025_AutoSTF.pdf",
+    "datasets": [
+      "METR-LA"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.35,
+        "MAPE": " 9.58%",
+        "RMSE": 7.09
+      },
+    "repo_url": "https://github.com/usail-hkust/AutoSTF",
+    "keywords": [
+      "spatial-temporal",
+      "traffic forecasting",
+      "neural architecture search",
+      "automated machine learning",
+      "cost-effective"
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "title": "STD-MAE: Spatial-Temporal Dual Masked Autoencoder for Traffic Forecasting",
+    "authors": [
+      "Authors TBD"
+    ],
+    "venue": "IJCAI",
+    "year": 2024,
+    "score": 8,
+    "arxiv": "2312.00516",
+    "github": "https://github.com/Jimmy-7664/STD-MAE",
+    "datasets": [
+      "METR_LA"
+    ],
+    "model_name": "STDMAE",
+    "key_contributions": [
+      "Masked autoencoder for ST data",
+      "Self-supervised pre-training approach",
+      "Dual masking: spatial and temporal",
+      "Learns robust representations"
+    ],
+    "metrics": {
+      "METR_LA": {
+        "MAE": 3.40,
+        "MAPE": "7.07%",
+        "RMSE": 9.59
+      }
+    },
+    "abstract": "Applies masked autoencoder paradigm to spatial-temporal traffic data. Pre-trains with dual masking strategy (masking both spatial nodes and temporal steps) to learn robust representations for downstream forecasting.",
+    "pdf_path": "/home/wangwenrui/private/shk/agentCity/data/articles/pdfs/stdmae.pdf",
+    "notes": "IJCAI 2024. Brings self-supervised learning (MAE) to traffic forecasting. Growing trend toward pre-training approaches."
+  },
+  {
   "title": "Efficient Large-Scale Traffic Forecasting with Transformers: A Spatial Data Management Perspective",
   "conference": "KDD",
   "year": 2025,
@@ -926,6 +1012,56 @@
     ]
   },
   {
+    "title": "Fine-Grained Trajectory-based Travel Time Estimation for Multi-city Scenarios Based on Deep Meta-Learning",
+    "conference": "KDD",
+    "year": 2019,
+    "model_name": "MetaTTE",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3292500.3330876",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Beijing (Didi)"
+    ],
+    "metrics": {
+      "Note": "Uses a meta-learning based framework (MetaTTE) to transfer knowledge from data-rich cities to data-scarce cities for travel time estimation."
+    },
+    "repo_url": "https://github.com/maxwang967/MetaTTE",
+    "keywords": [
+      "meta-learning",
+      "travel time estimation",
+      "multi-city",
+      "transfer learning",
+      "spatio-temporal"
+    ]
+  },
+  {
+    "title": "Multi View Spatial-Temporal Model for Travel Time Estimation",
+    "conference": "SIGSPATIAL (GIS Cup)",
+    "year": 2021,
+    "model_name": "MVSTM",
+    "track": "Competition/Conference",
+    "pdf_link": "https://arxiv.org/abs/2109.07402",
+    "datasets": [
+      "Didi Shenzhen (Taxi)",
+      "GIS Cup 2021 Dataset"
+    ],
+    "metrics": {
+      "Performance": {
+        "Rank": "4th Place in GIS Cup 2021",
+        "MAPE": "Competitive with top solutions"
+      },
+      "Note": "MVSTM captures spatial, trajectory, and semantic views using Graph2Vec, dual-channel temporal modules, and structural embeddings to estimate travel time."
+    },
+    "repo_url": "https://github.com/775269512/SIGSPATIAL-2021-GISCUP-4th-Solution",
+    "keywords": [
+      "multi-view learning",
+      "spatial-temporal modeling",
+      "travel time estimation",
+      "graph2vec",
+      "trajectory embedding"
+    ]
+  },
+  {
     "title": "LightPath: Lightweight and Scalable Path Representation Learning",
     "conference": "KDD",
     "year": 2023,
@@ -1429,34 +1565,6 @@
     ]
   },
   {
-    "title": "Fast map matching, an algorithm integrating hidden Markov model with precomputation",
-    "conference": "IJGIS (International Journal of Geographical Information Science)",
-    "year": 2018,
-    "model_name": "FMM",
-    "track": "Journal",
-    "pdf_link": "https://www.tandfonline.com/doi/full/10.1080/13658816.2017.1400548",
-    "datasets": [
-      "Porto (Taxi)",
-      "Seattle (Uber)",
-      "OpenStreetMap"
-    ],
-    "metrics": {
-      "Performance": {
-        "Speed": "40x-100x faster than traditional HMM",
-        "Accuracy": "Comparable to advanced HMM"
-      },
-      "Note": "FMM is a high-performance open-source map matching framework implemented in C++ and Python, widely used in industry and academia."
-    },
-    "repo_url": "https://github.com/cyang-kth/fmm",
-    "keywords": [
-      "fast map matching",
-      "hidden markov model",
-      "precomputation",
-      "open source framework",
-      "GPS trajectory"
-    ]
-  },
-  {
     "title": "DeepMM: Deep Learning Based Map Matching with Data Augmentation",
     "conference": "IEEE TMC / SIGSPATIAL",
     "year": 2020,
@@ -1575,6 +1683,44 @@
     "repo_url": "https://github.com/derekwtian/TRMMA"
   },
   {
+    "title": "L2MM: Learning to Map Matching with Deep Models for Low-Quality GPS Trajectory Data",
+    "conference": "ACM TKDD (Transactions on Knowledge Discovery from Data)",
+    "year": 2022,
+    "model_name": "L2MM",
+    "track": "Journal",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3510830",
+    "datasets": [
+      "Porto (Taxi)",
+      "Shanghai (Taxi)"
+    ],
+    "metrics": {
+      "Accuracy": "Outperforms HMM and DeepMM baselines",
+      "Robustness": "Handles noisy, low-frequency, and non-uniform data effectively"
+    },
+    "note": "L2MM formulates map matching as a sequence-to-sequence translation task using a Transformer-based encoder-decoder architecture to capture trajectory behaviors and spatial dependencies.",
+    "repo_url": "https://github.com/JiangLinLi/L2MM"
+  },
+  {
+    "title": "RLOMM: An Efficient and Robust Online Map Matching Framework with Reinforcement Learning",
+    "conference": "SIGMOD",
+    "year": 2025,
+    "model_name": "RLOMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2502.06825",
+    "datasets": [
+      "Three Real-world Datasets (e.g., Taxi/Ride-hailing data)"
+    ],
+    "metrics": {
+      "Performance": {
+        "Accuracy": "Significantly higher than SOTA online methods",
+        "Efficiency": "High throughput suitable for online applications",
+        "Robustness": "Stable performance under diverse scenarios"
+      },
+      "Note": "Models online map matching as an Online Markov Decision Process (OMDP) and uses Deep Q-Learning with a comprehensive reward function (accuracy, continuity, detour penalty) to make future-oriented matching decisions."
+    },
+    "repo_url": "https://github.com/faceless0124/RLOMM"
+  },
+  {
     "title": "Driving with Context: Online Map Matching for Complex Roads Using Lane Markings and Scenario Recognition",
     "conference": "IEEE RA-L (Under Review) / arXiv",
     "year": 2025,
@@ -1591,5 +1737,153 @@
     },
     "note": "An online SD map matching method that integrates lane markings (via ICP registration) and driving scenario recognition into an HMM framework to handle complex urban environments like elevated roads.",
     "repo_url": "https://github.com/TRV-Lab/LMSR-OMM"
+  },
+  {
+    "title": "Jointly Contrastive Representation Learning on Road Network and Trajectory",
+    "conference": "CIKM",
+    "year": 2022,
+    "model_name": "JCLRNT",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3511808.3557280",
+    "datasets": [
+      "Chengdu",
+      "Xi'an"
+    ],
+    "metrics": {
+      "Note": "JCLRNT employs a unified framework with three contrastive learning objectives (Road-Road, Trajectory-Trajectory, Road-Trajectory) to maximize mutual information between static graph structure and dynamic mobility data."
+    },
+    "note": "This approach bridges the gap between road network topology and moving object trajectories.",
+    "repo_url": "https://github.com/mzy94/JCLRNT"
+  },
+  {
+    "title": "Road Network Representation Learning with the Third Law of Geography",
+    "conference": "NeurIPS",
+    "year": 2024,
+    "model_name": "Garner",
+    "track": "Research",
+    "pdf_link": "https://proceedings.neurips.cc/paper_files/paper/2024/file/15cc8e4a46565dab0c1a1220884bd503-Paper-Conference.pdf",
+    "datasets": [
+      "New York",
+      "Porto"
+    ],
+    "metrics": {
+      "Note": "Proposes a graph contrastive learning framework (Garner) that integrates the Third Law of Geography (geographic configuration similarity) to learn effective road network representations."
+    },
+    "repo_url": "https://github.com/Haicang/Garner"
+  },
+  {
+    "title": "Spatial Structure-Aware Road Network Embedding via Graph Contrastive Learning",
+    "conference": "EDBT",
+    "year": 2023,
+    "model_name": "SARN",
+    "track": "Research",
+    "pdf_link": "https://openproceedings.org/2023/conf/edbt/paper-112.pdf",
+    "datasets": [
+      "San Francisco",
+      "Beijing"
+    ],
+    "metrics": {
+      "Performance": {
+        "Improvement": "Consistently outperforms Node2Vec and GAE on road property prediction.",
+        "Generalization": "Strong performance on task-agnostic embeddings."
+      },
+      "Note": "SARN integrates a spatial similarity matrix and a structure-aware sampling strategy into a graph contrastive learning framework to capture both topological connectivity and spatial correlations of road networks."
+    },
+    "repo_url": "https://github.com/changyanchuan/SARN",
+    "keywords": [
+      "road network embedding",
+      "graph contrastive learning",
+      "spatial structure-aware",
+      "self-supervised learning",
+      "task-agnostic"
+    ]
+  },
+  {
+    "title": "From Canonical Correlation Analysis to Self-supervised Graph Neural Networks",
+    "conference": "NeurIPS",
+    "year": 2021,
+    "model_name": "CCASSG",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2106.13846",
+    "datasets": [
+      "Cora",
+      "Citeseer",
+      "Pubmed",
+      "Amazon-Photo"
+    ],
+    "metrics": {
+      "Efficiency": "Significantly faster training than GRACE/MVGRL",
+      "Accuracy": "Competitive with or superior to contrastive methods using negative sampling"
+    },
+    "note": "CCA-SSG introduces a non-contrastive self-supervised objective inspired by Canonical Correlation Analysis. It avoids negative sampling by minimizing the correlation between different dimensions of the representations, preventing mode collapse efficiently.",
+    "repo_url": "https://github.com/hengruizhang98/CCA-SSG",
+    "keywords": [
+      "graph neural networks",
+      "self-supervised learning",
+      "canonical correlation analysis",
+      "non-contrastive learning",
+      "feature decorrelation"
+    ]
+  },
+  {
+    "title": "Contrastive Multi-View Representation Learning on Graphs",
+    "conference": "ICML",
+    "year": 2020,
+    "model_name": "MVGRL",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2006.05582",
+    "datasets": [
+      "Cora",
+      "Citeseer",
+      "Pubmed"
+    ],
+    "metrics": {
+      "Performance": {
+        "Node Classification": "Outperforms DGI and GCN on multiple benchmarks",
+        "Graph Classification": "Strong unsupervised performance"
+      },
+      "Note": "MVGRL contrasts encodings from first-order neighbors (local view) and a graph diffusion (global view) to learn robust node and graph representations."
+    },
+    "repo_url": "https://github.com/kavehhassani/mvgrl",
+    "keywords": [
+      "graph contrastive learning",
+      "multi-view learning",
+      "graph diffusion",
+      "self-supervised learning",
+      "mutual information"
+    ]
+  },
+  {
+    "title": "highway2vec -- representing OpenStreetMap microregions with respect to their road network characteristics",
+    "conference": "AGILE",
+    "year": 2022,
+    "model_name": "highway2vec",
+    "track": "Conference",
+    "pdf_link": "https://agile-giss.copernicus.org/articles/3/36/2022/",
+    "datasets": [
+      "OpenStreetMap (Germany)"
+    ],
+    "metrics": {
+      "Note": "highway2vec computes feature vectors for microregions (hexagons) based on road network characteristics (graph measures like centrality, density) extracted from OSM."
+    },
+    "repo_url": "https://github.com/Calychas/highway2vec"
+  },
+  {
+    "title": "On Representation Learning for Road Networks",
+    "conference": "ACM TIST (Transactions on Intelligent Systems and Technology)",
+    "year": 2020,
+    "model_name": "RN2Vec",
+    "track": "Journal",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3379445",
+    "datasets": [
+      "Beijing",
+      "Shanghai"
+    ],
+    "metrics": {
+      "Traffic Signal Classification": "Accuracy ~0.85",
+      "Note": "RN2Vec jointly learns embeddings for road segments and intersections by incorporating spatial, connectivity, and trajectory information."
+    },
+    "note": "Proposes a comprehensive framework for road network embedding that captures geometric and topological features simultaneously.",
+    "repo_url": "https://github.com/meettyj/rn2vec"
   }
 ]

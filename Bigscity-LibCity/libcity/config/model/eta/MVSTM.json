@@ -1,0 +1,43 @@
+{
+  "num_links": 50000,
+  "num_drivers": 10000,
+  "num_time_slices": 288,
+  "num_weather_types": 5,
+
+  "link_emb_dim": 20,
+  "driver_emb_dim": 20,
+  "slice_emb_dim": 20,
+  "weekday_emb_dim": 3,
+  "weather_emb_dim": 3,
+
+  "lstm_hidden_dim": 128,
+  "lstm_num_layers": 1,
+  "mlp_hidden_dims": [256, 128],
+
+  "num_numerical_features": 4,
+  "use_log_transform": true,
+
+  "eta_mean": 6.553886963677842,
+  "eta_std": 0.5905307292899195,
+  "dist_mean": 8.325948361544423,
+  "dist_std": 0.6799133140855674,
+  "simple_eta_mean": 6.453206241137908,
+  "simple_eta_std": 0.5758803681400783,
+  "high_temp_mean": 31.84375,
+  "high_temp_std": 1.6975971069426339,
+  "low_temp_mean": 26.46875,
+  "low_temp_std": 0.9348922063532245,
+  "link_time_min": 0.0,
+  "link_time_max": 2949.12,
+
+  "max_epoch": 50,
+  "batch_size": 512,
+  "learner": "adam",
+  "learning_rate": 1e-4,
+  "lr_decay": true,
+  "lr_scheduler": "exponentiallr",
+  "lr_decay_ratio": 0.98,
+  "clip_grad_norm": false,
+  "use_early_stop": true,
+  "patience": 10
+}

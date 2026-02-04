@@ -76,6 +76,8 @@ except ImportError:
     PatchSTG = None  # timm not installed
 from libcity.model.traffic_speed_prediction.GNNRF import GNNRF
 from libcity.model.traffic_speed_prediction.FCNNBus import FCNNBus
+from libcity.model.traffic_speed_prediction.Garner import Garner
+from libcity.model.traffic_speed_prediction.MVGRL import MVGRL
 
 __all__ = [
     "DCRNN",
@@ -138,4 +140,6 @@ __all__ = [
     "Pathformer",
     "GNNRF",
     "FCNNBus",
+    "Garner",
+    "MVGRL",
 ]

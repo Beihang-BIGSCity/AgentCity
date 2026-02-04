@@ -5,41 +5,29 @@
 **Model Name**: DiffMM
 **Original Repository**: https://github.com/decisionintelligence/DiffMM
 **Paper**: "DiffMM: Efficient Method for Accurate Noisy and Sparse Trajectory Map Matching via One Step Diffusion" (AAAI)
-**Task Type**: Map Matching (GPS-to-road-segment matching)
+**Task Type**: Map Matching / Trajectory Location Prediction (GPS-to-road-segment matching)
 **Migration Date**: 2026-02-02
-**Task Category Fix**: 2026-02-02 (moved from traj_loc_pred to map_matching)
+**Latest Update**: 2026-02-03 (restored to trajectory_loc_prediction per user request)
 
 ---
 
-## IMPORTANT: Task Category Update (2026-02-02)
+## Task Category History
 
-DiffMM was initially placed in `trajectory_loc_prediction` task, but this was **incorrect**.
+### Update 2026-02-03
+DiffMM has been restored to `trajectory_loc_prediction` task as requested by user.
+While technically a map matching model, it is now available in trajectory_loc_prediction for compatibility.
 
-**DiffMM is a MAP MATCHING model** (GPS trajectory to road segment matching), NOT a trajectory location prediction model (next check-in prediction).
+**Current Location**: `libcity/model/trajectory_loc_prediction/DiffMM.py`
 
-### Changes Made
-
-1. **Model File Moved**:
-   - FROM: `libcity/model/trajectory_loc_prediction/DiffMM.py`
-   - TO: `libcity/model/map_matching/DiffMM.py`
-
-2. **Config File Moved**:
-   - FROM: `libcity/config/model/traj_loc_pred/DiffMM.json`
-   - TO: `libcity/config/model/map_matching/DiffMM.json`
-
-3. **__init__.py Updates**:
-   - Added DiffMM to `libcity/model/map_matching/__init__.py`
-   - Removed DiffMM from `libcity/model/trajectory_loc_prediction/__init__.py`
-
-4. **Batch Access Pattern Fixed**:
-   - Changed from `.get()` method to try/except pattern for BatchPAD compatibility
+### Previous Update (2026-02-02)
+DiffMM was moved from traj_loc_pred to map_matching, but has been reverted.
 
 ---
 
 ## Files Created/Updated
 
 ### Model File
-**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/map_matching/DiffMM.py`
+**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/DiffMM.py`
 
 The model file contains all necessary components:
 - `Norm`: Layer normalization
@@ -60,37 +48,38 @@ The model file contains all necessary components:
 - `DiffMM`: Main LibCity model class
 
 ### Configuration File
-**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/map_matching/DiffMM.json`
+**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/traj_loc_pred/DiffMM.json`
 
 ```json
 {
-    "model_name": "DiffMM",
+    "model": "DiffMM",
+    "task": "traj_loc_pred",
     "hid_dim": 256,
     "num_units": 512,
     "transformer_layers": 2,
     "depth": 2,
+    "num_heads": 4,
+    "dropout": 0.1,
     "timesteps": 2,
     "samplingsteps": 1,
-    "dropout": 0.1,
     "bootstrap_every": 8,
-    "num_heads": 4,
-    "optimizer": "AdamW",
-    "learning_rate": 0.001,
-    "weight_decay": 1e-6,
-    "lr_scheduler": "none",
     "batch_size": 4,
+    "learning_rate": 0.001,
     "max_epoch": 30,
+    "optimizer": "adamw",
+    "weight_decay": 1e-6,
     "clip_grad_norm": 1.0,
+    "lr_scheduler": "none",
     "evaluate_method": "segment"
 }
 ```
 
 ### Registration
-**File Updated**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/map_matching/__init__.py`
+**File Updated**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/__init__.py`
 
 Added:
 ```python
-from libcity.model.map_matching.DiffMM import DiffMM
+from libcity.model.trajectory_loc_prediction.DiffMM import DiffMM
 # And added "DiffMM" to __all__ list
 ```
 
@@ -241,17 +230,17 @@ Returns predictions with probability scores and full distributions.
 
 ```bash
 # Basic usage
-python run_model.py --task map_matching --model DiffMM --dataset your_dataset
+python run_model.py --task traj_loc_pred --model DiffMM --dataset your_dataset
 
 # With custom config
-python run_model.py --task map_matching --model DiffMM --dataset your_dataset \
+python run_model.py --task traj_loc_pred --model DiffMM --dataset your_dataset \
     --hid_dim 256 --num_units 512 --batch_size 4 --max_epoch 30
 ```
 
 ### Python API Usage
 
 ```python
-from libcity.model.map_matching import DiffMM
+from libcity.model.trajectory_loc_prediction import DiffMM
 
 # Configuration
 config = {
@@ -318,6 +307,6 @@ These can be computed using LibCity's evaluation framework or custom evaluators.
 ---
 
 **Initial Migration**: 2026-02-02
-**Task Category Fix**: 2026-02-02 (moved from traj_loc_pred to map_matching)
+**Task Category Restored**: 2026-02-03 (restored to traj_loc_pred per user request)
 **LibCity Version**: Compatible with current version
-**Status**: Migration complete, correctly categorized as map_matching model
+**Status**: Migration complete, located in trajectory_loc_prediction

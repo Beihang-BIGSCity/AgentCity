@@ -8,6 +8,9 @@ from libcity.data.dataset.traffic_state_grid_od_dataset import TrafficStateGridO
 from libcity.data.dataset.traffic_state_od_dataset import TrafficStateOdDataset
 from libcity.data.dataset.eta_dataset import ETADataset
 from libcity.data.dataset.map_matching_dataset import MapMatchingDataset
+from libcity.data.dataset.deep_map_matching_dataset import DeepMapMatchingDataset
+from libcity.data.dataset.dataset_subclass.deep_map_matching_dataset import DeepMMSeq2SeqDataset
+from libcity.data.dataset.dataset_subclass.diffmm_dataset import DiffMMDataset
 from libcity.data.dataset.roadnetwork_dataset import RoadNetWorkDataset
 from libcity.data.dataset.patchstg_dataset import PatchSTGDataset
 try:
@@ -44,6 +47,9 @@ __all__ = [
     "TrafficStateGridOdDataset",
     "ETADataset",
     "MapMatchingDataset",
+    "DeepMapMatchingDataset",
+    "DeepMMSeq2SeqDataset",
+    "DiffMMDataset",
     "RoadNetWorkDataset",
     "PatchSTGDataset",
     # START model dataset classes

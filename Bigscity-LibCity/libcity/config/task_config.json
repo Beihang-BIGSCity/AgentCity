@@ -32,7 +32,9 @@
             "JGRM",
             "TrajSDE",
             "RNTrajRec",
-            "GraphMM"
+            "DiffMM",
+            "L2MM",
+            "DeepMM"
         ],
         "allowed_dataset": [
             "foursquare_tky",
@@ -221,10 +223,22 @@
             "evaluator": "TrajLocPredEvaluator",
             "traj_encoder": "StandardTrajectoryEncoder"
         },
-        "GraphMM": {
+        "DiffMM": {
+            "dataset_class": "DiffMMDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "L2MM": {
             "dataset_class": "TrajectoryDataset",
             "executor": "TrajLocPredExecutor",
             "evaluator": "TrajLocPredEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "DeepMM": {
+            "dataset_class": "DeepMMSeq2SeqDataset",
+            "executor": "TrajLocPredExecutor",
+            "evaluator": "DeepMMEvaluator",
             "traj_encoder": "StandardTrajectoryEncoder"
         }
     },
@@ -345,7 +359,9 @@
             "FlashST",
             "Pathformer",
             "GNNRF",
-            "FCNNBus"
+            "FCNNBus",
+            "Garner",
+            "MVGRL"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -970,6 +986,16 @@
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
+        },
+        "Garner": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "MVGRL": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
         }
     },
     "eta": {
@@ -983,7 +1009,9 @@
             "MDTI",
             "HierETA",
             "HetETA",
-            "ProbETA"
+            "ProbETA",
+            "MVSTM",
+            "MetaTTE"
         ],
         "allowed_dataset": [
             "Chengdu_Taxi_Sample1",
@@ -1048,6 +1076,18 @@
             "executor": "ETAExecutor",
             "evaluator": "ETAEvaluator",
             "eta_encoder": "ProbETAEncoder"
+        },
+        "MVSTM": {
+            "dataset_class": "ETADataset",
+            "executor": "ETAExecutor",
+            "evaluator": "ETAEvaluator",
+            "eta_encoder": "MVSTMEncoder"
+        },
+        "MetaTTE": {
+            "dataset_class": "ETADataset",
+            "executor": "ETAExecutor",
+            "evaluator": "ETAEvaluator",
+            "eta_encoder": "DeeptteEncoder"
         }
     },
     "map_matching": {
@@ -1059,11 +1099,18 @@
             "STMatch",
             "DeepMM",
             "DiffMM",
-            "TRMMA"
+            "TRMMA",
+            "GraphMM"
         ],
         "allowed_dataset": [
             "global",
-            "Seattle"
+            "Seattle",
+            "Neftekamsk",
+            "Valky",
+            "Ruzhany",
+            "Santander",
+            "Spaichingen",
+            "NovoHamburgo"
         ],
         "STMatching": {
             "dataset_class": "MapMatchingDataset",
@@ -1091,17 +1138,22 @@
             "evaluator": "MapMatchingEvaluator"
         },
         "DeepMM": {
-            "dataset_class": "MapMatchingDataset",
+            "dataset_class": "DeepMMSeq2SeqDataset",
             "executor": "DeepMapMatchingExecutor",
-            "evaluator": "MapMatchingEvaluator"
+            "evaluator": "DeepMMEvaluator"
         },
         "DiffMM": {
-            "dataset_class": "MapMatchingDataset",
+            "dataset_class": "DiffMMDataset",
             "executor": "DeepMapMatchingExecutor",
             "evaluator": "MapMatchingEvaluator"
         },
         "TRMMA": {
             "dataset_class": "MapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "GraphMM": {
+            "dataset_class": "DeepMapMatchingDataset",
             "executor": "DeepMapMatchingExecutor",
             "evaluator": "MapMatchingEvaluator"
         }
@@ -1113,7 +1165,10 @@
             "GAT",
             "Node2Vec",
             "DeepWalk",
-            "GeomGCN"
+            "GeomGCN",
+            "SARN",
+            "CCASSG",
+            "Highway2Vec"
         ],
         "allowed_dataset": [
             "BJ_roadmap"
@@ -1147,6 +1202,21 @@
             "dataset_class": "RoadNetWorkDataset",
             "executor": "GensimExecutor",
             "evaluator": "RoadRepresentationEvaluator"
+        },
+        "SARN": {
+            "dataset_class": "ChebConvDataset",
+            "executor": "ChebConvExecutor",
+            "evaluator": "RoadRepresentationEvaluator"
+        },
+        "CCASSG": {
+            "dataset_class": "ChebConvDataset",
+            "executor": "ChebConvExecutor",
+            "evaluator": "RoadRepresentationEvaluator"
+        },
+        "Highway2Vec": {
+            "dataset_class": "ChebConvDataset",
+            "executor": "ChebConvExecutor",
+            "evaluator": "RoadRepresentationEvaluator"
         }
     },
     "trajectory_embedding": {
@@ -1160,7 +1230,8 @@
             "LinearETA",
             "LinearClassify",
             "LinearSim",
-            "LinearNextLoc"
+            "LinearNextLoc",
+            "JCLRNT"
         ],
         "allowed_dataset": [
             "geolife",
@@ -1216,6 +1287,11 @@
             "dataset_class": "NextLocDataset",
             "executor": "NextLocExecutor",
             "evaluator": "ClassificationEvaluator"
+        },
+        "JCLRNT": {
+            "dataset_class": "TrajectoryDataset",
+            "executor": "TrajEmbeddingExecutor",
+            "evaluator": "TrajLocPredEvaluator"
         }
     }
 }

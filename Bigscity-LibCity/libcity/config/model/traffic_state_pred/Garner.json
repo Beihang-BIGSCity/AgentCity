@@ -1,0 +1,40 @@
+{
+  "model_name": "Garner",
+
+  "hidden_dim": 256,
+  "num_gnn_layers": 2,
+  "diffusion_k": 20,
+  "diffusion_alpha": 0.2,
+  "diffusion_epsilon": 0.01,
+  "use_similarity_graph": false,
+  "temporal_hidden_dim": 256,
+  "num_temporal_layers": 2,
+  "num_heads": 4,
+  "dropout": 0.1,
+  "bidir_adj_mx": true,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": true,
+
+  "batch_size": 32,
+  "max_epoch": 100,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "lr_decay": true,
+  "lr_scheduler": "steplr",
+  "lr_decay_ratio": 0.5,
+  "step_size": 20,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 15,
+
+  "input_window": 12,
+  "output_window": 12,
+  "output_dim": 1
+}

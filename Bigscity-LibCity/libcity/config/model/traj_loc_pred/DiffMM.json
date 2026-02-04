@@ -1,5 +1,31 @@
 {
-    "_notice": "DEPRECATED: DiffMM moved to map_matching task",
-    "_redirect": "Use Bigscity-LibCity/libcity/config/model/map_matching/DiffMM.json instead",
-    "_reason": "DiffMM is a map matching model (GPS-to-road segment), not trajectory location prediction"
+    "model": "DiffMM",
+    "task": "traj_loc_pred",
+
+    "hid_dim": 256,
+    "num_units": 512,
+    "transformer_layers": 2,
+    "depth": 2,
+    "num_heads": 4,
+    "dropout": 0.1,
+    "timesteps": 2,
+    "samplingsteps": 1,
+    "bootstrap_every": 8,
+
+    "objective": "pred_v",
+    "beta_schedule": "sqrt",
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+
+    "batch_size": 4,
+    "learning_rate": 0.001,
+    "max_epoch": 100,
+    "optimizer": "adamw",
+    "weight_decay": 1e-6,
+    "clip_grad_norm": 1.0,
+    "lr_scheduler": "none",
+    "log_every": 1,
+    "load_best_epoch": true,
+    "hyper_tune": false,
+    "evaluate_method": "segment"
 }

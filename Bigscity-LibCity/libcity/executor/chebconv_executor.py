@@ -15,16 +15,32 @@ class ChebConvExecutor(TrafficStateExecutor):
         """
         use model to test data
         """
-        self.evaluator.evaluate()
-
         node_features = torch.FloatTensor(test_dataloader['node_features']).to(self.device)
         node_labels = node_features.clone()
         test_mask = test_dataloader['mask']
 
+        # Ensure evaluate_cache directory exists before saving embeddings
+        evaluate_cache_dir = './libcity/cache/{}/evaluate_cache'.format(self.config.get('exp_id', None))
+        if not os.path.exists(evaluate_cache_dir):
+            os.makedirs(evaluate_cache_dir)
+
         self._logger.info('Start evaluating ...')
         with torch.no_grad():
             self.model.eval()
+            # Generate embeddings (saved to file in model's forward method)
             output = self.model.predict({'node_features': node_features})
+
+            # Call evaluator after embeddings are saved
+            self.evaluator.evaluate()
+
+            # Check if output dimension matches input dimension
+            # If not, this is an embedding-only model, skip reconstruction metrics
+            if output.shape[-1] != node_labels.shape[-1]:
+                self._logger.info('Embedding model detected (output_dim={} != input_dim={}). '
+                                  'Skipping reconstruction metrics.'.format(
+                                      output.shape[-1], node_labels.shape[-1]))
+                return 0.0, 0.0, 0.0  # Return placeholder metrics
+
             output = self._scaler.inverse_transform(output)
             node_labels = self._scaler.inverse_transform(node_labels)
             rmse = loss.masked_rmse_torch(output[test_mask], node_labels[test_mask])

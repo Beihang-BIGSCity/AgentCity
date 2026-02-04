@@ -1733,3 +1733,667 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] [12 rows x 10 columns]
 
 [Return Code: 0]
+
+============================================================
+Timestamp: 2026-02-02 16:01:18
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model DSTAGNN --dataset PEMSD7 --train true --max_epoch 35 --gpu_id 0 --exp_id 226035
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-02 16:01:23,953 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-02 16:01:23,954 - INFO - Begin pipeline, task=traffic_state_pred, model_name=DSTAGNN, dataset_name=PEMSD7, exp_id=226035
+[OUT] 2026-02-02 16:01:23,954 - INFO - {'task': 'traffic_state_pred', 'model': 'DSTAGNN', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '226035', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'DSTAGNNDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'model_name': 'DSTAGNN', 'comment_model': 'Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting (ICML 2022)', 'comment_paper': 'Lan et al. ICML 2022. Reference: https://github.com/SYLan2019/DSTAGNN', 'comment_architecture_parameters': 'These parameters control the model architecture', 'in_channels': 1, 'comment_in_channels': 'Input feature dimension (usually 1 for traffic speed/flow)', 'nb_block': 4, 'comment_nb_block': 'Number of DSTAGNN blocks (stacked residual blocks). Paper default: 4', 'K': 3, 'comment_K': 'Order of Chebyshev polynomials for graph convolution. Paper default: 3', 'nb_chev_filter': 32, 'comment_nb_chev_filter': 'Output channels from Chebyshev graph convolution. Paper default: 32', 'nb_time_filter': 32, 'comment_nb_time_filter': 'Output channels from temporal convolution (GTU). Paper default: 32', 'd_model': 512, 'comment_d_model': 'Attention model dimension for temporal and spatial attention. Paper default: 512', 'd_k': 32, 'comment_d_k': 'Key/query/value dimension in attention layers. Paper default: 32', 'n_heads': 3, 'comment_n_heads': 'Number of attention heads. Paper default: 3 (must divide d_model evenly)', 'graph': 'AG', 'comment_graph': "Graph type to use. 'G'=static adjacency matrix, 'AG'=adaptive graph learning. Paper default: AG", 'time_strides': 1, 'comment_time_strides': 'Temporal stride in the first DSTAGNN block. Paper default: 1', 'd_v': 32, 'comment_d_v': 'Value dimension in attention layers. Paper default: 32 (same as d_k)', 'input_window': 12, 'comment_input_window': 'Input time sequence length (look-back window). Paper default: 12 (PEMS datasets)', 'output_window': 12, 'comment_output_window': 'Output prediction horizon length. Paper default: 12 (PEMS datasets)', 'comment_training_parameters': 'Training hyperparameters', 'comment_max_epoch': 'Maximum training epochs. Paper default: 110', 'learner': 'adam', 'comment_learner': 'Optimizer type. Paper uses Adam', 'learning_rate': 0.0001, 'comment_learning_rate': 'Initial learning rate for Adam optimizer. Paper default: 0.0001', 'lr_decay': False, 'comment_lr_decay': 'Whether to apply learning rate decay during training', 'clip_grad_norm': False, 'comment_clip_grad_norm': 'Whether to apply gradient clipping to prevent exploding gradients', 'use_early_stop': False, 'comment_use_early_stop': 'Whether to use early stopping based on validation loss', 'comment_data_parameters': 'Dataset and data loading parameters', 'batch_size': 32, 'comment_batch_size': 'Training batch size. Paper default: 32', 'scaler': 'standard', 'comment_scaler': 'Feature scaling method: standard (z-score), minmax, etc.', 'load_external': False, 'comment_load_external': 'Whether to load external features (e.g., POI, weather)', 'normal_external': False, 'comment_normal_external': 'Whether to normalize external features', 'ext_scaler': 'none', 'comment_ext_scaler': 'Scaler for external features if load_external=true', 'add_time_in_day': False, 'comment_add_time_in_day': 'Whether to add time-of-day features (hour embeddings)', 'add_day_in_week': False, 'comment_add_day_in_week': 'Whether to add day-of-week features', 'comment_reduced_capacity': 'For memory-limited scenarios, use these settings:', 'comment_reduced_setup': 'nb_block=2, nb_chev_filter=16, nb_time_filter=16, d_model=256, d_k=16, n_heads=2, batch_size=16', 'comment_expected_performance': 'PEMS04 dataset (from ICML 2022 paper):', 'comment_mae': 'MAE: 19.3', 'comment_rmse': 'RMSE: 31.3', 'comment_mape': 'MAPE: 12.8%', 'comment_datasets': 'Recommended datasets: PEMS03, PEMS04, PEMS07, PEMS08', 'comment_io_format': 'Input: (batch_size, T_in=12, N_nodes, F_in=1). Output: (batch_size, T_out=12, N_nodes, 1)', 'cache_dataset': True, 'comment_cache_dataset': 'Cache dataset in memory for faster training', 'num_workers': 0, 'comment_num_workers': 'Number of parallel data loading workers', 'train_rate': 0.6, 'comment_train_rate': 'Training data ratio (60% train, 20% eval, 20% test by default)', 'eval_rate': 0.2, 'comment_eval_rate': 'Evaluation data ratio', 'output_dim': 1, 'comment_output_dim': 'Output feature dimension. DSTAGNN uses only traffic_flow (first feature). Set to 1 to select only first column', 'sparsity': 0.01, 'comment_sparsity': 'Sparsity parameter for Adaptive Graph (AG) construction. Default: 0.01 (1% connectivity)', 'period': 288, 'comment_period': 'Number of timesteps in one day. For 5-minute intervals: 288 (24*60/5)', 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-02 16:01:23,997 - INFO - Using opt_einsum
+[OUT] 2026-02-02 16:01:24,950 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-02-02 16:01:24,952 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-02-02 16:01:24,952 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-02-02 16:01:24,956 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-02-02 16:01:24,956 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.6_0.2_standard_32_False_False_False_True.npz
+[OUT] 2026-02-02 16:01:43,840 - INFO - train	x: (16921, 12, 883, 1), y: (16921, 12, 883, 1)
+[OUT] 2026-02-02 16:01:43,841 - INFO - eval	x: (5640, 12, 883, 1), y: (5640, 12, 883, 1)
+[OUT] 2026-02-02 16:01:43,841 - INFO - test	x: (5640, 12, 883, 1), y: (5640, 12, 883, 1)
+[OUT] 2026-02-02 16:01:44,908 - INFO - StandardScaler mean: 309.5414726371829, std: 189.50746108430616
+[OUT] 2026-02-02 16:01:44,908 - INFO - NoneScaler
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_version_cpu.so: undefined symbol: _ZN3c106detail14torchCheckFailEPKcS2_jRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+[ERR]   import torch_geometric.typing
+[OUT] 2026-02-02 16:01:54,664 - INFO - DSTAGNN model initialized with 4 blocks, K=3, d_model=512, n_heads=3
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/__init__.py:36: UserWarning: KgContextExecutor not available due to missing dependencies: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_version_cpu.so: undefined symbol: _ZN3c106detail14torchCheckFailEPKcS2_jRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+[ERR]   warnings.warn(f"KgContextExecutor not available due to missing dependencies: {e}")
+[OUT] 2026-02-02 16:01:55,356 - INFO - DSTAGNN(
+[OUT]   (BlockList): ModuleList(
+[OUT]     (0): DSTAGNN_block(
+[OUT]       (sigmoid): Sigmoid()
+[OUT]       (tanh): Tanh()
+[OUT]       (relu): ReLU(inplace=True)
+[OUT]       (pre_conv): Conv2d(12, 512, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (EmbedT): Embedding(
+[OUT]         (pos_embed): Embedding(12, 883)
+[OUT]         (norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (EmbedS): Embedding(
+[OUT]         (pos_embed): Embedding(883, 512)
+[OUT]         (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (TAt): MultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_V): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (fc): Linear(in_features=96, out_features=883, bias=False)
+[OUT]         (layer_norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (SAt): SMultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=512, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=512, out_features=96, bias=False)
+[OUT]       )
+[OUT]       (cheb_conv_SAt): cheb_conv_withSAt(
+[OUT]         (relu): ReLU(inplace=True)
+[OUT]         (Theta): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]         )
+[OUT]         (mask): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]         )
+[OUT]       )
+[OUT]       (gtu3): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu5): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 5), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu7): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]       (residual_conv): Conv2d(1, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (dropout): Dropout(p=0.05, inplace=False)
+[OUT]       (fcmy): Sequential(
+[OUT]         (0): Linear(in_features=24, out_features=12, bias=True)
+[OUT]         (1): Dropout(p=0.05, inplace=False)
+[OUT]       )
+[OUT]       (ln): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+[OUT]     )
+[OUT]     (1-3): 3 x DSTAGNN_block(
+[OUT]       (sigmoid): Sigmoid()
+[OUT]       (tanh): Tanh()
+[OUT]       (relu): ReLU(inplace=True)
+[OUT]       (pre_conv): Conv2d(12, 512, kernel_size=(1, 32), stride=(1, 1))
+[OUT]       (EmbedT): Embedding(
+[OUT]         (pos_embed): Embedding(12, 883)
+[OUT]         (norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (EmbedS): Embedding(
+[OUT]         (pos_embed): Embedding(883, 512)
+[OUT]         (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (TAt): MultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_V): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (fc): Linear(in_features=96, out_features=883, bias=False)
+[OUT]         (layer_norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (SAt): SMultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=512, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=512, out_features=96, bias=False)
+[OUT]       )
+[OUT]       (cheb_conv_SAt): cheb_conv_withSAt(
+[OUT]         (relu): ReLU(inplace=True)
+[OUT]         (Theta): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]         )
+[OUT]         (mask): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]         )
+[OUT]       )
+[OUT]       (gtu3): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu5): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 5), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu7): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]       (residual_conv): Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (dropout): Dropout(p=0.05, inplace=False)
+[OUT]       (fcmy): Sequential(
+[OUT]         (0): Linear(in_features=24, out_features=12, bias=True)
+[OUT]         (1): Dropout(p=0.05, inplace=False)
+[OUT]       )
+[OUT]       (ln): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+[OUT]     )
+[OUT]   )
+[OUT]   (final_conv): Conv2d(48, 128, kernel_size=(1, 32), stride=(1, 1))
+[OUT]   (final_fc): Linear(in_features=128, out_features=12, bias=True)
+[OUT] )
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.pre_conv.weight	torch.Size([512, 12, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,361 - INFO - BlockList.0.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.cheb_conv_SAt.Theta.0	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,362 - INFO - BlockList.0.cheb_conv_SAt.Theta.1	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.cheb_conv_SAt.Theta.2	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,363 - INFO - BlockList.0.residual_conv.weight	torch.Size([32, 1, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.0.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.0.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.0.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.0.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.0.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,364 - INFO - BlockList.1.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,365 - INFO - BlockList.1.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,366 - INFO - BlockList.1.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.1.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.1.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.1.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.1.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,367 - INFO - BlockList.2.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,368 - INFO - BlockList.2.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,369 - INFO - BlockList.2.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.2.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.3.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.3.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,370 - INFO - BlockList.3.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,371 - INFO - BlockList.3.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,372 - INFO - BlockList.3.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,373 - INFO - BlockList.3.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,374 - INFO - final_conv.weight	torch.Size([128, 48, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,374 - INFO - final_conv.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,374 - INFO - final_fc.weight	torch.Size([12, 128])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,374 - INFO - final_fc.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 16:01:55,375 - INFO - Total parameter numbers: 13908712
+[OUT] 2026-02-02 16:01:55,375 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-02 16:01:55,376 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-02 16:01:55,376 - INFO - Start training ...
+[OUT] 2026-02-02 16:01:55,376 - INFO - num_batches:529
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+[ERR]     executor.train(train_data, valid_data)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 297, in train
+[ERR]     losses = self._train_epoch(train_dataloader, epoch_idx, self.loss_func)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 369, in _train_epoch
+[ERR]     loss = loss_func(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 614, in calculate_loss
+[ERR]     y_predicted = self.predict(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 596, in predict
+[ERR]     output = self.forward(x)  # (B, N, T_out)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 569, in forward
+[ERR]     x, res_att = block(x, res_att)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 425, in forward
+[ERR]     spatial_gcn = self.cheb_conv_SAt(x, STAt, self.adj_pa)  # (B, N, F, T)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 266, in forward
+[ERR]     myspatial_attention = F.softmax(myspatial_attention, dim=1)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/functional.py", line 1888, in softmax
+[ERR]     ret = input.softmax(dim)
+[ERR] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 96.00 MiB. GPU 0 has a total capacity of 23.49 GiB of which 40.75 MiB is free. Including non-PyTorch memory, this process has 23.43 GiB memory in use. Of the allocated memory 23.02 GiB is allocated by PyTorch, and 107.25 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-02-02 18:40:19
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model DSTAGNN --dataset PEMSD7 --train true --max_epoch 35 --gpu_id 0 --exp_id 203165
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-02 18:40:24,377 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-02 18:40:24,377 - INFO - Begin pipeline, task=traffic_state_pred, model_name=DSTAGNN, dataset_name=PEMSD7, exp_id=203165
+[OUT] 2026-02-02 18:40:24,377 - INFO - {'task': 'traffic_state_pred', 'model': 'DSTAGNN', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '203165', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'DSTAGNNDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'model_name': 'DSTAGNN', 'comment_model': 'Dynamic Spatial-Temporal Aware Graph Neural Network for Traffic Flow Forecasting (ICML 2022)', 'comment_paper': 'Lan et al. ICML 2022. Reference: https://github.com/SYLan2019/DSTAGNN', 'comment_architecture_parameters': 'These parameters control the model architecture', 'in_channels': 1, 'comment_in_channels': 'Input feature dimension (usually 1 for traffic speed/flow)', 'nb_block': 4, 'comment_nb_block': 'Number of DSTAGNN blocks (stacked residual blocks). Paper default: 4', 'K': 3, 'comment_K': 'Order of Chebyshev polynomials for graph convolution. Paper default: 3', 'nb_chev_filter': 32, 'comment_nb_chev_filter': 'Output channels from Chebyshev graph convolution. Paper default: 32', 'nb_time_filter': 32, 'comment_nb_time_filter': 'Output channels from temporal convolution (GTU). Paper default: 32', 'd_model': 512, 'comment_d_model': 'Attention model dimension for temporal and spatial attention. Paper default: 512', 'd_k': 32, 'comment_d_k': 'Key/query/value dimension in attention layers. Paper default: 32', 'n_heads': 3, 'comment_n_heads': 'Number of attention heads. Paper default: 3 (must divide d_model evenly)', 'graph': 'AG', 'comment_graph': "Graph type to use. 'G'=static adjacency matrix, 'AG'=adaptive graph learning. Paper default: AG", 'time_strides': 1, 'comment_time_strides': 'Temporal stride in the first DSTAGNN block. Paper default: 1', 'd_v': 32, 'comment_d_v': 'Value dimension in attention layers. Paper default: 32 (same as d_k)', 'input_window': 12, 'comment_input_window': 'Input time sequence length (look-back window). Paper default: 12 (PEMS datasets)', 'output_window': 12, 'comment_output_window': 'Output prediction horizon length. Paper default: 12 (PEMS datasets)', 'comment_training_parameters': 'Training hyperparameters', 'comment_max_epoch': 'Maximum training epochs. Paper default: 110', 'learner': 'adam', 'comment_learner': 'Optimizer type. Paper uses Adam', 'learning_rate': 0.0001, 'comment_learning_rate': 'Initial learning rate for Adam optimizer. Paper default: 0.0001', 'lr_decay': False, 'comment_lr_decay': 'Whether to apply learning rate decay during training', 'clip_grad_norm': False, 'comment_clip_grad_norm': 'Whether to apply gradient clipping to prevent exploding gradients', 'use_early_stop': False, 'comment_use_early_stop': 'Whether to use early stopping based on validation loss', 'comment_data_parameters': 'Dataset and data loading parameters', 'batch_size': 32, 'comment_batch_size': 'Training batch size. Paper default: 32', 'scaler': 'standard', 'comment_scaler': 'Feature scaling method: standard (z-score), minmax, etc.', 'load_external': False, 'comment_load_external': 'Whether to load external features (e.g., POI, weather)', 'normal_external': False, 'comment_normal_external': 'Whether to normalize external features', 'ext_scaler': 'none', 'comment_ext_scaler': 'Scaler for external features if load_external=true', 'add_time_in_day': False, 'comment_add_time_in_day': 'Whether to add time-of-day features (hour embeddings)', 'add_day_in_week': False, 'comment_add_day_in_week': 'Whether to add day-of-week features', 'comment_reduced_capacity': 'For memory-limited scenarios, use these settings:', 'comment_reduced_setup': 'nb_block=2, nb_chev_filter=16, nb_time_filter=16, d_model=256, d_k=16, n_heads=2, batch_size=16', 'comment_expected_performance': 'PEMS04 dataset (from ICML 2022 paper):', 'comment_mae': 'MAE: 19.3', 'comment_rmse': 'RMSE: 31.3', 'comment_mape': 'MAPE: 12.8%', 'comment_datasets': 'Recommended datasets: PEMS03, PEMS04, PEMS07, PEMS08', 'comment_io_format': 'Input: (batch_size, T_in=12, N_nodes, F_in=1). Output: (batch_size, T_out=12, N_nodes, 1)', 'cache_dataset': True, 'comment_cache_dataset': 'Cache dataset in memory for faster training', 'num_workers': 0, 'comment_num_workers': 'Number of parallel data loading workers', 'train_rate': 0.6, 'comment_train_rate': 'Training data ratio (60% train, 20% eval, 20% test by default)', 'eval_rate': 0.2, 'comment_eval_rate': 'Evaluation data ratio', 'output_dim': 1, 'comment_output_dim': 'Output feature dimension. DSTAGNN uses only traffic_flow (first feature). Set to 1 to select only first column', 'sparsity': 0.01, 'comment_sparsity': 'Sparsity parameter for Adaptive Graph (AG) construction. Default: 0.01 (1% connectivity)', 'period': 288, 'comment_period': 'Number of timesteps in one day. For 5-minute intervals: 288 (24*60/5)', 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'weight_decay': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'max_grad_norm': 1.0, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-02 18:40:24,415 - INFO - Using opt_einsum
+[OUT] 2026-02-02 18:40:27,498 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-02-02 18:40:27,500 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-02-02 18:40:27,500 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-02-02 18:40:27,504 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-02-02 18:40:27,505 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.6_0.2_standard_32_False_False_False_True.npz
+[OUT] 2026-02-02 18:40:43,629 - INFO - train	x: (16921, 12, 883, 1), y: (16921, 12, 883, 1)
+[OUT] 2026-02-02 18:40:43,630 - INFO - eval	x: (5640, 12, 883, 1), y: (5640, 12, 883, 1)
+[OUT] 2026-02-02 18:40:43,630 - INFO - test	x: (5640, 12, 883, 1), y: (5640, 12, 883, 1)
+[OUT] 2026-02-02 18:40:44,610 - INFO - StandardScaler mean: 309.5414726371829, std: 189.50746108430616
+[OUT] 2026-02-02 18:40:44,610 - INFO - NoneScaler
+[OUT] 2026-02-02 18:40:51,873 - INFO - DSTAGNN model initialized with 4 blocks, K=3, d_model=512, n_heads=3
+[OUT] 2026-02-02 18:40:52,562 - INFO - DSTAGNN(
+[OUT]   (BlockList): ModuleList(
+[OUT]     (0): DSTAGNN_block(
+[OUT]       (sigmoid): Sigmoid()
+[OUT]       (tanh): Tanh()
+[OUT]       (relu): ReLU(inplace=True)
+[OUT]       (pre_conv): Conv2d(12, 512, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (EmbedT): Embedding(
+[OUT]         (pos_embed): Embedding(12, 883)
+[OUT]         (norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (EmbedS): Embedding(
+[OUT]         (pos_embed): Embedding(883, 512)
+[OUT]         (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (TAt): MultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_V): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (fc): Linear(in_features=96, out_features=883, bias=False)
+[OUT]         (layer_norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (SAt): SMultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=512, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=512, out_features=96, bias=False)
+[OUT]       )
+[OUT]       (cheb_conv_SAt): cheb_conv_withSAt(
+[OUT]         (relu): ReLU(inplace=True)
+[OUT]         (Theta): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 1x32 (cuda:0)]
+[OUT]         )
+[OUT]         (mask): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]         )
+[OUT]       )
+[OUT]       (gtu3): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu5): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 5), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu7): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]       (residual_conv): Conv2d(1, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (dropout): Dropout(p=0.05, inplace=False)
+[OUT]       (fcmy): Sequential(
+[OUT]         (0): Linear(in_features=24, out_features=12, bias=True)
+[OUT]         (1): Dropout(p=0.05, inplace=False)
+[OUT]       )
+[OUT]       (ln): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+[OUT]     )
+[OUT]     (1-3): 3 x DSTAGNN_block(
+[OUT]       (sigmoid): Sigmoid()
+[OUT]       (tanh): Tanh()
+[OUT]       (relu): ReLU(inplace=True)
+[OUT]       (pre_conv): Conv2d(12, 512, kernel_size=(1, 32), stride=(1, 1))
+[OUT]       (EmbedT): Embedding(
+[OUT]         (pos_embed): Embedding(12, 883)
+[OUT]         (norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (EmbedS): Embedding(
+[OUT]         (pos_embed): Embedding(883, 512)
+[OUT]         (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (TAt): MultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (W_V): Linear(in_features=883, out_features=96, bias=False)
+[OUT]         (fc): Linear(in_features=96, out_features=883, bias=False)
+[OUT]         (layer_norm): LayerNorm((883,), eps=1e-05, elementwise_affine=True)
+[OUT]       )
+[OUT]       (SAt): SMultiHeadAttention(
+[OUT]         (W_Q): Linear(in_features=512, out_features=96, bias=False)
+[OUT]         (W_K): Linear(in_features=512, out_features=96, bias=False)
+[OUT]       )
+[OUT]       (cheb_conv_SAt): cheb_conv_withSAt(
+[OUT]         (relu): ReLU(inplace=True)
+[OUT]         (Theta): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 32x32 (cuda:0)]
+[OUT]         )
+[OUT]         (mask): ParameterList(
+[OUT]             (0): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (1): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]             (2): Parameter containing: [torch.float32 of size 883x883 (cuda:0)]
+[OUT]         )
+[OUT]       )
+[OUT]       (gtu3): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu5): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 5), stride=(1, 1))
+[OUT]       )
+[OUT]       (gtu7): GTU(
+[OUT]         (tanh): Tanh()
+[OUT]         (sigmoid): Sigmoid()
+[OUT]         (con2out): Conv2d(32, 64, kernel_size=(1, 7), stride=(1, 1))
+[OUT]       )
+[OUT]       (residual_conv): Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]       (dropout): Dropout(p=0.05, inplace=False)
+[OUT]       (fcmy): Sequential(
+[OUT]         (0): Linear(in_features=24, out_features=12, bias=True)
+[OUT]         (1): Dropout(p=0.05, inplace=False)
+[OUT]       )
+[OUT]       (ln): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+[OUT]     )
+[OUT]   )
+[OUT]   (final_conv): Conv2d(48, 128, kernel_size=(1, 32), stride=(1, 1))
+[OUT]   (final_fc): Linear(in_features=128, out_features=12, bias=True)
+[OUT] )
+[OUT] 2026-02-02 18:40:52,564 - INFO - BlockList.0.pre_conv.weight	torch.Size([512, 12, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,564 - INFO - BlockList.0.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,564 - INFO - BlockList.0.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.Theta.0	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.Theta.1	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.Theta.2	torch.Size([1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.residual_conv.weight	torch.Size([32, 1, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,565 - INFO - BlockList.0.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.0.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.0.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.0.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.0.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,566 - INFO - BlockList.1.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.1.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,567 - INFO - BlockList.2.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.2.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.pre_conv.weight	torch.Size([512, 12, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.pre_conv.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedT.pos_embed.weight	torch.Size([12, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedT.norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedT.norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedS.pos_embed.weight	torch.Size([883, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedS.norm.weight	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.EmbedS.norm.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,568 - INFO - BlockList.3.TAt.W_Q.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.TAt.W_K.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.TAt.W_V.weight	torch.Size([96, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.TAt.fc.weight	torch.Size([883, 96])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.TAt.layer_norm.weight	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.TAt.layer_norm.bias	torch.Size([883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.SAt.W_Q.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.SAt.W_K.weight	torch.Size([96, 512])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.Theta.0	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.Theta.1	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.Theta.2	torch.Size([32, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.mask.0	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.mask.1	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.cheb_conv_SAt.mask.2	torch.Size([883, 883])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu3.con2out.weight	torch.Size([64, 32, 1, 3])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu3.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu5.con2out.weight	torch.Size([64, 32, 1, 5])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu5.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu7.con2out.weight	torch.Size([64, 32, 1, 7])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.gtu7.con2out.bias	torch.Size([64])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.residual_conv.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.residual_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.fcmy.0.weight	torch.Size([12, 24])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.fcmy.0.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.ln.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - BlockList.3.ln.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,569 - INFO - final_conv.weight	torch.Size([128, 48, 1, 32])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,570 - INFO - final_conv.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,570 - INFO - final_fc.weight	torch.Size([12, 128])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,570 - INFO - final_fc.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-02 18:40:52,570 - INFO - Total parameter numbers: 13908712
+[OUT] 2026-02-02 18:40:52,570 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-02 18:40:52,571 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-02 18:40:52,571 - INFO - Start training ...
+[OUT] 2026-02-02 18:40:52,571 - INFO - num_batches:529
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+[ERR]     executor.train(train_data, valid_data)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 297, in train
+[ERR]     losses = self._train_epoch(train_dataloader, epoch_idx, self.loss_func)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 369, in _train_epoch
+[ERR]     loss = loss_func(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 614, in calculate_loss
+[ERR]     y_predicted = self.predict(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 596, in predict
+[ERR]     output = self.forward(x)  # (B, N, T_out)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 569, in forward
+[ERR]     x, res_att = block(x, res_att)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 425, in forward
+[ERR]     spatial_gcn = self.cheb_conv_SAt(x, STAt, self.adj_pa)  # (B, N, F, T)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_flow_prediction/DSTAGNN.py", line 266, in forward
+[ERR]     myspatial_attention = F.softmax(myspatial_attention, dim=1)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/functional.py", line 1888, in softmax
+[ERR]     ret = input.softmax(dim)
+[ERR] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 96.00 MiB. GPU 0 has a total capacity of 23.49 GiB of which 40.75 MiB is free. Including non-PyTorch memory, this process has 23.43 GiB memory in use. Of the allocated memory 23.02 GiB is allocated by PyTorch, and 107.25 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+[Return Code: 1]
