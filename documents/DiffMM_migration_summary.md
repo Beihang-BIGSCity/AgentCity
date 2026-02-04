@@ -5,29 +5,36 @@
 **Model Name**: DiffMM
 **Original Repository**: https://github.com/decisionintelligence/DiffMM
 **Paper**: "DiffMM: Efficient Method for Accurate Noisy and Sparse Trajectory Map Matching via One Step Diffusion" (AAAI)
-**Task Type**: Map Matching / Trajectory Location Prediction (GPS-to-road-segment matching)
+**Task Type**: Map Matching (GPS-to-road-segment matching)
 **Migration Date**: 2026-02-02
-**Latest Update**: 2026-02-03 (restored to trajectory_loc_prediction per user request)
+**Latest Update**: 2026-02-04 (moved to map_matching with complete rewrite)
 
 ---
 
 ## Task Category History
 
-### Update 2026-02-03
-DiffMM has been restored to `trajectory_loc_prediction` task as requested by user.
-While technically a map matching model, it is now available in trajectory_loc_prediction for compatibility.
+### Update 2026-02-04
+DiffMM has been properly implemented in `map_matching` directory with a complete rewrite following the original repository architecture more closely.
 
-**Current Location**: `libcity/model/trajectory_loc_prediction/DiffMM.py`
+**Current Location**: `libcity/model/map_matching/DiffMM.py`
 
-### Previous Update (2026-02-02)
-DiffMM was moved from traj_loc_pred to map_matching, but has been reverted.
+The new implementation includes:
+- Complete TrajEncoder with PointEncoder and road segment attention
+- Full DiT (Diffusion Transformer) with AdaLN modulation
+- ShortCut one-step diffusion for efficient inference
+- Bootstrap target generation for training
+- Proper LibCity AbstractModel integration
+
+### Previous Updates
+- 2026-02-03: Temporarily in trajectory_loc_prediction
+- 2026-02-02: Initial migration
 
 ---
 
 ## Files Created/Updated
 
 ### Model File
-**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/DiffMM.py`
+**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/map_matching/DiffMM.py`
 
 The model file contains all necessary components:
 - `Norm`: Layer normalization

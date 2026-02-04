@@ -7518,3 +7518,751 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-02-04 04:24:28,334 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
 
 [Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 04:52:01
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 04:52:13,745 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 04:52:13,746 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 04:52:13,746 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 04:52:19,418 - INFO - Using opt_einsum
+[OUT] 2026-02-04 04:52:28,498 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 04:52:28,508 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 04:52:28,508 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 04:52:28,525 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 04:52:28,525 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 04:52:28,527 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 04:52:55,356 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 04:52:55,356 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 04:52:55,356 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 04:53:00,011 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 04:53:00,012 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:21:05
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:23:03,592 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:23:03,593 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 05:23:03,593 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:23:09,190 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:23:21,256 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 05:23:21,264 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:23:21,264 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:23:21,281 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 05:23:21,281 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:23:21,285 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 05:26:12,537 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 05:26:12,538 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 05:26:12,538 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 05:26:16,010 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 05:26:16,010 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:54:06
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:54:21,218 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:54:21,218 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 05:54:21,219 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:54:26,381 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:54:35,954 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 05:54:35,963 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:54:35,963 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:54:35,987 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 05:54:35,987 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:54:35,993 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 05:55:00,296 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 05:55:00,296 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 05:55:00,296 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 05:55:08,187 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 05:55:08,188 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:22:59
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:23:11,131 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:23:11,131 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 06:23:11,131 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:23:16,020 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:23:23,143 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 06:23:23,152 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:23:23,152 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:23:23,170 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 06:23:23,170 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:23:23,174 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:51:15
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:51:31,013 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:51:31,013 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 06:51:31,014 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:51:34,654 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:51:42,129 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 06:51:42,138 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:51:42,138 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:51:42,156 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 06:51:42,156 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:51:42,159 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 06:52:06,618 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 06:52:06,618 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 06:52:06,618 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:19:21
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:19:29,463 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:19:29,464 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 07:19:29,464 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:19:31,540 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:19:33,928 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 07:19:33,937 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:19:33,937 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:19:33,954 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 07:19:33,954 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:19:33,959 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 07:20:03,764 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 07:20:03,764 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 07:20:03,764 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 07:20:11,075 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 07:20:11,076 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:47:43
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:50:20,081 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:50:20,082 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 07:50:20,082 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:50:24,694 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:51:42,750 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 07:51:42,761 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:51:42,761 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:51:42,788 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 07:51:42,789 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:51:42,799 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 07:53:04,535 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 07:53:04,537 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 07:53:04,537 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 07:53:14,457 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 07:53:14,457 - INFO - NoneScaler
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+[ERR]   warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
+[OUT] 2026-02-04 07:54:11,866 - INFO - STDMAE(
+[OUT]   (tmae): Mask(
+[OUT]     (encoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (decoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (patch_embedding): PatchEmbedding(
+[OUT]       (input_embedding): Conv2d(1, 96, kernel_size=(12, 1), stride=(12, 1))
+[OUT]       (norm_layer): Identity()
+[OUT]     )
+[OUT]     (positional_encoding): PositionalEncoding()
+[OUT]     (encoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0-3): 4 x TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (enc_2_dec_emb): Linear(in_features=96, out_features=96, bias=True)
+[OUT]     (decoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0): TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (output_layer): Linear(in_features=96, out_features=12, bias=True)
+[OUT]   )
+[OUT]   (smae): Mask(
+[OUT]     (encoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (decoder_norm): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]     (patch_embedding): PatchEmbedding(
+[OUT]       (input_embedding): Conv2d(1, 96, kernel_size=(12, 1), stride=(12, 1))
+[OUT]       (norm_layer): Identity()
+[OUT]     )
+[OUT]     (positional_encoding): PositionalEncoding()
+[OUT]     (encoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0-3): 4 x TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (enc_2_dec_emb): Linear(in_features=96, out_features=96, bias=True)
+[OUT]     (decoder): TransformerLayers(
+[OUT]       (transformer_encoder): TransformerEncoder(
+[OUT]         (layers): ModuleList(
+[OUT]           (0): TransformerEncoderLayer(
+[OUT]             (self_attn): MultiheadAttention(
+[OUT]               (out_proj): NonDynamicallyQuantizableLinear(in_features=96, out_features=96, bias=True)
+[OUT]             )
+[OUT]             (linear1): Linear(in_features=96, out_features=384, bias=True)
+[OUT]             (dropout): Dropout(p=0.1, inplace=False)
+[OUT]             (linear2): Linear(in_features=384, out_features=96, bias=True)
+[OUT]             (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+[OUT]             (dropout1): Dropout(p=0.1, inplace=False)
+[OUT]             (dropout2): Dropout(p=0.1, inplace=False)
+[OUT]           )
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (output_layer): Linear(in_features=96, out_features=12, bias=True)
+[OUT]   )
+[OUT]   (backend): GraphWaveNet(
+[OUT]     (filter_convs): ModuleList(
+[OUT]       (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]     )
+[OUT]     (gate_convs): ModuleList(
+[OUT]       (0): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (1): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (2): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (3): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (4): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (5): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]       (6): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1))
+[OUT]       (7): Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 1), dilation=(2, 2))
+[OUT]     )
+[OUT]     (residual_convs): ModuleList(
+[OUT]       (0-7): 8 x Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     )
+[OUT]     (skip_convs): ModuleList(
+[OUT]       (0-7): 8 x Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     )
+[OUT]     (bn): ModuleList(
+[OUT]       (0-7): 8 x BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[OUT]     )
+[OUT]     (gconv): ModuleList(
+[OUT]       (0-7): 8 x gcn(
+[OUT]         (nconv): nconv()
+[OUT]         (mlp): linear(
+[OUT]           (mlp): Conv2d(160, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]         )
+[OUT]       )
+[OUT]     )
+[OUT]     (fc_his_t): Sequential(
+[OUT]       (0): Linear(in_features=96, out_features=512, bias=True)
+[OUT]       (1): ReLU()
+[OUT]       (2): Linear(in_features=512, out_features=256, bias=True)
+[OUT]       (3): ReLU()
+[OUT]     )
+[OUT]     (fc_his_s): Sequential(
+[OUT]       (0): Linear(in_features=96, out_features=512, bias=True)
+[OUT]       (1): ReLU()
+[OUT]       (2): Linear(in_features=512, out_features=256, bias=True)
+[OUT]       (3): ReLU()
+[OUT]     )
+[OUT]     (start_conv): Conv2d(2, 32, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     (end_conv_1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+[OUT]     (end_conv_2): Conv2d(512, 12, kernel_size=(1, 1), stride=(1, 1))
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.mask_token	torch.Size([1, 1, 1, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.encoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.encoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.decoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.decoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,869 - INFO - tmae.patch_embedding.input_embedding.weight	torch.Size([96, 1, 12, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.patch_embedding.input_embedding.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.1.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,870 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.2.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.encoder.transformer_encoder.layers.3.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.enc_2_dec_emb.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.enc_2_dec_emb.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,871 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,872 - INFO - tmae.decoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - tmae.output_layer.weight	torch.Size([12, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - tmae.output_layer.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.mask_token	torch.Size([1, 1, 1, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.decoder_norm.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.decoder_norm.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.patch_embedding.input_embedding.weight	torch.Size([96, 1, 12, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.patch_embedding.input_embedding.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,894 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.1.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.2.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,895 - INFO - smae.encoder.transformer_encoder.layers.3.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.encoder.transformer_encoder.layers.3.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.enc_2_dec_emb.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.enc_2_dec_emb.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.in_proj_weight	torch.Size([288, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.in_proj_bias	torch.Size([288])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.out_proj.weight	torch.Size([96, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.self_attn.out_proj.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.linear1.weight	torch.Size([384, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.linear1.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.linear2.weight	torch.Size([96, 384])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.linear2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.norm1.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.norm1.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.norm2.weight	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.decoder.transformer_encoder.layers.0.norm2.bias	torch.Size([96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.output_layer.weight	torch.Size([12, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,896 - INFO - smae.output_layer.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.nodevec1	torch.Size([325, 10])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.nodevec2	torch.Size([10, 325])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.filter_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.0.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.1.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.2.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.3.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,897 - INFO - backend.gate_convs.4.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.5.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.6.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.7.weight	torch.Size([32, 32, 1, 2])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.gate_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.0.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.1.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.2.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.3.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.4.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.5.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.6.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.7.weight	torch.Size([32, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.residual_convs.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.skip_convs.0.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.skip_convs.0.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.skip_convs.1.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.skip_convs.1.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,898 - INFO - backend.skip_convs.2.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.3.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.3.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.4.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.4.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.5.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.5.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.6.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.6.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.7.weight	torch.Size([256, 32, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.skip_convs.7.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.0.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.0.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.1.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.1.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.2.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.2.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.3.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.3.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.4.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.4.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.5.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.5.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.6.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.6.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.7.weight	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,899 - INFO - backend.bn.7.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,900 - INFO - backend.gconv.0.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,900 - INFO - backend.gconv.0.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.1.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.1.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.2.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.2.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.3.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.3.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.4.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.4.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.5.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.5.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.6.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.6.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.7.mlp.mlp.weight	torch.Size([32, 160, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.gconv.7.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_t.0.weight	torch.Size([512, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_t.0.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_t.2.weight	torch.Size([256, 512])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_t.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_s.0.weight	torch.Size([512, 96])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,902 - INFO - backend.fc_his_s.0.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.fc_his_s.2.weight	torch.Size([256, 512])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.fc_his_s.2.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.start_conv.weight	torch.Size([32, 2, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.start_conv.bias	torch.Size([32])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.end_conv_1.weight	torch.Size([512, 256, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.end_conv_1.bias	torch.Size([512])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.end_conv_2.weight	torch.Size([12, 512, 1, 1])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - backend.end_conv_2.bias	torch.Size([12])	cuda:0	True
+[OUT] 2026-02-04 07:54:11,903 - INFO - Total parameter numbers: 1800168
+[OUT] 2026-02-04 07:54:11,904 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-04 07:54:11,904 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-04 07:54:11,905 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-04 07:54:11,905 - INFO - Start training ...
+[OUT] 2026-02-04 07:54:11,905 - INFO - num_batches:4559
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:22:28
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:22:33,293 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:22:33,294 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 08:22:33,294 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:22:34,272 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:22:36,650 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 08:22:36,656 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:22:36,656 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:22:36,670 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 08:22:36,670 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:22:36,674 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 08:23:23,783 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 08:23:23,784 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 08:23:23,784 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 08:23:26,291 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 08:23:26,291 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:50:33
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:53:14,818 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:53:14,827 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 08:53:14,827 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:53:20,235 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:53:30,846 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 08:53:30,861 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:53:30,861 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:53:30,887 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 08:53:30,887 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:53:30,903 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 08:56:17,355 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 08:56:17,356 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 08:56:17,357 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 08:56:32,718 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 08:56:32,721 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:24:15
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:25:06,739 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:25:06,739 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 09:25:06,739 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:25:11,706 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:25:21,720 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 09:25:21,737 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:25:21,737 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:25:21,779 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 09:25:21,779 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:25:21,792 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 09:26:31,912 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 09:26:31,913 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 09:26:31,913 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 09:26:45,064 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 09:26:45,064 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:54:42
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:54:55,955 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:54:55,955 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 09:54:55,955 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:55:00,082 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:55:08,549 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 09:55:08,558 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:55:08,558 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:55:08,577 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 09:55:08,577 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:55:08,580 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+[OUT] 2026-02-04 09:57:07,383 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 09:57:07,384 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 09:57:07,385 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 09:57:10,474 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 09:57:10,475 - INFO - NoneScaler
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:24:27
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STDMAE --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 292786
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:24:36,884 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:24:36,885 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STDMAE, dataset_name=PEMS_BAY, exp_id=292786
+[OUT] 2026-02-04 10:24:36,885 - INFO - {'task': 'traffic_state_pred', 'model': 'STDMAE', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '292786', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'seq_len': 864, 'patch_size': 12, 'embed_dim': 96, 'num_heads': 4, 'mlp_ratio': 4, 'dropout': 0.1, 'mask_ratio': 0.25, 'encoder_depth': 4, 'decoder_depth': 1, 'gcn_bool': True, 'addaptadj': True, 'residual_channels': 32, 'dilation_channels': 32, 'skip_channels': 256, 'end_channels': 512, 'kernel_size': 2, 'blocks': 4, 'layers': 2, 'pre_trained_tmae_path': None, 'pre_trained_smae_path': None, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'batch_size': 8, 'learner': 'adam', 'learning_rate': 0.002, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.5, 'milestones': [1, 18, 36, 54, 72], 'clip_grad_norm': True, 'max_grad_norm': 3.0, 'use_early_stop': False, 'patience': 20, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'input_window': 12, 'output_window': 12, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:24:40,212 - INFO - Using opt_einsum
+[OUT] 2026-02-04 10:24:48,081 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 10:24:48,094 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 10:24:48,094 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 10:24:48,122 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 10:24:48,123 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 10:24:48,132 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_8_True_True_False_True.npz
+
+[Return Code: -9]

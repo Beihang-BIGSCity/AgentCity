@@ -18,15 +18,13 @@ from libcity.model.trajectory_loc_prediction.GETNext import GETNext
 from libcity.model.trajectory_loc_prediction.LoTNext import LoTNext
 from libcity.model.trajectory_loc_prediction.ROTAN import ROTAN
 from libcity.model.trajectory_loc_prediction.CLSPRec import CLSPRec
-from libcity.model.trajectory_loc_prediction.PRME import PRME
-from libcity.model.trajectory_loc_prediction.TrajSDE import TrajSDE
-from libcity.model.trajectory_loc_prediction.DCHL import DCHL
 from libcity.model.trajectory_loc_prediction.PLMTrajRec import PLMTrajRec
 from libcity.model.trajectory_loc_prediction.GNPRSID import GNPRSID
 from libcity.model.trajectory_loc_prediction.JGRM import JGRM
 from libcity.model.trajectory_loc_prediction.RNTrajRec import RNTrajRec
 from libcity.model.trajectory_loc_prediction.AGRAN import AGRAN
 from libcity.model.trajectory_loc_prediction.DeepMM import DeepMM
+from libcity.model.trajectory_loc_prediction.DCHL import DCHL
 __all__ = [
     "DeepMove",
     "RNN",
@@ -48,13 +46,11 @@ __all__ = [
     "LoTNext",
     "ROTAN",
     "CLSPRec",
-    "PRME",
-    "TrajSDE",
-    "DCHL",
     "PLMTrajRec",
     "GNPRSID",
     "JGRM",
     "RNTrajRec",
     "AGRAN",
-    "DeepMM"
+    "DeepMM",
+    "DCHL"
 ]

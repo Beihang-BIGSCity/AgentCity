@@ -34,7 +34,8 @@
             "RNTrajRec",
             "DiffMM",
             "L2MM",
-            "DeepMM"
+            "DeepMM",
+            "TRMMA"
         ],
         "allowed_dataset": [
             "foursquare_tky",
@@ -237,8 +238,14 @@
         },
         "DeepMM": {
             "dataset_class": "DeepMMSeq2SeqDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator",
+            "traj_encoder": "StandardTrajectoryEncoder"
+        },
+        "TRMMA": {
+            "dataset_class": "TrajectoryDataset",
             "executor": "TrajLocPredExecutor",
-            "evaluator": "DeepMMEvaluator",
+            "evaluator": "TrajLocPredEvaluator",
             "traj_encoder": "StandardTrajectoryEncoder"
         }
     },
@@ -1100,7 +1107,8 @@
             "DeepMM",
             "DiffMM",
             "TRMMA",
-            "GraphMM"
+            "GraphMM",
+            "RLOMM"
         ],
         "allowed_dataset": [
             "global",
@@ -1140,7 +1148,7 @@
         "DeepMM": {
             "dataset_class": "DeepMMSeq2SeqDataset",
             "executor": "DeepMapMatchingExecutor",
-            "evaluator": "DeepMMEvaluator"
+            "evaluator": "MapMatchingEvaluator"
         },
         "DiffMM": {
             "dataset_class": "DiffMMDataset",
@@ -1153,6 +1161,11 @@
             "evaluator": "MapMatchingEvaluator"
         },
         "GraphMM": {
+            "dataset_class": "DeepMapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "RLOMM": {
             "dataset_class": "DeepMapMatchingDataset",
             "executor": "DeepMapMatchingExecutor",
             "evaluator": "MapMatchingEvaluator"

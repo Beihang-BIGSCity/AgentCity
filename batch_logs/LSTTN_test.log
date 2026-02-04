@@ -10453,3 +10453,944 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-02-04 04:33:37,984 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
 
 [Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 04:54:25
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 04:54:43,472 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 04:54:43,473 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 04:54:43,473 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 04:54:50,247 - INFO - Using opt_einsum
+[OUT] 2026-02-04 04:55:06,732 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 04:55:06,743 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 04:55:06,743 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 04:55:06,764 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 04:55:06,764 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 04:55:06,767 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 04:55:14,722 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:00:21
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:00:34,079 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:00:34,079 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 05:00:34,079 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:00:37,870 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:00:45,673 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 05:00:45,687 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:00:45,687 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:00:45,721 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 05:00:45,721 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:00:45,723 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 05:00:53,226 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:01:42
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:01:56,222 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:01:56,222 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 05:01:56,222 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:01:59,677 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:02:07,837 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 05:02:07,848 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:02:07,848 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:02:07,866 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 05:02:07,866 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:02:07,871 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 05:02:25,427 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:22:23
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:23:03,592 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:23:03,593 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 05:23:03,593 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:23:09,190 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:23:21,247 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 05:23:21,259 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:23:21,259 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:23:21,282 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 05:23:21,282 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:23:21,284 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 05:23:30,272 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:27:54
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:28:00,603 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:28:00,604 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 05:28:00,604 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:28:01,618 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:28:04,279 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 05:28:04,287 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:28:04,287 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:28:04,307 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 05:28:04,307 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:28:04,308 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 05:28:44,051 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:30:00
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:30:15,581 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:30:15,582 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 05:30:15,583 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:30:21,590 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:30:30,972 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 05:30:30,986 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:30:30,986 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:30:31,005 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 05:30:31,005 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:30:31,010 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 05:30:49,433 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:52:50
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:53:05,105 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:53:05,106 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 05:53:05,106 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:53:10,884 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:53:20,006 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 05:53:20,025 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:53:20,025 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:53:20,057 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 05:53:20,057 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:53:20,059 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 05:53:28,031 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:56:40
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:56:47,290 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:56:47,291 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 05:56:47,291 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:56:48,376 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:56:51,037 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 05:56:51,046 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:56:51,046 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:56:51,063 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 05:56:51,063 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:56:51,064 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 05:57:00,493 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 05:58:11
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 05:58:16,451 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 05:58:16,451 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 05:58:16,452 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 05:58:17,418 - INFO - Using opt_einsum
+[OUT] 2026-02-04 05:58:22,178 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 05:58:22,186 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 05:58:22,186 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 05:58:22,204 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 05:58:22,204 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 05:58:22,206 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 05:58:41,872 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:20:40
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:20:54,833 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:20:54,834 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 06:20:54,834 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:21:00,444 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:21:09,902 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 06:21:09,917 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:21:09,917 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:21:09,941 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 06:21:09,941 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:21:09,943 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 06:21:16,774 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:24:35
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:24:47,990 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:24:47,991 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 06:24:47,991 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:24:51,352 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:24:58,300 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 06:24:58,309 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:24:58,309 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:24:58,328 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 06:24:58,328 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:24:58,329 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 06:25:06,735 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+============================================================
+Timestamp: 2026-02-04 06:26:54
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+
+[Return Code: -9]
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:27:09,474 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:27:09,475 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 06:27:09,475 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:27:14,709 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:27:23,274 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 06:27:23,281 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:27:23,281 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:27:23,297 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 06:27:23,297 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:27:23,301 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 06:27:42,834 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:48:12
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:48:27,841 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:48:27,842 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 06:48:27,842 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:48:32,628 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:48:42,846 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 06:48:42,863 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:48:42,863 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:48:42,885 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 06:48:42,885 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:48:42,887 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 06:48:49,586 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:53:36
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:54:57,190 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:54:57,190 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 06:54:57,191 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:55:01,946 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:55:11,349 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 06:55:11,366 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:55:11,367 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:55:11,436 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 06:55:11,441 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:55:11,444 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 06:55:18,212 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 06:56:24
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 06:56:28,786 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 06:56:28,787 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 06:56:28,787 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 06:56:31,146 - INFO - Using opt_einsum
+[OUT] 2026-02-04 06:56:35,785 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 06:56:35,791 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 06:56:35,791 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 06:56:35,808 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 06:56:35,808 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 06:56:35,811 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 06:58:10,370 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:16:25
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:16:30,332 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:16:30,333 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 07:16:30,333 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:16:31,397 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:16:33,800 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 07:16:33,811 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:16:33,811 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:16:33,834 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 07:16:33,834 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:16:33,835 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 07:16:40,881 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:22:43
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:22:56,090 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:22:56,090 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 07:22:56,091 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:22:59,484 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:23:06,897 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 07:23:06,908 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:23:06,908 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:23:06,929 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 07:23:06,930 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:23:06,931 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 07:23:13,628 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:26:34
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:26:41,635 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:26:41,636 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 07:26:41,636 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:26:43,845 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:26:48,140 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 07:26:48,148 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:26:48,148 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:26:48,163 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 07:26:48,163 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:26:48,166 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 07:27:04,778 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:43:37
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:44:12,522 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:44:12,522 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 07:44:12,522 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:44:16,056 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:44:24,843 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 07:44:24,854 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:44:24,854 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:44:24,876 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 07:44:24,876 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:44:24,878 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 07:44:31,691 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:50:56
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:52:08,778 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:52:08,780 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 07:52:08,780 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:52:20,452 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:52:27,361 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 07:52:27,375 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:52:27,375 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:52:27,404 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 07:52:27,404 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:52:27,408 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 07:52:47,885 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 07:54:58
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 07:55:09,845 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 07:55:09,845 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 07:55:09,845 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 07:55:13,320 - INFO - Using opt_einsum
+[OUT] 2026-02-04 07:55:19,663 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 07:55:19,669 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 07:55:19,670 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 07:55:19,684 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 07:55:19,684 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 07:55:19,687 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 07:55:37,393 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:11:29
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:11:43,141 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:11:43,141 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 08:11:43,141 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:11:46,766 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:11:50,198 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 08:11:50,207 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:11:50,207 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:11:50,226 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 08:11:50,226 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:11:50,228 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 08:11:59,705 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:20:22
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:20:35,060 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:20:35,061 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 08:20:35,061 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:20:38,788 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:20:47,714 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 08:20:47,724 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:20:47,724 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:20:47,754 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 08:20:47,754 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:20:47,757 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 08:20:55,967 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:22:47
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:22:52,670 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:22:52,671 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 08:22:52,671 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:22:53,704 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:22:56,140 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 08:22:56,146 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:22:56,147 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:22:56,160 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 08:22:56,160 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:22:56,162 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 08:23:25,491 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:40:55
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:41:00,391 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:41:00,391 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 08:41:00,391 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:41:01,401 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:41:03,803 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 08:41:03,812 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:41:03,813 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:41:03,833 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 08:41:03,833 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:41:03,834 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 08:41:17,749 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 08:48:51
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:49:15,159 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:49:15,161 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 08:49:15,165 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:51:07,049 - INFO - Using opt_einsum
+
+============================================================
+Timestamp: 2026-02-04 08:51:27
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 08:53:14,784 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 08:53:14,785 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 08:53:14,785 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 08:53:17,998 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 08:53:18,021 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:53:18,022 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:53:18,083 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 08:53:18,083 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:53:18,089 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 08:53:20,236 - INFO - Using opt_einsum
+[OUT] 2026-02-04 08:53:30,914 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 08:53:30,925 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 08:53:30,926 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 08:53:30,951 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 08:53:30,952 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 08:53:30,954 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 08:53:35,548 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+[OUT] 2026-02-04 08:55:12,895 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:08:32
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:09:08,809 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:09:08,811 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 09:09:08,811 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:09:12,935 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:09:22,735 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 09:09:22,755 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:09:22,756 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:09:22,796 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 09:09:22,796 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:09:22,800 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 09:09:33,042 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:21:31
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:21:38,651 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:21:38,652 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 09:21:38,652 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:21:39,972 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:21:42,366 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 09:21:42,374 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:21:42,374 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:21:42,393 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 09:21:42,393 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:21:42,394 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 09:21:50,177 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+============================================================
+Timestamp: 2026-02-04 09:23:12
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+
+[Return Code: -9]
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:23:34,441 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:23:34,441 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 09:23:34,441 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:23:38,202 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:23:45,296 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 09:23:45,304 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:23:45,304 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:23:45,319 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 09:23:45,319 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:23:45,323 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 09:24:19,938 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:37:34
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:37:47,772 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:37:47,772 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 09:37:47,772 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:37:52,300 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:37:59,783 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 09:37:59,795 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:37:59,795 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:37:59,817 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 09:37:59,817 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:37:59,820 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 09:38:07,024 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:50:07
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:50:25,383 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:50:25,383 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 09:50:25,383 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:50:31,190 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:50:42,767 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 09:50:42,782 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:50:42,782 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:50:42,819 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 09:50:42,819 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:50:42,821 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 09:50:52,804 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 09:52:30
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 09:52:42,820 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 09:52:42,821 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 09:52:42,821 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 09:52:43,793 - INFO - Using opt_einsum
+[OUT] 2026-02-04 09:52:46,134 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 09:52:46,141 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 09:52:46,141 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 09:52:46,154 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 09:52:46,155 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 09:52:46,156 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 09:53:46,939 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:05:34
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:05:46,819 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:05:46,819 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 10:05:46,819 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:05:50,544 - INFO - Using opt_einsum
+[OUT] 2026-02-04 10:05:56,921 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 10:05:56,932 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 10:05:56,932 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 10:05:56,955 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 10:05:56,955 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 10:05:56,956 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 10:06:03,671 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:18:03
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:18:41,885 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:18:41,885 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 10:18:41,885 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:18:47,033 - INFO - Using opt_einsum
+[OUT] 2026-02-04 10:18:57,495 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 10:18:57,508 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 10:18:57,509 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 10:18:57,539 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 10:18:57,539 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 10:18:57,541 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 10:19:06,136 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:21:20
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 287394
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:22:08,362 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:22:08,363 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=PEMS_BAY, exp_id=287394
+[OUT] 2026-02-04 10:22:08,363 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '287394', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:22:13,933 - INFO - Using opt_einsum
+[OUT] 2026-02-04 10:22:23,273 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 10:22:23,283 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 10:22:23,283 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 10:22:23,304 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 10:22:23,304 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 10:22:23,308 - INFO - Loading file PEMS_BAY.dyna
+[OUT] 2026-02-04 10:22:43,176 - INFO - Loaded file PEMS_BAY.dyna, shape=(52116, 325, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:33:21
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 146706
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:33:33,497 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:33:33,497 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=146706
+[OUT] 2026-02-04 10:33:33,497 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '146706', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:33:37,186 - INFO - Using opt_einsum
+[OUT] 2026-02-04 10:33:43,193 - INFO - Loaded file METR_LA.geo, num_nodes=207
+[OUT] 2026-02-04 10:33:43,204 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 10:33:43,204 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 10:33:43,227 - INFO - Loaded file METR_LA.rel, shape=(207, 207)
+[OUT] 2026-02-04 10:33:43,227 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 10:33:43,228 - INFO - Loading file METR_LA.dyna
+[OUT] 2026-02-04 10:33:50,739 - INFO - Loaded file METR_LA.dyna, shape=(34272, 207, 1)
+
+[Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-04 10:46:52
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 289177
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 10:48:32,593 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 10:48:32,596 - INFO - Begin pipeline, task=traffic_state_pred, model_name=LSTTN, dataset_name=METR_LA, exp_id=289177
+[OUT] 2026-02-04 10:48:32,596 - INFO - {'task': 'traffic_state_pred', 'model': 'LSTTN', 'dataset': 'METR_LA', 'saved_model': True, 'train': True, 'exp_id': '289177', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'input_window': 4032, 'output_window': 12, 'short_seq_len': 12, 'long_seq_len': 4032, 'transformer_hidden_dim': 64, 'transformer_dropout': 0.1, 'transformer_mask_ratio': 0.75, 'num_transformer_encoder_layers': 4, 'long_trend_hidden_dim': 4, 'seasonality_hidden_dim': 4, 'mlp_hidden_dim': 128, 'model_dropout': 0.3, 'gwnet_dropout': 0.3, 'gwnet_gcn_bool': True, 'gwnet_addaptadj': True, 'gwnet_in_dim': 2, 'gwnet_out_dim': 128, 'gwnet_residual_channels': 32, 'gwnet_dilation_channels': 32, 'gwnet_skip_channels': 256, 'gwnet_end_channels': 512, 'gwnet_kernel_size': 2, 'gwnet_blocks': 4, 'gwnet_layers': 2, 'adjtype': 'doubletransition', 'pretrained_transformer_path': '', 'scaler': 'standard', 'load_external': False, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'learner': 'adam', 'learning_rate': 0.005, 'weight_decay': 1e-05, 'lr_epsilon': 1e-08, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'steps': [1, 18, 36, 54, 72], 'lr_decay_ratio': 0.5, 'clip_grad_norm': True, 'max_grad_norm': 3, 'use_early_stop': False, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'patience': 50, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['METR_LA'], 'geo_file': 'METR_LA', 'rel_file': 'METR_LA', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 10:48:38,173 - INFO - Using opt_einsum

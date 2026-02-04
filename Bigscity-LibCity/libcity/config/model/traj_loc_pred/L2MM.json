@@ -9,6 +9,7 @@
     "dropout": 0.1,
     "bidirectional": true,
     "cluster_size": 10,
+    "criterion_name": "CE",
     "max_length": 300,
     "teacher_forcing_ratio": 1.0,
     "training_mode": "train",
@@ -21,8 +22,9 @@
 
     "batch_size": 128,
     "learning_rate": 0.001,
-    "max_epoch": 100,
+    "max_epoch": 10,
     "optimizer": "adam",
+    "learner": "adam",
     "clip": 5.0,
     "lr_step": 20,
     "lr_decay": 0.5,

@@ -861,6 +861,34 @@
     "notes": "SIGIR 2025. Multi-agent approach for POI prediction."
   },
   {
+    "title": "RNTrajRec: Road Network Enhanced Trajectory Recovery with Spatial-Temporal Transformer",
+    "conference": "ICDE",
+    "year": 2023,
+    "model_name": "RNTrajRec",
+    "track": "Research",
+    "pdf_link": "https://ieeexplore.ieee.org/document/10184589",
+    "datasets": [
+      "Porto",
+      "Shanghai",
+      "Chengdu"
+    ],
+    "metrics": {
+      "Performance": {
+        "F1-Score": "Significant improvement over seq2seq baselines",
+        "Recovery Rate": "High accuracy on low-sampling rate data"
+      },
+      "Note": "Combines a GridGNN for road segment embedding and a Spatial-Temporal Transformer to recover high-resolution trajectories from sparse GPS points."
+    },
+    "repo_url": "https://github.com/chenyuqi990215/RNTrajRec",
+    "keywords": [
+      "trajectory recovery",
+      "spatial-temporal transformer",
+      "road network embedding",
+      "grid gnn",
+      "sparse trajectory"
+    ]
+  },
+  {
     "title": "GETNext: Trajectory Flow Map Enhanced Transformer for Next POI Recommendation",
     "venue": "SIGIR",
     "year": 2022,
@@ -896,12 +924,41 @@
     "keywords": ["chaotic mobility", "neural oscillator", "next location prediction", "attention mechanism"]
   },
   {
+    "title": "Timestamps as Prompts for Geography-Aware Location Recommendation",
+    "conference": "CIKM",
+    "year": 2023,
+    "model_name": "TPG",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2304.04151",
+    "datasets": [
+      "Foursquare-NYC",
+      "Foursquare-TKY",
+      "Gowalla",
+      "Check-in (Instagram)"
+    ],
+    "metrics": {
+      "Performance": {
+        "Recall@5": "Significant improvement over STAN and GeoSAN",
+        "NDCG@5": "State-of-the-art performance on sequential recommendation"
+      },
+      "Note": "TPG introduces a temporal prompt mechanism to enable flexible interval prediction (predicting visits at arbitrary future times) and uses a shifted window mechanism to handle the hard boundary problem in geographic gridding."
+    },
+    "repo_url": "https://github.com/haoyi-duan/TPG",
+    "keywords": [
+      "temporal prompt",
+      "geography-aware",
+      "location recommendation",
+      "interval prediction",
+      "shifted window"
+    ]
+  },
+  {
     "title": "ROTAN: A Rotation-based Temporal Attention Network for Time-Specific Next POI Recommendation",
     "conference": "KDD",
     "year": 2024,
     "model_name": "ROTAN",
     "track": "Research",
-    "pdf_link": "https://dl.acm.org/doi/10.1145/3637528.3671813",
+    "pdf_link": "https://dl.acm.org/doi/abs/10.1145/3637528.3671809",
     "datasets": [
       "Foursquare-NYC",
       "Foursquare-TKY",
@@ -1012,56 +1069,6 @@
     ]
   },
   {
-    "title": "Fine-Grained Trajectory-based Travel Time Estimation for Multi-city Scenarios Based on Deep Meta-Learning",
-    "conference": "KDD",
-    "year": 2019,
-    "model_name": "MetaTTE",
-    "track": "Research",
-    "pdf_link": "https://dl.acm.org/doi/10.1145/3292500.3330876",
-    "datasets": [
-      "Chengdu (Didi)",
-      "Beijing (Didi)"
-    ],
-    "metrics": {
-      "Note": "Uses a meta-learning based framework (MetaTTE) to transfer knowledge from data-rich cities to data-scarce cities for travel time estimation."
-    },
-    "repo_url": "https://github.com/maxwang967/MetaTTE",
-    "keywords": [
-      "meta-learning",
-      "travel time estimation",
-      "multi-city",
-      "transfer learning",
-      "spatio-temporal"
-    ]
-  },
-  {
-    "title": "Multi View Spatial-Temporal Model for Travel Time Estimation",
-    "conference": "SIGSPATIAL (GIS Cup)",
-    "year": 2021,
-    "model_name": "MVSTM",
-    "track": "Competition/Conference",
-    "pdf_link": "https://arxiv.org/abs/2109.07402",
-    "datasets": [
-      "Didi Shenzhen (Taxi)",
-      "GIS Cup 2021 Dataset"
-    ],
-    "metrics": {
-      "Performance": {
-        "Rank": "4th Place in GIS Cup 2021",
-        "MAPE": "Competitive with top solutions"
-      },
-      "Note": "MVSTM captures spatial, trajectory, and semantic views using Graph2Vec, dual-channel temporal modules, and structural embeddings to estimate travel time."
-    },
-    "repo_url": "https://github.com/775269512/SIGSPATIAL-2021-GISCUP-4th-Solution",
-    "keywords": [
-      "multi-view learning",
-      "spatial-temporal modeling",
-      "travel time estimation",
-      "graph2vec",
-      "trajectory embedding"
-    ]
-  },
-  {
     "title": "LightPath: Lightweight and Scalable Path Representation Learning",
     "conference": "KDD",
     "year": 2023,
@@ -1086,6 +1093,29 @@
       "scalable",
       "sparse auto-encoder",
       "knowledge distillation"
+    ]
+  },
+  {
+    "title": "More Than Routing: Joint GPS and Route Modeling for Refine Trajectory Representation Learning",
+    "conference": "WWW",
+    "year": 2024,
+    "model_name": "JGRM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2402.16915",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Xi'an (Didi)"
+    ],
+    "metrics": {
+      "Note": "JGRM proposes a joint GPS and Route modeling framework for trajectory representation learning, utilizing a hierarchical GPS encoder and a route encoder with self-supervised tasks (masked language modeling and contrastive learning) to capture fine-grained motion details and road topology."
+    },
+    "repo_url": "https://github.com/mamazi0131/JGRM",
+    "keywords": [
+      "trajectory representation learning",
+      "joint modeling",
+      "GPS and route",
+      "self-supervised learning",
+      "contrastive learning"
     ]
   },
   {
@@ -1135,6 +1165,33 @@
       "next POI recommendation",
       "multi-view learning"
     ]
+  },
+  {
+    "title": "Generative Next POI Recommendation with Semantic ID",
+    "conference": "KDD",
+    "year": 2025,
+    "model_name": "GNPRSID",
+    "track": "Research",
+    "datasets": [
+      "NYC",
+      "TKY (Tokyo)",
+      "CA (Check-in)"
+    ],
+    "metrics": {
+      "NYC": {
+        "Hit@1": "22.5% (Approx)",
+        "NDCG@1": "14.2%",
+        "Note": "Uses RQ-VAE to quantize POI coordinates into Semantic IDs for LLM generation."
+      },
+      "repo_url": "https://github.com/wds1996/GNPR-SID",
+      "keywords": [
+        "next POI recommendation",
+        "generative model",
+        "semantic ID",
+        "large language model",
+        "quantization"
+      ]
+    }
   },
   {
     "title": "PLMTrajRec: A Scalable and Generalizable Trajectory Recovery Method with Pre-trained Language Models",
@@ -1219,6 +1276,56 @@
     ]
   },
   {
+    "title": "Fine-Grained Trajectory-based Travel Time Estimation for Multi-city Scenarios Based on Deep Meta-Learning",
+    "conference": "KDD",
+    "year": 2019,
+    "model_name": "MetaTTE",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3292500.3330876",
+    "datasets": [
+      "Chengdu (Didi)",
+      "Beijing (Didi)"
+    ],
+    "metrics": {
+      "Note": "Uses a meta-learning based framework (MetaTTE) to transfer knowledge from data-rich cities to data-scarce cities for travel time estimation."
+    },
+    "repo_url": "https://github.com/maxwang967/MetaTTE",
+    "keywords": [
+      "meta-learning",
+      "travel time estimation",
+      "multi-city",
+      "transfer learning",
+      "spatio-temporal"
+    ]
+  },
+  {
+    "title": "Multi View Spatial-Temporal Model for Travel Time Estimation",
+    "conference": "SIGSPATIAL (GIS Cup)",
+    "year": 2021,
+    "model_name": "MVSTM",
+    "track": "Competition/Conference",
+    "pdf_link": "https://arxiv.org/abs/2109.07402",
+    "datasets": [
+      "Didi Shenzhen (Taxi)",
+      "GIS Cup 2021 Dataset"
+    ],
+    "metrics": {
+      "Performance": {
+        "Rank": "4th Place in GIS Cup 2021",
+        "MAPE": "Competitive with top solutions"
+      },
+      "Note": "MVSTM captures spatial, trajectory, and semantic views using Graph2Vec, dual-channel temporal modules, and structural embeddings to estimate travel time."
+    },
+    "repo_url": "https://github.com/775269512/SIGSPATIAL-2021-GISCUP-4th-Solution",
+    "keywords": [
+      "multi-view learning",
+      "spatial-temporal modeling",
+      "travel time estimation",
+      "graph2vec",
+      "trajectory embedding"
+    ]
+  },
+  {
     "title": "DutyTTE: Deciphering Uncertainty in Origin-Destination Travel Time Estimation",
     "conference": "AAAI",
     "year": 2025,
@@ -1243,33 +1350,6 @@
       "origin-destination",
       "robust ETA"
     ]
-  },
-  {
-    "title": "Generative Next POI Recommendation with Semantic ID",
-    "conference": "KDD",
-    "year": 2025,
-    "model_name": "GNPRSID",
-    "track": "Research",
-    "datasets": [
-      "NYC",
-      "TKY (Tokyo)",
-      "CA (Check-in)"
-    ],
-    "metrics": {
-      "NYC": {
-        "Hit@1": "22.5% (Approx)",
-        "NDCG@1": "14.2%",
-        "Note": "Uses RQ-VAE to quantize POI coordinates into Semantic IDs for LLM generation."
-      },
-      "repo_url": "https://github.com/wds1996/GNPR-SID",
-      "keywords": [
-        "next POI recommendation",
-        "generative model",
-        "semantic ID",
-        "large language model",
-        "quantization"
-      ]
-    }
   },
   {
     "title": "TTPNet: A Neural Network for Travel Time Prediction Based on Tensor Decomposition and Graph Embedding",
@@ -1468,7 +1548,7 @@
     "repo_url": "https://github.com/carolinssc/Arrival-time-prediction-autonomous-shuttles",
     "keywords": [
       "autonomous shuttles",
-      "arrival time prediction",
+      "arrival time estimation",
       "graph neural networks",
       "hierarchical modeling",
       "public transport"
@@ -1495,29 +1575,6 @@
       "urban mobility",
       "fully connected neural network",
       "public transit"
-    ]
-  },
-  {
-    "title": "More Than Routing: Joint GPS and Route Modeling for Refine Trajectory Representation Learning",
-    "conference": "WWW",
-    "year": 2024,
-    "model_name": "JGRM",
-    "track": "Research",
-    "pdf_link": "https://arxiv.org/abs/2402.16915",
-    "datasets": [
-      "Chengdu (Didi)",
-      "Xi'an (Didi)"
-    ],
-    "metrics": {
-      "Note": "JGRM proposes a joint GPS and Route modeling framework for trajectory representation learning, utilizing a hierarchical GPS encoder and a route encoder with self-supervised tasks (masked language modeling and contrastive learning) to capture fine-grained motion details and road topology."
-    },
-    "repo_url": "https://github.com/mamazi0131/JGRM",
-    "keywords": [
-      "trajectory representation learning",
-      "joint modeling",
-      "GPS and route",
-      "self-supervised learning",
-      "contrastive learning"
     ]
   },
   {
@@ -1572,7 +1629,6 @@
     "track": "Journal/Conference",
     "pdf_link": "https://ieeexplore.ieee.org/document/9288879",
     "datasets": [
-      "Porto (Taxi)",
       "Shanghai (Taxi)"
     ],
     "metrics": {
@@ -1596,8 +1652,7 @@
     "track": "Journal",
     "pdf_link": "https://ieeexplore.ieee.org/abstract/document/10158034",
     "datasets": [
-      "Tencent (Large-scale)",
-      "Porto"
+      "Tencent (Large-scale)"
     ],
     "metrics": {
       "Note": "GraphMM leverages Graph Neural Networks (GNN) to explicitly model the topology correlations between the trajectory graph and the road network graph for accurate matching."
@@ -1609,34 +1664,6 @@
       "road correlations",
       "trajectory graph",
       "vehicular data"
-    ]
-  },
-  {
-    "title": "RNTrajRec: Road Network Enhanced Trajectory Recovery with Spatial-Temporal Transformer",
-    "conference": "ICDE",
-    "year": 2023,
-    "model_name": "RNTrajRec",
-    "track": "Research",
-    "pdf_link": "https://ieeexplore.ieee.org/document/10184589",
-    "datasets": [
-      "Porto",
-      "Shanghai",
-      "Chengdu"
-    ],
-    "metrics": {
-      "Performance": {
-        "F1-Score": "Significant improvement over seq2seq baselines",
-        "Recovery Rate": "High accuracy on low-sampling rate data"
-      },
-      "Note": "Combines a GridGNN for road segment embedding and a Spatial-Temporal Transformer to recover high-resolution trajectories from sparse GPS points."
-    },
-    "repo_url": "https://github.com/chenyuqi990215/RNTrajRec",
-    "keywords": [
-      "trajectory recovery",
-      "spatial-temporal transformer",
-      "road network embedding",
-      "grid gnn",
-      "sparse trajectory"
     ]
   },
   {
@@ -1693,6 +1720,9 @@
       "Porto (Taxi)",
       "Shanghai (Taxi)"
     ],
+    "keywords": [
+      "map matching"
+    ],
     "metrics": {
       "Accuracy": "Outperforms HMM and DeepMM baselines",
       "Robustness": "Handles noisy, low-frequency, and non-uniform data effectively"
@@ -1709,6 +1739,9 @@
     "pdf_link": "https://arxiv.org/abs/2502.06825",
     "datasets": [
       "Three Real-world Datasets (e.g., Taxi/Ride-hailing data)"
+    ],
+    "keywords": [
+      "map matching"
     ],
     "metrics": {
       "Performance": {

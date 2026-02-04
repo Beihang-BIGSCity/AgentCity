@@ -1,23 +1,24 @@
 """
-DeepMM: Deep Learning-based Map Matching Model for LibCity Framework
+DeepMM: Deep Neural Network for Map Matching
 
-This module adapts the Seq2SeqAttention model from the DeepMM paper to the LibCity framework.
-The original implementation is from: repos/DeepMM/DeepMM/model.py
+This module adapts the DeepMM model (Seq2SeqAttention) from the original repository
+to the LibCity framework for trajectory location prediction (map matching).
 
-Key Adaptations:
-1. Removed deprecated torch.autograd.Variable wrappers
-2. Replaced hardcoded .cuda() calls with device abstraction
-3. Updated deprecated functions (F.sigmoid() -> torch.sigmoid())
-4. Implemented LibCity interface (AbstractModel)
-5. Added predict() and calculate_loss() methods
+Original paper: "Deep Learning Map Matching"
+Original repository: https://github.com/... (DeepMM)
 
-Original Model Classes Used:
-- Seq2SeqAttention (lines 825-1034): Main encoder-decoder with attention
-- LSTMAttentionDot (lines 391-443): LSTM decoder with dot-product attention
-- SoftDotAttention (lines 303-388): Soft dot-product attention mechanism
+Key adaptations:
+- Inherits from AbstractModel instead of nn.Module
+- Uses self.device from config instead of hardcoded .cuda() calls
+- Replaces deprecated torch.autograd.Variable with modern tensor operations
+- Implements predict() and calculate_loss() methods for LibCity compatibility
+- Handles LibCity batch dictionary format
 
-Reference:
-- DeepMM: Deep Learning based Map Matching with Heterogeneous Trajectory Data
+Model architecture:
+- Bidirectional LSTM encoder (2 layers, 512 hidden dim by default)
+- LSTM decoder with dot-product attention (1 layer, 512 hidden dim)
+- Embeddings: 256-dim for location (source) and segment (target)
+- Supports optional time encoding (NoEncoding, OneEncoding, TwoEncoding)
 """
 
 import torch
@@ -31,27 +32,27 @@ class SoftDotAttention(nn.Module):
     """Soft Dot Attention mechanism.
 
     Reference: http://www.aclweb.org/anthology/D15-1166
-    Adapted from PyTorch OpenNMT and the original DeepMM implementation.
+    Adapted from PyTorch OpenNMT.
 
-    This attention mechanism supports three types:
-    - 'dot': Simple dot product attention
-    - 'general': Linear transformation before dot product
-    - 'mlp': Multi-layer perceptron attention
+    Supports three attention types:
+    - dot: Simple dot product attention
+    - general: Bilinear attention with learned weights
+    - mlp: MLP-based attention
     """
 
     def __init__(self, dim, attn_type='dot'):
         """Initialize the attention layer.
 
         Args:
-            dim (int): Hidden dimension size
-            attn_type (str): Attention type ('dot', 'general', or 'mlp')
+            dim: Hidden dimension size
+            attn_type: Type of attention ('dot', 'general', or 'mlp')
         """
         super(SoftDotAttention, self).__init__()
 
         self.dim = dim
         self.attn_type = attn_type
-        assert self.attn_type in ["dot", "general", "mlp"], \
-            "Please select a valid attention type: 'dot', 'general', or 'mlp'"
+        assert self.attn_type in ["dot", "general", "mlp"], (
+            "Please select a valid attention type: 'dot', 'general', or 'mlp'")
 
         if self.attn_type == "general":
             self.linear_in = nn.Linear(dim, dim, bias=False)
@@ -60,23 +61,24 @@ class SoftDotAttention(nn.Module):
             self.linear_query = nn.Linear(dim, dim, bias=True)
             self.v = nn.Linear(dim, 1, bias=False)
 
-        # mlp wants bias
+        # mlp requires bias in output layer
         out_bias = self.attn_type == "mlp"
         self.linear_out = nn.Linear(dim * 2, dim, bias=out_bias)
 
         self.sm = nn.Softmax(dim=-1)
         self.tanh = nn.Tanh()
+        self.mask = None
 
     def forward(self, input, context):
-        """Compute attention-weighted context.
+        """Propagate input through the attention network.
 
         Args:
             input: Query tensor of shape (batch, dim)
-            context: Context tensor of shape (batch, source_len, dim)
+            context: Context tensor of shape (batch, sourceL, dim)
 
         Returns:
-            h_tilde: Attention-weighted output of shape (batch, dim)
-            attn: Attention weights of shape (batch, source_len)
+            h_tilde: Attended hidden state (batch, dim)
+            attn: Attention weights (batch, sourceL)
         """
         tgt_len = 1
         h_s, h_t = context, input
@@ -89,7 +91,8 @@ class SoftDotAttention(nn.Module):
                 h_t_ = h_t.view(tgt_batch * tgt_len, tgt_dim)
                 h_t_ = self.linear_in(h_t_)
                 h_t = h_t_.view(tgt_batch, tgt_dim, tgt_len)
-            else:  # dot
+            else:
+                # dot attention
                 h_t = h_t.view(tgt_batch, tgt_dim, tgt_len)
             # (batch, s_len, d) x (batch, d, t_len) --> (batch, s_len, t_len)
             attn = torch.bmm(h_s, h_t).squeeze(2)
@@ -107,7 +110,7 @@ class SoftDotAttention(nn.Module):
             wquh = self.tanh(wq + uh)
 
             attn = self.v(wquh.view(-1, dim)).view(tgt_batch, tgt_len, src_len)
-            attn = attn.transpose(1, 2).squeeze(2)  # tg_len = 1
+            attn = attn.transpose(1, 2).squeeze(2)  # tgt_len = 1
 
         attn = self.sm(attn)
         attn3 = attn.view(attn.size(0), 1, attn.size(1))  # batch x 1 x sourceL
@@ -121,20 +124,20 @@ class SoftDotAttention(nn.Module):
 
 
 class LSTMAttentionDot(nn.Module):
-    """LSTM cell with dot-product attention.
+    """LSTM cell with dot-product attention mechanism.
 
-    This is a custom LSTM implementation where each step attends to
-    the encoder outputs using the SoftDotAttention mechanism.
+    This module combines an LSTM cell with attention over encoder outputs,
+    allowing the decoder to focus on relevant parts of the input sequence.
     """
 
     def __init__(self, input_size, hidden_size, batch_first=True, attn_type='dot'):
         """Initialize the LSTM attention layer.
 
         Args:
-            input_size (int): Input embedding dimension
-            hidden_size (int): Hidden state dimension
-            batch_first (bool): Whether input is batch-first
-            attn_type (str): Attention type ('dot', 'general', or 'mlp')
+            input_size: Size of input features
+            hidden_size: Size of hidden state
+            batch_first: If True, input/output tensors are (batch, seq, feature)
+            attn_type: Type of attention mechanism ('dot', 'general', or 'mlp')
         """
         super(LSTMAttentionDot, self).__init__()
         self.input_size = input_size
@@ -148,25 +151,24 @@ class LSTMAttentionDot(nn.Module):
         self.attention_layer = SoftDotAttention(hidden_size, attn_type)
 
     def forward(self, input, hidden, ctx, ctx_mask=None):
-        """Process input through LSTM with attention.
+        """Propagate input through the network.
 
         Args:
-            input: Input tensor of shape (batch, seq_len, input_size) if batch_first
-            hidden: Tuple of (h_0, c_0) initial states
-            ctx: Encoder context of shape (seq_len, batch, hidden_size)
-            ctx_mask: Optional context mask (not used in current implementation)
+            input: Input tensor (batch, seq_len, input_size) if batch_first
+            hidden: Tuple of (h_0, c_0) initial hidden states
+            ctx: Encoder context (seq_len, batch, hidden_size)
+            ctx_mask: Optional mask for context (not used currently)
 
         Returns:
-            output: Output tensor of shape (batch, seq_len, hidden_size)
-            hidden: Final (h_n, c_n) state tuple
+            output: Output tensor (batch, seq_len, hidden_size)
+            hidden: Final hidden state tuple (h_n, c_n)
         """
         def recurrence(input_t, hidden):
-            """Process one time step."""
+            """Single step recurrence with attention."""
             hx, cx = hidden  # (batch, hidden_dim)
             gates = self.input_weights(input_t) + self.hidden_weights(hx)
             ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
 
-            # Updated: Use torch.sigmoid instead of deprecated F.sigmoid
             ingate = torch.sigmoid(ingate)
             forgetgate = torch.sigmoid(forgetgate)
             cellgate = torch.tanh(cellgate)
@@ -175,14 +177,13 @@ class LSTMAttentionDot(nn.Module):
             cy = (forgetgate * cx) + (ingate * cellgate)
             hy = outgate * torch.tanh(cy)  # (batch, hidden_dim)
 
-            # Apply attention: ctx is (src_len, batch, hidden_dim)
-            # attention_layer expects context as (batch, src_len, hidden_dim)
+            # Apply attention: ctx should be (batch, seq_len, hidden_dim)
             h_tilde, alpha = self.attention_layer(hy, ctx.transpose(0, 1))
 
             return h_tilde, cy
 
         if self.batch_first:
-            input = input.transpose(0, 1)  # (seq_len, batch, input_size)
+            input = input.transpose(0, 1)
 
         output = []
         steps = range(input.size(0))
@@ -193,51 +194,32 @@ class LSTMAttentionDot(nn.Module):
         output = torch.cat(output, 0).view(input.size(0), *output[0].size())
 
         if self.batch_first:
-            output = output.transpose(0, 1)  # (batch, seq_len, hidden_size)
+            output = output.transpose(0, 1)
 
         return output, hidden
 
 
 class DeepMM(AbstractModel):
-    """DeepMM: Deep Learning-based Map Matching Model.
+    """DeepMM: Seq2Seq model with attention for map matching.
 
-    This model uses a sequence-to-sequence architecture with attention for
-    map matching. It takes GPS trajectory points (discretized to grid cells)
-    as input and outputs matched road segment sequences.
+    This model performs map matching by treating it as a sequence-to-sequence
+    translation task: translating GPS point sequences to road segment sequences.
 
-    The architecture consists of:
-    1. Source location embedding layer
-    2. Optional time embedding layers (OneEncoding or TwoEncoding)
-    3. Bidirectional LSTM encoder
-    4. LSTM decoder with dot-product attention
-    5. Output projection layer
+    Architecture:
+    - Encoder: Bidirectional LSTM that processes GPS block embeddings
+    - Decoder: LSTM with dot-product attention that generates road segment IDs
+    - Optional time encoding to incorporate temporal information
 
-    Configuration Parameters:
-        src_loc_emb_dim (int): Source location embedding dimension (default: 256)
-        src_tim_emb_dim (int/list): Time embedding dimension(s) (default: 64)
-        trg_seg_emb_dim (int): Target segment embedding dimension (default: 256)
-        src_hidden_dim (int): Encoder hidden dimension (default: 512)
-        trg_hidden_dim (int): Decoder hidden dimension (default: 512)
-        bidirectional (bool): Use bidirectional encoder (default: True)
-        nlayers_src (int): Number of encoder layers (default: 2)
-        dropout (float): Dropout probability (default: 0.5)
-        time_encoding (str): Time encoding type ('NoEncoding', 'OneEncoding', 'TwoEncoding')
-        rnn_type (str): RNN type for encoder ('LSTM' or 'GRU') (default: 'LSTM')
-        attn_type (str): Attention type ('dot', 'general', 'mlp') (default: 'dot')
-
-    Data Features Required:
-        src_loc_vocab_size (int): Source location vocabulary size
-        trg_seg_vocab_size (int): Target segment vocabulary size
-        pad_token_src_loc (int): Padding token ID for source
-        pad_token_trg (int): Padding token ID for target
+    The model supports teacher forcing during training and greedy decoding
+    during inference.
     """
 
     def __init__(self, config, data_feature):
         """Initialize the DeepMM model.
 
         Args:
-            config (dict): Configuration dictionary with model hyperparameters
-            data_feature (dict): Data features including vocabulary sizes
+            config: Configuration dictionary containing model hyperparameters
+            data_feature: Dictionary containing data-specific features like vocab sizes
         """
         super(DeepMM, self).__init__(config, data_feature)
 
@@ -246,123 +228,82 @@ class DeepMM(AbstractModel):
 
         # Vocabulary sizes from data features
         self.src_loc_vocab_size = data_feature.get('src_loc_vocab_size', 10000)
-        self.trg_seg_vocab_size = data_feature.get('trg_seg_vocab_size', 5000)
+        self.trg_seg_vocab_size = data_feature.get('trg_seg_vocab_size', 10000)
+        self.src_tim_vocab_size = data_feature.get('src_tim_vocab_size', None)
 
-        # Embedding dimensions
+        # Padding token indices
+        self.pad_token_src_loc = data_feature.get('pad_token_src_loc', 1)
+        self.pad_token_src_tim1 = data_feature.get('pad_token_src_tim1', None)
+        self.pad_token_src_tim2 = data_feature.get('pad_token_src_tim2', None)
+        self.pad_token_trg = data_feature.get('pad_token_trg', 1)
+
+        # Special tokens
+        self.sos_token = data_feature.get('sos_token', 0)
+        self.eos_token = data_feature.get('eos_token', 2)
+
+        # Model hyperparameters from config
         self.src_loc_emb_dim = config.get('src_loc_emb_dim', 256)
         self.src_tim_emb_dim = config.get('src_tim_emb_dim', 64)
         self.trg_seg_emb_dim = config.get('trg_seg_emb_dim', 256)
-
-        # Hidden dimensions
+        self.time_encoding = config.get('time_encoding', 'NoEncoding')
         self.src_hidden_dim = config.get('src_hidden_dim', 512)
         self.trg_hidden_dim = config.get('trg_hidden_dim', 512)
-
-        # Architecture options
         self.bidirectional = config.get('bidirectional', True)
         self.nlayers_src = config.get('nlayers_src', 2)
         self.dropout = config.get('dropout', 0.5)
-        self.time_encoding = config.get('time_encoding', 'NoEncoding')
         self.rnn_type = config.get('rnn_type', 'LSTM')
         self.attn_type = config.get('attn_type', 'dot')
+        self.teacher_forcing_ratio = config.get('teacher_forcing_ratio', 1.0)
+        self.max_trg_length = config.get('max_trg_length', 54)
 
-        # Padding tokens
-        self.pad_token_src_loc = data_feature.get('pad_token_src_loc', 1)
-        self.pad_token_trg = data_feature.get('pad_token_trg', 1)
-
-        # Time encoding padding tokens (optional)
-        self.pad_token_src_tim1 = config.get('pad_token_src_tim1', 1)
-        self.pad_token_src_tim2 = config.get('pad_token_src_tim2', [1, 1])
-
-        # Time vocabulary sizes (for time encoding)
-        self.src_tim_vocab_size = data_feature.get('src_tim_vocab_size', [1000, [24, 60]])
-
-        # Calculate number of directions
         self.num_directions = 2 if self.bidirectional else 1
-
-        # Adjust encoder hidden dim for bidirectional
+        # Adjust hidden dim for bidirectional encoder
         self.encoder_hidden_dim = self.src_hidden_dim // 2 if self.bidirectional else self.src_hidden_dim
 
-        # Build embedding layers
-        self._build_embeddings()
+        # Calculate source embedding dimension based on time encoding
+        if self.time_encoding == 'NoEncoding':
+            src_emb_dim = self.src_loc_emb_dim
+        elif self.time_encoding == 'OneEncoding':
+            src_emb_dim = self.src_loc_emb_dim + self.src_tim_emb_dim[0] if isinstance(self.src_tim_emb_dim, (list, tuple)) else self.src_loc_emb_dim + self.src_tim_emb_dim
+        elif self.time_encoding == 'TwoEncoding':
+            src_emb_dim = self.src_loc_emb_dim + self.src_tim_emb_dim[1][0] + self.src_tim_emb_dim[1][1]
+        else:
+            raise RuntimeError(f'Invalid time encoding: {self.time_encoding}')
 
-        # Build encoder and decoder
-        self._build_encoder_decoder()
-
-        # Initialize weights
-        self.init_weights()
-
-    def _build_embeddings(self):
-        """Build embedding layers for source locations, times, and target segments."""
-        # Source location embedding
+        # Embeddings
         self.src_embedding = nn.Embedding(
             self.src_loc_vocab_size,
             self.src_loc_emb_dim,
             padding_idx=self.pad_token_src_loc
         )
-
-        # Target segment embedding
         self.trg_embedding = nn.Embedding(
             self.trg_seg_vocab_size,
             self.trg_seg_emb_dim,
             padding_idx=self.pad_token_trg
         )
 
-        # Time embeddings (optional)
+        # Optional time embeddings
         if self.time_encoding == 'OneEncoding':
-            tim_vocab_size = self.src_tim_vocab_size[0] if isinstance(
-                self.src_tim_vocab_size, (list, tuple)) else self.src_tim_vocab_size
-            tim_emb_dim = self.src_tim_emb_dim[0] if isinstance(
-                self.src_tim_emb_dim, (list, tuple)) else self.src_tim_emb_dim
+            tim_vocab_size = self.src_tim_vocab_size[0] if isinstance(self.src_tim_vocab_size, (list, tuple)) else self.src_tim_vocab_size
+            tim_emb_dim = self.src_tim_emb_dim[0] if isinstance(self.src_tim_emb_dim, (list, tuple)) else self.src_tim_emb_dim
             self.src_time_embedding = nn.Embedding(
                 tim_vocab_size,
                 tim_emb_dim,
                 padding_idx=self.pad_token_src_tim1
             )
         elif self.time_encoding == 'TwoEncoding':
-            # Two separate time embeddings (e.g., hour and minute)
-            if isinstance(self.src_tim_vocab_size, (list, tuple)) and len(self.src_tim_vocab_size) > 1:
-                tim_vocab_sizes = self.src_tim_vocab_size[1]
-            else:
-                tim_vocab_sizes = [24, 60]
-
-            if isinstance(self.src_tim_emb_dim, (list, tuple)) and len(self.src_tim_emb_dim) > 1:
-                tim_emb_dims = self.src_tim_emb_dim[1]
-            else:
-                tim_emb_dims = [32, 32]
-
-            pad_tokens = self.pad_token_src_tim2 if isinstance(
-                self.pad_token_src_tim2, (list, tuple)) else [1, 1]
-
             self.src_time_embedding_1 = nn.Embedding(
-                tim_vocab_sizes[0],
-                tim_emb_dims[0],
-                padding_idx=pad_tokens[0]
+                self.src_tim_vocab_size[1][0],
+                self.src_tim_emb_dim[1][0],
+                padding_idx=self.pad_token_src_tim2[0]
             )
             self.src_time_embedding_2 = nn.Embedding(
-                tim_vocab_sizes[1],
-                tim_emb_dims[1],
-                padding_idx=pad_tokens[1]
+                self.src_tim_vocab_size[1][1],
+                self.src_tim_emb_dim[1][1],
+                padding_idx=self.pad_token_src_tim2[1]
             )
 
-    def _build_encoder_decoder(self):
-        """Build encoder and decoder layers."""
-        # Calculate source embedding dimension based on time encoding
-        if self.time_encoding == 'NoEncoding':
-            src_emb_dim = self.src_loc_emb_dim
-        elif self.time_encoding == 'OneEncoding':
-            tim_emb_dim = self.src_tim_emb_dim[0] if isinstance(
-                self.src_tim_emb_dim, (list, tuple)) else self.src_tim_emb_dim
-            src_emb_dim = self.src_loc_emb_dim + tim_emb_dim
-        elif self.time_encoding == 'TwoEncoding':
-            if isinstance(self.src_tim_emb_dim, (list, tuple)) and len(self.src_tim_emb_dim) > 1:
-                tim_emb_dims = self.src_tim_emb_dim[1]
-            else:
-                tim_emb_dims = [32, 32]
-            src_emb_dim = self.src_loc_emb_dim + tim_emb_dims[0] + tim_emb_dims[1]
-        else:
-            raise ValueError(f"Unknown time_encoding: {self.time_encoding}")
-
-        # Encoder: Bidirectional LSTM or GRU
+        # Encoder: Bidirectional LSTM
         self.encoder = getattr(nn, self.rnn_type)(
             src_emb_dim,
             self.encoder_hidden_dim,
@@ -380,97 +321,88 @@ class DeepMM(AbstractModel):
             attn_type=self.attn_type
         )
 
-        # Encoder to decoder projection
+        # Projection layers
         self.encoder2decoder = nn.Linear(
             self.encoder_hidden_dim * self.num_directions,
             self.trg_hidden_dim
         )
-
-        # Decoder to vocabulary projection
         self.decoder2vocab = nn.Linear(self.trg_hidden_dim, self.trg_seg_vocab_size)
 
+        self.init_weights()
+
     def init_weights(self):
-        """Initialize model weights."""
+        """Initialize model weights with uniform distribution."""
         initrange = 0.1
         self.src_embedding.weight.data.uniform_(-initrange, initrange)
         self.trg_embedding.weight.data.uniform_(-initrange, initrange)
         self.encoder2decoder.bias.data.fill_(0)
         self.decoder2vocab.bias.data.fill_(0)
 
-    def get_encoder_state(self, batch_size):
-        """Get initial encoder hidden states.
+    def get_encoder_state(self, input_src):
+        """Get initial encoder hidden and cell states.
 
         Args:
-            batch_size (int): Batch size
+            input_src: Source input tensor (batch, seq_len)
 
         Returns:
-            h0: Initial hidden state
-            c0: Initial cell state
+            Tuple of (h_0, c_0) tensors on the correct device
         """
-        h0 = torch.zeros(
-            self.nlayers_src * self.num_directions,
+        batch_size = input_src.size(0)
+        h0_encoder = torch.zeros(
+            self.encoder.num_layers * self.num_directions,
             batch_size,
             self.encoder_hidden_dim,
             device=self.device
         )
-        c0 = torch.zeros(
-            self.nlayers_src * self.num_directions,
+        c0_encoder = torch.zeros(
+            self.encoder.num_layers * self.num_directions,
             batch_size,
             self.encoder_hidden_dim,
             device=self.device
         )
-        return h0, c0
+        return h0_encoder, c0_encoder
 
     def forward(self, batch):
-        """Forward pass through the model.
+        """Forward pass through the seq2seq model.
 
         Args:
-            batch (dict): Batch dictionary containing:
-                - 'input_src': Source location sequence (batch, src_seq_len)
-                - 'input_trg': Target segment input for teacher forcing (batch, trg_seq_len)
-                - 'input_time' (optional): Time sequence(s) for time encoding
+            batch: Dictionary containing:
+                - 'input_src': Source GPS block indices (batch, src_len)
+                - 'input_trg': Target road segment indices (batch, trg_len)
+                - 'input_time': Optional time indices
 
         Returns:
-            decoder_logit: Output logits of shape (batch, trg_seq_len, vocab_size)
+            decoder_logit: Logits for each position (batch, trg_len, trg_vocab_size)
         """
         input_src = batch['input_src']
         input_trg = batch['input_trg']
         input_time = batch.get('input_time', None)
+        ctx_mask = batch.get('ctx_mask', None)
 
-        batch_size = input_src.size(0)
-
-        # Source embeddings
+        # Get embeddings
         src_emb = self.src_embedding(input_src)
+        trg_emb = self.trg_embedding(input_trg)
 
-        # Add time embeddings if applicable
+        # Handle time encoding
         if self.time_encoding == 'NoEncoding':
             src_time_emb = src_emb
         elif self.time_encoding == 'OneEncoding':
-            if input_time is not None:
-                time_emb = self.src_time_embedding(input_time)
-                src_time_emb = torch.cat((src_emb, time_emb), dim=2)
-            else:
-                src_time_emb = src_emb
+            time_emb = self.src_time_embedding(input_time)
+            src_time_emb = torch.cat((src_emb, time_emb), dim=2)
         elif self.time_encoding == 'TwoEncoding':
-            if input_time is not None and isinstance(input_time, (list, tuple)):
-                time_emb_1 = self.src_time_embedding_1(input_time[0])
-                time_emb_2 = self.src_time_embedding_2(input_time[1])
-                src_time_emb = torch.cat((src_emb, time_emb_1, time_emb_2), dim=2)
-            else:
-                src_time_emb = src_emb
+            time_emb_1 = self.src_time_embedding_1(input_time[0])
+            time_emb_2 = self.src_time_embedding_2(input_time[1])
+            src_time_emb = torch.cat((src_emb, time_emb_1, time_emb_2), dim=2)
         else:
-            raise RuntimeError(f'Unknown time encoding: {self.time_encoding}')
+            raise RuntimeError(f'Invalid time encoding: {self.time_encoding}')
 
-        # Target embeddings
-        trg_emb = self.trg_embedding(input_trg)
-
-        # Get initial encoder state
-        h0_encoder, c0_encoder = self.get_encoder_state(batch_size)
+        # Initialize encoder hidden state
+        h0_encoder, c0_encoder = self.get_encoder_state(input_src)
 
         # Encode source sequence
         if self.rnn_type == "LSTM":
             src_h, (src_h_t, src_c_t) = self.encoder(src_time_emb, (h0_encoder, c0_encoder))
-        else:  # GRU
+        else:
             src_h, src_h_t = self.encoder(src_time_emb, h0_encoder)
             src_c_t = c0_encoder
 
@@ -485,11 +417,11 @@ class DeepMM(AbstractModel):
         # Project encoder state to decoder initial state
         decoder_init_state = torch.tanh(self.encoder2decoder(h_t))
 
-        # Prepare context for attention: (src_seq_len, batch, hidden_dim)
+        # Prepare context for attention (transpose to seq_len x batch x hidden)
         ctx = src_h.transpose(0, 1)
 
         # Decode with attention
-        trg_h, (_, _) = self.decoder(trg_emb, (decoder_init_state, c_t), ctx)
+        trg_h, (_, _) = self.decoder(trg_emb, (decoder_init_state, c_t), ctx, ctx_mask)
 
         # Project to vocabulary
         trg_h_reshape = trg_h.contiguous().view(
@@ -505,55 +437,14 @@ class DeepMM(AbstractModel):
 
         return decoder_logit
 
-    def predict(self, batch):
-        """Generate predictions for evaluation.
-
-        Args:
-            batch (dict): Batch dictionary
-
-        Returns:
-            predictions: Predicted segment IDs of shape (batch, trg_seq_len)
-        """
-        logits = self.forward(batch)
-        # Get most likely segment for each position
-        predictions = torch.argmax(logits, dim=-1)
-        return predictions
-
-    def calculate_loss(self, batch):
-        """Calculate cross-entropy loss for training.
-
-        Args:
-            batch (dict): Batch dictionary containing 'output_trg' or 'target'
-
-        Returns:
-            loss: Scalar loss tensor
-        """
-        logits = self.forward(batch)
-
-        # Get target sequence
-        target = batch.get('output_trg', batch.get('target'))
-
-        # Reshape for cross-entropy: (batch * seq_len, vocab_size) vs (batch * seq_len)
-        logits_flat = logits.view(-1, self.trg_seg_vocab_size)
-        target_flat = target.view(-1)
-
-        # Cross-entropy loss, ignoring padding tokens
-        loss = F.cross_entropy(
-            logits_flat,
-            target_flat,
-            ignore_index=self.pad_token_trg
-        )
-
-        return loss
-
     def decode(self, logits):
-        """Return probability distribution over words.
+        """Convert logits to probability distribution.
 
         Args:
-            logits: Output logits of shape (batch, seq_len, vocab_size)
+            logits: Raw output scores (batch, seq_len, vocab_size)
 
         Returns:
-            word_probs: Softmax probabilities of shape (batch, seq_len, vocab_size)
+            word_probs: Softmax probabilities (batch, seq_len, vocab_size)
         """
         logits_reshape = logits.view(-1, self.trg_seg_vocab_size)
         word_probs = F.softmax(logits_reshape, dim=-1)
@@ -561,3 +452,131 @@ class DeepMM(AbstractModel):
             logits.size(0), logits.size(1), logits.size(2)
         )
         return word_probs
+
+    def greedy_decode(self, batch, max_length=None):
+        """Perform greedy decoding for inference.
+
+        Args:
+            batch: Input batch dictionary
+            max_length: Maximum output sequence length
+
+        Returns:
+            predictions: Predicted sequence indices (batch, max_length)
+        """
+        if max_length is None:
+            max_length = self.max_trg_length
+
+        input_src = batch['input_src']
+        input_time = batch.get('input_time', None)
+        batch_size = input_src.size(0)
+
+        # Encode source
+        src_emb = self.src_embedding(input_src)
+
+        if self.time_encoding == 'NoEncoding':
+            src_time_emb = src_emb
+        elif self.time_encoding == 'OneEncoding':
+            time_emb = self.src_time_embedding(input_time)
+            src_time_emb = torch.cat((src_emb, time_emb), dim=2)
+        elif self.time_encoding == 'TwoEncoding':
+            time_emb_1 = self.src_time_embedding_1(input_time[0])
+            time_emb_2 = self.src_time_embedding_2(input_time[1])
+            src_time_emb = torch.cat((src_emb, time_emb_1, time_emb_2), dim=2)
+        else:
+            raise RuntimeError(f'Invalid time encoding: {self.time_encoding}')
+
+        h0_encoder, c0_encoder = self.get_encoder_state(input_src)
+
+        if self.rnn_type == "LSTM":
+            src_h, (src_h_t, src_c_t) = self.encoder(src_time_emb, (h0_encoder, c0_encoder))
+        else:
+            src_h, src_h_t = self.encoder(src_time_emb, h0_encoder)
+            src_c_t = c0_encoder
+
+        if self.bidirectional:
+            h_t = torch.cat((src_h_t[-1], src_h_t[-2]), 1)
+            c_t = torch.cat((src_c_t[-1], src_c_t[-2]), 1)
+        else:
+            h_t = src_h_t[-1]
+            c_t = src_c_t[-1]
+
+        decoder_hidden = torch.tanh(self.encoder2decoder(h_t))
+        decoder_cell = c_t
+        ctx = src_h.transpose(0, 1)
+
+        # Start with SOS token
+        current_token = torch.full((batch_size,), self.sos_token,
+                                   dtype=torch.long, device=self.device)
+        predictions = []
+
+        for _ in range(max_length):
+            # Get embedding for current token
+            trg_emb = self.trg_embedding(current_token.unsqueeze(1))
+
+            # Single decoder step
+            trg_h, (decoder_hidden, decoder_cell) = self.decoder(
+                trg_emb, (decoder_hidden, decoder_cell), ctx, None
+            )
+
+            # Project to vocabulary and get prediction
+            logits = self.decoder2vocab(trg_h.squeeze(1))
+            current_token = logits.argmax(dim=-1)
+            predictions.append(current_token)
+
+        predictions = torch.stack(predictions, dim=1)
+        return predictions
+
+    def predict(self, batch):
+        """Generate predictions for a batch.
+
+        This method is called during evaluation. It uses greedy decoding
+        to generate the output sequence.
+
+        Args:
+            batch: Input batch dictionary
+
+        Returns:
+            predictions: Predicted sequence indices (batch, seq_len)
+        """
+        # For evaluation, return predicted indices (not logits)
+        # If target is available, use teacher forcing for fair comparison
+        if 'input_trg' in batch:
+            logits = self.forward(batch)
+            # Return predicted indices, not logits
+            return logits.argmax(dim=-1)  # Returns 2D: [batch, seq_len]
+        else:
+            # If no target, use greedy decoding (already returns indices)
+            return self.greedy_decode(batch)
+
+    def calculate_loss(self, batch):
+        """Calculate the training loss.
+
+        Uses cross-entropy loss with padding tokens ignored.
+
+        Args:
+            batch: Dictionary containing input_src, input_trg, and target_trg
+
+        Returns:
+            loss: Scalar loss tensor
+        """
+        # Forward pass
+        logits = self.forward(batch)
+
+        # Get target (shifted by one position for teacher forcing)
+        target = batch.get('target_trg', batch.get('input_trg')[:, 1:])
+
+        # Reshape for cross-entropy: (batch * seq_len, vocab_size) and (batch * seq_len)
+        # Trim logits to match target length if needed
+        if logits.size(1) > target.size(1):
+            logits = logits[:, :target.size(1), :]
+        elif logits.size(1) < target.size(1):
+            target = target[:, :logits.size(1)]
+
+        logits_flat = logits.contiguous().view(-1, self.trg_seg_vocab_size)
+        target_flat = target.contiguous().view(-1)
+
+        # Cross-entropy loss ignoring padding
+        criterion = nn.CrossEntropyLoss(ignore_index=self.pad_token_trg)
+        loss = criterion(logits_flat, target_flat)
+
+        return loss
