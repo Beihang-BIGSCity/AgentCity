@@ -63,12 +63,14 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
     """Build migration stage agents.
 
     Returns agents for repository cloning, model adaptation, config migration,
-    and testing.
+    testing, and dataset migration.
     """
     from agents.migration.prompts.cloner import CLONER_SYSTEM_PROMPT
     from agents.migration.prompts.adapter import ADAPTER_SYSTEM_PROMPT
     from agents.migration.prompts.config import CONFIG_SYSTEM_PROMPT
     from agents.migration.prompts.tester import TESTER_SYSTEM_PROMPT
+    from agents.migration.prompts.dataset_downloader import DATASET_DOWNLOADER_SYSTEM_PROMPT
+    from agents.migration.prompts.dataset_converter import DATASET_CONVERTER_SYSTEM_PROMPT
 
     return {
         "repo-cloner": AgentDefinition(
@@ -113,6 +115,28 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["test_migration", "Bash", "Read"],
             prompt=TESTER_SYSTEM_PROMPT,
+            model="opus",
+        ),
+        "dataset-downloader": AgentDefinition(
+            name="dataset-downloader",
+            description=(
+                "Downloads external datasets from various sources (direct links, GitHub, "
+                "Google Drive, Kaggle, Zenodo). Extracts and analyzes dataset structure. "
+                "Saves to ./datasets/<dataset-name>/ directory."
+            ),
+            tools=["Bash", "Glob", "Read", "WebFetch"],
+            prompt=DATASET_DOWNLOADER_SYSTEM_PROMPT,
+            model="sonnet",
+        ),
+        "dataset-converter": AgentDefinition(
+            name="dataset-converter",
+            description=(
+                "Converts external datasets to LibCity atomic file format (.geo, .rel, .dyna, "
+                ".usr, config.json). Creates conversion scripts in preprocess/ directory. "
+                f"Saves converted data to {context.repo_path}/raw_data/<dataset-name>/."
+            ),
+            tools=["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+            prompt=DATASET_CONVERTER_SYSTEM_PROMPT,
             model="opus",
         ),
     }

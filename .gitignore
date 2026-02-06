@@ -7,3 +7,4 @@ cache/
 /claude_code.log
 /.claude/
 /batch_logs/
+/datasets/

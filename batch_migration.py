@@ -39,9 +39,11 @@ class PaperEntry:
     datasets: List[str]
     metrics: Dict[str, Any]
     github: Optional[str] = None
+    dataset_url: Optional[str] = None  # 数据集下载链接
     venue: str = ""
     year: int = 0
     pdf_path: Optional[str] = None
+    task_type: str = ""  # 任务类型
 
     @classmethod
     def from_dict(cls, data: dict) -> "PaperEntry":
@@ -51,9 +53,11 @@ class PaperEntry:
             datasets=data.get("datasets", []),
             metrics=data.get("metrics", {}),
             github=data.get("github") or data.get("repo_url") or data.get('repository_url'),
+            dataset_url=data.get("dataset_url"),
             venue=data.get("venue") or data.get("conference", ""),
             year=data.get("year", 0),
             pdf_path=data.get("pdf_path"),
+            task_type=data.get("task_type", ""),
         )
 
 
@@ -124,9 +128,9 @@ class BatchRunner:
             data = json.load(f)
 
         for item in data:
-            if not item.get("model_name"):
+            '''if not item.get("model_name"):
                 print(f"[WARN] Skipping paper without model_name: {item.get('title', 'Unknown')}")
-                continue
+                continue'''
             paper = PaperEntry.from_dict(item)
 
             # 过滤模型
@@ -250,10 +254,12 @@ class BatchRunner:
             "title": paper.title,
             "model_name": paper.model_name,
             "repo_url": paper.github or "",
+            "dataset_url": paper.dataset_url or "",
             "datasets": paper.datasets,
             "conference": paper.venue,
             "year": paper.year,
             "pdf_path": paper.pdf_path or "",
+            "task_type": paper.task_type or "",
         }
 
         # 日志文件
@@ -315,10 +321,12 @@ asyncio.run(run())
             "title": paper.title,
             "model_name": paper.model_name,
             "repo_url": paper.github or "",
+            "dataset_url": paper.dataset_url or "",
             "datasets": paper.datasets,
             "conference": paper.venue,
             "year": paper.year,
             "pdf_path": paper.pdf_path or "",
+            "task_type": paper.task_type or "",
         }
 
         # 日志文件

@@ -33,7 +33,7 @@ def get_migration_workflow() -> WorkflowDefinition:
         stages=[
             MultiAgentStage(
                 key="model_migration",
-                title="Model Migration",
+                title="Migration",
                 description=(
                     "Coordinate repository cloning, model adaptation, configuration, "
                     "and testing using specialized subagents."

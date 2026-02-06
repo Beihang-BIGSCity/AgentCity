@@ -3146,3 +3146,41 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-02-06 10:33:30,153 - INFO - epoch complete!
 [OUT] 2026-02-06 10:33:30,154 - INFO - evaluating now!
 [OUT] 2026-02-06 10:36:38,498 - INFO - Epoch [30/35] train_loss: 18.8176, val_loss: 22.1426, lr: 0.000100, 1638.87s
+[OUT] 2026-02-06 11:00:43,284 - INFO - epoch complete!
+[OUT] 2026-02-06 11:00:43,284 - INFO - evaluating now!
+[OUT] 2026-02-06 11:04:05,514 - INFO - Epoch [31/35] train_loss: 18.7680, val_loss: 22.2952, lr: 0.000100, 1647.02s
+[OUT] 2026-02-06 11:27:16,009 - INFO - epoch complete!
+[OUT] 2026-02-06 11:27:16,010 - INFO - evaluating now!
+[OUT] 2026-02-06 11:30:04,504 - INFO - Epoch [32/35] train_loss: 18.6944, val_loss: 21.9402, lr: 0.000100, 1558.99s
+[OUT] 2026-02-06 11:53:00,455 - INFO - epoch complete!
+[OUT] 2026-02-06 11:53:00,456 - INFO - evaluating now!
+[OUT] 2026-02-06 11:55:48,615 - INFO - Epoch [33/35] train_loss: 18.6646, val_loss: 22.1620, lr: 0.000100, 1544.11s
+[OUT] 2026-02-06 12:19:34,420 - INFO - epoch complete!
+[OUT] 2026-02-06 12:19:34,421 - INFO - evaluating now!
+[OUT] 2026-02-06 12:22:24,401 - INFO - Epoch [34/35] train_loss: 18.5756, val_loss: 22.1420, lr: 0.000100, 1595.79s
+[OUT] 2026-02-06 12:22:24,402 - INFO - Trained totally 35 epochs, average train time is 1406.021s, average eval time is 179.595s
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py:127: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+[ERR]   checkpoint = torch.load(model_path)
+[OUT] 2026-02-06 12:22:24,574 - INFO - Loaded model at 26
+[OUT] 2026-02-06 12:22:24,575 - INFO - Saved model at ./libcity/cache/281126/model_cache/DSTAGNN_PEMSD7.m
+[OUT] 2026-02-06 12:22:24,801 - INFO - Start evaluating ...
+[OUT] 2026-02-06 12:26:29,329 - INFO - Note that you select the single mode to evaluate!
+[OUT] 2026-02-06 12:26:29,341 - INFO - Evaluate result is saved at ./libcity/cache/281126/evaluate_cache/2026_02_06_12_26_29_DSTAGNN_PEMSD7.csv
+[OUT] 2026-02-06 12:26:29,357 - INFO -
+[OUT]           MAE  MAPE          MSE  ...  masked_RMSE        R2      EVAR
+[OUT] 1   18.267475   inf   816.268982  ...    28.582497  0.976608  0.976612
+[OUT] 2   20.183306   inf   988.369690  ...    31.439346  0.971676  0.972171
+[OUT] 3   20.810017   inf  1079.022583  ...    32.819729  0.969078  0.969116
+[OUT] 4   21.516342   inf  1164.793091  ...    34.070480  0.966620  0.966620
+[OUT] 5   22.249363   inf  1248.739502  ...    35.251690  0.964214  0.964469
+[OUT] 6   23.015694   inf  1329.455200  ...    36.356083  0.961901  0.962023
+[OUT] 7   23.783762   inf  1417.939575  ...    37.510120  0.959365  0.959900
+[OUT] 8   23.915363   inf  1463.814575  ...    38.115131  0.958050  0.958299
+[OUT] 9   24.108671   inf  1498.429321  ...    38.573215  0.957058  0.957072
+[OUT] 10  24.364428   inf  1535.378540  ...    39.044601  0.956000  0.956001
+[OUT] 11  25.075592   inf  1598.483643  ...    39.811310  0.954192  0.954366
+[OUT] 12  25.736116   inf  1684.343140  ...    40.856350  0.951733  0.951782
+[OUT] 
+[OUT] [12 rows x 10 columns]
+
+[Return Code: 0]
