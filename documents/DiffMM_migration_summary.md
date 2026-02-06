@@ -7,23 +7,24 @@
 **Paper**: "DiffMM: Efficient Method for Accurate Noisy and Sparse Trajectory Map Matching via One Step Diffusion" (AAAI)
 **Task Type**: Map Matching (GPS-to-road-segment matching)
 **Migration Date**: 2026-02-02
-**Latest Update**: 2026-02-04 (moved to map_matching with complete rewrite)
+**Latest Update**: 2026-02-04 (final version in map_matching directory)
 
 ---
 
 ## Task Category History
 
-### Update 2026-02-04
-DiffMM has been properly implemented in `map_matching` directory with a complete rewrite following the original repository architecture more closely.
+### Update 2026-02-04 (Final)
+DiffMM has been properly implemented in `map_matching` directory with a complete rewrite following the original repository architecture.
 
 **Current Location**: `libcity/model/map_matching/DiffMM.py`
 
-The new implementation includes:
+The implementation includes:
 - Complete TrajEncoder with PointEncoder and road segment attention
 - Full DiT (Diffusion Transformer) with AdaLN modulation
 - ShortCut one-step diffusion for efficient inference
 - Bootstrap target generation for training
 - Proper LibCity AbstractModel integration
+- Full batch format adaptation for LibCity compatibility
 
 ### Previous Updates
 - 2026-02-03: Temporarily in trajectory_loc_prediction
@@ -51,42 +52,48 @@ The model file contains all necessary components:
 - `OutputLayer`: Final output with modulation
 - `DiT`: Complete Diffusion Transformer
 - `get_targets`: Bootstrap target generation function
-- `ShortCutModel`: One-step diffusion wrapper
+- `ShortCut`: One-step diffusion wrapper
 - `DiffMM`: Main LibCity model class
 
 ### Configuration File
-**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/traj_loc_pred/DiffMM.json`
+**Path**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/map_matching/DiffMM.json`
 
 ```json
 {
-    "model": "DiffMM",
-    "task": "traj_loc_pred",
+    "model_name": "DiffMM",
+    "dataset_class": "DiffMMDataset",
     "hid_dim": 256,
     "num_units": 512,
     "transformer_layers": 2,
     "depth": 2,
-    "num_heads": 4,
-    "dropout": 0.1,
     "timesteps": 2,
     "samplingsteps": 1,
+    "dropout": 0.1,
     "bootstrap_every": 8,
-    "batch_size": 4,
+    "num_heads": 4,
+    "optimizer": "AdamW",
     "learning_rate": 0.001,
-    "max_epoch": 30,
-    "optimizer": "adamw",
     "weight_decay": 1e-6,
-    "clip_grad_norm": 1.0,
     "lr_scheduler": "none",
-    "evaluate_method": "segment"
+    "batch_size": 16,
+    "max_epoch": 30,
+    "clip_grad_norm": 1.0,
+    "evaluate_method": "segment",
+    "num_cands": 10,
+    "cand_search_radius": 100,
+    "max_seq_len": 100,
+    "min_seq_len": 5,
+    "train_rate": 0.7,
+    "eval_rate": 0.15
 }
 ```
 
 ### Registration
-**File Updated**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/__init__.py`
+**File Updated**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/map_matching/__init__.py`
 
 Added:
 ```python
-from libcity.model.trajectory_loc_prediction.DiffMM import DiffMM
+from libcity.model.map_matching.DiffMM import DiffMM
 # And added "DiffMM" to __all__ list
 ```
 
@@ -236,18 +243,18 @@ Returns predictions with probability scores and full distributions.
 ### Running DiffMM in LibCity
 
 ```bash
-# Basic usage
-python run_model.py --task traj_loc_pred --model DiffMM --dataset your_dataset
+# Basic usage for map matching task
+python run_model.py --task map_matching --model DiffMM --dataset your_dataset
 
 # With custom config
-python run_model.py --task traj_loc_pred --model DiffMM --dataset your_dataset \
-    --hid_dim 256 --num_units 512 --batch_size 4 --max_epoch 30
+python run_model.py --task map_matching --model DiffMM --dataset your_dataset \
+    --hid_dim 256 --num_units 512 --batch_size 16 --max_epoch 30
 ```
 
 ### Python API Usage
 
 ```python
-from libcity.model.trajectory_loc_prediction import DiffMM
+from libcity.model.map_matching import DiffMM
 
 # Configuration
 config = {
@@ -264,7 +271,9 @@ config = {
 
 # Data features
 data_feature = {
-    'id_size': 5000  # Number of road segments + 1
+    'id_size': 5000,  # Number of road segments + 1
+    'num_cands': 10,
+    'feat_dim': 9
 }
 
 # Create model
@@ -278,6 +287,12 @@ loss.backward()
 # Inference
 predictions = model.predict(batch)
 ```
+
+---
+
+## Executor
+
+Uses `DeepMapMatchingExecutor` for training and evaluation.
 
 ---
 
@@ -314,6 +329,7 @@ These can be computed using LibCity's evaluation framework or custom evaluators.
 ---
 
 **Initial Migration**: 2026-02-02
-**Task Category Restored**: 2026-02-03 (restored to traj_loc_pred per user request)
+**Final Migration**: 2026-02-04 (moved to map_matching directory)
 **LibCity Version**: Compatible with current version
-**Status**: Migration complete, located in trajectory_loc_prediction
+**Status**: Migration complete, located in map_matching directory
+**Executor**: DeepMapMatchingExecutor

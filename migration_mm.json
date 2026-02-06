@@ -1,0 +1,152 @@
+[
+  {
+    "title": "DeepMM: Deep Learning Based Map Matching with Data Augmentation",
+    "conference": "IEEE TMC / SIGSPATIAL",
+    "year": 2020,
+    "model_name": "DeepMM",
+    "track": "Journal/Conference",
+    "pdf_link": "https://ieeexplore.ieee.org/document/9288879",
+    "datasets": [
+      "Shanghai (Taxi)"
+    ],
+    "metrics": {
+      "Accuracy": "Outperforms HMM baselines by >10%",
+      "Note": "Uses a seq2seq architecture with attention to map sparse and noisy trajectories to road segments in a latent space, augmented by a data generation mechanism."
+    },
+    "repo_url": "https://github.com/vonfeng/DeepMapMatching",
+    "keywords": [
+      "deep learning",
+      "map matching",
+      "data augmentation",
+      "seq2seq",
+      "trajectory"
+    ]
+  },
+  {
+    "title": "GraphMM: Graph-Based Vehicular Map Matching by Leveraging Trajectory and Road Correlations",
+    "conference": "IEEE TKDE",
+    "year": 2023,
+    "model_name": "GraphMM",
+    "track": "Journal",
+    "pdf_link": "https://ieeexplore.ieee.org/abstract/document/10158034",
+    "datasets": [
+      "Tencent (Large-scale)"
+    ],
+    "metrics": {
+      "Note": "GraphMM leverages Graph Neural Networks (GNN) to explicitly model the topology correlations between the trajectory graph and the road network graph for accurate matching."
+    },
+    "repo_url": "https://github.com/GraphAlgoX/GraphMM-Master",
+    "keywords": [
+      "graph neural networks",
+      "map matching",
+      "road correlations",
+      "trajectory graph",
+      "vehicular data"
+    ]
+  },
+  {
+    "title": "DiffMM: Efficient Method for Accurate Noisy and Sparse Trajectory Map Matching via One Step Diffusion",
+    "conference": "AAAI",
+    "year": 2026,
+    "model_name": "DiffMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2601.08482",
+    "datasets": [
+      "Beijing",
+      "Porto"
+    ],
+    "metrics": {
+      "Note": "DiffMM is the first to model map matching through a conditional diffusion paradigm. It uses a one-step diffusion process for efficiency, significantly outperforming HMM and previous Deep Learning methods on sparse/noisy data."
+    },
+    "repo_url": "https://github.com/decisionintelligence/DiffMM",
+    "keywords": [
+      "diffusion model",
+      "map matching",
+      "one-step diffusion",
+      "sparse trajectory",
+      "conditional generation"
+    ]
+  },
+  {
+    "title": "Efficient Methods for Accurate Sparse Trajectory Recovery and Map Matching",
+    "conference": "IEEE (ICDE/Similar)",
+    "year": 2025,
+    "model_name": "TRMMA",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2508.10460",
+    "datasets": [
+      "Chengdu",
+      "Shanghai",
+      "Porto",
+      "Harbin"
+    ],
+    "metrics": {
+      "F1-Score": "Consistently achieves best result quality compared to baselines.",
+      "Speed": "Orders of magnitude faster than competitors during training and inference."
+    },
+    "note": "Proposes a two-stage framework: MMA (Map Matching) formulates point-to-segment matching as a classification task over a small candidate set, and TRMMA (Trajectory Recovery) uses a dual-transformer to infer missing points along the matched route.",
+    "repo_url": "https://github.com/derekwtian/TRMMA"
+  },
+  {
+    "title": "L2MM: Learning to Map Matching with Deep Models for Low-Quality GPS Trajectory Data",
+    "conference": "ACM TKDD (Transactions on Knowledge Discovery from Data)",
+    "year": 2022,
+    "model_name": "L2MM",
+    "track": "Journal",
+    "pdf_link": "https://dl.acm.org/doi/10.1145/3510830",
+    "datasets": [
+      "Porto (Taxi)",
+      "Shanghai (Taxi)"
+    ],
+    "keywords": [
+      "map matching"
+    ],
+    "metrics": {
+      "Accuracy": "Outperforms HMM and DeepMM baselines",
+      "Robustness": "Handles noisy, low-frequency, and non-uniform data effectively"
+    },
+    "note": "L2MM formulates map matching as a sequence-to-sequence translation task using a Transformer-based encoder-decoder architecture to capture trajectory behaviors and spatial dependencies.",
+    "repo_url": "https://github.com/JiangLinLi/L2MM"
+  },
+  {
+    "title": "RLOMM: An Efficient and Robust Online Map Matching Framework with Reinforcement Learning",
+    "conference": "SIGMOD",
+    "year": 2025,
+    "model_name": "RLOMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2502.06825",
+    "datasets": [
+      "Three Real-world Datasets (e.g., Taxi/Ride-hailing data)"
+    ],
+    "keywords": [
+      "map matching"
+    ],
+    "metrics": {
+      "Performance": {
+        "Accuracy": "Significantly higher than SOTA online methods",
+        "Efficiency": "High throughput suitable for online applications",
+        "Robustness": "Stable performance under diverse scenarios"
+      },
+      "Note": "Models online map matching as an Online Markov Decision Process (OMDP) and uses Deep Q-Learning with a comprehensive reward function (accuracy, continuity, detour penalty) to make future-oriented matching decisions."
+    },
+    "repo_url": "https://github.com/faceless0124/RLOMM"
+  },
+  {
+    "title": "Driving with Context: Online Map Matching for Complex Roads Using Lane Markings and Scenario Recognition",
+    "conference": "IEEE RA-L (Under Review) / arXiv",
+    "year": 2025,
+    "model_name": "LMSROMM",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/abs/2505.05007",
+    "datasets": [
+      "Zenseact Open Dataset",
+      "Shanghai Multilevel Road Data"
+    ],
+    "metrics": {
+      "F1 Score": "98.04% (Zenseact), 94.60% (Shanghai Complex Roads)",
+      "Improvement": "Significantly outperforms benchmarks in multilevel/complex areas."
+    },
+    "note": "An online SD map matching method that integrates lane markings (via ICP registration) and driving scenario recognition into an HMM framework to handle complex urban environments like elevated roads.",
+    "repo_url": "https://github.com/TRV-Lab/LMSR-OMM"
+  }
+]

@@ -1,39 +1,59 @@
 {
+  "model_name": "RLOMM",
+
   "road_emb_dim": 128,
   "traces_emb_dim": 128,
-  "num_rnn_layers": 3,
+  "num_layers": 3,
+  "gin_depth": 3,
+  "gcn_depth": 3,
   "attention_dim": 128,
+
   "gamma": 0.8,
   "match_interval": 4,
   "candidate_size": 10,
   "memory_capacity": 100,
   "target_update_interval": 10,
-  "correct_reward": 5.0,
-  "lambda_ctr": 0.1,
-  "learning_rate": 0.001,
-  "train_batch_size": 512,
-  "eval_batch_size": 500,
   "optimize_batch_size": 32,
-  "road_feat_dim": 28,
-  "trace_feat_dim": 4,
-  "gin_depth": 3,
-  "gin_mlp_layers": 2,
-  "digcn_depth": 3,
+
+  "correct_reward": 5.0,
   "mask_reward": 0.0,
   "continuous_success_reward": 1.0,
   "connectivity_reward": 1.0,
   "detour_penalty": 1.0,
+  "lambda_ctr": 0.1,
+
+  "road_feat_dim": 28,
+  "trace_feat_dim": 4,
+
   "batch_size": 512,
+  "train_batch_size": 512,
+  "eval_batch_size": 500,
+  "learning_rate": 0.001,
   "max_epoch": 100,
   "optimizer": "adam",
   "learner": "adam",
   "lr_decay": false,
+  "lr_scheduler": "none",
   "clip_grad_norm": true,
   "max_grad_norm": 5.0,
+
   "use_early_stop": true,
   "patience": 20,
   "log_every": 1,
   "saved": true,
   "save_mode": "best",
-  "train_loss": "none"
+  "train_loss": "none",
+
+  "metrics": ["RMF", "AN", "AL"],
+
+  "cache_dataset": true,
+  "num_workers": 0,
+  "load_best_epoch": true,
+
+  "debug": false,
+  "hyper_tune": false,
+
+  "dataset_class": "DeepMapMatchingDataset",
+  "executor": "DeepMapMatchingExecutor",
+  "evaluator": "MapMatchingEvaluator"
 }

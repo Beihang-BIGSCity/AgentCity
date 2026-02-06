@@ -64,7 +64,7 @@
   "comment_use_early_stop": "Whether to use early stopping based on validation loss",
 
   "comment_data_parameters": "Dataset and data loading parameters",
-  "batch_size": 32,
+  "batch_size": 8,
   "comment_batch_size": "Training batch size. Paper default: 32",
 
   "scaler": "standard",

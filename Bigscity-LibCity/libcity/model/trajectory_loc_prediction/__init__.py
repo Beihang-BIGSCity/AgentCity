@@ -23,8 +23,9 @@ from libcity.model.trajectory_loc_prediction.GNPRSID import GNPRSID
 from libcity.model.trajectory_loc_prediction.JGRM import JGRM
 from libcity.model.trajectory_loc_prediction.RNTrajRec import RNTrajRec
 from libcity.model.trajectory_loc_prediction.AGRAN import AGRAN
-from libcity.model.trajectory_loc_prediction.DeepMM import DeepMM
 from libcity.model.trajectory_loc_prediction.DCHL import DCHL
+from libcity.model.trajectory_loc_prediction.TRMMA import TRMMA
+from libcity.model.trajectory_loc_prediction.L2MM import L2MM
 __all__ = [
     "DeepMove",
     "RNN",
@@ -51,6 +52,7 @@ __all__ = [
     "JGRM",
     "RNTrajRec",
     "AGRAN",
-    "DeepMM",
-    "DCHL"
+    "DCHL",
+    "TRMMA",
+    "L2MM"
 ]

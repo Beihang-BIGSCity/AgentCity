@@ -36,223 +36,280 @@ The model performs two related tasks:
 
 ---
 
-## LibCity Migration - Data Format Fix (2026-02-04)
+## LibCity Migration Summary
 
-### Problem Diagnosis
+### Migration Date: 2026-02-04
 
-The original TRMMA model expected specialized batch keys designed for trajectory recovery with road network data:
-- `src_grid_seq`: Source GPS grid sequence
-- `da_routes`: Route segment candidate IDs
-- `trg_rid`: Target segment IDs
-- `trg_rate`: Target position rates
-- `labels`: One-hot encoded target labels over route candidates
-- And many more...
+### Status: COMPLETED
 
-**Error encountered**: `KeyError: 'src_grid_seq is not in the batch'`
-
-However, LibCity's `StandardTrajectoryEncoder` provides a simpler format for next-location prediction:
-- `current_loc`: Current trajectory location IDs
-- `current_tim`: Current trajectory time encodings
-- `history_loc`: History location IDs
-- `history_tim`: History time encodings
-- `target`: Next location to predict
-- `target_tim`: Target time encoding
-- `uid`: User IDs
-
-### Solution Implemented: Model Modification
-
-**Chosen Approach**: Option 2 - Modify the TRMMA model to accept standard LibCity trajectory batch format.
-
-**Rationale**: Creating a custom encoder would require road network preprocessing and complex route candidate generation that is not available in standard LibCity trajectory datasets.
-
-### Key Changes Made
-
-#### 1. Automatic Batch Format Detection
-
-Added `_is_standard_libcity_batch()` method that detects whether the input batch is in standard LibCity format or original TRMMA format:
-
-```python
-def _is_standard_libcity_batch(self, batch):
-    """Check if batch is in standard LibCity format."""
-    has_current_loc = 'current_loc' in batch
-    has_src_grid_seq = 'src_grid_seq' in batch
-    return has_current_loc and not has_src_grid_seq
-```
-
-#### 2. Batch Format Conversion
-
-Added `_convert_batch_format()` method that transforms standard LibCity batch to TRMMA's internal format:
-
-**Standard LibCity -> TRMMA Mapping**:
-| LibCity Key | TRMMA Key | Transformation |
-|------------|-----------|----------------|
-| `current_loc` | `src_emb` | Location embedding lookup |
-| Computed from `current_loc` | `src_len` | Count non-padding positions |
-| Generated from batch | `da_routes` | Unique locations + random samples |
-| `current_loc[:, -1]` + `target` | `trg_rid` | [last_loc, target, target] |
-| Constant 0.5 | `trg_rate` | Dummy rates (not used) |
-| `current_tim[:, -1]` | `pro_features` | Last time encoding |
-| `target` | `d_rids` | Destination location |
-| One-hot over candidates | `labels` | Target in route candidates |
-
-#### 3. Dual Forward Pass Methods
-
-Split the forward method into two implementations:
-- `_forward_libcity()`: For standard LibCity format, returns logits for cross-entropy loss
-- `_forward_original()`: For TRMMA format with all specialized keys
-
-#### 4. Dual Loss Calculation
-
-Split the loss calculation:
-- `_calculate_loss_libcity()`: Standard cross-entropy loss for next-location prediction
-- `_calculate_loss_original()`: Combined segment ID + rate loss
-
-#### 5. Updated Architecture
-
-Added new components for LibCity compatibility:
-- `loc_embedding`: Learnable location embedding for generating pseudo-GPS features
-- `output_layer`: Linear projection from hidden state to vocabulary for next-location prediction
-
-#### 6. Updated Default Configuration
-
-Disabled road-network-specific features by default:
-- `srcseg_flag`: `false` (no road segment data)
-- `rate_flag`: `false` (no position rate prediction needed)
-- `lambda2`: `0.0` (rate loss weight set to zero)
-
-### Files Modified
+### Files Created/Modified
 
 1. **Model File**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/TRMMA.py`
-   - Added `_is_standard_libcity_batch()` method
-   - Added `_convert_batch_format()` method
-   - Added `_forward_libcity()` method
-   - Added `_forward_original()` method
-   - Added `_calculate_loss_libcity()` method
-   - Added `_calculate_loss_original()` method
-   - Updated `forward()`, `predict()`, `calculate_loss()` to dispatch based on batch format
-   - Added `loc_embedding` and `output_layer` in `_build_model()`
+   - Full adaptation of TrajRecovery model and all supporting classes
+   - Inherits from `AbstractModel`
+   - Implements `forward()`, `predict()`, `calculate_loss()` methods
+   - Self-contained with all required layer implementations
 
 2. **Config File**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/traj_loc_pred/TRMMA.json`
-   - Updated defaults for LibCity compatibility
+   - Default hyperparameters for all model options
+   - Training configuration included
 
-### Updated Configuration
+3. **Registration**: Model registered in `__init__.py`
 
-```json
-{
-    "model": "TRMMA",
-    "task": "traj_loc_pred",
+---
 
-    "hid_dim": 256,
-    "id_emb_dim": 128,
-    "transformer_layers": 2,
-    "heads": 4,
-    "dropout": 0.1,
+### Model Architecture
 
-    "pro_features_flag": true,
-    "pro_input_dim": 48,
-    "pro_output_dim": 64,
-    "learn_pos": true,
-    "da_route_flag": true,
-    "srcseg_flag": false,
-    "rid_feats_flag": false,
-    "rid_fea_dim": 8,
+The adapted TRMMA model includes the following components:
 
-    "dest_type": 1,
-    "rate_flag": false,
-    "prog_flag": false,
+#### Supporting Layer Classes
 
-    "lambda1": 1.0,
-    "lambda2": 0.0,
-    "teacher_forcing_ratio": 0.5,
+| Class | Description | Original File |
+|-------|-------------|---------------|
+| `sequence_mask` | Masks irrelevant entries in sequences | layers.py |
+| `sequence_mask3d` | Masks irrelevant entries in 3D sequences | layers.py |
+| `PositionalEncoder` | Sinusoidal positional encoding | layers.py |
+| `MultiHeadAttention` | Multi-head self-attention | layers.py |
+| `FeedForward` | Position-wise feed-forward network | layers.py |
+| `Norm` | Layer normalization | layers.py |
+| `GPSLayer` | GPS transformer layer with self-attention | layers.py |
+| `GPSFormer` | GPS sequence transformer encoder | layers.py |
+| `RouteLayer` | Route layer with self + cross attention | layers.py |
+| `GRLayer` | GPS-Route dual layer | layers.py |
+| `GRFormer` | GPS-Route dual transformer | layers.py |
+| `Attention` | Bahdanau-style attention for decoder | layers.py |
 
-    "candi_size": 50,
-    "max_input_length": 500,
-    "history_type": "splice",
-    "evaluate_method": "popularity"
-}
-```
+#### Encoder Classes
+
+| Class | Description | Original File |
+|-------|-------------|---------------|
+| `GPSEncoder` | GPS-only encoder with temporal features | trmma.py |
+| `GREncoder` | GPS-Route dual encoder with temporal features | trmma.py |
+
+#### Decoder Classes
+
+| Class | Description | Original File |
+|-------|-------------|---------------|
+| `DecoderMulti` | GRU-based decoder with route attention | trmma.py |
+
+#### Main Model Classes
+
+| Class | Description | Original File |
+|-------|-------------|---------------|
+| `TrajRecoveryModule` | Core trajectory recovery module | trmma.py (TrajRecovery) |
+| `TRMMA` | LibCity-compatible wrapper class | New (LibCity adapter) |
+
+---
+
+### Configuration Parameters
+
+#### Model Architecture Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `hid_dim` | int | 256 | Hidden dimension for all layers |
+| `id_emb_dim` | int | 128 | Road segment embedding dimension |
+| `transformer_layers` | int | 2 | Number of transformer layers |
+| `heads` | int | 4 | Number of attention heads |
+| `dropout` | float | 0.1 | Dropout probability |
+
+#### Feature Flags
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `pro_features_flag` | bool | true | Use temporal features (hour of day) |
+| `pro_input_dim` | int | 48 | Temporal feature vocabulary size |
+| `pro_output_dim` | int | 64 | Temporal embedding dimension |
+| `learn_pos` | bool | true | Use learned positional embeddings |
+| `da_route_flag` | bool | true | Use dual route encoder (GREncoder) |
+| `srcseg_flag` | bool | false | Use source segment features |
+| `rid_feats_flag` | bool | false | Use road segment features |
+| `rid_fea_dim` | int | 8 | Road segment feature dimension |
+
+#### Decoder Settings
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `dest_type` | int | 1 | Destination embedding type (0, 1, or 2) |
+| `rate_flag` | bool | false | Predict position rate within segment |
+| `prog_flag` | bool | false | Use progressive decoding |
+
+#### Loss Settings
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `lambda1` | float | 1.0 | Weight for ID prediction loss |
+| `lambda2` | float | 0.0 | Weight for rate prediction loss |
+| `teacher_forcing_ratio` | float | 0.5 | Teacher forcing probability during training |
+
+#### Training Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `batch_size` | int | 64 | Training batch size |
+| `learning_rate` | float | 0.001 | Initial learning rate |
+| `max_epoch` | int | 50 | Maximum training epochs |
+| `optimizer` | string | "adam" | Optimizer type |
+| `weight_decay` | float | 0.0001 | L2 regularization |
+| `lr_scheduler` | string | "reducelronplateau" | Learning rate scheduler |
+| `lr_decay` | float | 0.5 | Learning rate decay factor |
+| `lr_step` | int | 5 | Learning rate decay step |
+| `clip_grad_norm` | bool | true | Enable gradient clipping |
+| `max_grad_norm` | float | 1.0 | Maximum gradient norm |
+| `use_early_stop` | bool | true | Enable early stopping |
+| `patience` | int | 10 | Early stopping patience |
+
+---
+
+### Expected Batch Format
+
+The TRMMA model can accept batch data with the following keys:
+
+#### Primary Input Keys
+
+| Key | Shape | Type | Description |
+|-----|-------|------|-------------|
+| `current_loc` OR `src_grid_seq` | (batch, seq_len) OR (batch, seq_len, 3) | long/float | Source GPS sequence |
+| `target_loc` OR `trg_rid` | (batch, seq_len) | long | Target road segment IDs |
+| `trg_rate` | (batch, seq_len, 1) | float | Target position rates (optional) |
+| `da_route` | (batch, route_len) | long | Route candidate IDs |
+| `pro_features` OR `current_tim` | (batch,) OR (batch, seq_len) | long | Temporal features |
+
+#### Optional Keys
+
+| Key | Shape | Type | Description |
+|-----|-------|------|-------------|
+| `src_seg_seq` | (batch, seq_len) | long | Source segment sequences |
+| `src_seg_feat` | (batch, seq_len, 1) | float | Source segment features |
+| `rid_features` | (id_size, rid_fea_dim) | float | Road segment feature lookup |
+| `label` | (batch, seq_len, route_len) | float | One-hot attention labels |
+
+---
 
 ### Usage Example
 
 ```python
-# TRMMA now works with standard LibCity trajectory datasets
 from libcity.model.trajectory_loc_prediction import TRMMA
 
 config = {
     'device': 'cuda',
     'hid_dim': 256,
+    'id_emb_dim': 128,
     'transformer_layers': 2,
     'heads': 4,
+    'dropout': 0.1,
+    'da_route_flag': True,
+    'learn_pos': True,
+    'pro_features_flag': True,
+    'teacher_forcing_ratio': 0.5,
 }
 
 data_feature = {
-    'loc_size': 5000,  # Number of locations
-    'loc_pad': 4999,   # Padding token ID
-    'tim_size': 48,    # Time vocabulary size
+    'loc_size': 10000,  # Number of road segments
+    'loc_pad': 0,       # Padding token ID
 }
 
 model = TRMMA(config, data_feature)
 
-# Training with standard LibCity batch
-batch = {
-    'current_loc': current_loc_tensor,  # (batch, seq_len)
-    'current_tim': current_tim_tensor,  # (batch, seq_len)
-    'target': target_tensor,            # (batch,)
-}
-
+# Training
 loss = model.calculate_loss(batch)
+
+# Inference
 predictions = model.predict(batch)
 ```
 
-### Backward Compatibility
+---
 
-The model remains **fully backward compatible** with the original TRMMA format. If a batch contains `src_grid_seq` key, it will use the original TRMMA forward pass. This allows:
+### Key Adaptations from Original
 
-1. Using TRMMA with standard LibCity datasets (foursquare_nyc, gowalla, etc.)
-2. Using TRMMA with custom preprocessed data in original format
-3. Gradual migration of existing pipelines
+1. **Removed External Dependencies**
+   - Removed `preprocess` module dependencies (SparseDAM, SegInfo)
+   - Removed `utils.spatial_func` dependencies (SPoint, project_pt_to_road, rate2gps)
+   - Removed `utils.trajectory_func` dependencies (STPoint)
+   - Removed `utils.candidate_point` dependencies (CandidatePoint)
+   - Removed `utils.model_utils` dependencies (gps2grid, get_normalized_t)
+   - Removed DAPlanner route planning (expects pre-computed routes)
 
-### Limitations
+2. **Integrated Layer Classes**
+   - All layer classes from `layers.py` integrated into single file
+   - All helper functions (sequence_mask, sequence_mask3d) included
 
-1. **Simplified Route Candidates**: Route candidates are generated from unique locations in the batch plus random samples, not from actual road network analysis.
+3. **LibCity-Compatible Interface**
+   - Inherits from `AbstractModel`
+   - Implements `predict()` returning log-softmax scores
+   - Implements `calculate_loss()` returning combined loss
 
-2. **No Position Rate Prediction**: The rate prediction (position within segment) is disabled for standard LibCity datasets since there's no road network concept.
+4. **Flexible Batch Format**
+   - Accepts multiple key naming conventions
+   - Auto-detects available features
+   - Provides sensible defaults for missing optional keys
 
-3. **Pseudo-GPS Features**: Location embeddings are used instead of actual GPS coordinates for source sequence encoding.
-
-4. **No Road Network Integration**: The model works without road network preprocessing but loses some of the original TRMMA's map-matching capabilities.
-
-### Testing
-
-To verify the fix works:
-
-```bash
-cd /home/wangwenrui/shk/AgentCity/Bigscity-LibCity
-python run_model.py --task traj_loc_pred --model TRMMA --dataset foursquare_nyc
-```
-
-The model should now train without `KeyError` on standard LibCity trajectory datasets.
+5. **Device Handling**
+   - All tensors properly moved to configured device
+   - Uses `config.get('device', 'cpu')` for device configuration
 
 ---
 
-## Original Migration Summary (Preserved for Reference)
+### Limitations
 
-### Date: 2026-02-02
+1. **Pre-computed Routes Required**: Route planning (DAPlanner) is not included; routes must be pre-computed and provided in batch data.
 
-### Status: COMPLETED (with Data Format Fix 2026-02-04)
+2. **No Road Network Integration**: External road network preprocessing not included; model works with provided road segment vocabularies.
 
-### Files Created/Modified
+3. **Simplified Rate Prediction**: Position rate prediction is optional and disabled by default.
 
-1. **Model File**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/trajectory_loc_prediction/TRMMA.py`
-   - Full adaptation of TrajRecovery model
-   - Includes all supporting classes (GPSFormer, GRFormer, DecoderMulti, etc.)
-   - Inherits from AbstractModel
-   - Implements forward(), predict(), calculate_loss() methods
-   - **Updated 2026-02-04**: Added LibCity batch format compatibility
+4. **No Graph Neural Networks**: Original road network graph features not included.
 
-2. **Config File**: `/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/model/traj_loc_pred/TRMMA.json`
-   - Default hyperparameters
-   - All configuration options documented
-   - **Updated 2026-02-04**: Changed defaults for LibCity compatibility
+---
 
-3. **Registration**: Model registered in `__init__.py`
+### Testing
+
+To verify the migration works:
+
+```bash
+cd /home/wangwenrui/shk/AgentCity/Bigscity-LibCity
+python -c "from libcity.model.trajectory_loc_prediction import TRMMA; print('TRMMA import successful')"
+```
+
+To run with a dataset:
+
+```bash
+python run_model.py --task traj_loc_pred --model TRMMA --dataset <your_dataset>
+```
+
+---
+
+### Component Hierarchy
+
+```
+TRMMA (AbstractModel)
+|
++-- TrajRecoveryModule (nn.Module)
+    |
+    +-- emb_id (nn.Parameter) - Road segment embeddings
+    |
+    +-- pos_embedding_gps (nn.Embedding) - GPS positional embeddings
+    +-- pos_embedding_route (nn.Embedding) - Route positional embeddings
+    |
+    +-- fc_in_gps (nn.Linear) - GPS input projection
+    +-- fc_in_route (nn.Linear) - Route input projection
+    |
+    +-- encoder: GREncoder or GPSEncoder
+    |   |
+    |   +-- transformer: GRFormer or GPSFormer
+    |   |   |
+    |   |   +-- layers: [GRLayer or GPSLayer]
+    |   |       |
+    |   |       +-- MultiHeadAttention
+    |   |       +-- FeedForward
+    |   |       +-- Norm
+    |   |
+    |   +-- temporal (nn.Embedding) - Temporal feature embedding
+    |   +-- fc_hid (nn.Linear) - Hidden state projection
+    |
+    +-- decoder: DecoderMulti
+        |
+        +-- rnn (nn.GRU) - Recurrent decoder
+        +-- attn_route (Attention) - Route attention
+        +-- fc_rate_out (nn.Sequential) - Rate prediction (optional)
+```

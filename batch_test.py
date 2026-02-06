@@ -231,8 +231,9 @@ def main():
     #model_list = ["PatchTST","DCST","STLLM","TGraphormer","CKGGNN","EasyST","LEAF","MetaDG","TRACK","HiMSNet","DST2former"]
     '''model_list = ["AutoSTF", "STSSDL", "STDMAE", "LSTTN","UniST","STID","ConvTimeNet","FlashST","Fredformer","GNNRF","PatchSTG","PatchTST","RevIN"
                   ,"Trafformer",'DMSTGCN','GWNET','STAEformer','STMGAT','TGCLSTM','STID','Trafformer','D2STGNN'
-                  ,'STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet']'''
-    model_list = ['STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]
+                  ,'STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet','STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]'''
+    #model_list = ['STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]
+    model_list = ['STAEformer',"DCST",'PatchSTG','STWave','DST2former','STLLM','AutoSTF','FlashST','HSTWAVE','DSTAGNN','TRACK','UniST']
     task = 'traffic_state_pred'
     dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
     manager = Manager()
@@ -252,7 +253,7 @@ def main():
              for m, d in itertools.product(model_list, dataset_list)]
     
     # 进程数 = GPU数量，确保每个GPU同一时间只跑一个任务
-    num_gpus = 3
+    num_gpus = 4
     with Pool(processes=num_gpus) as pool:
         results = pool.map(run_test_process, tasks)
 

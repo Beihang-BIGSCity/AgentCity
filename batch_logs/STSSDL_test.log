@@ -1136,3 +1136,387 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-02-03 18:20:37,399 - WARNING - Received none train loss func and will use the loss func defined in the model.
 [OUT] 2026-02-03 18:20:37,399 - INFO - Start training ...
 [OUT] 2026-02-03 18:20:37,399 - INFO - num_batches:570
+
+============================================================
+Timestamp: 2026-02-04 11:08:40
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMSD7 --train true --max_epoch 35 --gpu_id 0 --exp_id 278992
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 11:08:45,001 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 11:08:45,002 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMSD7, exp_id=278992
+[OUT] 2026-02-04 11:08:45,002 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '278992', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 11:08:45,939 - INFO - Using opt_einsum
+[OUT] 2026-02-04 11:08:48,209 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-02-04 11:08:48,212 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-02-04 11:08:48,212 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-02-04 11:08:48,216 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-02-04 11:08:48,216 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-04 11:09:15,711 - INFO - train	x: (19741, 12, 883, 2), y: (19741, 12, 883, 2)
+[OUT] 2026-02-04 11:09:15,711 - INFO - eval	x: (2820, 12, 883, 2), y: (2820, 12, 883, 2)
+[OUT] 2026-02-04 11:09:15,711 - INFO - test	x: (5640, 12, 883, 2), y: (5640, 12, 883, 2)
+[OUT] 2026-02-04 11:09:17,258 - INFO - StandardScaler mean: 308.4280360596107, std: 188.77957026274376
+[OUT] 2026-02-04 11:09:17,258 - INFO - NoneScaler
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py:297: RuntimeWarning: divide by zero encountered in power
+[ERR]   d_inv_sqrt = np.power(rowsum, -0.5).flatten()
+[OUT] 2026-02-04 11:09:29,086 - INFO - STSSDL initialized with 883 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-04 11:09:29,443 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-04 11:09:29,444 - INFO - adaptive_embedding	torch.Size([12, 883, 48])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - node_embedding	torch.Size([883, 20])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,444 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,445 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,445 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,445 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,445 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-04 11:09:29,445 - INFO - Total parameter numbers: 1533447
+[OUT] 2026-02-04 11:09:29,445 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-04 11:09:29,445 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-04 11:09:29,446 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-04 11:09:29,446 - INFO - Start training ...
+[OUT] 2026-02-04 11:09:29,446 - INFO - num_batches:309
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+[ERR]     executor.train(train_data, valid_data)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 297, in train
+[ERR]     losses = self._train_epoch(train_dataloader, epoch_idx, self.loss_func)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 369, in _train_epoch
+[ERR]     loss = loss_func(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 564, in calculate_loss
+[ERR]     output, query, pos, neg, mask, latent_dis, prototype_dis = self._forward_with_aux(
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 480, in _forward_with_aux
+[ERR]     h_de, ht_list = self.decoder(go, ht_list, supports_de)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 163, in forward
+[ERR]     state = self.dcrnn_cells[i](current_inputs, init_state[i], supports)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 97, in forward
+[ERR]     z_r = torch.sigmoid(self.gate(input_and_state, supports))
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 76, in forward
+[ERR]     support_ks.append(torch.matmul(2 * support, support_ks[-1]) - support_ks[-2])
+[ERR] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 192.00 MiB. GPU 0 has a total capacity of 23.49 GiB of which 133.44 MiB is free. Process 326787 has 650.00 MiB memory in use. Including non-PyTorch memory, this process has 22.70 GiB memory in use. Of the allocated memory 21.24 GiB is allocated by PyTorch, and 1.15 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-02-04 11:09:32
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 285605
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 11:09:37,205 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 11:09:37,206 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMS_BAY, exp_id=285605
+[OUT] 2026-02-04 11:09:37,206 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '285605', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 11:09:38,173 - INFO - Using opt_einsum
+[OUT] 2026-02-04 11:09:40,591 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 11:09:40,598 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 11:09:40,598 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 11:09:40,612 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 11:09:40,612 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 11:09:40,613 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-04 11:10:00,428 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 11:10:00,429 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 11:10:00,429 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 11:10:01,481 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 11:10:01,481 - INFO - NoneScaler
+
+============================================================
+Timestamp: 2026-02-04 12:33:53
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMSD7 --train true --max_epoch 35 --gpu_id 0 --exp_id 236183
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 12:33:58,795 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 12:33:58,796 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMSD7, exp_id=236183
+[OUT] 2026-02-04 12:33:58,796 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMSD7', 'saved_model': True, 'train': True, 'exp_id': '236183', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PEMSD7'], 'geo_file': 'PEMSD7', 'rel_file': 'PEMSD7', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 12:33:59,977 - INFO - Using opt_einsum
+[OUT] 2026-02-04 12:34:02,663 - INFO - Loaded file PEMSD7.geo, num_nodes=883
+[OUT] 2026-02-04 12:34:02,665 - INFO - set_weight_link_or_dist: link
+[OUT] 2026-02-04 12:34:02,665 - INFO - init_weight_inf_or_zero: zero
+[OUT] 2026-02-04 12:34:02,669 - INFO - Loaded file PEMSD7.rel, shape=(883, 883)
+[OUT] 2026-02-04 12:34:02,670 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMSD7_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-04 12:34:39,943 - INFO - train	x: (19741, 12, 883, 2), y: (19741, 12, 883, 2)
+[OUT] 2026-02-04 12:34:39,943 - INFO - eval	x: (2820, 12, 883, 2), y: (2820, 12, 883, 2)
+[OUT] 2026-02-04 12:34:39,943 - INFO - test	x: (5640, 12, 883, 2), y: (5640, 12, 883, 2)
+[OUT] 2026-02-04 12:34:42,144 - INFO - StandardScaler mean: 308.4280360596107, std: 188.77957026274376
+[OUT] 2026-02-04 12:34:42,144 - INFO - NoneScaler
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py:297: RuntimeWarning: divide by zero encountered in power
+[ERR]   d_inv_sqrt = np.power(rowsum, -0.5).flatten()
+[OUT] 2026-02-04 12:35:53,981 - INFO - STSSDL initialized with 883 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-04 12:35:55,270 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-04 12:35:55,271 - INFO - adaptive_embedding	torch.Size([12, 883, 48])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - node_embedding	torch.Size([883, 20])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,271 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,272 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,272 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,272 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,272 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-04 12:35:55,272 - INFO - Total parameter numbers: 1533447
+[OUT] 2026-02-04 12:35:55,272 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-04 12:35:55,272 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-04 12:35:55,273 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-04 12:35:55,273 - INFO - Start training ...
+[OUT] 2026-02-04 12:35:55,273 - INFO - num_batches:309
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 86, in run_model
+[ERR]     executor.train(train_data, valid_data)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 297, in train
+[ERR]     losses = self._train_epoch(train_dataloader, epoch_idx, self.loss_func)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/traffic_state_executor.py", line 369, in _train_epoch
+[ERR]     loss = loss_func(batch)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 564, in calculate_loss
+[ERR]     output, query, pos, neg, mask, latent_dis, prototype_dis = self._forward_with_aux(
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 480, in _forward_with_aux
+[ERR]     h_de, ht_list = self.decoder(go, ht_list, supports_de)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 163, in forward
+[ERR]     state = self.dcrnn_cells[i](current_inputs, init_state[i], supports)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 100, in forward
+[ERR]     hc = torch.tanh(self.update(candidate, supports))
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+[ERR]     return self._call_impl(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+[ERR]     return forward_call(*args, **kwargs)
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STSSDL.py", line 74, in forward
+[ERR]     support_ks = [torch.eye(support.shape[1]).repeat(support.shape[0], 1, 1).to(support.device), support]
+[ERR] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 192.00 MiB. GPU 0 has a total capacity of 23.49 GiB of which 176.75 MiB is free. Including non-PyTorch memory, this process has 23.29 GiB memory in use. Of the allocated memory 21.80 GiB is allocated by PyTorch, and 1.19 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+[Return Code: 1]
+
+============================================================
+Timestamp: 2026-02-04 12:36:01
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model STSSDL --dataset PEMS_BAY --train true --max_epoch 35 --gpu_id 0 --exp_id 141691
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[OUT] 2026-02-04 12:36:12,693 - INFO - Log directory: ./libcity/log
+[OUT] 2026-02-04 12:36:12,694 - INFO - Begin pipeline, task=traffic_state_pred, model_name=STSSDL, dataset_name=PEMS_BAY, exp_id=141691
+[OUT] 2026-02-04 12:36:12,694 - INFO - {'task': 'traffic_state_pred', 'model': 'STSSDL', 'dataset': 'PEMS_BAY', 'saved_model': True, 'train': True, 'exp_id': '141691', 'seed': 0, 'gpu_id': 0, 'max_epoch': 35, 'dataset_class': 'TrafficStatePointDataset', 'executor': 'TrafficStateExecutor', 'evaluator': 'TrafficStateEvaluator', 'rnn_units': 128, 'rnn_layers': 1, 'cheb_k': 3, 'prototype_num': 20, 'prototype_dim': 64, 'tod_embed_dim': 10, 'node_embedding_dim': 20, 'adaptive_embedding_dim': 48, 'input_embedding_dim': 128, 'cl_decay_steps': 2000, 'use_curriculum_learning': True, 'use_STE': True, 'TDAY': 288, 'lamb_c': 0.01, 'lamb_d': 1.0, 'contra_loss': 'triplet', 'margin': 0.5, 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'add_time_in_day': True, 'add_day_in_week': False, 'input_window': 12, 'output_window': 12, 'learner': 'adam', 'learning_rate': 0.01, 'lr_decay': True, 'lr_scheduler': 'multisteplr', 'lr_decay_ratio': 0.1, 'steps': [50, 100], 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 30, 'epsilon': 0.001, 'weight_decay': 0, 'batch_size': 64, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'train_rate': 0.7, 'eval_rate': 0.1, 'robustness_test': False, 'noise_type': 'gaussian', 'disturb_rate': 0.5, 'noise_mean': [5], 'noise_SD': [10], 'gpu': True, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'step_size': 10, 'lr_T_max': 30, 'lr_eta_min': 0, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'metrics': ['MAE', 'MAPE', 'MSE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_MSE', 'masked_RMSE', 'R2', 'EVAR'], 'evaluator_mode': 'single', 'save_mode': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_speed': 'num'}}, 'data_col': ['traffic_speed'], 'weight_col': 'cost', 'data_files': ['PEMS_BAY'], 'geo_file': 'PEMS_BAY', 'rel_file': 'PEMS_BAY', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'inf', 'set_weight_link_or_dist': 'dist', 'calculate_weight_adj': True, 'weight_adj_epsilon': 0.1, 'device': device(type='cuda', index=0)}
+[OUT] 2026-02-04 12:36:17,150 - INFO - Using opt_einsum
+[OUT] 2026-02-04 12:36:21,942 - INFO - Loaded file PEMS_BAY.geo, num_nodes=325
+[OUT] 2026-02-04 12:36:21,952 - INFO - set_weight_link_or_dist: dist
+[OUT] 2026-02-04 12:36:21,953 - INFO - init_weight_inf_or_zero: inf
+[OUT] 2026-02-04 12:36:21,969 - INFO - Loaded file PEMS_BAY.rel, shape=(325, 325)
+[OUT] 2026-02-04 12:36:21,969 - INFO - Start Calculate the weight by Gauss kernel!
+[OUT] 2026-02-04 12:36:21,974 - INFO - Loading ./libcity/cache/dataset_cache/point_based_PEMS_BAY_12_12_0.7_0.1_standard_64_True_True_False_True.npz
+[OUT] 2026-02-04 12:36:40,999 - INFO - train	x: (36465, 12, 325, 2), y: (36465, 12, 325, 2)
+[OUT] 2026-02-04 12:36:40,999 - INFO - eval	x: (5209, 12, 325, 2), y: (5209, 12, 325, 2)
+[OUT] 2026-02-04 12:36:40,999 - INFO - test	x: (10419, 12, 325, 2), y: (10419, 12, 325, 2)
+[OUT] 2026-02-04 12:36:42,009 - INFO - StandardScaler mean: 62.73567651594296, std: 9.438173664359947
+[OUT] 2026-02-04 12:36:42,009 - INFO - NoneScaler
+[OUT] 2026-02-04 12:36:50,350 - INFO - STSSDL initialized with 325 nodes, use_STE=True, prototype_num=20
+[OUT] 2026-02-04 12:36:50,699 - INFO - STSSDL(
+[OUT]   (contrastive_loss): TripletMarginLoss()
+[OUT]   (prototypes): ParameterDict(
+[OUT]       (prototypes): Parameter containing: [torch.cuda.FloatTensor of size 20x64 (cuda:0)]
+[OUT]       (Wq): Parameter containing: [torch.cuda.FloatTensor of size 128x64 (cuda:0)]
+[OUT]   )
+[OUT]   (input_proj): Linear(in_features=1, out_features=128, bias=True)
+[OUT]   (encoder): ADCRNN_Encoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (decoder): ADCRNN_Decoder(
+[OUT]     (dcrnn_cells): ModuleList(
+[OUT]       (0): AGCRNCell(
+[OUT]         (gate): AGCN()
+[OUT]         (update): AGCN()
+[OUT]       )
+[OUT]     )
+[OUT]   )
+[OUT]   (proj): Sequential(
+[OUT]     (0): Linear(in_features=192, out_features=1, bias=True)
+[OUT]   )
+[OUT]   (hypernet): Sequential(
+[OUT]     (0): Linear(in_features=384, out_features=10, bias=True)
+[OUT]   )
+[OUT] )
+[OUT] 2026-02-04 12:36:50,700 - INFO - adaptive_embedding	torch.Size([12, 325, 48])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - node_embedding	torch.Size([325, 20])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - time_embedding	torch.Size([288, 10])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - prototypes.prototypes	torch.Size([20, 64])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - prototypes.Wq	torch.Size([128, 64])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - input_proj.weight	torch.Size([128, 1])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - input_proj.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - encoder.dcrnn_cells.0.gate.weights	torch.Size([1002, 256])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - encoder.dcrnn_cells.0.gate.bias	torch.Size([256])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,700 - INFO - encoder.dcrnn_cells.0.update.weights	torch.Size([1002, 128])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - encoder.dcrnn_cells.0.update.bias	torch.Size([128])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - decoder.dcrnn_cells.0.gate.weights	torch.Size([1050, 384])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - decoder.dcrnn_cells.0.gate.bias	torch.Size([384])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - decoder.dcrnn_cells.0.update.weights	torch.Size([1050, 192])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - decoder.dcrnn_cells.0.update.bias	torch.Size([192])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - proj.0.weight	torch.Size([1, 192])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - proj.0.bias	torch.Size([1])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - hypernet.0.weight	torch.Size([10, 384])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - hypernet.0.bias	torch.Size([10])	cuda:0	True
+[OUT] 2026-02-04 12:36:50,701 - INFO - Total parameter numbers: 1200879
+[OUT] 2026-02-04 12:36:50,701 - INFO - You select `adam` optimizer.
+[OUT] 2026-02-04 12:36:50,701 - INFO - You select `multisteplr` lr_scheduler.
+[OUT] 2026-02-04 12:36:50,702 - WARNING - Received none train loss func and will use the loss func defined in the model.
+[OUT] 2026-02-04 12:36:50,702 - INFO - Start training ...
+[OUT] 2026-02-04 12:36:50,702 - INFO - num_batches:570
+[OUT] 2026-02-04 12:45:55,922 - INFO - epoch complete!
+[OUT] 2026-02-04 12:45:55,922 - INFO - evaluating now!
+[OUT] 2026-02-04 12:46:41,531 - INFO - Epoch [0/35] train_loss: 4.8230, val_loss: 6.6086, lr: 0.010000, 590.83s
+[OUT] 2026-02-04 12:46:41,555 - INFO - Saved model at 0
+[OUT] 2026-02-04 12:46:41,555 - INFO - Val loss decrease from inf to 6.6086, saving to ./libcity/cache/141691/model_cache/STSSDL_PEMS_BAY_epoch0.tar
+[OUT] 2026-02-04 12:55:33,707 - INFO - epoch complete!
+[OUT] 2026-02-04 12:55:33,707 - INFO - evaluating now!
+[OUT] 2026-02-04 12:56:19,126 - INFO - Epoch [1/35] train_loss: 4.4789, val_loss: 6.7128, lr: 0.010000, 577.57s
+[OUT] 2026-02-04 13:05:10,401 - INFO - epoch complete!
+[OUT] 2026-02-04 13:05:10,402 - INFO - evaluating now!
+[OUT] 2026-02-04 13:05:57,461 - INFO - Epoch [2/35] train_loss: 4.4301, val_loss: 6.4616, lr: 0.010000, 578.33s
+[OUT] 2026-02-04 13:05:57,522 - INFO - Saved model at 2
+[OUT] 2026-02-04 13:05:57,523 - INFO - Val loss decrease from 6.6086 to 6.4616, saving to ./libcity/cache/141691/model_cache/STSSDL_PEMS_BAY_epoch2.tar
+[OUT] 2026-02-04 13:15:15,366 - INFO - epoch complete!
+[OUT] 2026-02-04 13:15:15,367 - INFO - evaluating now!
+[OUT] 2026-02-04 13:16:02,729 - INFO - Epoch [3/35] train_loss: 4.4079, val_loss: 6.6146, lr: 0.010000, 605.21s
+[OUT] 2026-02-04 13:25:06,347 - INFO - epoch complete!
+[OUT] 2026-02-04 13:25:06,348 - INFO - evaluating now!
+[OUT] 2026-02-04 13:25:54,525 - INFO - Epoch [4/35] train_loss: 4.3925, val_loss: 6.4943, lr: 0.010000, 591.80s
+[OUT] 2026-02-04 13:35:00,184 - INFO - epoch complete!
+[OUT] 2026-02-04 13:35:00,185 - INFO - evaluating now!
+[OUT] 2026-02-04 13:35:49,578 - INFO - Epoch [5/35] train_loss: 4.3879, val_loss: 6.5232, lr: 0.010000, 595.05s
+[OUT] 2026-02-04 13:45:43,290 - INFO - epoch complete!
+[OUT] 2026-02-04 13:45:43,291 - INFO - evaluating now!
+[OUT] 2026-02-04 13:46:55,482 - INFO - Epoch [6/35] train_loss: 4.0282, val_loss: 2.7827, lr: 0.010000, 665.90s
+[OUT] 2026-02-04 13:46:55,568 - INFO - Saved model at 6
+[OUT] 2026-02-04 13:46:55,568 - INFO - Val loss decrease from 6.4616 to 2.7827, saving to ./libcity/cache/141691/model_cache/STSSDL_PEMS_BAY_epoch6.tar
+[OUT] 2026-02-04 13:55:53,922 - INFO - epoch complete!
+[OUT] 2026-02-04 13:55:53,923 - INFO - evaluating now!
+[OUT] 2026-02-04 13:56:41,687 - INFO - Epoch [7/35] train_loss: 3.0930, val_loss: 2.9031, lr: 0.010000, 586.12s
+[OUT] 2026-02-04 14:05:39,357 - INFO - epoch complete!
+[OUT] 2026-02-04 14:05:39,358 - INFO - evaluating now!
+[OUT] 2026-02-04 14:06:27,080 - INFO - Epoch [8/35] train_loss: 3.0585, val_loss: 2.8209, lr: 0.010000, 585.39s
+[OUT] 2026-02-04 14:21:21,895 - INFO - epoch complete!
+[OUT] 2026-02-04 14:21:21,917 - INFO - evaluating now!
+[OUT] 2026-02-04 14:22:06,825 - INFO - Epoch [9/35] train_loss: 3.0440, val_loss: 2.7230, lr: 0.010000, 939.74s
+[OUT] 2026-02-04 14:22:06,932 - INFO - Saved model at 9
+[OUT] 2026-02-04 14:22:06,933 - INFO - Val loss decrease from 2.7827 to 2.7230, saving to ./libcity/cache/141691/model_cache/STSSDL_PEMS_BAY_epoch9.tar

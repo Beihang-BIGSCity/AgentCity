@@ -4,8 +4,6 @@
   "split": 20,
   "num_channel": 3,
   "flat": false,
-
-  "timesteps": 1000,
   "schedule_name": "linear",
   "diffusion_loss_type": "huber",
   "condition": "odt",

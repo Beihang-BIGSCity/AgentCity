@@ -14,7 +14,7 @@
     "teacher_forcing_ratio": 1.0,
     "training_mode": "train",
 
-    "latent_weight": 0.00390625,
+    "latent_weight": 1.0,
     "cate_weight": 0.1,
 
     "latent_init_path": null,

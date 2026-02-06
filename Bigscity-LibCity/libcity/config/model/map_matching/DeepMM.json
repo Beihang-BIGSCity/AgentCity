@@ -37,7 +37,7 @@
   "debug": false,
   "hyper_tune": false,
   "schedule_threshold": 0.001,
-  "metrics": ["accuracy", "edit_distance", "lcs_ratio"],
+  "metrics": ["RMF", "AN", "AL"],
 
   "max_src_length": 100,
   "max_trg_length": 100,

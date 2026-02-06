@@ -308,7 +308,7 @@
       "NYCTaxi"
     ],
     "metrics": {
-      "Note": "Treats traffic prediction as a language modeling task by defining timesteps as tokens and using a partially frozen attention strategy to adapt LLMs for spatial-temporal dependencies."
+      "Note": "Treats traffic prediction as af language modeling task by defining timesteps as tokens and using a partially frozen attention strategy to adapt LLMs for spatial-temporal dependencies."
     },
     "repo_url": "https://github.com/ChenxiLiu-HNU/ST-LLM",
     "keywords": [
@@ -478,11 +478,11 @@
   },
   {
     "title": "Multi-Source Urban Traffic Flow Forecasting with Drone and Loop Detector Data",
-    "conference": "IEEE Transactions on Intelligent Transportation Systems",
+    "conference": "arXiv",
     "year": 2025,
     "model_name": "HiMSNet",
     "track": "Journal",
-    "pdf_link": "https://ieeexplore.ieee.org/document/10834032",
+    "pdf_link": "https://arxiv.org/pdf/2501.03492",
     "datasets": [
       "METR-LA",
       "PEMS-BAY",
@@ -638,6 +638,7 @@
       "title": "STWave: When Spatio-Temporal Meet Wavelets - Disentangled Traffic Forecasting via Efficient Spectral Graph Attention Networks",
       "authors": ["Yuchen Fang", "Yanjun Qin", "Haiyong Luo", "Fang Zhao", "Bingbing Xu", "Liang Zeng", "Chenxing Wang"],
       "venue": "ICDE",
+      "pdf_link": "https://ieeexplore.ieee.org/abstract/document/10184591",
       "year": 2023,
       "relevance_score": 7,
       "abstract": "Combines wavelets with ST prediction for multi-scale temporal pattern analysis in traffic forecasting.",
@@ -797,7 +798,7 @@
   },
   {
     "title": "Efficient Traffic Prediction Through Spatio-Temporal Distillation",
-    "conference": "AAAI",
+    "conference": "IEEE Big Data",
     "year": 2025,
     "track": "Conference",
     "pdf_link": "https://arxiv.org/pdf/2501.10459",
@@ -1025,10 +1026,10 @@
   {
     "title": "Personalized Long- and Short-term Preference Learning for Next POI Recommendation",
     "conference": "IEEE TKDE",
-    "year": 2022,
+    "year": 2020,
     "model_name": "PLSPL",
     "track": "Journal",
-    "pdf_link": "https://ieeexplore.ieee.org/document/9091924",
+    "pdf_link": "http://www.smiles-xjtu.com/html/Our%20Paper/Personalized%20Long.pdf",
     "datasets": [
       "Foursquare",
       "Gowalla"
@@ -1043,29 +1044,6 @@
       "next POI recommendation",
       "preference learning",
       "temporal dynamics"
-    ]
-  },
-  {
-    "title": "Personalized Ranking Metric Embedding for Next New POI Recommendation",
-    "conference": "IJCAI",
-    "year": 2015,
-    "model_name": "PRME",
-    "track": "Research",
-    "pdf_link": "https://www.ijcai.org/Proceedings/15/Papers/296.pdf",
-    "datasets": [
-      "Foursquare",
-      "Gowalla"
-    ],
-    "metrics": {
-      "Note": "A classic model that integrates sequential information and user preference into a metric embedding space for predicting new POIs."
-    },
-    "repo_url": "https://github.com/flaviovdf/prme",
-    "keywords": [
-      "metric embedding",
-      "personalized ranking",
-      "next new POI",
-      "sequential recommendation",
-      "classic baseline"
     ]
   },
   {

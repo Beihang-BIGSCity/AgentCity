@@ -1,51 +1,30 @@
+# coding=utf-8
 """
-DiffMM: Diffusion-based Map Matching Model
+Adapted DiffMM model for LibCity framework.
 
-This module adapts the DiffMM model from the original repository to the LibCity
-framework for trajectory map matching tasks.
+Original paper: DiffMM: One-Step Diffusion-based Map Matching
+Original authors: [DiffMM Authors]
+Adapted for LibCity by: Model Adaptation Agent
 
-Original paper: "DiffMM: A Diffusion Model for Map Matching"
+Key adaptations:
+1. Inherits from AbstractModel instead of standalone nn.Module
+2. Constructor signature changed to (config, data_feature) following LibCity conventions
+3. Added predict() and calculate_loss() methods as required by LibCity
+4. Adapted data format handling to work with LibCity batch format
+5. Combined TrajEncoder, ShortCut, and DiT components into a single file
 
-Key Components:
-1. TrajEncoder - Encodes trajectory points with road segment embeddings
-   - PointEncoder: Transformer-based encoder for GPS point sequences
-   - Attention: Computes attention over candidate road segments per GPS point
-   - 9D road segment features + road ID embeddings
+The model uses a one-step diffusion approach for map matching:
+- TrajEncoder: Encodes GPS trajectories with attention to candidate road segments
+- DiT: Diffusion Transformer backbone for denoising
+- ShortCut: One-step diffusion model that accelerates inference
 
-2. ShortCut - One-step diffusion transformer for road segment prediction
-   - DiT (Diffusion Transformer): Main denoising network with AdaLN modulation
-   - Uses flow matching with bootstrapping for efficient training
-   - Sinusoidal time embeddings for diffusion timestep conditioning
-
-3. ModelAllShortCut - Combines TrajEncoder and ShortCut for end-to-end training
-
-Architecture Overview:
-- Input: GPS trajectory with candidate road segments per point
-- TrajEncoder produces condition embeddings from trajectory and road features
-- ShortCut diffusion model predicts road segment probability distributions
-- One-step or multi-step diffusion inference for final predictions
-
-Adaptations for LibCity:
-- Inherits from AbstractModel following LibCity conventions
-- Implements predict() and calculate_loss() methods
-- Adapts batch input format to LibCity's Batch dictionary format
-- Configuration parameters accessible via config dictionary
-- Device handling through LibCity's config system
-
-Required data_feature:
-- id_size: Number of unique road segment IDs
-- knn: Maximum number of candidate segments per GPS point
-
-Required config parameters:
-- hid_dim: Hidden dimension (default: 256)
-- num_units: Number of units for denoiser (default: 512)
-- transformer_layers: Number of transformer layers in PointEncoder (default: 2)
-- depth: Number of DiT blocks (default: 2)
-- timesteps: Diffusion timesteps for training (default: 2)
-- samplingsteps: Inference steps for diffusion (default: 1)
-- dropout: Dropout probability (default: 0.1)
-- bootstrap_every: Bootstrap frequency for training (default: 8)
-- num_heads: Number of attention heads (default: 4)
+Expected batch format from DeepMapMatchingExecutor:
+- src_gps: Normalized GPS sequences [batch, seq_len, 3] (lat, lng, time)
+- src_lens: Sequence lengths [batch]
+- src_cands: Candidate road segment IDs [batch, seq_len, num_cands]
+- src_cands_feat: Candidate features [batch, seq_len, num_cands, feat_dim]
+- src_cands_mask: Candidate mask [batch, seq_len, num_cands]
+- tgt_roads: Target road segment IDs [batch, seq_len]
 """
 
 import math
@@ -53,9 +32,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from logging import getLogger
+import logging
 
 from libcity.model.abstract_model import AbstractModel
+
+# Set up logger
+_logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -63,16 +45,7 @@ from libcity.model.abstract_model import AbstractModel
 # ============================================================================
 
 def sequence_mask(X, valid_len, value=0.):
-    """Mask irrelevant entries in sequences.
-
-    Args:
-        X: Input tensor (batch, seq_len, ...)
-        valid_len: Valid lengths for each sequence (batch,)
-        value: Value to fill masked positions
-
-    Returns:
-        Masked tensor
-    """
+    """Mask irrelevant entries in sequences."""
     maxlen = X.size(1)
     mask = torch.arange((maxlen), dtype=torch.float32,
                         device=X.device)[None, :] < valid_len[:, None]
@@ -81,40 +54,35 @@ def sequence_mask(X, valid_len, value=0.):
 
 
 def sequence_mask3d(X, valid_len, valid_len2, value=0.):
-    """Mask irrelevant entries in 3D sequences.
-
-    Args:
-        X: Input tensor (batch, seq_len, seq_len2)
-        valid_len: Valid lengths for dimension 1 (batch,)
-        valid_len2: Valid lengths for dimension 2 (batch,)
-        value: Value to fill masked positions
-
-    Returns:
-        Masked tensor
-    """
+    """Mask irrelevant entries in 3D sequences."""
     maxlen = X.size(1)
     maxlen2 = X.size(2)
     mask = torch.arange((maxlen), dtype=torch.float32,
                         device=X.device)[None, :] < valid_len[:, None]
     mask2 = torch.arange((maxlen2), dtype=torch.float32,
-                        device=X.device)[None, :] < valid_len2[:, None]
+                         device=X.device)[None, :] < valid_len2[:, None]
     mask_fin = torch.bmm(mask.float().unsqueeze(-1), mask2.float().unsqueeze(-2)).bool()
     X[~mask_fin] = value
     return X
 
 
 def modulate(x, shift, scale):
-    """Apply adaptive layer normalization modulation.
-
-    Args:
-        x: Input tensor
-        shift: Shift parameter
-        scale: Scale parameter
-
-    Returns:
-        Modulated tensor: x * (1 + scale) + shift
-    """
+    """Modulation function for DiT blocks."""
     return x * (1 + scale) + shift
+
+
+def init_weights(module):
+    """
+    Initialize weights following Keras default initialization.
+    Reference: https://github.com/vonfeng/DeepMove/blob/master/codes/model.py
+    """
+    for name, param in module.named_parameters():
+        if 'weight_ih' in name:
+            nn.init.xavier_uniform_(param.data)
+        elif 'weight_hh' in name:
+            nn.init.orthogonal_(param.data)
+        elif 'bias' in name:
+            nn.init.constant_(param.data, 0)
 
 
 # ============================================================================
@@ -122,13 +90,7 @@ def modulate(x, shift, scale):
 # ============================================================================
 
 class Norm(nn.Module):
-    """Layer normalization with learnable parameters.
-
-    Args:
-        d_model: Model dimension
-        eps: Small constant for numerical stability
-    """
-
+    """Layer normalization."""
     def __init__(self, d_model, eps=1e-6):
         super().__init__()
         self.size = d_model
@@ -143,24 +105,15 @@ class Norm(nn.Module):
 
 
 class PositionalEncoder(nn.Module):
-    """Sinusoidal positional encoding.
-
-    Args:
-        d_model: Model dimension
-        max_seq_len: Maximum sequence length (default: 500)
-    """
-
+    """Positional encoding for transformer."""
     def __init__(self, d_model, max_seq_len=500):
         super().__init__()
         self.d_model = d_model
-
         pe = torch.zeros(max_seq_len, d_model)
         for pos in range(max_seq_len):
             for i in range(0, d_model, 2):
                 pe[pos, i] = math.sin(pos / (10000 ** ((2 * i) / d_model)))
-                if i + 1 < d_model:
-                    pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * (i + 1)) / d_model)))
-
+                pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * (i + 1)) / d_model)))
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
@@ -172,14 +125,7 @@ class PositionalEncoder(nn.Module):
 
 
 class MultiHeadAttention(nn.Module):
-    """Multi-head self-attention mechanism.
-
-    Args:
-        heads: Number of attention heads
-        d_model: Model dimension
-        dropout: Dropout probability (default: 0.1)
-    """
-
+    """Multi-head attention layer."""
     def __init__(self, heads, d_model, dropout=0.1):
         super().__init__()
         self.d_model = d_model
@@ -191,20 +137,6 @@ class MultiHeadAttention(nn.Module):
         self.k_linear = nn.Linear(d_model, d_model)
         self.dropout = nn.Dropout(dropout)
         self.out = nn.Linear(d_model, d_model)
-
-    def attention(self, q, k, v, d_k, mask=None, dropout=None):
-        scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(d_k)
-
-        if mask is not None:
-            mask = mask.unsqueeze(1)
-            scores = scores.masked_fill(mask == 0, -1e9)
-        scores = F.softmax(scores, dim=-1)
-
-        if dropout is not None:
-            scores = self.dropout(scores)
-
-        output = torch.matmul(scores, v)
-        return output
 
     def forward(self, q, k, v, mask=None):
         bs = q.size(0)
@@ -218,22 +150,24 @@ class MultiHeadAttention(nn.Module):
         v = v.transpose(1, 2)
 
         scores = self.attention(q, k, v, self.d_k, mask, self.dropout)
-
         concat = scores.transpose(1, 2).contiguous().view(bs, -1, self.d_model)
         output = self.out(concat)
+        return output
 
+    def attention(self, q, k, v, d_k, mask=None, dropout=None):
+        scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(d_k)
+        if mask is not None:
+            mask = mask.unsqueeze(1)
+            scores = scores.masked_fill(mask == 0, -1e9)
+        scores = F.softmax(scores, dim=-1)
+        if dropout is not None:
+            scores = self.dropout(scores)
+        output = torch.matmul(scores, v)
         return output
 
 
 class FeedForward(nn.Module):
-    """Position-wise feed-forward network with residual connection.
-
-    Args:
-        d_model: Model dimension
-        d_ff: Feed-forward hidden dimension
-        dropout: Dropout probability (default: 0.1)
-    """
-
+    """Feed-forward network."""
     def __init__(self, d_model, d_ff, dropout=0.1):
         super().__init__()
         self.linear_1 = nn.Linear(d_model, d_ff)
@@ -251,14 +185,7 @@ class FeedForward(nn.Module):
 
 
 class EncoderLayer(nn.Module):
-    """Transformer encoder layer with self-attention and feed-forward.
-
-    Args:
-        d_model: Model dimension
-        heads: Number of attention heads
-        dropout: Dropout probability (default: 0.1)
-    """
-
+    """Transformer encoder layer."""
     def __init__(self, d_model, heads, dropout=0.1):
         super().__init__()
         self.norm_1 = Norm(d_model)
@@ -275,14 +202,7 @@ class EncoderLayer(nn.Module):
 
 
 class TransformerEncoder(nn.Module):
-    """Stack of transformer encoder layers.
-
-    Args:
-        d_model: Model dimension
-        N: Number of encoder layers
-        heads: Number of attention heads
-    """
-
+    """Transformer encoder."""
     def __init__(self, d_model, N, heads):
         super().__init__()
         self.N = N
@@ -299,86 +219,21 @@ class TransformerEncoder(nn.Module):
         return self.norm(x)
 
 
-class Attention(nn.Module):
-    """Additive attention for candidate road segment selection.
-
-    Computes attention weights over candidate road segments for each GPS point.
-
-    Args:
-        hid_dim: Hidden dimension
-    """
-
-    def __init__(self, hid_dim):
-        super().__init__()
-        self.hid_dim = hid_dim
-        self.attn = nn.Linear(self.hid_dim * 2, self.hid_dim)
-        self.v = nn.Linear(self.hid_dim, 1, bias=False)
-
-    def forward(self, query, key, value, attn_mask):
-        """Compute attention over candidate segments.
-
-        Args:
-            query: Point embeddings (batch, src_len, hid_dim)
-            key: Candidate segment embeddings (batch, src_len, num_cands, hid_dim)
-            value: Same as key
-            attn_mask: Mask for valid candidates (batch, src_len, num_cands)
-
-        Returns:
-            scores: Attention weights (batch, src_len, num_cands)
-            weighted: Weighted segment embeddings (batch, src_len, hid_dim)
-        """
-        batch_size, src_len = query.shape[0], query.shape[1]
-        seg_num = key.shape[-2]
-
-        # Expand query to match key dimensions
-        query = query.unsqueeze(-2).repeat(1, 1, seg_num, 1)
-
-        energy = torch.tanh(self.attn(torch.cat((query, key), dim=-1)))
-        attention = self.v(energy).squeeze(-1)
-        attention = attention.masked_fill(attn_mask == 0, -1e10)
-
-        scores = F.softmax(attention, dim=-1)
-        weighted = torch.bmm(
-            scores.reshape(batch_size * src_len, seg_num).unsqueeze(-2),
-            value.reshape(batch_size * src_len, seg_num, -1)
-        ).squeeze(-2)
-        weighted = weighted.reshape(batch_size, src_len, -1)
-
-        return scores, weighted
-
-
 class PointEncoder(nn.Module):
-    """Transformer encoder for GPS point sequences.
-
-    Args:
-        hid_dim: Hidden dimension
-        transformer_layers: Number of transformer layers
-        num_heads: Number of attention heads (default: 4)
-    """
-
+    """Encodes GPS point sequences using transformer."""
     def __init__(self, hid_dim, transformer_layers, num_heads=4):
         super().__init__()
         self.hid_dim = hid_dim
-
-        # GPS points have 3 features: lat, lon, and possibly time
-        input_dim = 3
+        input_dim = 3  # (lat, lng, time)
         self.fc_point = nn.Linear(input_dim, hid_dim)
         self.transformer = TransformerEncoder(hid_dim, transformer_layers, heads=num_heads)
 
     def forward(self, src, src_len):
-        """Encode GPS point sequence.
-
-        Args:
-            src: GPS points (batch, seq_len, 3)
-            src_len: Sequence lengths (list or tensor)
-
-        Returns:
-            Point embeddings (batch, seq_len, hid_dim)
-        """
         max_src_len = src.size(1)
         batch_size = src.size(0)
 
-        src_len = torch.tensor(src_len, device=src.device)
+        if not isinstance(src_len, torch.Tensor):
+            src_len = torch.tensor(src_len, device=src.device)
 
         mask3d = torch.ones(batch_size, max_src_len, max_src_len, device=src.device)
         mask2d = torch.ones(batch_size, max_src_len, device=src.device)
@@ -395,36 +250,52 @@ class PointEncoder(nn.Module):
         return outputs
 
 
+class Attention(nn.Module):
+    """Attention layer for trajectory-road segment alignment."""
+    def __init__(self, hid_dim):
+        super().__init__()
+        self.hid_dim = hid_dim
+        self.attn = nn.Linear(self.hid_dim * 2, self.hid_dim)
+        self.v = nn.Linear(self.hid_dim, 1, bias=False)
+
+    def forward(self, query, key, value, attn_mask):
+        batch_size, src_len = query.shape[0], query.shape[1]
+        seg_num = key.shape[-2]
+
+        query = query.unsqueeze(-2).repeat(1, 1, seg_num, 1)
+        energy = torch.tanh(self.attn(torch.cat((query, key), dim=-1)))
+        attention = self.v(energy).squeeze(-1)
+        attention = attention.masked_fill(attn_mask == 0, -1e10)
+
+        scores = F.softmax(attention, dim=-1)
+        weighted = torch.bmm(
+            scores.reshape(batch_size * src_len, seg_num).unsqueeze(-2),
+            value.reshape(batch_size * src_len, seg_num, -1)
+        ).squeeze(-2)
+        weighted = weighted.reshape(batch_size, src_len, -1)
+
+        return scores, weighted
+
+
 # ============================================================================
-# TrajEncoder: Trajectory Encoder with Road Segment Attention
+# TrajEncoder: Encodes GPS trajectories with road segment attention
 # ============================================================================
 
 class TrajEncoder(nn.Module):
-    """Trajectory encoder combining GPS points with road segment embeddings.
-
-    Encodes GPS trajectory points and computes attention over candidate road
-    segments for each point to produce context-aware trajectory embeddings.
-
-    Args:
-        id_size: Number of unique road segment IDs
-        hid_dim: Hidden dimension
-        transformer_layers: Number of transformer layers
-        num_heads: Number of attention heads
-        device: Computation device
     """
-
-    def __init__(self, id_size, hid_dim, transformer_layers, num_heads, device):
+    Trajectory encoder that combines GPS point encoding with
+    attention-based road segment matching.
+    """
+    def __init__(self, id_size, hid_dim, transformer_layers, num_heads=4):
         super().__init__()
         self.id_size = id_size
         self.hid_dim = hid_dim
         self.id_emb_dim = hid_dim
 
-        # Learnable road segment ID embeddings
+        # Road segment ID embedding
         self.emb_id = nn.Parameter(torch.rand(self.id_size, self.id_emb_dim))
 
-        self.device = device
-
-        # Road embedding: ID embedding + 9D features
+        # Road embedding: combines ID embedding with features (9 features)
         road_emb_input_dim = self.id_emb_dim + 9
         self.road_emb = nn.Sequential(
             nn.Linear(road_emb_input_dim, self.hid_dim),
@@ -433,52 +304,50 @@ class TrajEncoder(nn.Module):
             Norm(self.hid_dim)
         )
 
+        # Point encoder (transformer-based)
         self.point_encoder = PointEncoder(hid_dim, transformer_layers, num_heads)
+
+        # Attention for aligning points to road segments
         self.attn = Attention(self.hid_dim)
 
+        # Output projection
         self.output = nn.Linear(2 * hid_dim, hid_dim)
 
     def forward(self, src, src_len, src_segs, segs_feat, segs_mask):
-        """Encode trajectory with road segment attention.
-
+        """
         Args:
-            src: GPS points (batch, seq_len, 3)
-            src_len: Sequence lengths (list)
-            src_segs: Candidate segment IDs (batch, seq_len, num_cands)
-            segs_feat: Segment features (batch, seq_len, num_cands, 9)
-            segs_mask: Valid segment mask (batch, seq_len, num_cands)
+            src: GPS sequence [batch, seq_len, 3] (normalized lat, lng, time)
+            src_len: Sequence lengths [batch]
+            src_segs: Candidate road segment IDs [batch, seq_len, num_cands]
+            segs_feat: Candidate features [batch, seq_len, num_cands, 9]
+            segs_mask: Candidate mask [batch, seq_len, num_cands]
 
         Returns:
-            Trajectory embeddings (batch, seq_len, 2*hid_dim)
+            outputs: Encoded trajectory [batch, seq_len, 2*hid_dim]
         """
-        # Get road segment ID embeddings
-        src_id_emb = self.emb_id[src_segs]
+        # Get road segment embeddings
+        src_id_emb = self.emb_id[src_segs]  # [batch, seq_len, num_cands, hid_dim]
         src_road_emb = torch.cat((src_id_emb, segs_feat), dim=-1)
         road_emb = self.road_emb(src_road_emb)
 
         # Encode GPS points
         point_encoder_output = self.point_encoder(src, src_len)
 
-        # Compute attention over candidate segments
+        # Attention: align points to road segments
         _, attention = self.attn(point_encoder_output, road_emb, road_emb, segs_mask)
 
-        # Concatenate point embedding with attended road embedding
+        # Concatenate point encoding and road attention
         outputs = torch.cat((point_encoder_output, attention), dim=-1)
 
         return outputs
 
 
 # ============================================================================
-# Diffusion Components: DiT and ShortCut
+# DiT: Diffusion Transformer
 # ============================================================================
 
 class SinusoidalPosEmb(nn.Module):
-    """Sinusoidal positional embedding for diffusion timesteps.
-
-    Args:
-        dim: Embedding dimension
-    """
-
+    """Sinusoidal positional embedding for diffusion timesteps."""
     def __init__(self, dim):
         super().__init__()
         self.dim = dim
@@ -494,24 +363,13 @@ class SinusoidalPosEmb(nn.Module):
 
 
 class DiTBlock(nn.Module):
-    """Diffusion Transformer block with AdaLN modulation.
-
-    Implements a transformer block with adaptive layer normalization (AdaLN)
-    conditioning for diffusion models.
-
-    Args:
-        hid_dim: Hidden dimension
-        num_heads: Number of attention heads (default: 4)
-        dropout: Dropout probability (default: 0.1)
-    """
-
+    """Diffusion Transformer block with adaptive layer norm."""
     def __init__(self, hid_dim, num_heads=4, dropout=0.1):
-        super(DiTBlock, self).__init__()
+        super().__init__()
         self.hid_dim = hid_dim
         self.num_heads = num_heads
         self.dropout = dropout
 
-        # AdaLN modulation: generates shift, scale, gate for both attention and MLP
         self.cond_linear = nn.Sequential(
             nn.SiLU(),
             nn.Linear(hid_dim, 6 * hid_dim)
@@ -524,25 +382,14 @@ class DiTBlock(nn.Module):
         self.ff = FeedForward(hid_dim, d_ff=hid_dim * 2)
 
     def forward(self, x, c):
-        """Forward pass with conditioning.
-
-        Args:
-            x: Input tensor (batch, seq_len, hid_dim)
-            c: Conditioning tensor (batch, seq_len, hid_dim)
-
-        Returns:
-            Output tensor (batch, seq_len, hid_dim)
-        """
         cond = self.cond_linear(c)
         shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = torch.chunk(cond, 6, dim=-1)
 
-        # Attention with AdaLN
         x_norm1 = self.norm1(x)
         x_modulated = modulate(x_norm1, shift_msa, scale_msa)
         attn_x = self.attn(x_modulated, x_modulated, x_modulated)
         x = x + (gate_msa * attn_x)
 
-        # MLP with AdaLN
         x_norm2 = self.norm2(x)
         x_modulated2 = modulate(x_norm2, shift_mlp, scale_mlp)
         mlp_x = self.ff(x_modulated2)
@@ -552,15 +399,9 @@ class DiTBlock(nn.Module):
 
 
 class OutputLayer(nn.Module):
-    """Output layer with AdaLN modulation for DiT.
-
-    Args:
-        hid_dim: Hidden dimension
-        out_dim: Output dimension
-    """
-
+    """Final output layer for DiT."""
     def __init__(self, hid_dim, out_dim):
-        super(OutputLayer, self).__init__()
+        super().__init__()
         self.hid_dim = hid_dim
         self.out_dim = out_dim
 
@@ -584,71 +425,66 @@ class OutputLayer(nn.Module):
 
 
 class DiT(nn.Module):
-    """Diffusion Transformer for denoising.
-
-    A transformer-based denoising network that conditions on trajectory
-    embeddings and diffusion timesteps.
-
-    Args:
-        out_dim: Output dimension (number of candidate segments)
-        hid_dim: Hidden dimension
-        depth: Number of DiT blocks
-        cond_dim: Conditioning dimension (from trajectory encoder)
     """
+    Diffusion Transformer for map matching.
 
-    def __init__(self, out_dim, hid_dim, depth, cond_dim):
-        super(DiT, self).__init__()
+    Takes noisy input and conditioning to predict velocity field.
+    """
+    def __init__(self, out_dim, hid_dim, depth, cond_dim, num_heads=4):
+        super().__init__()
         self.out_dim = out_dim
         self.hid_dim = hid_dim
         self.depth = depth
 
         sinu_pos_emb = SinusoidalPosEmb(hid_dim)
-        fourier_dim = hid_dim
         time_dim = hid_dim
 
         self.pe = PositionalEncoder(hid_dim, max_seq_len=2000)
 
-        # Time embedding for diffusion timestep t
+        # Time embedding
         self.time_embedder = nn.Sequential(
             sinu_pos_emb,
-            nn.Linear(fourier_dim, time_dim),
+            nn.Linear(hid_dim, time_dim),
             nn.SiLU(),
             nn.Linear(time_dim, time_dim)
         )
 
-        # Timestep embedding for step size dt
+        # Timestep embedding
         self.timestep_embedder = nn.Sequential(
             sinu_pos_emb,
-            nn.Linear(fourier_dim, time_dim),
+            nn.Linear(hid_dim, time_dim),
             nn.SiLU(),
             nn.Linear(time_dim, time_dim)
         )
 
+        # Condition projection
         self.cond_linear = nn.Linear(cond_dim, hid_dim)
 
+        # DiT blocks
         self.DiTBlocks = nn.ModuleList([
-            DiTBlock(hid_dim) for _ in range(depth)
+            DiTBlock(hid_dim, num_heads) for _ in range(depth)
         ])
 
+        # Noise projection
         self.noise_linear = nn.Sequential(
             nn.Linear(out_dim, hid_dim),
             nn.ReLU()
         )
 
+        # Output layer
         self.output = OutputLayer(hid_dim, out_dim)
 
     def forward(self, x, t, dt, cond, segs_mask):
-        """Forward pass through DiT.
-
+        """
         Args:
-            x: Noisy input (batch, seq_len, out_dim)
-            t: Diffusion timestep (batch,)
-            dt: Step size indicator (batch,)
-            cond: Conditioning from trajectory encoder (batch, seq_len, cond_dim)
-            segs_mask: Valid segment mask (batch, seq_len, out_dim)
+            x: Noisy input [batch, 1, out_dim]
+            t: Diffusion timesteps [batch]
+            dt: Diffusion step sizes [batch]
+            cond: Conditioning from trajectory encoder [batch, 1, cond_dim]
+            segs_mask: Segment mask [batch, 1, out_dim]
 
         Returns:
-            Velocity prediction (batch, seq_len, out_dim)
+            x: Predicted velocity [batch, 1, out_dim]
         """
         x = self.noise_linear(x)
         x = self.pe(x)
@@ -657,32 +493,27 @@ class DiT(nn.Module):
         te = self.time_embedder(t)
         dte = self.timestep_embedder(dt)
 
-        # Add time embeddings to conditioning
         c = c + te[:, None] + dte[:, None]
 
         for i in range(self.depth):
             x = self.DiTBlocks[i](x, c)
 
         x = self.output(x, cond)
-
-        # Mask invalid positions
         x = x.masked_fill(segs_mask == 0, 0)
+
         return x
 
 
+# ============================================================================
+# ShortCut: One-step diffusion model
+# ============================================================================
+
 class ShortCut(nn.Module):
-    """One-step diffusion shortcut model for efficient inference.
-
-    Implements a flow matching approach with optional bootstrapping for
-    distillation during training.
-
-    Args:
-        model: DiT denoising network
-        infer_steps: Number of inference steps
-        seq_length: Output sequence length (number of candidates)
-        bootstrap_every: Bootstrap frequency (default: 8)
     """
+    One-step diffusion model for accelerated inference.
 
+    Uses shortcut learning to reduce diffusion steps while maintaining quality.
+    """
     def __init__(self, model, infer_steps, seq_length, bootstrap_every=8):
         super().__init__()
         self.model = model
@@ -691,113 +522,89 @@ class ShortCut(nn.Module):
         self.bootstrap_every = bootstrap_every
 
     def forward(self, x_t, v_t, t, dt_base, cond, x_1, segs_mask):
-        """Forward pass for training.
+        """
+        Training forward pass.
 
         Args:
-            x_t: Noisy sample at timestep t
+            x_t: Noisy input at time t
             v_t: Target velocity
-            t: Timestep
-            dt_base: Step size base
+            t: Diffusion timesteps
+            dt_base: Base timestep sizes
             cond: Conditioning
-            x_1: Clean target
-            segs_mask: Valid segment mask
+            x_1: Target output
+            segs_mask: Segment mask
 
         Returns:
-            Combined loss (MSE + BCE)
+            loss: Combined MSE and BCE loss
         """
         v_pred = self.model(x_t, t, dt_base, cond, segs_mask)
-
-        # Predicted clean sample
         x_pred = x_t + v_pred
 
-        # MSE loss on velocity
         mse_loss = F.mse_loss(v_pred, v_t)
-
-        # BCE loss on predicted probability distribution
         bce_loss = F.binary_cross_entropy(
             F.softmax(x_pred.masked_fill(segs_mask == 0, -1e9), dim=-1),
             x_1,
             reduction='mean'
         )
-
         loss = mse_loss + bce_loss
+
         return loss
 
     @torch.no_grad()
     def inference(self, batch_size, cond, segs_mask):
-        """Generate predictions via diffusion sampling.
+        """
+        Inference using one-step diffusion.
 
         Args:
-            batch_size: Batch size
-            cond: Conditioning tensor (batch, seq_len, cond_dim)
-            segs_mask: Valid segment mask (batch, seq_len, out_dim)
+            batch_size: Number of samples
+            cond: Conditioning from trajectory encoder
+            segs_mask: Segment mask
 
         Returns:
-            Probability predictions (batch, seq_len, out_dim)
+            x: Predicted probabilities over road segments
         """
         device = cond.device
-        seq_len = cond.size(1)
-
-        # Start from noise
-        eps = torch.randn((batch_size, seq_len, self.seq_length), device=device)
+        eps = torch.randn((batch_size, 1, self.seq_length), device=device)
 
         delta_t = 1.0 / self.infer_steps
         x = eps.masked_fill(segs_mask == 0, 0)
 
         for ti in range(self.infer_steps):
             t = ti / self.infer_steps
-
-            t_vector = torch.full((batch_size,), t, device=device)
-            dt_base = torch.ones_like(t_vector) * math.log2(self.infer_steps)
+            t_vector = torch.full((eps.shape[0],), t, device=device)
+            dt_base = torch.ones_like(t_vector, device=device) * math.log2(self.infer_steps)
 
             v = self.model(x, t_vector, dt_base, cond, segs_mask)
-
             x = x + v * delta_t
 
-        # Convert to probabilities
         x = F.softmax(x.masked_fill(segs_mask == 0, -1e9), dim=-1)
-
         return x
 
 
 # ============================================================================
-# Helper function for bootstrapping target generation
+# Target Generation for Training
 # ============================================================================
 
 def get_targets(model, inputs, cond, denoise_steps, device, segs_mask, bootstrap_every=8, force_t=-1, force_dt=-1):
-    """Generate bootstrap targets for training.
+    """
+    Generate training targets using bootstrap and flow-matching.
 
-    Creates training targets by combining flow-matching objectives with
-    bootstrapped targets from the model itself.
-
-    Args:
-        model: DiT model
-        inputs: Target one-hot distributions (batch, seq_len, num_cands)
-        cond: Conditioning tensor
-        denoise_steps: Number of denoising steps
-        device: Computation device
-        segs_mask: Valid segment mask
-        bootstrap_every: Bootstrap frequency
-        force_t: Force specific timestep (-1 for random)
-        force_dt: Force specific step size (-1 for random)
-
-    Returns:
-        x_t: Noisy samples
-        v_t: Target velocities
-        t: Timesteps
-        dt_base: Step size bases
+    This function creates training pairs (x_t, v_t) for the shortcut model
+    by combining bootstrap targets and flow-matching targets.
     """
     model.eval()
-
     batch_size = inputs.shape[0]
 
-    # Sample dt
+    # 1. Sample dt for bootstrap
     bootstrap_batchsize = batch_size // bootstrap_every
-    log2_sections = int(math.log2(denoise_steps))
+    if bootstrap_batchsize == 0:
+        bootstrap_batchsize = 1
+
+    log2_sections = int(math.log2(denoise_steps)) if denoise_steps > 1 else 1
 
     dt_base = torch.repeat_interleave(
         log2_sections - 1 - torch.arange(log2_sections),
-        bootstrap_batchsize // log2_sections
+        max(bootstrap_batchsize // log2_sections, 1)
     )
     dt_base = torch.cat([dt_base, torch.zeros(bootstrap_batchsize - dt_base.shape[0],)])
 
@@ -807,17 +614,18 @@ def get_targets(model, inputs, cond, denoise_steps, device, segs_mask, bootstrap
     dt_base_bootstrap = dt_base + 1
     dt_bootstrap = dt / 2
 
-    # Sample t
+    # 2. Sample t for bootstrap
     dt_sections = 2 ** dt_base
     t = torch.cat([
-        torch.randint(low=0, high=int(val.item()), size=(1,)).float() for val in dt_sections
+        torch.randint(low=0, high=max(int(val.item()), 1), size=(1,)).float()
+        for val in dt_sections
     ]).to(device)
-    t = t / dt_sections
+    t = t / torch.clamp(dt_sections, min=1)
     force_t_vec = torch.ones(bootstrap_batchsize, dtype=torch.float32).to(device) * force_t
     t = torch.where(force_t_vec != -1, force_t_vec, t).to(device)
     t_full = t[:, None, None]
 
-    # Generate Bootstrap Targets
+    # 3. Generate bootstrap targets
     x_1 = inputs[:bootstrap_batchsize]
     cond_bst = cond[:bootstrap_batchsize]
     segs_mask_bst = segs_mask[:bootstrap_batchsize]
@@ -842,224 +650,371 @@ def get_targets(model, inputs, cond, denoise_steps, device, segs_mask, bootstrap
     bst_t = t
     bst_xt = x_t
 
-    # Generate Flow-Matching Targets
+    # 4. Generate flow-matching targets
     t = torch.randint(low=0, high=denoise_steps, size=(inputs.shape[0],), dtype=torch.float32)
     t /= denoise_steps
     force_t_vec = torch.ones(inputs.shape[0]) * force_t
     t = torch.where(force_t_vec != -1, force_t_vec, t).to(device)
     t_full = t[:, None, None]
 
-    # Sample flow pairs x_t, v_t
     x_0 = torch.randn_like(inputs).masked_fill(segs_mask == 0, 0)
     x_1 = inputs
     x_t = (1 - (1 - 1e-5) * t_full) * x_0 + t_full * x_1
     v_t = x_1 - (1 - 1e-5) * x_0
     v_t = v_t.masked_fill(segs_mask == 0, 0)
 
-    dt_flow = int(math.log2(denoise_steps))
+    dt_flow = int(math.log2(denoise_steps)) if denoise_steps > 1 else 1
     dt_base = (torch.ones(inputs.shape[0], dtype=torch.int32) * dt_flow).to(device)
 
-    # Merge Flow and Bootstrap
-    bst_size = batch_size // bootstrap_every
+    # 5. Merge bootstrap and flow-matching
+    bst_size = min(bootstrap_batchsize, batch_size)
     bst_size_data = batch_size - bst_size
-    x_t = torch.cat([bst_xt, x_t[-bst_size_data:]], dim=0)
-    t = torch.cat([bst_t, t[-bst_size_data:]], dim=0)
-    dt_base = torch.cat([bst_dt, dt_base[-bst_size_data:]], dim=0)
-    v_t = torch.cat([bst_v, v_t[-bst_size_data:]], dim=0)
+
+    if bst_size_data > 0:
+        x_t = torch.cat([bst_xt, x_t[-bst_size_data:]], dim=0)
+        t = torch.cat([bst_t, t[-bst_size_data:]], dim=0)
+        dt_base = torch.cat([bst_dt, dt_base[-bst_size_data:]], dim=0)
+        v_t = torch.cat([bst_v, v_t[-bst_size_data:]], dim=0)
+    else:
+        x_t = bst_xt
+        t = bst_t
+        dt_base = bst_dt
+        v_t = bst_v
 
     return x_t, v_t, t, dt_base
 
 
 # ============================================================================
-# DiffMM: Main LibCity Model
+# DiffMM: Main Model Class for LibCity
 # ============================================================================
 
 class DiffMM(AbstractModel):
-    """DiffMM: Diffusion-based Map Matching Model for LibCity.
+    """
+    DiffMM: One-Step Diffusion-based Map Matching
 
-    This model uses a diffusion transformer (DiT) to predict road segment
-    probability distributions from GPS trajectory sequences. It combines
-    a trajectory encoder with attention over candidate road segments and
-    a one-step diffusion shortcut for efficient inference.
+    This model uses a one-step diffusion approach with shortcut learning
+    for efficient and accurate map matching of GPS trajectories to road networks.
+
+    Architecture:
+    1. TrajEncoder: Encodes GPS trajectories with attention to candidate road segments
+    2. DiT: Diffusion Transformer backbone
+    3. ShortCut: One-step diffusion model for fast inference
 
     Args:
-        config (dict): Configuration dictionary containing model hyperparameters
-        data_feature (dict): Data features including vocabulary sizes
-
-    Required config parameters:
-        - hid_dim: Hidden dimension (default: 256)
-        - num_units: Number of units for denoiser (default: 512)
-        - transformer_layers: Number of transformer layers (default: 2)
-        - depth: Number of DiT blocks (default: 2)
-        - timesteps: Diffusion timesteps for training (default: 2)
-        - samplingsteps: Inference steps (default: 1)
-        - dropout: Dropout probability (default: 0.1)
-        - bootstrap_every: Bootstrap frequency (default: 8)
-        - num_heads: Number of attention heads (default: 4)
-        - num_cands: Number of candidate segments per point (default: 10)
-
-    Required data_feature:
-        - id_size: Number of unique road segment IDs
-        - num_cands: Maximum number of candidate segments (if not in config)
+        config: LibCity configuration dictionary
+        data_feature: Data feature dictionary containing:
+            - id_size: Number of road segments + 1
+            - num_cands: Maximum number of candidates per point
+            - feat_dim: Feature dimension for candidates
     """
 
     def __init__(self, config, data_feature):
         super(DiffMM, self).__init__(config, data_feature)
 
-        self._logger = getLogger()
+        # Device configuration
         self.device = config.get('device', 'cpu')
 
-        # Model hyperparameters
+        # Model hyperparameters from config
         self.hid_dim = config.get('hid_dim', 256)
         self.num_units = config.get('num_units', 512)
         self.transformer_layers = config.get('transformer_layers', 2)
         self.depth = config.get('depth', 2)
+        self.num_heads = config.get('num_heads', 4)
+        self.dropout = config.get('dropout', 0.1)
         self.timesteps = config.get('timesteps', 2)
         self.samplingsteps = config.get('samplingsteps', 1)
-        self.dropout = config.get('dropout', 0.1)
         self.bootstrap_every = config.get('bootstrap_every', 8)
-        self.num_heads = config.get('num_heads', 4)
 
-        # Data dimensions
-        self.id_size = data_feature.get('id_size', 10000)
-        self.num_cands = config.get('num_cands', data_feature.get('num_cands', 10))
+        # Data features
+        self.id_size = data_feature.get('id_size', data_feature.get('num_roads', 1000))
+        self.num_cands = data_feature.get('num_cands', config.get('num_cands', 10))
+        self.feat_dim = data_feature.get('feat_dim', 9)
+
+        # Store data_feature for later use
+        self.data_feature = data_feature
+
+        _logger.info(f"DiffMM: Initializing with id_size={self.id_size}, "
+                     f"hid_dim={self.hid_dim}, num_units={self.num_units}")
 
         # Build model components
         self._build_model()
 
-        self._logger.info(
-            f"DiffMM initialized: hid_dim={self.hid_dim}, "
-            f"depth={self.depth}, timesteps={self.timesteps}, "
-            f"samplingsteps={self.samplingsteps}, id_size={self.id_size}"
-        )
+        # Initialize weights
+        self.apply(init_weights)
 
     def _build_model(self):
-        """Build model components."""
-
+        """Build all model components."""
         # Trajectory encoder
         self.encoder = TrajEncoder(
             id_size=self.id_size,
             hid_dim=self.hid_dim,
             transformer_layers=self.transformer_layers,
-            num_heads=self.num_heads,
-            device=self.device
+            num_heads=self.num_heads
         )
 
-        # DiT denoising network
-        # Output dim is number of candidates per point
-        # Conditioning dim is 2*hid_dim from encoder
+        # DiT (Diffusion Transformer)
+        # Output dimension is id_size - 1 (excluding padding)
+        out_dim = self.id_size - 1 if self.id_size > 1 else self.id_size
         self.dit = DiT(
-            out_dim=self.num_cands,
-            hid_dim=self.hid_dim,
+            out_dim=out_dim,
+            hid_dim=self.num_units,
             depth=self.depth,
-            cond_dim=2 * self.hid_dim
+            cond_dim=2 * self.hid_dim,
+            num_heads=self.num_heads
         )
 
-        # ShortCut diffusion wrapper
+        # ShortCut diffusion model
         self.shortcut = ShortCut(
             model=self.dit,
             infer_steps=self.samplingsteps,
-            seq_length=self.num_cands,
+            seq_length=out_dim,
             bootstrap_every=self.bootstrap_every
         )
+
+    def _prepare_batch(self, batch):
+        """
+        Convert LibCity batch format to DiffMM expected format.
+
+        Expected batch keys from DeepMapMatchingDataset:
+        - src_gps: [batch, seq_len, 3] normalized GPS (lat, lng, time)
+        - src_lens: [batch] sequence lengths
+        - src_cands: [batch, seq_len, num_cands] candidate road IDs
+        - src_cands_feat: [batch, seq_len, num_cands, feat_dim] candidate features
+        - src_cands_mask: [batch, seq_len, num_cands] candidate mask
+        - tgt_roads: [batch, seq_len] target road segment IDs
+
+        Returns processed tensors for the model.
+        """
+        # Get source GPS sequences
+        src_gps = batch.get('src_gps', batch.get('X', batch.get('input_gps', batch.get('norm_gps_seq'))))
+        if src_gps is None:
+            raise KeyError("Batch must contain 'src_gps', 'X', or 'input_gps'")
+
+        # Get sequence lengths
+        src_lens = batch.get('src_lens', batch.get('lengths'))
+        if src_lens is None:
+            # Infer lengths from GPS data
+            src_lens = torch.full((src_gps.shape[0],), src_gps.shape[1], device=src_gps.device)
+
+        # Get candidate road segments
+        src_cands = batch.get('src_cands', batch.get('cands', batch.get('candidate_ids', batch.get('segs_id'))))
+        if src_cands is None:
+            raise KeyError("Batch must contain 'src_cands', 'cands', or 'candidate_ids'")
+
+        # Get candidate features
+        src_cands_feat = batch.get('src_cands_feat', batch.get('cands_feat', batch.get('candidate_feats', batch.get('segs_feat'))))
+        if src_cands_feat is None:
+            # Create zero features if not provided
+            src_cands_feat = torch.zeros(
+                (*src_cands.shape, self.feat_dim),
+                device=src_cands.device
+            )
+
+        # Get candidate mask
+        src_cands_mask = batch.get('src_cands_mask', batch.get('cands_mask', batch.get('candidate_mask', batch.get('segs_mask'))))
+        if src_cands_mask is None:
+            # Create mask from candidate IDs (non-zero = valid)
+            src_cands_mask = (src_cands > 0).float()
+
+        # Get target roads
+        tgt_roads = batch.get('tgt_roads', batch.get('y', batch.get('target', batch.get('output_trg', batch.get('trg_rid')))))
+
+        return {
+            'src_gps': src_gps,
+            'src_lens': src_lens,
+            'src_cands': src_cands,
+            'src_cands_feat': src_cands_feat,
+            'src_cands_mask': src_cands_mask,
+            'tgt_roads': tgt_roads
+        }
+
+    def _batch2model(self, batch):
+        """
+        Process batch through encoder and prepare for diffusion.
+
+        This mirrors the batch2model function from the original code.
+        """
+        processed = self._prepare_batch(batch)
+
+        src_gps = processed['src_gps']
+        src_lens = processed['src_lens']
+        src_cands = processed['src_cands']
+        src_cands_feat = processed['src_cands_feat']
+        src_cands_mask = processed['src_cands_mask']
+        tgt_roads = processed['tgt_roads']
+
+        # Encode trajectory
+        enc_out = self.encoder(src_gps, src_lens, src_cands, src_cands_feat, src_cands_mask)
+
+        # Flatten per-point for diffusion processing
+        traj_cond = []
+        trg_rid_diff = []
+        trg_onehot_diff = []
+        src_segs_id = []
+        src_segs_mask = []
+
+        batch_size = enc_out.shape[0]
+        out_dim = self.id_size - 1 if self.id_size > 1 else self.id_size
+
+        for idx in range(batch_size):
+            length = int(src_lens[idx].item()) if torch.is_tensor(src_lens[idx]) else int(src_lens[idx])
+            if length > 0:
+                for i in range(length):
+                    traj_cond.append(enc_out[idx, i:i+1])
+
+                    if tgt_roads is not None:
+                        rid = tgt_roads[idx, i]
+                        trg_rid_diff.append(rid.unsqueeze(0) if torch.is_tensor(rid) else torch.tensor([rid], device=self.device))
+                        # Create one-hot encoding
+                        onehot = torch.zeros(out_dim, device=self.device)
+                        if rid >= 0 and rid < out_dim:
+                            onehot[int(rid)] = 1
+                        trg_onehot_diff.append(onehot.unsqueeze(0))
+
+                    src_segs_id.append(src_cands[idx, i:i+1])
+                    src_segs_mask.append(src_cands_mask[idx, i:i+1])
+
+        if len(traj_cond) == 0:
+            return None  # Empty batch
+
+        traj_cond = torch.cat(traj_cond, dim=0)  # [total_points, 2*hid_dim]
+        src_segs_id = torch.cat(src_segs_id, dim=0)
+        src_segs_mask = torch.cat(src_segs_mask, dim=0)
+
+        if tgt_roads is not None and len(trg_rid_diff) > 0:
+            trg_rid_diff = torch.cat(trg_rid_diff, dim=0)
+            trg_onehot_diff = torch.cat(trg_onehot_diff, dim=0)
+        else:
+            trg_rid_diff = None
+            trg_onehot_diff = None
+
+        # Reshape for diffusion
+        total_points = traj_cond.shape[0]
+        traj_cond = traj_cond.reshape(total_points, 1, -1)  # [N, 1, 2*hid_dim]
+        src_segs_id = src_segs_id.reshape(total_points, 1, -1)
+        src_segs_mask = src_segs_mask.reshape(total_points, 1, -1)
+
+        if trg_rid_diff is not None:
+            trg_rid_diff = trg_rid_diff.reshape(total_points, 1, 1)
+            trg_onehot_diff = trg_onehot_diff.reshape(total_points, 1, -1)
+
+        # Create diffusion mask from candidate segments
+        diff_mask = torch.zeros((total_points, 1, out_dim), device=self.device)
+        for i in range(total_points):
+            seg_num = int(src_segs_mask[i, 0].sum().item())
+            if seg_num > 0:
+                segs = src_segs_id[i, 0, :seg_num].long()
+                valid_segs = segs[(segs > 0) & (segs <= out_dim)]
+                if len(valid_segs) > 0:
+                    diff_mask[i, 0, valid_segs - 1] = 1
+
+        return {
+            'traj_cond': traj_cond,
+            'trg_rid': trg_rid_diff,
+            'trg_onehot': trg_onehot_diff,
+            'lengths': src_lens,
+            'src_segs_id': src_segs_id,
+            'src_segs_mask': src_segs_mask,
+            'diff_mask': diff_mask
+        }
 
     def forward(self, batch):
-        """Forward pass for training.
+        """
+        Forward pass through the model.
+
+        This is primarily used during training.
+        """
+        model_input = self._batch2model(batch)
+        if model_input is None:
+            return None
+
+        return model_input
+
+    def predict(self, batch):
+        """
+        Predict road segments for given batch.
 
         Args:
-            batch: LibCity Batch object containing:
-                - 'src': GPS points (batch, seq_len, 3)
-                - 'src_len': Sequence lengths (list)
-                - 'src_segs': Candidate segment IDs (batch, seq_len, num_cands)
-                - 'segs_feat': Segment features (batch, seq_len, num_cands, 9)
-                - 'segs_mask': Valid segment mask (batch, seq_len, num_cands)
-                - 'target': Target one-hot distribution (batch, seq_len, num_cands)
+            batch: Dictionary containing trajectory data
 
         Returns:
-            loss: Training loss tensor
+            predictions: Predicted road segment IDs [batch, seq_len]
         """
-        # Extract data from batch
-        src = batch['src'].to(self.device).float()
-        src_len = batch['src_len']
-        if isinstance(src_len, torch.Tensor):
-            src_len = src_len.tolist()
-        src_segs = batch['src_segs'].to(self.device).long()
-        segs_feat = batch['segs_feat'].to(self.device).float()
-        segs_mask = batch['segs_mask'].to(self.device)
-        target = batch['target'].to(self.device).float()
+        model_input = self._batch2model(batch)
+        if model_input is None:
+            return torch.tensor([], device=self.device)
 
-        # Encode trajectory
-        cond = self.encoder(src, src_len, src_segs, segs_feat, segs_mask)
+        traj_cond = model_input['traj_cond']
+        diff_mask = model_input['diff_mask']
+        lengths = model_input['lengths']
 
-        # Get diffusion targets
-        x_t, v_t, t, dt_base = get_targets(
-            model=self.dit,
-            inputs=target,
-            cond=cond,
-            denoise_steps=self.timesteps,
-            device=self.device,
-            segs_mask=segs_mask,
-            bootstrap_every=self.bootstrap_every
+        # Run inference through shortcut model
+        sampled_seq = self.shortcut.inference(
+            batch_size=traj_cond.shape[0],
+            cond=traj_cond,
+            segs_mask=diff_mask
         )
 
-        # Compute loss
-        loss = self.shortcut(x_t, v_t, t, dt_base, cond, target, segs_mask)
+        # Convert to predicted road IDs
+        pred_ids = torch.argmax(sampled_seq.squeeze(1), dim=-1)  # [total_points]
 
-        return loss
+        # Reshape back to batch format
+        if lengths is not None:
+            batch_size = len(lengths)
+            max_len = max(int(l.item()) if torch.is_tensor(l) else int(l) for l in lengths)
+            predictions = torch.full((batch_size, max_len), -1, dtype=torch.long, device=self.device)
 
-    def infer(self, batch):
-        """Inference to get predicted road segment probabilities.
-
-        Args:
-            batch: LibCity Batch object
-
-        Returns:
-            predictions: Probability distributions (batch, seq_len, num_cands)
-        """
-        # Extract data from batch
-        src = batch['src'].to(self.device).float()
-        src_len = batch['src_len']
-        if isinstance(src_len, torch.Tensor):
-            src_len = src_len.tolist()
-        src_segs = batch['src_segs'].to(self.device).long()
-        segs_feat = batch['segs_feat'].to(self.device).float()
-        segs_mask = batch['segs_mask'].to(self.device)
-
-        batch_size = src.size(0)
-
-        # Encode trajectory
-        cond = self.encoder(src, src_len, src_segs, segs_feat, segs_mask)
-
-        # Generate predictions via diffusion sampling
-        predictions = self.shortcut.inference(batch_size, cond, segs_mask)
+            idx = 0
+            for b in range(batch_size):
+                length = int(lengths[b].item()) if torch.is_tensor(lengths[b]) else int(lengths[b])
+                for i in range(length):
+                    if idx < len(pred_ids):
+                        predictions[b, i] = pred_ids[idx]
+                        idx += 1
+        else:
+            predictions = pred_ids.unsqueeze(0)
 
         return predictions
 
-    def predict(self, batch):
-        """Prediction method for LibCity evaluation.
-
-        Args:
-            batch: Input batch dictionary
-
-        Returns:
-            Predicted road segment probabilities or indices
-        """
-        self.eval()
-        with torch.no_grad():
-            probs = self.infer(batch)
-
-            # Return argmax predictions for evaluation
-            predictions = probs.argmax(dim=-1)
-
-            return predictions
-
     def calculate_loss(self, batch):
-        """Calculate training loss for LibCity.
+        """
+        Calculate training loss.
+
+        Uses the shortcut model's combined MSE and BCE loss.
 
         Args:
-            batch: LibCity Batch object
+            batch: Dictionary containing trajectory data and targets
 
         Returns:
-            loss: Training loss tensor
+            loss: Combined training loss
         """
-        return self.forward(batch)
+        model_input = self._batch2model(batch)
+        if model_input is None:
+            return torch.tensor(0.0, device=self.device, requires_grad=True)
+
+        traj_cond = model_input['traj_cond']
+        trg_onehot = model_input['trg_onehot']
+        diff_mask = model_input['diff_mask']
+
+        if trg_onehot is None:
+            _logger.warning("No target roads in batch, returning zero loss")
+            return torch.tensor(0.0, device=self.device, requires_grad=True)
+
+        # Generate training targets using bootstrap + flow matching
+        x_t, v_t, t, dt_base = get_targets(
+            self.shortcut.model,
+            trg_onehot,
+            traj_cond,
+            self.timesteps,
+            self.device,
+            diff_mask,
+            self.bootstrap_every
+        )
+
+        # Set model to training mode
+        self.train()
+
+        # Calculate loss through shortcut model
+        loss = self.shortcut(x_t, v_t, t, dt_base, traj_cond, trg_onehot, diff_mask)
+
+        return loss
