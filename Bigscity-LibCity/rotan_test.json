@@ -1,7 +1,0 @@
-{
-    "cut_method": "time_interval",
-    "window_size": 50,
-    "max_session_len": 50,
-    "batch_size": 32,
-    "max_epoch": 2
-}

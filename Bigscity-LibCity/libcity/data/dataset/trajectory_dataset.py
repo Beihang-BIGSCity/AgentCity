@@ -71,7 +71,7 @@ class TrajectoryDataset(AbstractDataset):
                                        self.encoder.feature_dict,
                                        self.config['batch_size'],
                                        self.config['num_workers'], self.pad_item,
-                                       self.encoder.feature_max_len)
+                                       self.encoder.pad_max_len)
 
     def get_data_feature(self):
         res = self.data['data_feature']

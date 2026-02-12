@@ -16,7 +16,7 @@
   "ext_scaler": "none",
   "add_time_in_day": true,
   "add_day_in_week": false,
-
+  "batch_size": 8,
   "metrics": ["MAE", "MAPE", "MSE", "RMSE", "masked_MAE", "masked_MAPE", "masked_MSE", "masked_RMSE"],
   "max_epoch": 100,
   "learner": "adam",

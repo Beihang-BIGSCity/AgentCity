@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgentCity Showcase — LibCity Agent Dashboard</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+      :root {
+        --background: #f0f4ff;
+        --card: #ffffff;
+        --primary: #1f3fff;
+        --accent: #4fd1c5;
+        --text: #0f172a;
+        --muted: #6b7aa7;
+        --border: #e0e7ff;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Hero Header ── */
+      header.hero {
+        background: radial-gradient(circle at top right, #2e5cff, #141d61);
+        color: #fff;
+        padding: 3.5rem clamp(1rem, 5vw, 5rem);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+        position: relative;
+      }
+      .hero__content { flex: 1 1 320px; }
+      .hero__content h1 { margin: 0 0 .75rem; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+      .hero__content p { font-size: 1.1rem; max-width: 540px; line-height: 1.6; opacity: .92; }
+      .hero__cta { margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+      .hero__badge {
+        flex: 0 0 auto;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        text-align: center;
+      }
+      .hero__badge .badge {
+        background: rgba(79,209,197,0.2);
+        border-radius: 999px;
+        padding: .35rem 1.2rem;
+        display: inline-block;
+        margin-bottom: .5rem;
+        font-weight: 600;
+      }
+      .hero__badge .subtext { font-size: .9rem; color: rgba(255,255,255,0.85); }
+
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+        text-decoration: none;
+        background-image: linear-gradient(120deg, #304ffe, #0ea5e9, #34d399);
+        background-size: 220% 220%;
+        color: #fff;
+        padding: .6rem 1.5rem;
+        border-radius: 999px;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 12px 30px rgba(31,63,255,0.25);
+        cursor: pointer;
+        transition: transform 150ms ease, box-shadow 150ms ease, background-position 600ms ease;
+        animation: gradientShift 12s ease-in-out infinite;
+        font-size: .95rem;
+      }
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 18px 35px rgba(31,63,255,0.28); background-position: 100% 50%; }
+      .btn--secondary {
+        background-color: rgba(31,63,255,0.1) !important;
+        background-image: none !important;
+        color: var(--primary) !important;
+        border: 1px solid rgba(31,63,255,0.5) !important;
+        box-shadow: none; animation: none;
+      }
+      .hero .btn--secondary {
+        color: #fff !important;
+        background-color: transparent !important;
+        border-color: rgba(255,255,255,0.35) !important;
+      }
+      .btn--ghost {
+        background: transparent; color: var(--text);
+        border: 1px solid var(--border); box-shadow: none; animation: none;
+      }
+      .btn--ghost:hover { background: rgba(31,63,255,0.05); }
+      .btn--inline { padding: .4rem .9rem; font-size: .9rem; }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 50% 100%; }
+        100% { background-position: 100% 50%; }
+      }
+
+      /* ── Main ── */
+      main { padding: clamp(1.25rem, 4vw, 3rem); flex: 1 0 auto; }
+
+      .panel {
+        background: var(--card);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 20px 60px rgba(23,33,114,0.12);
+      }
+      .panel__header { margin-bottom: 1.5rem; }
+      .panel__header h2 { margin: 0; font-size: 1.5rem; }
+      .panel__header p { margin: .25rem 0 0; color: var(--muted); }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        background: #fff;
+        display: flex; flex-direction: column; gap: .75rem;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+      .card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(15,23,42,0.12); }
+      .card h3 { margin: 0; display: flex; justify-content: space-between; align-items: center; gap: .5rem; font-size: 1.05rem; }
+      .card__meta { color: var(--muted); font-size: .9rem; }
+      .card__summary { font-size: .95rem; line-height: 1.6; }
+      .card__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+      .tag {
+        font-size: .75rem; text-transform: uppercase; letter-spacing: .06em;
+        color: var(--primary); background: rgba(31,63,255,0.08);
+        border-radius: 999px; padding: .25rem .75rem; white-space: nowrap;
+      }
+
+      .article-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+      .article-link:hover { text-decoration: underline; }
+      .link-row { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+      /* ── Search Form ── */
+      .search-form {
+        display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;
+        border: 1px solid rgba(17,24,39,0.08); border-radius: 1.25rem; padding: 1.25rem;
+        background: linear-gradient(135deg, rgba(31,63,255,0.06), rgba(255,255,255,0.9));
+      }
+      .search-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+      .search-field { display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; color: var(--muted); }
+      .search-field--full { grid-column: 1 / -1; }
+      .search-input {
+        display: flex; align-items: center; gap: .5rem;
+        border: 1px solid rgba(17,24,39,0.15); border-radius: 1rem; padding: .35rem .75rem;
+        background: #fff; box-shadow: inset 0 1px 2px rgba(15,23,42,0.05);
+      }
+      .search-input input {
+        border: none; background: transparent; flex: 1; font-size: 1rem; padding: .4rem 0; outline: none;
+        font-family: inherit;
+      }
+      .year-range-input { max-width: 280px; }
+      .year-separator { color: var(--muted); font-weight: 600; }
+      .search-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+      /* ── Migration Controls ── */
+      .migration-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem; }
+      .selection-block { flex: 2 1 340px; }
+      .action-block { flex: 1 1 200px; display: flex; flex-direction: column; gap: .75rem; align-items: flex-start; }
+      .helper-text { color: var(--muted); font-size: .9rem; margin: 0; line-height: 1.4; }
+      .selection-list {
+        border: 1px solid var(--border); border-radius: 1rem; padding: 1rem;
+        display: flex; flex-direction: column; gap: .75rem; max-height: 320px; overflow-y: auto;
+      }
+      .selection-item {
+        display: flex; gap: .75rem; align-items: flex-start; padding: .5rem;
+        border-radius: .75rem; transition: background .2s;
+      }
+      .selection-item:hover { background: rgba(31,63,255,0.05); }
+      .selection-item input[type="checkbox"] { margin-top: .4rem; accent-color: var(--primary); width: 16px; height: 16px; }
+      .selection-item span { display: flex; flex-direction: column; gap: .2rem; }
+      .selection-item small { color: var(--muted); font-size: .85rem; }
+
+      /* ── Status Pills ── */
+      .status-pill {
+        border-radius: 999px; padding: .25rem .8rem; font-size: .85rem; font-weight: 600;
+        display: inline-block;
+      }
+      .status-pill.success { background: rgba(79,209,197,0.2); color: #0f766e; }
+      .status-pill.error { background: rgba(255,99,132,0.2); color: #991b1b; }
+      .status-pill.info { background: rgba(59,130,246,0.2); color: #1d4ed8; }
+
+      /* ── Job Card ── */
+      .job-card .job-status { align-self: flex-start; margin-bottom: .5rem; }
+      .job-times { display: flex; flex-direction: column; gap: .3rem; font-size: .85rem; color: var(--muted); }
+
+      /* ── Stage transcript details ── */
+      details { font-size: .9rem; }
+      details summary {
+        cursor: pointer; color: var(--primary); font-weight: 600; padding: .25rem 0;
+      }
+      details ul { margin: .5rem 0 0 1.2rem; color: var(--muted); line-height: 1.6; }
+
+      /* ── Footer ── */
+      footer {
+        padding: 1rem clamp(1rem, 4vw, 3rem); text-align: center;
+        color: var(--muted); border-top: 1px solid var(--border); background: #f8f9ff;
+      }
+      footer code { background: rgba(31,63,255,0.08); padding: .15rem .4rem; border-radius: .35rem; font-size: .85rem; }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════ HERO ═══════════ -->
+    <header class="hero">
+      <div class="hero__content">
+        <h1>AgentCity</h1>
+        <p>
+          An autonomous pipeline that searches papers, migrates models
+          into LibCity, validates runs, and reports metrics.
+        </p>
+        <div class="hero__cta">
+          <a class="btn" href="#">View Pipeline Script</a>
+          <a class="btn btn--secondary" href="#">Contributor Guide</a>
+        </div>
+      </div>
+      <div class="hero__badge">
+        <span class="badge">Autonomous Workflow</span>
+        <span class="subtext">2025 Editions: ICLR · ICML · NeurIPS · KDD · ICDE</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- ═══════════ SEARCH PANEL ═══════════ -->
+      <section class="panel" id="search-panel">
+        <div class="panel__header">
+          <h2>Literature Search</h2>
+          <p>Search for the latest traffic-forecasting papers by keywords, year, and conference.</p>
+        </div>
+        <form class="search-form" onsubmit="return false">
+          <div class="search-grid">
+            <label class="search-field search-field--full">
+              <span>Keywords</span>
+              <div class="search-input">
+                <input type="text" value="graph transformer, traffic prediction" autocomplete="off" />
+              </div>
+            </label>
+            <label class="search-field">
+              <span>Year Range</span>
+              <div class="search-input year-range-input">
+                <input type="number" value="2024" style="width:80px" />
+                <span class="year-separator">-</span>
+                <input type="number" value="2025" style="width:80px" />
+              </div>
+            </label>
+            <label class="search-field search-field--full">
+              <span>Conference</span>
+              <div class="search-input">
+                <input type="text" value="ICLR, NeurIPS" autocomplete="off" />
+              </div>
+            </label>
+          </div>
+          <div class="search-actions">
+            <button type="button" class="btn">Search &amp; Download</button>
+            <button type="button" class="btn btn--ghost">Reset</button>
+          </div>
+        </form>
+        <div class="grid">
+          <article class="card">
+            <h3>
+              <span>Efficient Large-Scale Traffic Forecasting with Transformers: A Spatial Data Management Perspective</span>
+              <span class="tag">KDD 2025</span>
+            </h3>
+            <div class="card__actions">
+              <a class="btn btn--inline" href="#">Download PDF</a>
+              <a class="btn btn--inline btn--secondary" href="#">Open Repository</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════ MIGRATION PANEL ═══════════ -->
+      <section class="panel" id="migration-panel">
+        <div class="panel__header">
+          <h2>Migration Batch Runner</h2>
+          <p>Select papers with code, then run migration and tuning as separate steps.</p>
+        </div>
+        <div class="migration-controls">
+          <div class="selection-block">
+            <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Select Papers</h3>
+            <div class="selection-list">
+              <label class="selection-item">
+                <input type="checkbox" checked />
+                <span>
+                  <strong>PDFormer: Propagation Delay-Aware Dynamic Transformer</strong>
+                  <small>Model: PDFormer</small>
+                </span>
+              </label>
+              <label class="selection-item">
+                <input type="checkbox" checked />
+                <span>
+                  <strong>GraphMM: Graph-Based Map Matching with HMM</strong>
+                  <small>Model: GraphMM</small>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="action-block">
+            <h4>Step 1: Migration</h4>
+            <button type="button" class="btn">Start Migration</button>
+            <p class="helper-text">Exports a JSON plan and runs <code>python claude_client.py</code>.</p>
+          </div>
+          <div class="action-block">
+            <h4>Step 2: Tuning</h4>
+            <button type="button" class="btn">Start Tuning</button>
+            <p class="helper-text">Runs hyperparameter search on the migrated models.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3>
+              <span>PDFormer</span>
+              <span class="tag">AAAI 2023</span>
+            </h3>
+            <p class="card__meta">Model: PDFormer</p>
+            <div class="link-row">
+              <a class="article-link" href="#">Repository</a>
+              <a class="article-link" href="#">PDF</a>
+            </div>
+            <p class="card__summary">Successfully migrated to LibCity. Adapted Batch interface, generated config, validated on PEMS04.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════ JOB QUEUE ═══════════ -->
+      <section class="panel" id="job-panel">
+        <div class="panel__header">
+          <h2>Job Queue</h2>
+          <p>Monitor literature-search, migration, and tuning jobs in real time.</p>
+        </div>
+        <div class="grid">
+          <article class="card job-card">
+            <h3>
+              <span>Literature Search</span>
+              <span class="tag">a3f2c1</span>
+            </h3>
+            <span class="status-pill success job-status">Completed</span>
+            <div class="job-times">
+              <span>Created: 2025-06-15 10:00:05</span>
+              <span>Finished: 2025-06-15 10:03:42</span>
+            </div>
+          </article>
+          <article class="card job-card">
+            <h3>
+              <span>Migration: PDFormer</span>
+              <span class="tag">b7e4d9</span>
+            </h3>
+            <span class="status-pill info job-status">Running</span>
+            <div class="job-times">
+              <span>Started: 2025-06-15 10:05:14</span>
+              <span>Finished: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════ STAGE TIMELINE ═══════════ -->
+      <section class="panel" id="stage-panel">
+        <div class="panel__header">
+          <h2>Stage Timeline</h2>
+          <p>Each block represents a pipeline stage with transcript highlights.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3>
+              <span>1. Literature Retrieval</span>
+              <span class="tag">literature</span>
+            </h3>
+            <p class="card__summary">Searched "graph transformer, traffic prediction" across ICLR/NeurIPS 2023-2025. Found 12 papers, downloaded 9 PDFs.</p>
+          </article>
+          <article class="card">
+            <h3>
+              <span>2. Code Migration</span>
+              <span class="tag">migration</span>
+            </h3>
+            <p class="card__summary">Adapted model code to LibCity's AbstractModel interface, generated config files, and registered in task_config.json.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════ ARCHIVED ARTICLES ═══════════ -->
+      <section class="panel" id="article-panel">
+        <div class="panel__header">
+          <h2>Archived Articles</h2>
+          <p>Saved PDFs and metadata captured by the catalog tool.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3>
+              <span>PDFormer</span>
+              <span class="tag">AAAI 2023</span>
+            </h3>
+            <p class="card__meta">Datasets: PEMS03, PEMS04, PEMS07, PEMS08</p>
+            <div class="link-row">
+              <a class="article-link" href="#">Repository</a>
+              <a class="article-link" href="#">Open PDF</a>
+            </div>
+            <p class="card__summary">Propagation Delay-aware Dynamic Long-range Transformer for Traffic Flow Prediction.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Serve this folder via <code>python -m http.server</code> to load local JSON from <code>data/</code>.
+        &nbsp;|&nbsp; AgentCity &copy; 2025
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,7 +1,0 @@
-{
-  "input_window": 12,
-  "output_window": 12,
-  "input_length": 12,
-  "output_length": 12,
-  "max_epoch": 2
-}

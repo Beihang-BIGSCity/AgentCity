@@ -65,7 +65,7 @@ class ConfigParser(object):
 
     def _load_default_config(self):
         # 首先加载 task config
-        with open('./libcity/config/task_config.json', 'r') as f:
+        with open('libcity/config/task_config.json', 'r') as f:
             task_config = json.load(f)
             if self.config['task'] not in task_config:
                 raise ValueError(
@@ -106,13 +106,13 @@ class ConfigParser(object):
         default_file_list.append('evaluator/{}.json'.format(self.config['evaluator']))
         # 加载所有默认配置
         for file_name in default_file_list:
-            with open('./libcity/config/{}'.format(file_name), 'r') as f:
+            with open('libcity/config/{}'.format(file_name), 'r') as f:
                 x = json.load(f)
                 for key in x:
                     if key not in self.config:
                         self.config[key] = x[key]
         # 加载数据集config.json
-        with open('./raw_data/{}/config.json'.format(self.config['dataset']), 'r') as f:
+        with open('raw_data/{}/config.json'.format(self.config['dataset']), 'r') as f:
             x = json.load(f)
             for key in x:
                 if key == 'info':
@@ -129,7 +129,7 @@ class ConfigParser(object):
         if use_gpu:
             torch.cuda.set_device(gpu_id)
         self.config['device'] = torch.device(
-            "cuda:%d" % gpu_id if torch.cuda.is_available() and use_gpu else "cpu")
+            (f"cuda:{gpu_id}") if torch.cuda.is_available() and use_gpu else cpu)
 
     def get(self, key, default=None):
         return self.config.get(key, default)

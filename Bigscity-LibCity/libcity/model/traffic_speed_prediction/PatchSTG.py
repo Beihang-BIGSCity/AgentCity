@@ -163,6 +163,19 @@ class PatchSTG(AbstractTrafficStateModel):
         # Load spatial indices from geo coordinates
         self._load_spatial_indices(config, data_feature)
 
+        # Derive spa_patchnum from actual KDTree output
+        padded_nodes = len(self.reo_all_idx)
+        self.spa_patchnum = padded_nodes // self.spa_patchsize
+        self._logger.info(f"Adjusted spa_patchnum to {self.spa_patchnum} "
+                         f"(padded_nodes={padded_nodes}, spa_patchsize={self.spa_patchsize})")
+
+        # Ensure factors divides spa_patchnum evenly
+        while self.spa_patchnum % self.factors != 0 and self.factors > 1:
+            self.factors //= 2
+        self._logger.info(f"Using factors={self.factors} "
+                         f"(num={self.spa_patchnum // self.factors}, "
+                         f"size={self.spa_patchsize * self.factors})")
+
         # Build model layers
         self._build_model()
 
@@ -194,6 +207,7 @@ class PatchSTG(AbstractTrafficStateModel):
         data_path = f'./raw_data/{dataset}/'
         geo_path = os.path.join(data_path, f'{geo_file}.geo')
 
+        coords_valid = False
         if os.path.exists(geo_path):
             geofile = pd.read_csv(geo_path)
             # Parse coordinates - format is "[lng, lat]" or similar
@@ -204,15 +218,21 @@ class PatchSTG(AbstractTrafficStateModel):
                     coord = eval(coord_str)
                 else:
                     coord = coord_str
-                coords.append(coord)
-            coords = np.array(coords)
+                if isinstance(coord, (list, tuple)) and len(coord) >= 2:
+                    coords.append(coord[:2])
+            if len(coords) == len(geofile):
+                coords = np.array(coords)
+                locations = coords.T  # Shape: (2, num_nodes)
+                coords_valid = True
+                self._logger.info(f"Loaded {len(coords)} node coordinates from {geo_path}")
+            else:
+                self._logger.warning(
+                    f"Geo file {geo_path} has {len(coords)}/{len(geofile)} valid coordinates, "
+                    f"falling back to random coordinates")
 
-            # coords shape: (num_nodes, 2) - [lng, lat]
-            locations = coords.T  # Shape: (2, num_nodes)
-            self._logger.info(f"Loaded {len(coords)} node coordinates from {geo_path}")
-        else:
-            # Fallback: use random coordinates (not recommended)
-            self._logger.warning(f"Geo file not found at {geo_path}, using random coordinates")
+        if not coords_valid:
+            self._logger.warning(f"Using random coordinates for spatial partitioning")
+            np.random.seed(42)
             locations = np.random.randn(2, self.num_nodes)
 
         # Compute adjacency for padding if not available
@@ -284,11 +304,19 @@ class PatchSTG(AbstractTrafficStateModel):
         Args:
             parts_idx: List of index arrays from KDTree
             adj: Adjacency matrix for finding similar nodes for padding
-            sps: Spatial patch size
+            sps: Spatial patch size (minimum; will be increased to max partition size)
 
         Returns:
             Tuple of (ori_parts_idx, reo_parts_idx, reo_all_idx)
         """
+        # Ensure sps covers the largest partition
+        max_part_size = max(len(p) for p in parts_idx)
+        if max_part_size > sps:
+            self._logger.info(f"Increasing sps from {sps} to {max_part_size} "
+                             f"to cover largest KDTree partition")
+            sps = max_part_size
+        self.spa_patchsize = sps
+
         ori_parts_idx = np.array([], dtype=int)
         reo_parts_idx = np.array([], dtype=int)
         reo_all_idx = np.array([], dtype=int)
@@ -301,7 +329,7 @@ class PatchSTG(AbstractTrafficStateModel):
                 local_part_idx = self._augment_align(part_dist, sps - part_idx.shape[0])
                 auged_part_idx = np.concatenate([part_idx, local_part_idx], 0)
             else:
-                auged_part_idx = part_idx
+                auged_part_idx = part_idx[:sps]
 
             reo_parts_idx = np.concatenate([reo_parts_idx, np.arange(part_idx.shape[0]) + sps * i])
             ori_parts_idx = np.concatenate([ori_parts_idx, part_idx])

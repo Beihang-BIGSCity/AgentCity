@@ -279,10 +279,15 @@ class CHGANSimplified(nn.Module):
         # Apply adjacency mask if provided
         if adj_mx is not None:
             adj_mask = (adj_mx[:N, :N] == 0)
+            # Ensure self-loops are not masked (prevent all-masked rows -> NaN in softmax)
+            self_loop_mask = torch.eye(N, dtype=torch.bool, device=device)
+            adj_mask = adj_mask & ~self_loop_mask
             attn_scores = attn_scores.masked_fill(adj_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
 
         # Softmax and apply to values
         attn_weights = F.softmax(attn_scores, dim=-1)
+        # Replace any NaN from softmax (all -inf rows) with zeros
+        attn_weights = torch.nan_to_num(attn_weights, nan=0.0)
         attn_weights = self.dropout(attn_weights)
 
         # Apply attention to values
@@ -519,9 +524,11 @@ class HSTWAVE(AbstractTrafficStateModel):
         self._init_parameters()
 
     def _init_parameters(self):
-        """Initialize model parameters"""
-        for p in self.parameters():
-            if p.dim() > 1:
+        """Initialize model parameters (only linear/conv weights, skip embeddings and norm layers)"""
+        for name, p in self.named_parameters():
+            if p.dim() > 1 and 'layer_norm' not in name and 'ln' not in name \
+                    and 'series_tensor' not in name and 'node_type_embed' not in name \
+                    and 'edge_bias' not in name:
                 nn.init.xavier_uniform_(p)
 
     def init_weight(self, size: Tuple):
@@ -699,7 +706,12 @@ class HSTWAVE(AbstractTrafficStateModel):
         if temperature is None:
             temperature = self.contrastive_temp
 
+        # L2 normalize embeddings to prevent overflow in exp(dot_product)
+        out_1 = F.normalize(out_1, dim=-1)
+        out_2 = F.normalize(out_2, dim=-1)
+
         out = torch.cat([out_1, out_2], dim=0)  # (2*B, D)
+        # After normalization, dot products are in [-1, 1], so exp values are bounded
         sim_matrix = torch.exp(torch.mm(out, out.t().contiguous()) / temperature)  # (2*B, 2*B)
 
         mask = (torch.ones_like(sim_matrix) - torch.eye(2 * batch_size, device=sim_matrix.device)).bool()
@@ -708,6 +720,6 @@ class HSTWAVE(AbstractTrafficStateModel):
         pos_sim = torch.exp(torch.sum(out_1 * out_2, dim=-1) / temperature)
         pos_sim = torch.cat([pos_sim, pos_sim], dim=0)  # (2*B)
 
-        contrastive_loss = (-torch.log(pos_sim / sim_matrix.sum(dim=-1))).mean()
+        contrastive_loss = (-torch.log(pos_sim / (sim_matrix.sum(dim=-1) + 1e-8))).mean()
 
         return contrastive_loss

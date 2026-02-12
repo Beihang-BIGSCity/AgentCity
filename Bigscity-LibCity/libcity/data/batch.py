@@ -157,8 +157,7 @@ class BatchPAD(Batch):
                             print('device is ', device)
                             exit()
             elif self.feature_name[key] == 'no_pad_int':
-                for i in range(len(self.data[key])):
-                    self.data[key][i] = torch.LongTensor(np.array(self.data[key][i])).to(device)
+                self.data[key] = torch.LongTensor(np.array(self.data[key])).to(device)
             elif self.feature_name[key] == 'no_pad_float':
                 for i in range(len(self.data[key])):
                     self.data[key][i] = torch.FloatTensor(np.array(self.data[key][i])).to(device)

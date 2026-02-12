@@ -32,10 +32,8 @@
             "JGRM",
             "TrajSDE",
             "RNTrajRec",
-            "DiffMM",
-            "L2MM",
-            "DeepMM",
-            "TRMMA"
+            "GraphMM",
+            "DeepMM"
         ],
         "allowed_dataset": [
             "foursquare_tky",
@@ -219,30 +217,6 @@
             "traj_encoder": "StandardTrajectoryEncoder"
         },
         "RNTrajRec": {
-            "dataset_class": "TrajectoryDataset",
-            "executor": "TrajLocPredExecutor",
-            "evaluator": "TrajLocPredEvaluator",
-            "traj_encoder": "StandardTrajectoryEncoder"
-        },
-        "DiffMM": {
-            "dataset_class": "DiffMMDataset",
-            "executor": "TrajLocPredExecutor",
-            "evaluator": "TrajLocPredEvaluator",
-            "traj_encoder": "StandardTrajectoryEncoder"
-        },
-        "L2MM": {
-            "dataset_class": "TrajectoryDataset",
-            "executor": "TrajLocPredExecutor",
-            "evaluator": "TrajLocPredEvaluator",
-            "traj_encoder": "StandardTrajectoryEncoder"
-        },
-        "DeepMM": {
-            "dataset_class": "DeepMMSeq2SeqDataset",
-            "executor": "DeepMapMatchingExecutor",
-            "evaluator": "MapMatchingEvaluator",
-            "traj_encoder": "StandardTrajectoryEncoder"
-        },
-        "TRMMA": {
             "dataset_class": "TrajectoryDataset",
             "executor": "TrajLocPredExecutor",
             "evaluator": "TrajLocPredEvaluator",
@@ -1108,17 +1082,18 @@
             "DiffMM",
             "TRMMA",
             "GraphMM",
-            "RLOMM"
+            "RLOMM",
+            "L2MM"
         ],
         "allowed_dataset": [
-            "global",
-            "Seattle",
             "Neftekamsk",
             "Valky",
             "Ruzhany",
             "Santander",
             "Spaichingen",
-            "NovoHamburgo"
+            "NovoHamburgo",
+            "global",
+            "Seattle"
         ],
         "STMatching": {
             "dataset_class": "MapMatchingDataset",
@@ -1167,6 +1142,11 @@
         },
         "RLOMM": {
             "dataset_class": "DeepMapMatchingDataset",
+            "executor": "DeepMapMatchingExecutor",
+            "evaluator": "MapMatchingEvaluator"
+        },
+        "L2MM": {
+            "dataset_class": "DeepMMSeq2SeqDataset",
             "executor": "DeepMapMatchingExecutor",
             "evaluator": "MapMatchingEvaluator"
         }

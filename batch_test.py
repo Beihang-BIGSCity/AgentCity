@@ -28,8 +28,6 @@ import itertools
 from pathlib import Path
 from multiprocessing import Pool, Manager
 import pynvml
-
-list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet']
 # 项目根目录
 ROOT_DIR = Path(__file__).resolve().parent
 LIBCITY_DIR = ROOT_DIR / "Bigscity-LibCity"
@@ -127,11 +125,29 @@ def _parse_metrics(task, model_name, dataset, exp_id):
                 target_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(file, target_dir / new_name)
 
+def get_gpu_free_memory():
+    """获取所有GPU的空闲显存(GB)，返回 [(gpu_id, free_memory), ...]"""
+    try:
+        pynvml.nvmlInit()
+        gpu_count = pynvml.nvmlDeviceGetCount()
+        gpu_info = []
+        for i in range(gpu_count):
+            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+            info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+            free_gb = info.free / 1024**3
+            gpu_info.append((i, free_gb))
+        # 按空闲显存从大到小排序
+        return sorted(gpu_info, key=lambda x: x[1], reverse=True)
+    except Exception as e:
+        print(f"警告: 无法获取GPU显存信息: {e}")
+        return [(0, 0), (1, 0), (2, 0)]  # 默认3卡
+
 async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_pred'):
         """运行单个测试"""
         print(f"[INFO] Testing {model_name} on {dataset}...")
 
         # 标准化数据集名称
+    # 标准化数据集名称
         target_path = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.csv'
         target_path1 = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.json'
         target_path2 = Path(ROOT_DIR) / 'result' / task / dataset / f'{model_name}.jsonl'
@@ -162,7 +178,7 @@ async def run_test(model_name,dataset,gpu_id,max_epochs=35,task='traffic_state_p
             prefix=f"{model_name}:test:{dataset}",
         )
         while returncode < 0:
-            time.sleep(1600)
+            time.sleep(3600)
             returncode, stdout, stderr = await _run_subprocess(
             cmd, LIBCITY_DIR,
             log_file=log_file,
@@ -179,63 +195,50 @@ def worker(model, dataset, gpu_id, max_epochs=35):
     except Exception as e:
         print(f"[Error] {model}-{dataset} on GPU{gpu_id}: {e}")
 
-def get_gpu_free_memory():
-    """获取所有GPU的空闲显存(GB)，返回 [(gpu_id, free_memory), ...]"""
-    try:
-        pynvml.nvmlInit()
-        gpu_count = pynvml.nvmlDeviceGetCount()
-        gpu_info = []
-        for i in range(gpu_count):
-            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
-            info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-            free_gb = info.free / 1024**3
-            gpu_info.append((i, free_gb))
-        # 按空闲显存从大到小排序
-        return sorted(gpu_info, key=lambda x: x[1], reverse=True)
-    except Exception as e:
-        print(f"警告: 无法获取GPU显存信息: {e}")
-        return [(0, 0), (1, 0), (2, 0), (3,0)]  # 默认3卡
-    
 def run_test_process(args):
-    model, dataset, task, gpu_queue = args
+    model, dataset, task, gpu_queue, gpu_locks, gpu_usage = args
     
-    # 从队列阻塞式获取GPU（自动等待直到有可用）
-    gpu_id = gpu_queue.get()
+    # 循环等待直到找到有空闲显存的GPU
+    while True:
+        for gpu_id in range(8):  # 假设8卡
+            with gpu_locks[gpu_id]:
+                # 检查该GPU当前任务数
+                if gpu_usage[gpu_id] < 3:  # 最多3个并发
+                    gpu_usage[gpu_id] += 1
+                    assigned_gpu = gpu_id
+                    break
+            time.sleep(0.1)
+        else:
+            time.sleep(1)  # 所有GPU都满了，等待
+            continue
+        break
     
     try:
-        # 关键：必须在import torch之前设置！
-        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-        
-        # 延迟导入torch，确保环境变量生效
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(assigned_gpu)
         import torch
-        torch.cuda.set_device(0)  # 因为设置了VISIBLE_DEVICES，这里永远是0
+        torch.cuda.set_device(0)
         
-        print(f"[{model}-{dataset}] 运行在 GPU {gpu_id} (剩余显存: {torch.cuda.get_device_properties(0).total_memory/1024**3:.1f}GB)")
-        
-        # 执行你的异步任务
+        print(f"[{model}-{dataset}] GPU {assigned_gpu} (当前 {gpu_usage[assigned_gpu]} 个任务)")
         result = asyncio.run(run_test(model, dataset, 0, task=task, max_epochs=35))
         return result
-        
-    except Exception as e:
-        print(f"[{model}-{dataset}] GPU {gpu_id} 出错: {str(e)[:100]}")
-        raise
     finally:
-        # 任务完成，归还GPU到队列，让下一个任务自动获取
-        gpu_queue.put(gpu_id)
-        print(f"[{model}-{dataset}] 释放 GPU {gpu_id}")
+        with gpu_locks[assigned_gpu]:
+            gpu_usage[assigned_gpu] -= 1
 
 def main():
 
-    #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet',''ASeer']
-    #model_list = ['GriddedTNP','STHSepNet','BigST','STWave','UniST','LSTTN','LightST','RSTIB','DSTAGNN','STID']
-    #model_list = ["PatchTST","DCST","STLLM","TGraphormer","CKGGNN","EasyST","LEAF","MetaDG","TRACK","HiMSNet","DST2former"]
-    '''model_list = ["AutoSTF", "STSSDL", "STDMAE", "LSTTN","UniST","STID","ConvTimeNet","FlashST","Fredformer","GNNRF","PatchSTG","PatchTST","RevIN"
-                  ,"Trafformer",'DMSTGCN','GWNET','STAEformer','STMGAT','TGCLSTM','STID','Trafformer','D2STGNN'
-                  ,'STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet','STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]'''
-    #model_list = ['STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]
-    model_list = ['STAEformer',"DCST",'PatchSTG','STWave','DST2former','STLLM','AutoSTF','FlashST','HSTWAVE','DSTAGNN','TRACK','UniST']
+    #model_list = ['EAC','GriddedTNP','LSTGAN','MLCAFormer','PatchSTG','SRSNet']
+    #model_list = ['LSTGAN','MLCAFormer','ASeer','HSTWAVE','STHSepNet','BigST','DSTMamba','STWave','UniST','UrbanDiT','LSTTN','LightST','RSTIB','DSTAGNN']
+    #model_list = ['DMSTGCN','GWNET','STAEformer','STMGAT','TGCLSTM','STID','Trafformer','D2STGNN']
+    #model_list = ['STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet']
+    manager = Manager()
+    gpu_usage = manager.dict({i: 0 for i in range(2)})
+    gpu_locks = {i: manager.Lock() for i in range(2)}
+    #model_list = ['DeepTTE','DOT','DutyTTE','ProbETA','MDTI','HierETA','MulT_TTE','HetETA']
+    model_list = ['SRSNet','LEAF','HSTWAVE','PatchSTG','STLLM']
+    #task = 'traffic_state_pred'
     task = 'traffic_state_pred'
-    dataset_list = ['METR_LA','PEMSD7','PEMS_BAY']
+    dataset_list = ['PEMSD7','PEMS_BAY']
     manager = Manager()
     gpu_queue = manager.Queue()
     
@@ -249,13 +252,15 @@ def main():
         print(f"GPU {gpu_id} 已加入队列 (空闲 {free_mem:.1f}GB)")
     
     # 构建任务列表，传入共享队列
-    tasks = [(m, d, task, gpu_queue) 
+    tasks = [(m, d, task, None, gpu_locks, gpu_usage) 
              for m, d in itertools.product(model_list, dataset_list)]
     
     # 进程数 = GPU数量，确保每个GPU同一时间只跑一个任务
     num_gpus = 4
     with Pool(processes=num_gpus) as pool:
         results = pool.map(run_test_process, tasks)
+    
+    print("所有测试完成")
 
 
 if __name__ == "__main__":

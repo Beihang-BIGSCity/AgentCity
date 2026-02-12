@@ -233,9 +233,9 @@ def main():
                   ,"Trafformer",'DMSTGCN','GWNET','STAEformer','STMGAT','TGCLSTM','STID','Trafformer','D2STGNN'
                   ,'STWave','TimeMixer','STResNet','STDN','ResLSTM','DSTAGNN','LSTTN','STTSNet','STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]'''
     #model_list = ['STID','Trafformer',"ConvTimeNet","HTVGNN","Pathformer","DCST","CKGGNN","HiMSNet","LEAF"]
-    model_list = ['DeepMM','DiffMM','FMM','GraphMM','RLOMM']
+    model_list = ['DeepMM','DiffMM','RLOMM','L2MM','FMM','HMMM','IVMM','STMatching']
     task = 'map_matching'
-    dataset_list = ['Neftekamsk','Ruzhany','Valky','Santander','Spaichingen']
+    dataset_list = ['Neftekamsk','Valky','Santander','Spaichingen']
     manager = Manager()
     gpu_queue = manager.Queue()
     
@@ -253,7 +253,7 @@ def main():
              for m, d in itertools.product(model_list, dataset_list)]
     
     # 进程数 = GPU数量，确保每个GPU同一时间只跑一个任务
-    num_gpus = 4
+    num_gpus = 1
     with Pool(processes=num_gpus) as pool:
         results = pool.map(run_test_process, tasks)
 

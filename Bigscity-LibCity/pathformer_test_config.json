@@ -1,7 +1,0 @@
-{
-  "max_epoch": 2,
-  "batch_size": 32,
-  "input_window": 12,
-  "output_window": 12,
-  "gpu_id": 0
-}

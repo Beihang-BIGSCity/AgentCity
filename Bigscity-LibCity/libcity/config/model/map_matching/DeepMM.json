@@ -39,8 +39,6 @@
   "schedule_threshold": 0.001,
   "metrics": ["RMF", "AN", "AL"],
 
-  "max_src_length": 100,
-  "max_trg_length": 100,
   "grid_size": 0.001,
   "train_rate": 0.7,
   "eval_rate": 0.15,
@@ -50,6 +48,5 @@
   "enable_segmentation": true,
   "segment_window_src": 100,
   "segment_window_trg": 54,
-  "segment_stride_ratio": 0.5,
-  "min_segment_length": 3
+  "segment_stride_ratio": 0.5
 }

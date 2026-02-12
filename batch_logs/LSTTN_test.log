@@ -11573,3 +11573,27 @@ Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --
 [OUT] 2026-02-04 14:51:22,750 - INFO - Loaded file PEMSD7.dyna, shape=(28224, 883, 1)
 
 [Return Code: -9]
+
+============================================================
+Timestamp: 2026-02-06 16:25:19
+Command: /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python run_model.py --task traffic_state_pred --model LSTTN --dataset METR_LA --train true --max_epoch 35 --gpu_id 0 --exp_id 239894
+============================================================
+
+[ERR] /home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+[ERR]   if not hasattr(np, name):
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+[ERR]   import pkg_resources
+[ERR] /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:58: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[ERR]   import pynvml  # type: ignore[import]
+[ERR] Traceback (most recent call last):
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/run_model.py", line 36, in <module>
+[ERR]     run_model(task=args.task, model_name=args.model, dataset_name=args.dataset,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py", line 42, in run_model
+[ERR]     config = ConfigParser(task, model_name, dataset_name,
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/config_parser.py", line 25, in __init__
+[ERR]     self._load_default_config()
+[ERR]   File "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/config/config_parser.py", line 68, in _load_default_config
+[ERR]     with open('Bigscity-LibCity/libcity/config/task_config.json', 'r') as f:
+[ERR] FileNotFoundError: [Errno 2] No such file or directory: 'Bigscity-LibCity/libcity/config/task_config.json'
+
+[Return Code: 1]

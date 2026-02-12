@@ -1,1 +1,0 @@
-{"max_epoch": 2, "batch_size": 64, "learner": "adam", "learning_rate": 0.001}

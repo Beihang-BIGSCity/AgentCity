@@ -1,8 +1,0 @@
-{
-  "split": 10,
-  "timesteps": 100,
-  "batch_size": 16,
-  "max_epoch": 2,
-  "unet_dim_mults": [1, 2],
-  "num_layers": 1
-}

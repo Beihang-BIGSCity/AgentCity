@@ -3,6 +3,7 @@ import os
 from libcity.data.dataset.trajectory_encoder.abstract_trajectory_encoder import AbstractTrajectoryEncoder
 from libcity.utils import parse_time
 
+
 parameter_list = ['dataset', 'min_session_len', 'min_sessions', 'traj_encoder', 'cut_method',
                   'window_size', 'history_type', 'min_checkins', 'max_session_len']
 
@@ -16,9 +17,13 @@ class StandardTrajectoryEncoder(AbstractTrajectoryEncoder):
         self.loc_id = 0
         self.tim_max = 47  # 时间编码方式得改变
         self.history_type = self.config['history_type']
+        self.output_max_len = self.config['max_session_len']
+        self.pad_max_len = {}
+        self.pad_max_len['target'] = self.output_max_len
+        self.pad_max_len['target_tim'] = self.output_max_len
         self.feature_dict = {'history_loc': 'int', 'history_tim': 'int',
-                             'current_loc': 'int', 'current_tim': 'int',
-                             'target': 'int', 'target_tim': 'int', 'uid': 'int'
+                             'current_loc': 'no_pad_int', 'current_tim': 'no_pad_int',
+                             'target': 'no_pad_int', 'target_tim': 'no_pad_int', 'uid': 'int'
                              }
         if config['evaluate_method'] == 'sample':
             self.feature_dict['neg_loc'] = 'int'
@@ -81,8 +86,8 @@ class StandardTrajectoryEncoder(AbstractTrajectoryEncoder):
             # 一条轨迹可以产生多条训练数据，根据第一个点预测第二个点，前两个点预测第三个点....
             for i in range(len(current_loc) - 1):
                 trace = []
-                target = current_loc[i+1]
-                target_tim = current_tim[i+1]
+                target = current_loc[i+1 : i+1+self.output_max_len]
+                target_tim = current_tim[i+1 : i+1+self.output_max_len]
                 trace.append(history_loc.copy())
                 trace.append(history_tim.copy())
                 trace.append(current_loc[:i+1])
@@ -113,15 +118,26 @@ class StandardTrajectoryEncoder(AbstractTrajectoryEncoder):
         if self.history_type == 'cut_off':
             self.pad_item = {
                 'current_loc': loc_pad,
-                'current_tim': tim_pad
+                'current_tim': tim_pad,
+                'target': loc_pad,
+                'target_tim': tim_pad
             }
-            # 这种情况下不对 history_loc history_tim 做补齐
+            self.pad_max_len = {
+                'target': self.output_max_len,
+                'target_tim': self.output_max_len
+            }
         else:
             self.pad_item = {
                 'current_loc': loc_pad,
                 'history_loc': loc_pad,
                 'current_tim': tim_pad,
-                'history_tim': tim_pad
+                'history_tim': tim_pad,
+                'target': loc_pad,
+                'target_tim': tim_pad
+            }
+            self.pad_max_len = {
+                'target': self.output_max_len,
+                'target_tim': self.output_max_len
             }
         self.data_feature = {
             'loc_size': self.loc_id + 1,
@@ -136,3 +152,4 @@ class StandardTrajectoryEncoder(AbstractTrajectoryEncoder):
             return time.hour
         else:
             return time.hour + 24
+

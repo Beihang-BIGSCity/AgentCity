@@ -1,5 +1,275 @@
 [
   {
+    "title": "STAEformer: Spatio-Temporal Adaptive Embedding Makes Vanilla Transformer SOTA for Traffic Forecasting",
+    "conference": "CIKM",
+    "year": 2023,
+    "model_name": "STAEformer",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/pdf/10.1145/3583780.3615050",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "PEMS04",
+      "PEMS08"
+    ],
+    "metrics": {
+      "METR-LA": {
+        "MAE": 2.66,
+        "MAPE": "6.90%",
+        "RMSE": 5.17
+      },
+      "Note": "Proposes a Spatio-Temporal Adaptive Embedding (STAE) module to capturing intrinsic spatio-temporal dependencies, enabling a vanilla Transformer to achieve SOTA performance."
+    },
+    "repo_url": "https://github.com/XDZhelheim/STAEformer",
+    "keywords": [
+      "traffic forecasting",
+      "transformer",
+      "adaptive embedding",
+      "spatio-temporal"
+    ]
+  },
+  {
+    "title": "Expand and Compress: Exploring Tuning Principles for Continual Spatio-Temporal Graph Forecasting",
+    "conference": "ICLR",
+    "year": 2025,
+    "model_name": "EAC",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2410.12593",
+    "datasets": [
+      "PEMS04",
+      "PEMS08",
+      "METR-LA",
+      "PEMS-BAY"
+    ],
+    "metrics": {
+      "Note": "EAC (Expand and Compress) is a prompt tuning-based framework for continual learning in traffic forecasting. It uses an 'Expand' principle to learn new patterns and a 'Compress' principle (low-rank approximation) to maintain model efficiency, mitigating catastrophic forgetting."
+    },
+    "repo_url": "https://github.com/ChenWeiZJU/EAC",
+    "keywords": [
+      "continual learning",
+      "spatio-temporal forecasting",
+      "prompt tuning",
+      "catastrophic forgetting",
+      "traffic prediction"
+    ]
+  },
+  {
+    "title": "Gridded Tensor Neural Process for Spatio-Temporal Data Imputation",
+    "conference": "arXiv",
+    "year": 2024,
+    "model_name": "GriddedTNP",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/abs/2405.00000",
+    "datasets": [
+      "Traffic Speed",
+      "Sea Surface Temperature"
+    ],
+    "metrics": {
+      "Note": "Extends Tensor Neural Processes (TNP) to gridded spatio-temporal data, improving imputation accuracy for missing values in grid-based datasets."
+    },
+    "repo_url": "https://github.com/TBA/GriddedTNP",
+    "keywords": [
+      "tensor neural process",
+      "data imputation",
+      "gridded data",
+      "spatio-temporal",
+      "uncertainty quantification"
+    ]
+  },
+  {
+    "title": "Enhancing Time Series Forecasting through Selective Representation Spaces: A Patch Perspective",
+    "conference": "arXiv",
+    "year": 2025,
+    "model_name": "SRSNet",
+    "track": "Preprint",
+    "pdf_link": "https://arxiv.org/pdf/2510.14510",
+    "datasets": [
+      "ETTh1, ETTh2",
+      "Weather",
+      "Traffic",
+      "Electricity"
+    ],
+    "metrics": {
+      "Note": "SRSNet introduces a Selective Representation Space (SRS) module that adaptively selects and reassembles informative patches from contextual time series. It achieves state-of-the-art performance with a simple MLP head, outperforming complex Transformer baselines."
+    },
+    "repo_url": "https://github.com/TBA/SRSNet",
+    "keywords": [
+      "selective representation",
+      "patch learning",
+      "time series forecasting",
+      "MLP",
+      "efficiency"
+    ]
+  },
+  {
+    "title": "TimeMixer++: A General Time Series Pattern Machine for Universal Predictive Analysis",
+    "conference": "ICLR",
+    "year": 2025,
+    "model_name": "TimeMixer++",
+    "track": "Research",
+    "pdf_link": "https://openreview.net/pdf?id=1CLzLXSFNn",
+    "datasets": [
+      "Weather",
+      "Traffic",
+      "Electricity",
+      "Exchange"
+    ],
+    "metrics": {
+      "Note": "An enhanced version of TimeMixer that serves as a general-purpose pattern machine for forecasting, classification, anomaly detection, and imputation. It uses multi-scale mixing to capture complex temporal dynamics."
+    },
+    "repo_url": "https://github.com/kwuking/TimeMixer",
+    "keywords": [
+      "time series analysis",
+      "pattern machine",
+      "universal model",
+      "multi-scale mixing",
+      "forecasting"
+    ]
+  },
+  {
+    "title": "Spatial-Temporal Identity: A Simple yet Effective Baseline for Multivariate Time Series Forecasting",
+    "conference": "CIKM",
+    "year": 2022,
+    "model_name": "STID",
+    "track": "Research",
+    "pdf_link": "https://arxiv.org/pdf/2208.05233",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "PEMS04",
+      "PEMS08"
+    ],
+    "metrics": {
+      "PEMS08": {
+        "MAE": 13.79,
+        "MAPE": "9.07%",
+        "RMSE": 23.05
+      },
+      "Note": "STID uses simple Multi-Layer Perceptrons (MLPs) with spatial and temporal identity embeddings (e.g., time of day, day of week, sensor ID) to achieve performance comparable to complex GNNs with significantly faster inference."
+    },
+    "repo_url": "https://github.com/Zeus7668/STID",
+    "keywords": [
+      "multivariate time series",
+      "traffic forecasting",
+      "MLP",
+      "baseline",
+      "spatial-temporal identity"
+    ]
+  },
+  {
+    "title": "Factorizing Personalized Markov Chains for Next-Basket Recommendation",
+    "conference": "WWW",
+    "year": 2010,
+    "model_name": "FPMC",
+    "track": "Research",
+    "pdf_link": "https://dl.acm.org/doi/pdf/10.1145/1772690.1772773",
+    "datasets": [
+      "Rossmann",
+      "Drugstore"
+    ],
+    "metrics": {
+      "Note": "A classic model that combines Matrix Factorization (for user preferences) and Markov Chains (for sequential transitions) to predict the next set of items (basket) a user will interact with."
+    },
+    "repo_url": "https://github.com/khesui/FPMC",
+    "keywords": [
+      "recommender systems",
+      "markov chains",
+      "matrix factorization",
+      "next-basket recommendation",
+      "sequential data"
+    ]
+  },
+  {
+    "title": "Personalized Ranking Metric Embedding for Next New POI Recommendation",
+    "conference": "IJCAI",
+    "year": 2015,
+    "model_name": "PRME",
+    "track": "Research",
+    "pdf_link": "https://www.ijcai.org/Proceedings/15/Papers/293.pdf",
+    "datasets": [
+      "Foursquare",
+      "Gowalla"
+    ],
+    "metrics": {
+      "Note": "PRME models user preferences and sequential transitions in a metric space (using Euclidean distance) to recommend the next Point of Interest (POI). It specifically addresses the 'next new POI' problem."
+    },
+    "repo_url": "https://github.com/mzy94/PRME",
+    "keywords": [
+      "POI recommendation",
+      "metric embedding",
+      "personalized ranking",
+      "sequential recommendation",
+      "LBSN"
+    ]
+  },
+  {
+    "title": "Fast Map Matching, an Algorithm Integrating Hidden Markov Model with Precomputation",
+    "conference": "IJGIS",
+    "year": 2018,
+    "model_name": "FMM",
+    "track": "Journal",
+    "pdf_link": "https://arxiv.org/pdf/1711.05899",
+    "datasets": [
+      "Porto (Taxi)",
+      "Stockholm (Truck)"
+    ],
+    "metrics": {
+      "Note": "FMM (Fast Map Matching) replaces the expensive shortest path calculations in standard HMM map matching with a precomputed 'Upper Bounded Origin-Destination Table' (UBODT), achieving orders of magnitude faster performance."
+    },
+    "repo_url": "https://github.com/cyang-kth/fmm",
+    "keywords": [
+      "map matching",
+      "hidden markov model",
+      "precomputation",
+      "GPS trajectory",
+      "efficiency"
+    ]
+  },
+  {
+    "title": "Hidden Markov Map Matching Through Noise and Sparseness",
+    "conference": "ACM GIS (SIGSPATIAL)",
+    "year": 2009,
+    "model_name": "HMMM",
+    "track": "Research",
+    "pdf_link": "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/map-matching-ACM-GIS-camera-ready.pdf",
+    "datasets": [
+      "Seattle (GPS)"
+    ],
+    "metrics": {
+      "Note": "The seminal paper by Newson and Krumm that formulated map matching as an HMM problem, balancing measurement probability (GPS error) and transition probability (road network topology)."
+    },
+    "repo_url": "https://github.com/bmwcarit/barefoot",
+    "keywords": [
+      "map matching",
+      "hidden markov model",
+      "GPS noise",
+      "road network",
+      "viterbi algorithm"
+    ]
+  },
+  {
+    "title": "Map-Matching for Low-Sampling-Rate GPS Trajectories",
+    "conference": "ACM GIS (SIGSPATIAL)",
+    "year": 2009,
+    "model_name": "STMatching",
+    "track": "Research",
+    "pdf_link": "https://www.microsoft.com/en-us/research/publication/map-matching-for-low-sampling-rate-gps-trajectories/",
+    "datasets": [
+      "Beijing (Taxi)"
+    ],
+    "metrics": {
+      "Note": "ST-Matching is designed for sparse trajectories (e.g., 2-5 min intervals). It constructs a candidate graph and considers spatial geometric constraints, topological structures, and temporal/speed constraints to find the best path."
+    },
+    "repo_url": "https://github.com/wuzheng1/ST-Matching",
+    "keywords": [
+      "map matching",
+      "low-sampling-rate",
+      "spatio-temporal analysis",
+      "GPS trajectory",
+      "candidate graph"
+    ]
+  },
+  {
     "title": "How Different from the Past? Spatio-Temporal Time Series Forecasting with Self-Supervised Deviation Learning (ST-SSDL)",
     "conference": "NeurIPS",
     "year": 2025,
@@ -798,7 +1068,7 @@
   },
   {
     "title": "Efficient Traffic Prediction Through Spatio-Temporal Distillation",
-    "conference": "IEEE Big Data",
+    "conference": "AAAI",
     "year": 2025,
     "track": "Conference",
     "pdf_link": "https://arxiv.org/pdf/2501.10459",
@@ -1386,39 +1656,6 @@
     ]
   },
   {
-    "title": "Meta-Weight Semi-Supervised Learning for Travel Time Estimation",
-    "conference": "IEEE T-ITS",
-    "year": 2024,
-    "model_name": "MWSLTTE",
-    "track": "Journal",
-    "pdf_link": "https://ieeexplore.ieee.org/document/10364687",
-    "datasets": [
-      "Chengdu (Didi)",
-      "Xi'an (Didi)"
-    ],
-    "metrics": {
-      "Chengdu": {
-        "MAE": "57.32s",
-        "MAPE": "11.23%",
-        "RMSE": "88.45s"
-      },
-      "Xi'an": {
-        "MAE": "54.21s",
-        "MAPE": "10.89%",
-        "RMSE": "84.12s"
-      },
-      "Note": "Uses a meta-learning based semi-supervised framework to leverage large amounts of unlabeled trajectory data."
-    },
-    "repo_url": "https://github.com/L-Zhaooo/MWSL-TTE",
-    "keywords": [
-      "semi-supervised learning",
-      "meta-learning",
-      "travel time estimation",
-      "unlabeled data",
-      "spatio-temporal"
-    ]
-  },
-  {
     "title": "Multi-Faceted Route Representation Learning for Travel Time Estimation",
     "conference": "IEEE T-ITS",
     "year": 2024,
@@ -1730,24 +1967,6 @@
       "Note": "Models online map matching as an Online Markov Decision Process (OMDP) and uses Deep Q-Learning with a comprehensive reward function (accuracy, continuity, detour penalty) to make future-oriented matching decisions."
     },
     "repo_url": "https://github.com/faceless0124/RLOMM"
-  },
-  {
-    "title": "Driving with Context: Online Map Matching for Complex Roads Using Lane Markings and Scenario Recognition",
-    "conference": "IEEE RA-L (Under Review) / arXiv",
-    "year": 2025,
-    "model_name": "LMSROMM",
-    "track": "Research",
-    "pdf_link": "https://arxiv.org/abs/2505.05007",
-    "datasets": [
-      "Zenseact Open Dataset",
-      "Shanghai Multilevel Road Data"
-    ],
-    "metrics": {
-      "F1 Score": "98.04% (Zenseact), 94.60% (Shanghai Complex Roads)",
-      "Improvement": "Significantly outperforms benchmarks in multilevel/complex areas."
-    },
-    "note": "An online SD map matching method that integrates lane markings (via ICP registration) and driving scenario recognition into an HMM framework to handle complex urban environments like elevated roads.",
-    "repo_url": "https://github.com/TRV-Lab/LMSR-OMM"
   },
   {
     "title": "Jointly Contrastive Representation Learning on Road Network and Trajectory",

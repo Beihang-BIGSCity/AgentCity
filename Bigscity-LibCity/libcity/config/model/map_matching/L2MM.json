@@ -1,0 +1,55 @@
+{
+  "embedding_size": 256,
+  "hidden_size": 256,
+  "num_layers": 2,
+  "de_layer": 1,
+  "dropout": 0.1,
+  "bidirectional": true,
+  "cluster_size": 10,
+  "max_length": 300,
+  "criterion_name": "CE",
+  "latent_weight": 1.0,
+  "cate_weight": 0.1,
+  "training_mode": "train",
+  "BOS": 0,
+  "EOS": 2,
+  "PAD": 1,
+
+  "batch_size": 128,
+  "learning_rate": 0.001,
+  "max_epoch": 100,
+  "learner": "adam",
+  "optimizer": "adam",
+  "lr_decay": 0.5,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.1,
+  "steps": [20, 40, 60],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5.0,
+
+  "use_early_stop": true,
+  "patience": 10,
+  "log_every": 1,
+  "saved": true,
+  "save_mode": "best",
+  "train_loss": "none",
+
+  "metrics": ["RMF", "AN", "AL"],
+
+  "cache_dataset": true,
+  "num_workers": 0,
+  "load_best_epoch": true,
+
+  "max_src_length": 100,
+  "max_trg_length": 100,
+  "grid_size": 0.001,
+  "train_rate": 0.7,
+  "eval_rate": 0.15,
+
+  "debug": false,
+  "hyper_tune": false,
+
+  "dataset_class": "DeepMMSeq2SeqDataset",
+  "executor": "DeepMapMatchingExecutor",
+  "evaluator": "MapMatchingEvaluator"
+}

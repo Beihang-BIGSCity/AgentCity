@@ -1,1 +1,0 @@
-{"max_epoch": 2, "batch_size": 16, "min_segment_length": 3, "segment_window_src": 100}

@@ -263,7 +263,7 @@ class DeepMapMatchingExecutor(AbstractExecutor):
                     self.result[u_id][t_id] = output[i]
                     
                     # 存入真实路径
-                    if tgt_roads is not None:
+                    if tgt_roads is not None and i < len(tgt_roads):
                         # 注意：为了适配 evaluate 逻辑，这里需要存为 numpy array 或 list，
                         # evaluate 代码中用 route[:, 1] 取值，暗示 route 可能是 [[idx, edge_id], ...] 结构
                         # 但为了通用性，这里我假设 evaluate 代码中的 route 就是 edge_id 列表。
@@ -379,13 +379,23 @@ class DeepMapMatchingExecutor(AbstractExecutor):
                     i = k = 0
                     while i < len(lcs) and k < len(merged_result):
                         while k < len(merged_result) and merged_result[k] != lcs[i]:
-                            d_plus += self.rel_info.get(merged_result[k], {}).get('distance', 1.0)
+                            if isinstance(merged_result[k],list):
+                                for m in range(len(merged_result[k])):
+                                    if merged_result[k][m] != lcs[i]:
+                                        break
+                                    d_plus += self.rel_info.get(merged_result[k][m], {}).get('distance', 1.0)
+                            else:
+                                d_plus += self.rel_info.get(merged_result[k], {}).get('distance', 1.0)
                             k += 1
                         i += 1
                         k += 1
                     # 处理尾部剩余
                     while k < len(merged_result):
-                        d_plus += self.rel_info.get(merged_result[k], {}).get('distance', 1.0)
+                        if isinstance(merged_result[k],list):
+                                for m in range(len(merged_result[k])):
+                                    d_plus += self.rel_info.get(merged_result[k][m], {}).get('distance', 1.0)
+                        else:
+                            d_plus += self.rel_info.get(merged_result[k], {}).get('distance', 1.0)
                         k += 1
 
                     RMF = (d_plus + d_sub) / d_total

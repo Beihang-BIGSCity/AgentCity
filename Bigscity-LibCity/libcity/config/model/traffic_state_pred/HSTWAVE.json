@@ -6,7 +6,7 @@
   "dropout": 0.3,
   "use_contrastive": true,
   "contrastive_weight": 0.2,
-  "contrastive_temp": 500,
+  "contrastive_temp": 0.5,
   "noise_std": 0.05,
 
   "scaler": "standard",
@@ -20,7 +20,7 @@
   "output_window": 12,
 
   "max_epoch": 100,
-  "batch_size": 8,
+  "batch_size": 1,
   "learner": "adam",
   "learning_rate": 0.001,
   "weight_decay": 0.0005,
