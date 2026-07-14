@@ -138,3 +138,9 @@ Ensure LibCity datasets have been downloaded to `Bigscity-LibCity/raw_data/`, th
 cd Bigscity-LibCity
 python run_model.py --task traffic_state_pred --model <model_name> --dataset <dataset_name>
 ```
+
+## Publication
+
+This work accompanies the following paper received in the *Frontiers of Computer Science* special column “Code & Data in Earth Science”:
+
+**[LibCity2025: Recent Advances and Unified Evaluation for Urban Traffic Prediction](https://doi.org/10.1007/s11704-026-60579-w)**, *Frontiers of Computer Science*, 2026.
