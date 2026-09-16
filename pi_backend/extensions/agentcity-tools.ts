@@ -305,7 +305,6 @@ export default function (pi: ExtensionAPI) {
 				def.prompt,
 				"--tools",
 				(def.tools ?? []).join(","),
-				"--",
 				params.prompt,
 			];
 

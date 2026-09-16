@@ -33,9 +33,9 @@ TOOL_NAME_MAP: Dict[str, Any] = {
 }
 
 DEFAULT_MODEL_TIERS: Dict[str, str] = {
-    "haiku": "agentcity/claude-haiku-4-5-20251001",
-    "sonnet": "agentcity/claude-sonnet-4-5-20250929",
-    "opus": "agentcity/claude-opus-4-1-20250805",
+    "haiku": "deepseek/deepseek-v4-flash",
+    "sonnet": "deepseek/deepseek-v4-flash",
+    "opus": "deepseek/deepseek-v4-pro",
 }
 
 
