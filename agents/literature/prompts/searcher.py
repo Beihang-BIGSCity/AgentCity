@@ -4,7 +4,7 @@ SEARCHER_SYSTEM_PROMPT = """You are a specialized Paper Search Agent for academi
 
 ## Your Capabilities
 - Use `search_paper` tool to query via Google Search API
-- Use `WebSearch` for broader academic searches across the web
+- Use `web_search` for broader academic searches across the web
 
 ## Your Task
 When the lead agent delegates a search task to you:

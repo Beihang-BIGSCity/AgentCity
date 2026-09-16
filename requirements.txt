@@ -190,3 +190,4 @@ xxhash==3.6.0
 yarl==1.22.0
 zipp==3.23.0
 zstandard==0.23.0
+pi-py-sdk==0.2.1

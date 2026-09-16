@@ -224,7 +224,7 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         5. Recommendations for follow-up
 
         ## Critical Rules
-        - Use Task tool to delegate - do NOT migrate code/data directly
+        - Use the task tool to delegate - do NOT migrate code/data directly
         - Process items sequentially (complete one before starting next)
         - Maximum 10 fix iterations per item before marking as failed
         - Document model migrations in ./documentation/<model>_migration_summary.md

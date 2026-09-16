@@ -1,0 +1,4 @@
+#!/bin/bash
+# Project-local pi launcher: pi 0.79.9 requires Node >= 22.19; system node is v20.
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+exec "$DIR/node_modules/node/bin/node" "$DIR/node_modules/@earendil-works/pi-coding-agent/dist/cli.js" "$@"

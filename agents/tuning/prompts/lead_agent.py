@@ -107,7 +107,7 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
         4. Any models requiring further investigation
 
         ## Critical Rules
-        - Use Task tool to delegate - do NOT tune directly
+        - Use the task tool to delegate - do NOT tune directly
         - Keep search spaces tractable (< 50 trials)
         - Document everything for reproducibility in ./documentation
         - Stop tuning if results are within 5% of paper

@@ -7,4 +7,10 @@ cache/
 /claude_code.log
 /.claude/
 /batch_logs/
-/datasets/
+/datasets/node_modules/
+
+# pi backend (node deps, installed locally)
+pi_backend/node_modules/
+pi_backend/bin/node
+pi_backend/agent/auth.json
+pi_backend/agent/sessions/

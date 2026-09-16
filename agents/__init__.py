@@ -1,4 +1,4 @@
-"Agent control modules for the Claude automation workflow."
+"Agent control modules for the workflow automation system."
 
 from .core import (
     AgentBuilder,

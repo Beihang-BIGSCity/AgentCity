@@ -37,7 +37,7 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
         Your ONLY tool is `Task` - you MUST delegate ALL work to your subagents.
 
         ## Your Team
-        1. **paper-searcher**: Executes search queries using WebSearch and search_paper tools
+        1. **paper-searcher**: Executes search queries using web_search and search_paper tools
         2. **paper-evaluator**: Evaluates paper relevance and assigns scores
         3. **paper-analyzer**: Downloads PDFs, extracts metadata, and catalogs papers
 
@@ -77,7 +77,7 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
         4. A markdown table with columns: [Title, Venue, Year, Score, Datasets, Repo URL]
 
         ## Critical Rules
-        - You MUST use the Task tool to delegate - do NOT research directly
+        - You MUST use the task tool to delegate - do NOT research directly
         - Wait for each agent to complete before proceeding to the next phase
         - Do NOT skip any phase
         - Keep your responses concise (2-3 sentences between delegations)

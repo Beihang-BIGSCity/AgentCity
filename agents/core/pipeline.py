@@ -1,18 +1,18 @@
+"""Multi-stage workflow runner backed by the pi execution backend."""
+
 from __future__ import annotations
 
 import inspect
 import json
-from typing import Awaitable, Callable, List, Optional, Union
+from pathlib import Path
+from typing import Awaitable, Callable, Dict, List, Optional, Union
 
-from claude_agent_sdk import (
-    AgentDefinition as SDKAgentDefinition,
-    ClaudeAgentOptions,
-    ClaudeSDKClient,
-    ResultMessage,
-    TextBlock,
-    ToolUseBlock,
+from .pi_backend import (
+    PiBackendConfig,
+    PiStageSession,
+    map_tool_names,
+    resolve_model,
 )
-
 from .storage import StageStorage
 from .types import AgentContext, MultiAgentStage, StageDefinition, WorkflowDefinition
 
@@ -23,19 +23,19 @@ StageCallback = Callable[
 
 
 class AgentPipeline:
-    """Runs the multi-stage Claude workflow and persists transcripts."""
+    """Runs the multi-stage workflow and persists transcripts."""
 
     def __init__(
         self,
         *,
-        client,
+        backend: PiBackendConfig,
         workflows: List[WorkflowDefinition],
         storage: StageStorage,
         logger,
         context: AgentContext,
         stage_callback: Optional[StageCallback] = None,
     ) -> None:
-        self.client = client
+        self.backend = backend
         self.workflows = workflows
         self.storage = storage
         self.logger = logger
@@ -61,14 +61,13 @@ class AgentPipeline:
                 else stage.description
             )
             summary = await self._run_custom_stage(stage)
-            stage_messages: List[dict] = []
-            self.storage.append_stage(
-                workflow=workflow_name,
-                stage_key=stage.key,
-                title=stage.title,
+            self._finalize_stage(
+                workflow_name=workflow_name,
+                stage=stage,
                 prompt=prompt,
                 summary=summary,
-                messages=stage_messages,
+                stage_messages=[],
+                stats={},
             )
             if summary:
                 self.context.stage_notes[stage.key] = summary
@@ -80,20 +79,93 @@ class AgentPipeline:
             raise ValueError(f"Stage {stage.key} requires a prompt builder when no runner is set.")
 
         prompt = stage.prompt_builder(self.context)
-        await self.client.query(prompt)
-        stage_messages = []
-        text_sections: List[str] = []
+        async with PiStageSession(
+            self.backend,
+            model=resolve_model(None, self.backend.model_tiers),
+            logger=self.logger,
+        ) as session:
+            result = await session.run(prompt)
 
-        async for message in self.client.receive_response():
-            serialized_messages = self._serialize_message(message)
-            stage_messages.extend(serialized_messages)
-            text_sections.extend(
-                [chunk["content"] for chunk in serialized_messages if chunk["type"] == "text"]
-            )
+        self._finalize_stage(
+            workflow_name=workflow_name,
+            stage=stage,
+            prompt=prompt,
+            summary=result.summary,
+            stage_messages=result.messages,
+            stats=result.stats,
+        )
+        if result.summary:
+            self.context.stage_notes[stage.key] = result.summary
+        await self._handle_stage_callback(stage, result.summary)
+        self.logger.info("Completed stage: %s", stage.title)
 
-        summary = "\n".join(text_sections).strip()
-        if summary:
-            self.context.stage_notes[stage.key] = summary
+    async def _run_multi_agent_stage(
+        self, stage: MultiAgentStage, workflow_name: str
+    ) -> None:
+        """Execute a lead-agent stage; subagents run via the ``task`` tool."""
+        self.logger.info(
+            "Starting multi-agent stage: %s (%s)", stage.title, workflow_name
+        )
+
+        lead_prompt = stage.lead_agent_prompt_builder(self.context)
+
+        if callable(stage.agents):
+            agent_definitions = stage.agents(self.context)
+        else:
+            agent_definitions = stage.agents
+
+        subagents_file = self._write_subagent_defs(stage.key, agent_definitions)
+
+        async with PiStageSession(
+            self.backend,
+            model=resolve_model(stage.lead_model, self.backend.model_tiers),
+            tools=["task"],  # Lead agent only delegates
+            system_prompt=lead_prompt,
+            extra_env={"AGENTCITY_SUBAGENTS_FILE": str(subagents_file)},
+            logger=self.logger,
+        ) as session:
+            result = await session.run(lead_prompt)
+
+        self._finalize_stage(
+            workflow_name=workflow_name,
+            stage=stage,
+            prompt=lead_prompt,
+            summary=result.summary,
+            stage_messages=result.messages,
+            stats=result.stats,
+        )
+        if result.summary:
+            self.context.stage_notes[stage.key] = result.summary
+        await self._handle_multi_agent_stage_callback(stage, result.summary)
+        self.logger.info("Completed multi-agent stage: %s", stage.title)
+
+    def _write_subagent_defs(self, stage_key: str, agent_definitions) -> Path:
+        """Serialize subagent definitions for the extension's ``task`` tool."""
+        defs = {}
+        for name, agent_def in agent_definitions.items():
+            defs[name] = {
+                "description": agent_def.description,
+                "tools": map_tool_names(agent_def.tools),
+                "prompt": agent_def.prompt,
+                "model": resolve_model(agent_def.model, self.backend.model_tiers),
+            }
+        out_dir = Path(self.backend.project_root) / "data" / "runs"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        path = out_dir / f".subagents_{stage_key}.json"
+        path.write_text(json.dumps(defs, ensure_ascii=False, indent=2), encoding="utf-8")
+        return path
+
+    def _finalize_stage(
+        self,
+        *,
+        workflow_name: str,
+        stage,
+        prompt: str,
+        summary: str,
+        stage_messages: List[dict],
+        stats: Dict[str, float],
+    ) -> None:
+        self._log_stage_stats(stage.title, stats)
         self.storage.append_stage(
             workflow=workflow_name,
             stage_key=stage.key,
@@ -101,92 +173,8 @@ class AgentPipeline:
             prompt=prompt,
             summary=summary,
             messages=stage_messages,
+            stats=stats,
         )
-        await self._handle_stage_callback(stage, summary)
-        self.logger.info("Completed stage: %s", stage.title)
-
-    async def _run_multi_agent_stage(
-        self, stage: MultiAgentStage, workflow_name: str
-    ) -> None:
-        """Execute a multi-agent stage with lead agent + subagents."""
-        self.logger.info(
-            "Starting multi-agent stage: %s (%s)", stage.title, workflow_name
-        )
-
-        # Build lead agent prompt with context
-        lead_prompt = stage.lead_agent_prompt_builder(self.context)
-
-        # Resolve agents: can be a dict or a callable that returns a dict
-        if callable(stage.agents):
-            agent_definitions = stage.agents(self.context)
-        else:
-            agent_definitions = stage.agents
-
-        # Convert our AgentDefinition to SDK's AgentDefinition
-        sdk_agents = {}
-        for name, agent_def in agent_definitions.items():
-            sdk_agents[name] = SDKAgentDefinition(
-                description=agent_def.description,
-                tools=agent_def.tools,
-                prompt=agent_def.prompt,
-                model=agent_def.model,
-            )
-
-        # Build options for this stage with lead agent configuration
-        options = ClaudeAgentOptions(
-            permission_mode="bypassPermissions",
-            setting_sources=["project"],  # Load pdf skill, ralph-wiggum
-            system_prompt=lead_prompt,
-            allowed_tools=["Task"],  # Lead agent only delegates
-            agents=sdk_agents,
-            model=stage.lead_model,
-        )
-
-        stage_messages: List[dict] = []
-        text_sections: List[str] = []
-
-        # Create dedicated client for this multi-agent stage
-        async with ClaudeSDKClient(options=options) as client:
-            # Initial query to start the lead agent
-            await client.query(prompt=lead_prompt)
-
-            # Collect responses from lead agent and subagents
-            async for message in client.receive_response():
-                serialized_messages = self._serialize_message(message)
-                stage_messages.extend(serialized_messages)
-                text_sections.extend(
-                    [
-                        chunk["content"]
-                        for chunk in serialized_messages
-                        if chunk["type"] == "text"
-                    ]
-                )
-
-        summary = "\n".join(text_sections).strip()
-        if summary:
-            self.context.stage_notes[stage.key] = summary
-
-        self.storage.append_stage(
-            workflow=workflow_name,
-            stage_key=stage.key,
-            title=stage.title,
-            prompt=lead_prompt,
-            summary=summary,
-            messages=stage_messages,
-        )
-
-        await self._handle_multi_agent_stage_callback(stage, summary)
-        self.logger.info("Completed multi-agent stage: %s", stage.title)
-
-    async def _handle_multi_agent_stage_callback(
-        self, stage: MultiAgentStage, summary: str
-    ) -> None:
-        """Handle callback for multi-agent stages."""
-        if not self.stage_callback:
-            return
-        result = self.stage_callback(stage, summary, self.context)
-        if inspect.isawaitable(result):
-            await result
 
     async def _run_custom_stage(self, stage: StageDefinition) -> str:
         assert stage.runner is not None
@@ -208,38 +196,27 @@ class AgentPipeline:
         if inspect.isawaitable(result):
             await result
 
-    def _serialize_message(self, message) -> List[dict]:
-        records = []
-        role = "assistant"
-        if isinstance(message, ResultMessage):
-            role = "result"
+    async def _handle_multi_agent_stage_callback(
+        self, stage: MultiAgentStage, summary: str
+    ) -> None:
+        if not self.stage_callback:
+            return
+        result = self.stage_callback(stage, summary, self.context)
+        if inspect.isawaitable(result):
+            await result
 
-        for block in getattr(message, "content", []) or []:
-            if isinstance(block, TextBlock):
-                text = block.text.strip()
-                if text:
-                    self.logger.info("%s: %s", role.capitalize(), text)
-                    records.append({"role": role, "type": "text", "content": text})
-            elif isinstance(block, ToolUseBlock):
-                payload = self._safe_payload(block.input)
-                self.logger.info("Tool %s called with %s", block.name, payload)
-                records.append(
-                    {
-                        "role": role,
-                        "type": "tool_use",
-                        "tool_name": block.name,
-                        "tool_input": payload,
-                    }
-                )
-        return records
-
-    @staticmethod
-    def _safe_payload(payload):
-        try:
-            json.dumps(payload)
-            return payload
-        except TypeError:
-            return str(payload)
+    def _log_stage_stats(self, stage_title: str, stats: Dict[str, float]) -> None:
+        parts = []
+        if "duration_seconds" in stats:
+            parts.append(f"runtime={stats['duration_seconds']:.1f}s")
+        if stats.get("input_tokens"):
+            parts.append(f"input={int(stats['input_tokens'])} tokens")
+        if stats.get("output_tokens"):
+            parts.append(f"output={int(stats['output_tokens'])} tokens")
+        if stats.get("total_cost_usd"):
+            parts.append(f"cost=${stats['total_cost_usd']:.4f}")
+        if parts:
+            self.logger.info("Stage [%s] stats: %s", stage_title, ", ".join(parts))
 
 
 __all__ = ["AgentPipeline"]
