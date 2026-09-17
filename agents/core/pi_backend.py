@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -82,7 +83,7 @@ class PiBackendConfig:
             "PI_CODING_AGENT_DIR": self.pi_agent_dir,
             "AGENTCITY_ROOT": str(self.project_root),
             "AGENTCITY_PI_BIN": self.pi_bin,
-            "AGENTCITY_PYTHON": os.environ.get("AGENTCITY_PYTHON", "python"),
+            "AGENTCITY_PYTHON": os.environ.get("AGENTCITY_PYTHON", sys.executable),
         }
 
 
@@ -186,8 +187,25 @@ class PiStageSession:
 
     def _serialize_message(self, message: dict) -> List[dict]:
         """Map a pi AgentMessage to the stage-log record format."""
-        records: List[dict] = []
         role = message.get("role", "assistant")
+        if role == "toolResult":
+            text_parts = [
+                block.get("text", "")
+                for block in message.get("content") or []
+                if isinstance(block, dict) and block.get("type") == "text"
+            ]
+            return [
+                {
+                    "role": "tool",
+                    "type": "tool_result",
+                    "tool_name": message.get("toolName"),
+                    "content": "\n".join(part for part in text_parts if part)[:2000],
+                    "is_error": bool(message.get("isError")),
+                }
+            ]
+        if role != "assistant":
+            return []
+        records: List[dict] = []
         for block in message.get("content") or []:
             if not isinstance(block, dict):
                 continue
@@ -196,7 +214,7 @@ class PiStageSession:
                 text = (block.get("text") or "").strip()
                 if text:
                     if self._logger:
-                        self._logger.info("%s: %s", role.capitalize(), text)
+                        self._logger.info("Assistant: %s", text)
                     records.append({"role": role, "type": "text", "content": text})
             elif block_type == "toolCall":
                 payload = self._safe_payload(block.get("arguments"))
@@ -210,21 +228,6 @@ class PiStageSession:
                         "tool_input": payload,
                     }
                 )
-        if role == "toolResult":
-            text_parts = [
-                block.get("text", "")
-                for block in message.get("content") or []
-                if isinstance(block, dict) and block.get("type") == "text"
-            ]
-            records.append(
-                {
-                    "role": "tool",
-                    "type": "tool_result",
-                    "tool_name": message.get("toolName"),
-                    "content": "\n".join(part for part in text_parts if part)[:2000],
-                    "is_error": bool(message.get("isError")),
-                }
-            )
         return records
 
     @staticmethod

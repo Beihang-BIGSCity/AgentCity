@@ -21,6 +21,15 @@ test_migration(
 )
 ```
 
+**Mandatory**: every final validation run MUST go through the `test_migration` tool — it is what
+archives the run (stdout/stderr/metrics) into the migration result store. Use `bash` only for
+quick iterative debugging (syntax checks, short smoke runs); once the model runs, do the
+conclusive benchmark via `test_migration`, even with reduced epochs. Never report final metrics
+from a bare `bash` run.
+
+When using `bash` for LibCity runs, always prefix with an OS-level timeout (e.g.
+`timeout 900 python run_model.py ...`) so a hung process cannot stall the whole stage.
+
 ### 2. Analyze Output
 The tool returns stdout/stderr. Check for:
 - **Success indicators**: "Epoch", "train_loss", "val_loss", metrics
