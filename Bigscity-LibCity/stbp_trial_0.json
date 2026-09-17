@@ -1,0 +1,18 @@
+{
+  "input_window": 12,
+  "output_window": 12,
+  "in_channel": 12,
+  "out_channel": 12,
+  "head": 1,
+  "learner": "adamw",
+  "patience": 30,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "scaler": "standard",
+  "load_external": false,
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+  "hidden_channel": 128,
+  "weight_decay": 0.0,
+  "dropout": 0.0
+}

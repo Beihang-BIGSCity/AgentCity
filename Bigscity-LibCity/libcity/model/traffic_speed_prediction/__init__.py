@@ -1,5 +1,6 @@
 from libcity.model.traffic_speed_prediction.DCRNN import DCRNN
 from libcity.model.traffic_speed_prediction.STGCN import STGCN
+from libcity.model.traffic_speed_prediction.AGCRN import AGCRN
 from libcity.model.traffic_speed_prediction.GWNET import GWNET
 from libcity.model.traffic_speed_prediction.MTGNN import MTGNN
 from libcity.model.traffic_speed_prediction.TGCLSTM import TGCLSTM
@@ -78,10 +79,13 @@ from libcity.model.traffic_speed_prediction.GNNRF import GNNRF
 from libcity.model.traffic_speed_prediction.FCNNBus import FCNNBus
 from libcity.model.traffic_speed_prediction.Garner import Garner
 from libcity.model.traffic_speed_prediction.MVGRL import MVGRL
+from libcity.model.traffic_speed_prediction.PMDformer import PMDformer
+from libcity.model.traffic_speed_prediction.STBP import STBP
 
 __all__ = [
     "DCRNN",
     "STGCN",
+    "AGCRN",
     "GWNET",
     "TGCLSTM",
     "TGCN",
@@ -142,4 +146,6 @@ __all__ = [
     "FCNNBus",
     "Garner",
     "MVGRL",
+    "PMDformer",
+    "STBP",
 ]

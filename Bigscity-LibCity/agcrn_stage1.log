@@ -1,0 +1,181 @@
+/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/pipeline/pipeline.py:12: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, name):
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/hyperopt/atpe.py:19: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/executor/__init__.py:37: UserWarning: KgContextExecutor not available due to missing dependencies: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_scatter_cuda.so: undefined symbol: _ZN2at4_ops16div__Tensor_mode4callERNS_6TensorERKS2_St8optionalIN3c1017basic_string_viewIcEEE
+  warnings.warn(f"KgContextExecutor not available due to missing dependencies: {e}")
+2026-09-17 08:14:24,218 - INFO - Log directory: ./libcity/log
+  0%|          | 0/27 [00:00<?, ?trial/s, best loss=?]2026-09-17 08:14:24,223 - INFO - running parameters:
+2026-09-17 08:14:24,224 - INFO - {'embed_dim': 10, 'learning_rate': 0.001, 'rnn_units': 32}
+2026-09-17 08:14:25,812 - INFO - Loaded file PEMSD4.geo, num_nodes=307
+2026-09-17 08:14:25,818 - INFO - set_weight_link_or_dist: link
+2026-09-17 08:14:25,818 - INFO - init_weight_inf_or_zero: zero
+2026-09-17 08:14:25,824 - INFO - Loaded file PEMSD4.rel, shape=(307, 307)
+2026-09-17 08:14:25,824 - INFO - Loading file PEMSD4.dyna
+2026-09-17 08:14:33,225 - INFO - Loaded file PEMSD4.dyna, shape=(16992, 307, 1)
+                                                      (16992, 307, 1)
+  0%|          | 0/27 [00:09<?, ?trial/s, best loss=?]2026-09-17 08:14:38,297 - INFO - Dataset created
+2026-09-17 08:14:38,297 - INFO - x shape: (16969, 12, 307, 1), y shape: (16969, 12, 307, 1)
+2026-09-17 08:14:38,307 - INFO - train	x: (11878, 12, 307, 1), y: (11878, 12, 307, 1)
+2026-09-17 08:14:38,307 - INFO - eval	x: (1697, 12, 307, 1), y: (1697, 12, 307, 1)
+2026-09-17 08:14:38,307 - INFO - test	x: (3394, 12, 307, 1), y: (3394, 12, 307, 1)
+2026-09-17 08:14:54,689 - INFO - Saved at ./libcity/cache/dataset_cache/point_based_PEMSD4_12_12_0.7_0.1_standard_64_False_False_False_True.npz
+2026-09-17 08:14:54,952 - INFO - StandardScaler mean: 208.8526392966568, std: 157.3266062823488
+2026-09-17 08:14:54,952 - INFO - NoneScaler
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: /home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_scatter/_scatter_cuda.so: undefined symbol: _ZN2at4_ops16div__Tensor_mode4callERNS_6TensorERKS2_St8optionalIN3c1017basic_string_viewIcEEE
+  import torch_geometric.typing
+
+2026-09-17 08:14:59,966 - INFO - AGCRN(
+  (encoder): AVWDCRNN(
+    (dcrnn_cells): ModuleList(
+      (0-1): 2 x AGCRNCell(
+        (gate): AVWGCN()
+        (update): AVWGCN()
+      )
+    )
+  )
+  (end_conv): Conv2d(1, 12, kernel_size=(1, 32), stride=(1, 1))
+)
+2026-09-17 08:14:59,966 - INFO - node_embeddings	torch.Size([307, 10])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.0.gate.weights_pool	torch.Size([10, 2, 33, 64])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.0.gate.bias_pool	torch.Size([10, 64])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.0.update.weights_pool	torch.Size([10, 2, 33, 32])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.0.update.bias_pool	torch.Size([10, 32])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.1.gate.weights_pool	torch.Size([10, 2, 64, 64])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.1.gate.bias_pool	torch.Size([10, 64])	cuda:0	True
+2026-09-17 08:14:59,966 - INFO - encoder.dcrnn_cells.1.update.weights_pool	torch.Size([10, 2, 64, 32])	cuda:0	True
+2026-09-17 08:14:59,967 - INFO - encoder.dcrnn_cells.1.update.bias_pool	torch.Size([10, 32])	cuda:0	True
+2026-09-17 08:14:59,967 - INFO - end_conv.weight	torch.Size([12, 1, 1, 32])	cuda:0	True
+2026-09-17 08:14:59,967 - INFO - end_conv.bias	torch.Size([12])	cuda:0	True
+2026-09-17 08:14:59,967 - INFO - Total parameter numbers: 191626
+2026-09-17 08:14:59,967 - INFO - You select `adam` optimizer.
+2026-09-17 08:14:59,967 - INFO - You select `masked_mae` as train loss function.
+2026-09-17 08:14:59,967 - INFO - Start training ...
+2026-09-17 08:14:59,967 - INFO - num_batches:186
+2026-09-17 08:15:22,880 - INFO - epoch complete!
+2026-09-17 08:15:22,881 - INFO - evaluating now!
+2026-09-17 08:15:24,440 - INFO - Epoch [0/100] train_loss: 81.5735, val_loss: 32.6828, lr: 0.001000, 24.47s
+2026-09-17 08:15:24,449 - INFO - Saved model at 0
+2026-09-17 08:15:24,449 - INFO - Val loss decrease from inf to 32.6828, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch0.tar
+2026-09-17 08:15:45,063 - INFO - epoch complete!
+2026-09-17 08:15:45,064 - INFO - evaluating now!
+2026-09-17 08:15:46,468 - INFO - Epoch [1/100] train_loss: 28.8032, val_loss: 28.2261, lr: 0.001000, 22.02s
+2026-09-17 08:15:46,475 - INFO - Saved model at 1
+2026-09-17 08:15:46,475 - INFO - Val loss decrease from 32.6828 to 28.2261, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch1.tar
+2026-09-17 08:16:06,799 - INFO - epoch complete!
+2026-09-17 08:16:06,799 - INFO - evaluating now!
+2026-09-17 08:16:08,426 - INFO - Epoch [2/100] train_loss: 26.2335, val_loss: 26.5522, lr: 0.001000, 21.95s
+2026-09-17 08:16:08,434 - INFO - Saved model at 2
+2026-09-17 08:16:08,434 - INFO - Val loss decrease from 28.2261 to 26.5522, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch2.tar
+2026-09-17 08:16:28,889 - INFO - epoch complete!
+2026-09-17 08:16:28,889 - INFO - evaluating now!
+2026-09-17 08:16:30,432 - INFO - Epoch [3/100] train_loss: 25.1771, val_loss: 25.6199, lr: 0.001000, 22.00s
+2026-09-17 08:16:30,439 - INFO - Saved model at 3
+2026-09-17 08:16:30,440 - INFO - Val loss decrease from 26.5522 to 25.6199, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch3.tar
+2026-09-17 08:16:51,167 - INFO - epoch complete!
+2026-09-17 08:16:51,167 - INFO - evaluating now!
+2026-09-17 08:16:52,612 - INFO - Epoch [4/100] train_loss: 24.2812, val_loss: 24.6912, lr: 0.001000, 22.17s
+2026-09-17 08:16:52,619 - INFO - Saved model at 4
+2026-09-17 08:16:52,619 - INFO - Val loss decrease from 25.6199 to 24.6912, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch4.tar
+2026-09-17 08:17:12,286 - INFO - epoch complete!
+2026-09-17 08:17:12,287 - INFO - evaluating now!
+2026-09-17 08:17:13,905 - INFO - Epoch [5/100] train_loss: 23.7905, val_loss: 24.3000, lr: 0.001000, 21.29s
+2026-09-17 08:17:13,913 - INFO - Saved model at 5
+2026-09-17 08:17:13,913 - INFO - Val loss decrease from 24.6912 to 24.3000, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch5.tar
+2026-09-17 08:17:33,834 - INFO - epoch complete!
+2026-09-17 08:17:33,835 - INFO - evaluating now!
+2026-09-17 08:17:35,139 - INFO - Epoch [6/100] train_loss: 23.4970, val_loss: 24.2124, lr: 0.001000, 21.23s
+2026-09-17 08:17:35,146 - INFO - Saved model at 6
+2026-09-17 08:17:35,146 - INFO - Val loss decrease from 24.3000 to 24.2124, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch6.tar
+2026-09-17 08:17:55,095 - INFO - epoch complete!
+2026-09-17 08:17:55,096 - INFO - evaluating now!
+2026-09-17 08:17:56,415 - INFO - Epoch [7/100] train_loss: 23.2748, val_loss: 24.0294, lr: 0.001000, 21.27s
+2026-09-17 08:17:56,422 - INFO - Saved model at 7
+2026-09-17 08:17:56,423 - INFO - Val loss decrease from 24.2124 to 24.0294, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch7.tar
+2026-09-17 08:18:16,549 - INFO - epoch complete!
+2026-09-17 08:18:16,550 - INFO - evaluating now!
+2026-09-17 08:18:18,188 - INFO - Epoch [8/100] train_loss: 23.0552, val_loss: 23.4767, lr: 0.001000, 21.77s
+2026-09-17 08:18:18,198 - INFO - Saved model at 8
+2026-09-17 08:18:18,198 - INFO - Val loss decrease from 24.0294 to 23.4767, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch8.tar
+2026-09-17 08:18:39,126 - INFO - epoch complete!
+2026-09-17 08:18:39,127 - INFO - evaluating now!
+2026-09-17 08:18:40,711 - INFO - Epoch [9/100] train_loss: 22.8715, val_loss: 23.3037, lr: 0.001000, 22.51s
+2026-09-17 08:18:40,721 - INFO - Saved model at 9
+2026-09-17 08:18:40,721 - INFO - Val loss decrease from 23.4767 to 23.3037, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch9.tar
+2026-09-17 08:19:01,408 - INFO - epoch complete!
+2026-09-17 08:19:01,409 - INFO - evaluating now!
+2026-09-17 08:19:02,758 - INFO - Epoch [10/100] train_loss: 22.7070, val_loss: 23.0858, lr: 0.001000, 22.04s
+2026-09-17 08:19:02,766 - INFO - Saved model at 10
+2026-09-17 08:19:02,766 - INFO - Val loss decrease from 23.3037 to 23.0858, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch10.tar
+2026-09-17 08:19:24,001 - INFO - epoch complete!
+2026-09-17 08:19:24,003 - INFO - evaluating now!
+2026-09-17 08:19:25,890 - INFO - Epoch [11/100] train_loss: 22.5414, val_loss: 22.9775, lr: 0.001000, 23.12s
+2026-09-17 08:19:25,900 - INFO - Saved model at 11
+2026-09-17 08:19:25,900 - INFO - Val loss decrease from 23.0858 to 22.9775, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch11.tar
+2026-09-17 08:19:46,591 - INFO - epoch complete!
+2026-09-17 08:19:46,592 - INFO - evaluating now!
+2026-09-17 08:19:47,935 - INFO - Epoch [12/100] train_loss: 22.4056, val_loss: 22.8256, lr: 0.001000, 22.03s
+2026-09-17 08:19:47,942 - INFO - Saved model at 12
+2026-09-17 08:19:47,943 - INFO - Val loss decrease from 22.9775 to 22.8256, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch12.tar
+2026-09-17 08:20:08,239 - INFO - epoch complete!
+2026-09-17 08:20:08,240 - INFO - evaluating now!
+2026-09-17 08:20:09,688 - INFO - Epoch [13/100] train_loss: 22.2636, val_loss: 22.9599, lr: 0.001000, 21.75s
+2026-09-17 08:20:30,406 - INFO - epoch complete!
+2026-09-17 08:20:30,407 - INFO - evaluating now!
+2026-09-17 08:20:31,807 - INFO - Epoch [14/100] train_loss: 22.1834, val_loss: 22.5308, lr: 0.001000, 22.12s
+2026-09-17 08:20:31,815 - INFO - Saved model at 14
+2026-09-17 08:20:31,815 - INFO - Val loss decrease from 22.8256 to 22.5308, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch14.tar
+2026-09-17 08:20:51,976 - INFO - epoch complete!
+2026-09-17 08:20:51,977 - INFO - evaluating now!
+2026-09-17 08:20:53,697 - INFO - Epoch [15/100] train_loss: 22.0826, val_loss: 22.5542, lr: 0.001000, 21.88s
+2026-09-17 08:21:14,582 - INFO - epoch complete!
+2026-09-17 08:21:14,582 - INFO - evaluating now!
+2026-09-17 08:21:16,091 - INFO - Epoch [16/100] train_loss: 21.9705, val_loss: 22.3851, lr: 0.001000, 22.39s
+2026-09-17 08:21:16,099 - INFO - Saved model at 16
+2026-09-17 08:21:16,099 - INFO - Val loss decrease from 22.5308 to 22.3851, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch16.tar
+2026-09-17 08:21:37,080 - INFO - epoch complete!
+2026-09-17 08:21:37,081 - INFO - evaluating now!
+2026-09-17 08:21:38,901 - INFO - Epoch [17/100] train_loss: 21.8636, val_loss: 22.1836, lr: 0.001000, 22.80s
+2026-09-17 08:21:38,909 - INFO - Saved model at 17
+2026-09-17 08:21:38,910 - INFO - Val loss decrease from 22.3851 to 22.1836, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch17.tar
+2026-09-17 08:21:59,740 - INFO - epoch complete!
+2026-09-17 08:21:59,741 - INFO - evaluating now!
+2026-09-17 08:22:01,319 - INFO - Epoch [18/100] train_loss: 21.7737, val_loss: 22.2669, lr: 0.001000, 22.41s
+2026-09-17 08:22:21,172 - INFO - epoch complete!
+2026-09-17 08:22:21,172 - INFO - evaluating now!
+2026-09-17 08:22:22,449 - INFO - Epoch [19/100] train_loss: 21.6999, val_loss: 21.9290, lr: 0.001000, 21.13s
+2026-09-17 08:22:22,457 - INFO - Saved model at 19
+2026-09-17 08:22:22,457 - INFO - Val loss decrease from 22.1836 to 21.9290, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch19.tar
+2026-09-17 08:22:41,965 - INFO - epoch complete!
+2026-09-17 08:22:41,966 - INFO - evaluating now!
+2026-09-17 08:22:43,700 - INFO - Epoch [20/100] train_loss: 21.5805, val_loss: 21.9953, lr: 0.001000, 21.24s
+2026-09-17 08:23:03,174 - INFO - epoch complete!
+2026-09-17 08:23:03,175 - INFO - evaluating now!
+2026-09-17 08:23:04,644 - INFO - Epoch [21/100] train_loss: 21.5079, val_loss: 21.7844, lr: 0.001000, 20.94s
+2026-09-17 08:23:04,651 - INFO - Saved model at 21
+2026-09-17 08:23:04,651 - INFO - Val loss decrease from 21.9290 to 21.7844, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch21.tar
+2026-09-17 08:23:24,332 - INFO - epoch complete!
+2026-09-17 08:23:24,332 - INFO - evaluating now!
+2026-09-17 08:23:25,639 - INFO - Epoch [22/100] train_loss: 21.4143, val_loss: 21.8321, lr: 0.001000, 20.99s
+2026-09-17 08:23:45,445 - INFO - epoch complete!
+2026-09-17 08:23:45,445 - INFO - evaluating now!
+2026-09-17 08:23:46,866 - INFO - Epoch [23/100] train_loss: 21.3234, val_loss: 21.6074, lr: 0.001000, 21.23s
+2026-09-17 08:23:46,874 - INFO - Saved model at 23
+2026-09-17 08:23:46,874 - INFO - Val loss decrease from 21.7844 to 21.6074, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch23.tar
+2026-09-17 08:24:07,258 - INFO - epoch complete!
+2026-09-17 08:24:07,258 - INFO - evaluating now!
+2026-09-17 08:24:08,820 - INFO - Epoch [24/100] train_loss: 21.2744, val_loss: 21.5919, lr: 0.001000, 21.95s
+2026-09-17 08:24:08,831 - INFO - Saved model at 24
+2026-09-17 08:24:08,831 - INFO - Val loss decrease from 21.6074 to 21.5919, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch24.tar
+2026-09-17 08:24:29,347 - INFO - epoch complete!
+2026-09-17 08:24:29,348 - INFO - evaluating now!
+2026-09-17 08:24:30,754 - INFO - Epoch [25/100] train_loss: 21.1616, val_loss: 21.4389, lr: 0.001000, 21.92s
+2026-09-17 08:24:30,761 - INFO - Saved model at 25
+2026-09-17 08:24:30,761 - INFO - Val loss decrease from 21.5919 to 21.4389, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch25.tar
+2026-09-17 08:24:51,032 - INFO - epoch complete!
+2026-09-17 08:24:51,032 - INFO - evaluating now!
+2026-09-17 08:24:52,440 - INFO - Epoch [26/100] train_loss: 21.0624, val_loss: 21.2735, lr: 0.001000, 21.68s
+2026-09-17 08:24:52,447 - INFO - Saved model at 26
+2026-09-17 08:24:52,447 - INFO - Val loss decrease from 21.4389 to 21.2735, saving to ./libcity/cache/10905/model_cache/AGCRN_PEMSD4_epoch26.tar

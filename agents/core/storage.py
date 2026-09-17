@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 class StageStorage:
@@ -28,6 +28,7 @@ class StageStorage:
         prompt: str,
         summary: str,
         messages: List[Dict[str, Any]],
+        stats: Optional[Dict[str, Any]] = None,
     ) -> None:
         trimmed_messages = self._trim_messages(messages)
         entry = {
@@ -37,6 +38,7 @@ class StageStorage:
             "prompt": self._truncate_text(prompt, self._MAX_TEXT_LEN),
             "summary": self._truncate_text(summary, self._MAX_TEXT_LEN),
             "messages": trimmed_messages,
+            "stats": self._sanitize_stats(stats),
         }
         self.data["stages"].append(entry)
         self._persist()
@@ -73,6 +75,7 @@ class StageStorage:
             entry["messages"] = self._trim_messages(messages)
             entry["summary"] = self._truncate_text(entry.get("summary", ""), self._MAX_TEXT_LEN)
             entry["prompt"] = self._truncate_text(entry.get("prompt", ""), self._MAX_TEXT_LEN)
+            entry["stats"] = self._sanitize_stats(entry.get("stats"))
             trimmed.append(entry)
         self.data["stages"] = trimmed[-self._MAX_MESSAGES :]
 
@@ -101,6 +104,31 @@ class StageStorage:
                 entry["tool_input"] = cls._truncate_text(serialized, cls._MAX_TOOL_INPUT_LEN)
             trimmed.append(entry)
         return trimmed
+
+    @staticmethod
+    def _sanitize_stats(stats: Any) -> Optional[Dict[str, Any]]:
+        """Ensure stats is a safe dict or None."""
+        if not isinstance(stats, dict):
+            return None
+        allowed_keys = {
+            "duration_seconds",
+            "duration_api_ms",
+            "total_cost_usd",
+            "num_turns",
+            "input_tokens",
+            "output_tokens",
+            "cache_read_input_tokens",
+            "cache_creation_input_tokens",
+        }
+        sanitized = {}
+        for key in allowed_keys:
+            value = stats.get(key)
+            if value is not None:
+                try:
+                    sanitized[key] = float(value) if isinstance(value, (int, float)) else value
+                except (TypeError, ValueError):
+                    pass
+        return sanitized or None
 
     @staticmethod
     def _truncate_text(value: Any, limit: int) -> str:

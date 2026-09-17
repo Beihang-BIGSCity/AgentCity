@@ -120,6 +120,8 @@ def _sanitize_stage_payload(payload: Dict[str, object]) -> Dict[str, object]:
         item["messages"] = _trim_stage_messages(item.get("messages"))
         item["summary"] = _truncate_text(item.get("summary"), 2000)
         item["prompt"] = _truncate_text(item.get("prompt"), 2000)
+        stats = item.get("stats")
+        item["stats"] = stats if isinstance(stats, dict) else None
         sanitized.append(item)
     return {"stages": sanitized[-200:]}
 

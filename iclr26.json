@@ -1,0 +1,74 @@
+[
+  {
+  "title": "A General Spatio-Temporal Backbone with Scalable Contextual Pattern Bank for Urban Continual Forecasting",
+  "venue": "ICLR",
+  "year": 2026,
+  "score": null,
+  "arxiv_id": null,
+  "datasets": [
+    "PEMS04",
+    "PEMS08",
+    "UrbanCore"
+  ],
+  "metrics": {
+    "PEMS04": {
+      "MAE": null,
+      "RMSE": null,
+      "MAPE": null
+    }
+  },
+  "github": "https://github.com/Aoyu-Liu/STBP",
+  "model_name": "STBP",
+  "methodology": "Continual Spatio-Temporal Forecasting, Frequency Domain Representation (FreNet), Dynamic Linear Graph Attention (DLGA), Contextual Pattern Bank",
+  "analyzed": false,
+  "notes": "Addresses node expansion and temporal distribution drift in real-world streaming traffic data by freezing a general backbone and incrementally updating a scalable pattern bank."
+},
+  {
+    "title": "PMDformer: Patch-Mean Decoupling Information Transformer for Long-term Forecasting",
+    "venue": "ICLR",
+    "year": 2026,
+    "score": 6,
+    "arxiv_id": "2511.08272",
+    "datasets": [
+      "ETTh1",
+      "ETTm1",
+      "Weather",
+      "Traffic"
+    ],
+    "metrics": {
+      "ETTh1": {
+        "MSE": 0.364,
+        "MAE": 0.392
+      }
+    },
+    "github": "https://github.com/aohu1105/PMDformer",
+    "model_name": "PMDformer",
+    "methodology": "Patch-Mean Decoupling (PMD), Proximal Variable Attention (PVA), Trend Restoration Attention (TRA)",
+    "analyzed": false,
+    "notes": "Separates trend and residual shape information by subtracting the patch mean, ensuring attention mechanisms capture true shape similarities."
+  },
+  {
+    "title": "CPiRi: Channel Permutation-Invariant Relational Interaction for Multivariate Time Series Forecasting",
+    "venue": "ICLR",
+    "year": 2026,
+    "score": 6,
+    "arxiv_id": "2601.20318",
+    "datasets": [
+      "METR-LA",
+      "PEMS-BAY",
+      "PEMS-04",
+      "PEMS-08"
+    ],
+    "metrics": {
+      "METR-LA": {
+        "WAPE": 0.0914,
+        "MAE": 2.71
+      }
+    },
+    "github": "https://github.com/JasonStraka/CPiRi",
+    "model_name": "CPiRi",
+    "methodology": "Channel Permutation-Invariant (CPI), Spatio-Temporal Decoupling, Permutation-Invariant Regularization",
+    "analyzed": false,
+    "notes": "Addresses the channel ordering sensitivity of CD models and the relational reasoning lack of CI models in MTSF."
+  }
+]

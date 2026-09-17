@@ -55,6 +55,13 @@ const TRANSLATIONS = {
       "Stage completed without textual summary. Check raw transcript below.",
     "stages.transcript_label": "Transcript ({{count}} messages)",
     "stages.no_snippets": "No text snippets captured.",
+    "stages.stats.runtime": "Runtime",
+    "stages.stats.tokens_in": "Input Tokens",
+    "stages.stats.tokens_out": "Output Tokens",
+    "stages.stats.cost": "Cost",
+    "stages.stats.turns": "Turns",
+    "stages.stats.cache_read": "Cache Read",
+    "stages.stats.cache_create": "Cache Create",
     "articles.empty": "No articles cataloged yet. Run the pipeline to populate this grid.",
     "articles.datasets": "Datasets: {{value}}",
     "articles.datasets.unknown": "Unknown",
@@ -177,6 +184,13 @@ const TRANSLATIONS = {
     "stages.summary_fallback": "该阶段未生成文本摘要，可展开下方对话记录查看。",
     "stages.transcript_label": "对话记录（{{count}} 条消息）",
     "stages.no_snippets": "暂无文本片段。",
+    "stages.stats.runtime": "运行时间",
+    "stages.stats.tokens_in": "输入 Token",
+    "stages.stats.tokens_out": "输出 Token",
+    "stages.stats.cost": "费用",
+    "stages.stats.turns": "轮次",
+    "stages.stats.cache_read": "缓存读取",
+    "stages.stats.cache_create": "缓存写入",
     "articles.empty": "还没有论文被收录，先运行一次文献搜索吧。",
     "articles.datasets": "数据集：{{value}}",
     "articles.datasets.unknown": "未提供",
@@ -412,6 +426,46 @@ function canSelectForMigration(article) {
   return hasAvailablePdf(article) && hasRepo(article);
 }
 
+function formatDuration(seconds) {
+  if (seconds == null) return "--";
+  const s = Math.round(seconds);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  if (m < 60) return `${m}m ${rem}s`;
+  const h = Math.floor(m / 60);
+  return `${h}h ${m % 60}m ${rem}s`;
+}
+
+function formatTokenCount(count) {
+  if (count == null) return "--";
+  const n = Math.round(count);
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return n.toString();
+}
+
+function renderStageStats(stats) {
+  if (!stats || typeof stats !== "object") return "";
+  const items = [];
+  if (stats.duration_seconds != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.runtime")}</span><span class="stat-value">${formatDuration(stats.duration_seconds)}</span></span>`);
+  if (stats.input_tokens != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.tokens_in")}</span><span class="stat-value">${formatTokenCount(stats.input_tokens)}</span></span>`);
+  if (stats.output_tokens != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.tokens_out")}</span><span class="stat-value">${formatTokenCount(stats.output_tokens)}</span></span>`);
+  if (stats.total_cost_usd != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.cost")}</span><span class="stat-value">$${stats.total_cost_usd.toFixed(4)}</span></span>`);
+  if (stats.num_turns != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.turns")}</span><span class="stat-value">${stats.num_turns}</span></span>`);
+  if (stats.cache_read_input_tokens != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.cache_read")}</span><span class="stat-value">${formatTokenCount(stats.cache_read_input_tokens)}</span></span>`);
+  if (stats.cache_creation_input_tokens != null)
+    items.push(`<span class="stat-item"><span class="stat-label">${t("stages.stats.cache_create")}</span><span class="stat-value">${formatTokenCount(stats.cache_creation_input_tokens)}</span></span>`);
+  if (items.length === 0) return "";
+  return `<div class="stage-stats">${items.join("")}</div>`;
+}
+
 function renderStages(stagePayload) {
   const container = document.getElementById("stage-grid");
   const stages = Array.isArray(stagePayload?.stages)
@@ -467,6 +521,12 @@ function renderStages(stagePayload) {
 
     card.appendChild(header);
     card.appendChild(subLabel);
+    const statsHtml = renderStageStats(stage.stats);
+    if (statsHtml) {
+      const statsWrapper = document.createElement("div");
+      statsWrapper.innerHTML = statsHtml;
+      card.appendChild(statsWrapper.firstChild);
+    }
     card.appendChild(summary);
     card.appendChild(transcript);
     container.appendChild(card);

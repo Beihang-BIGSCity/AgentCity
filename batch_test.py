@@ -235,10 +235,10 @@ def main():
     gpu_usage = manager.dict({i: 0 for i in range(2)})
     gpu_locks = {i: manager.Lock() for i in range(2)}
     #model_list = ['DeepTTE','DOT','DutyTTE','ProbETA','MDTI','HierETA','MulT_TTE','HetETA']
-    model_list = ['SRSNet','LEAF','HSTWAVE','PatchSTG','STLLM']
+    model_list = ['PMDformer']
     #task = 'traffic_state_pred'
     task = 'traffic_state_pred'
-    dataset_list = ['PEMSD7','PEMS_BAY']
+    dataset_list = ['PEMS_BAY']
     manager = Manager()
     gpu_queue = manager.Queue()
     

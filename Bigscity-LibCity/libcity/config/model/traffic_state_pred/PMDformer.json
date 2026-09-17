@@ -1,0 +1,39 @@
+{
+  "model_name": "PMDformer",
+  "input_window": 12,
+  "output_window": 12,
+
+  "input_dim": 1,
+  "output_dim": 1,
+
+  "d_model": 512,
+  "n_heads": 8,
+  "e_layers": 3,
+  "v_layers": 1,
+  "d_ff": 512,
+  "dropout": 0.1,
+  "patch_size": 6,
+  "use_norm": true,
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": false,
+  "add_day_in_week": false,
+
+  "max_epoch": 50,
+  "batch_size": 32,
+  "learner": "adam",
+  "learning_rate": 0.001,
+  "weight_decay": 0,
+  "lr_epsilon": 1e-8,
+  "lr_decay": true,
+  "lr_scheduler": "multisteplr",
+  "lr_decay_ratio": 0.5,
+  "steps": [25, 40],
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": true,
+  "patience": 5
+}

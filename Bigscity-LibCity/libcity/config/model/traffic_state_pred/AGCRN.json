@@ -5,6 +5,11 @@
   "cheb_order": 2,
   "bidir_adj_mx": true,
 
+  "input_window": 12,
+  "output_window": 12,
+  "input_dim": 1,
+  "output_dim": 1,
+
   "scaler": "standard",
   "load_external": false,
   "normal_external": false,
@@ -13,10 +18,14 @@
   "add_day_in_week": false,
 
   "max_epoch": 100,
+  "batch_size": 64,
   "learner": "adam",
   "learning_rate": 0.003,
+  "weight_decay": 0,
+  "lr_epsilon": 1e-8,
+  "train_loss": "masked_mae",
   "lr_decay": false,
   "clip_grad_norm": false,
   "use_early_stop": true,
-  "patience": 50
+  "patience": 15
 }

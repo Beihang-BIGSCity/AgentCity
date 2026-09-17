@@ -177,6 +177,42 @@ main {
   padding: 0.25rem 0.75rem;
 }
 
+.stage-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(31, 63, 255, 0.04);
+  border: 1px solid rgba(31, 63, 255, 0.12);
+  border-radius: 0.75rem;
+}
+
+.stage-stats .stat-item {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.15rem 0.6rem;
+  border-right: 1px solid rgba(31, 63, 255, 0.12);
+  min-width: 0;
+}
+
+.stage-stats .stat-item:last-child {
+  border-right: none;
+}
+
+.stage-stats .stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.stage-stats .stat-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
 .btn {
   position: relative;
   display: inline-flex;

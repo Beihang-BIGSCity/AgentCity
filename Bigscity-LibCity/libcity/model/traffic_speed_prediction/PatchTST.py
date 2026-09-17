@@ -621,6 +621,7 @@ class PatchTST(AbstractTrafficStateModel):
 
         # Other parameters
         self.individual = config.get('individual', 0)
+        self.max_seq_len = config.get('max_seq_len', 1024)
         self.padding_patch = config.get('padding_patch', 'end')
         self.pe = config.get('pe', 'zeros')
         self.learn_pe = config.get('learn_pe', True)
@@ -652,6 +653,7 @@ class PatchTST(AbstractTrafficStateModel):
                 target_window=self.output_window,
                 patch_len=self.patch_len,
                 stride=self.stride,
+                max_seq_len=self.max_seq_len,
                 n_layers=self.e_layers,
                 d_model=self.d_model,
                 n_heads=self.n_heads,
@@ -677,6 +679,7 @@ class PatchTST(AbstractTrafficStateModel):
                 target_window=self.output_window,
                 patch_len=self.patch_len,
                 stride=self.stride,
+                max_seq_len=self.max_seq_len,
                 n_layers=self.e_layers,
                 d_model=self.d_model,
                 n_heads=self.n_heads,
@@ -703,6 +706,7 @@ class PatchTST(AbstractTrafficStateModel):
                 target_window=self.output_window,
                 patch_len=self.patch_len,
                 stride=self.stride,
+                max_seq_len=self.max_seq_len,
                 n_layers=self.e_layers,
                 d_model=self.d_model,
                 n_heads=self.n_heads,

@@ -1,0 +1,12 @@
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-scatter'. Disabling its usage. Stacktrace: libcudart.so.12: cannot open shared object file: No such file or directory
+  import torch_geometric.typing
+/home/wangwenrui/opt/miniconda3/envs/autogen/lib/python3.10/site-packages/torch_geometric/__init__.py:4: UserWarning: An issue occurred while importing 'torch-sparse'. Disabling its usage. Stacktrace: libcudart.so.12: cannot open shared object file: No such file or directory
+  import torch_geometric.typing
+Warning: transformers library not installed. MulT_TTE requires transformers.
+IMPORT OK <class 'libcity.model.traffic_speed_prediction.AGCRN.AGCRN'>
+PARAMS 745940
+X (2, 12, 20, 1) OUT (2, 12, 20, 1)
+BACKWARD OK
+SMOKE TEST PASS

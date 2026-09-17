@@ -297,6 +297,7 @@
             "STWave",
             "UrbanDiT",
             "PDFormer",
+            "PMDformer",
             "STGNCDE",
             "ASTGNN",
             "ASTGNNCommon",
@@ -342,7 +343,8 @@
             "GNNRF",
             "FCNNBus",
             "Garner",
-            "MVGRL"
+            "MVGRL",
+            "STBP"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -411,6 +413,11 @@
         "PDFormer": {
             "dataset_class": "PDFormerDataset",
             "executor": "PDFormerExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "PMDformer": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
         },
         "STWave": {
@@ -974,6 +981,11 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "MVGRL": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "STBP": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

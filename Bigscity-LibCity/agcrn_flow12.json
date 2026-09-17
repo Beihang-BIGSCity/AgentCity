@@ -1,0 +1,9 @@
+{
+  "data_col": ["traffic_flow"],
+  "output_dim": 1,
+  "max_epoch": 100,
+  "patience": 15,
+  "train_loss": "masked_mae",
+  "num_layers": 2,
+  "clip_grad_norm": false
+}
