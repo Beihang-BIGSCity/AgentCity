@@ -39,7 +39,7 @@ def get_tuning_workflow() -> WorkflowDefinition:
                 ),
                 lead_agent_prompt_builder=build_tuning_lead_prompt,
                 agents=build_tuning_agents,  # Will be called with context
-                lead_model="sonnet",
+                lead_model="balanced",
             )
         ],
     )

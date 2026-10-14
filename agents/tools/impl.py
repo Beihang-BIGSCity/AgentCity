@@ -1,20 +1,28 @@
+"""Business tool implementations for the AgentCity MCP server.
+
+Adapted from the pi-agent-migration branch's agents/tools/impl.py. Every
+entry point is ``async def tool(args: dict) -> str`` so the FastMCP server
+(server.py) can delegate without blocking openjiuwen's async engine.
+"""
+
+from __future__ import annotations
+
 import asyncio
 import json
+import os
 import re
-import subprocess
+import warnings
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
-import warnings
-import requests
-from claude_agent_sdk import tool
 
-from agents import AppPaths, setup_logger
-from agents.core.orchestrator import AgentOrchestrator  # noqa: E501
-from agents.migration import MigrationCatalog, create_migration_stage_callback
+import requests
+from bs4 import BeautifulSoup
+
+from agents import AppPaths
 from agents.migration.runtime import get_active_paper
 from agents.migration.storage import MigrationResultStore
-from agents.migration.utils import extract_standard_metrics
+from agents.migration.utils import extract_standard_metrics, libcity_python
 from agents.tuning.tuning import (
     ensure_search_space,
     is_libcity_tuning_allowed,
@@ -28,15 +36,14 @@ paths.ensure()
 
 ARTICLE_CATALOG_PATH = paths.article_catalog
 MIGRATION_RESULTS_PATH = paths.run_dir / "migration_results.json"
-migration_catalog = MigrationCatalog(
-    catalog_path=paths.migration_catalog,
-    documentation_dir=paths.documentation_dir,
-    root=paths.root,
-)
 migration_store = MigrationResultStore(
     root=paths.root, base_dir=paths.run_dir / "migrations", index_path=MIGRATION_RESULTS_PATH
 )
-stage_callback = create_migration_stage_callback(migration_catalog)
+
+SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "")
+
+TEST_MIGRATION_TIMEOUT = 3600
+TUNE_MIGRATION_TIMEOUT = 7200
 
 
 def _as_bool(value, default: bool | None = None) -> bool | None:
@@ -93,56 +100,12 @@ def _append_article_record(record: dict) -> None:
         json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
     )
 
+
 def _truncate_text(value: str, limit: int = 12000) -> str:
     text = (value or "").strip()
     if len(text) > limit:
         return f"{text[:limit]}...[truncated]"
     return text
-
-
-@tool(
-    "catalog_article",
-    "Persist metadata about a located research paper and its saved PDF",
-    {
-        "title": str,
-        "conference": str,
-        "datasets": str,
-        "repo_url": str,
-        "pdf_path": str,
-        "notes": str,
-        "model_name": str,
-    },
-)
-async def catalog_article(args):
-    record = {
-        "title": args.get("title", "").strip(),
-        "conference": args.get("conference", "").strip(),
-        "datasets": args.get("datasets", ""),
-        "repo_url": args.get("repo_url", ""),
-        "repo_path": args.get("repo_path", ""),
-        "pdf_path": args.get("pdf_path", ""),
-        "notes": args.get("notes", ""),
-        "model_name": args.get("model_name", ""),
-    }
-    if not record["title"]:
-        return {
-            "content": [
-                {
-                    "type": "text",
-                    "text": "catalog_article failed: title is required.",
-                }
-            ]
-        }
-
-    _append_article_record(record)
-    return {
-        "content": [
-            {
-                "type": "text",
-                "text": f"Catalog updated for {record['title']}",
-            }
-        ]
-    }
 
 
 def _fetch_arxiv_metadata(arxiv_id: str) -> Dict[str, Any] | None:
@@ -181,27 +144,26 @@ def _fetch_arxiv_metadata(arxiv_id: str) -> Dict[str, Any] | None:
         return None
 
 
-@tool(
-    "search_paper",
-    "Search for academic papers on arXiv using Google Search API. Returns paper metadata including title, abstract, arxiv_id, and URLs.",
-    {
-        "query": str,
-        "num": int,
-        "end_date": str,
-    },
-)
-async def search_paper(args):
-    """Search for papers and return detailed metadata."""
+async def catalog_article(args: dict) -> str:
+    record = {
+        "title": args.get("title", "").strip(),
+        "conference": args.get("conference", "").strip(),
+        "datasets": args.get("datasets", ""),
+        "repo_url": args.get("repo_url", ""),
+        "repo_path": args.get("repo_path", ""),
+        "pdf_path": args.get("pdf_path", ""),
+        "notes": args.get("notes", ""),
+        "model_name": args.get("model_name", ""),
+    }
+    if not record["title"]:
+        return "catalog_article failed: title is required."
+
+    _append_article_record(record)
+    return f"Catalog updated for {record['title']}"
+
+
+def _search_paper_sync(query: str, num: int, end_date: str | None) -> str:
     url = "https://google.serper.dev/search"
-    query = args.get("query")
-    num = args.get("num", 10)
-    end_date = args.get("end_date")
-
-    if not query:
-        return {
-            "content": [{"type": "text", "text": "search_paper failed: query is required"}]
-        }
-
     search_query = f"{query} site:arxiv.org"
     if end_date:
         try:
@@ -217,7 +179,7 @@ async def search_paper(args):
     })
 
     headers = {
-        'X-API-KEY': "1163e00449dce84869048401eccca059865553ff",
+        'X-API-KEY': SERPER_API_KEY,
         'Content-Type': 'application/json'
     }
 
@@ -226,7 +188,7 @@ async def search_paper(args):
 
     for _ in range(3):
         try:
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", url, headers=headers, data=payload, timeout=30)
             if response.status_code == 200:
                 results = json.loads(response.text)
                 for paper in results.get('organic', []):
@@ -255,61 +217,64 @@ async def search_paper(args):
             continue
 
     if not papers:
-        return {
-            "content": [{"type": "text", "text": f"No papers found for query: {query}"}]
-        }
+        return f"No papers found for query: {query}"
 
     result_text = json.dumps(papers, ensure_ascii=False, indent=2)
-    return {
-        "content": [{"type": "text", "text": f"Found {len(papers)} papers:\n{result_text}"}]
-    }
+    return f"Found {len(papers)} papers:\n{result_text}"
 
 
-@tool(
-    "evaluate_paper_relevance",
-    "Evaluate whether a paper is relevant to the user query based on title and abstract.",
-    {
-        "title": str,
-        "abstract": str,
-        "user_query": str,
-    },
-)
-async def evaluate_paper_relevance(args):
-    """Placeholder tool for paper relevance evaluation. Claude should use its own judgment."""
+async def search_paper(args: dict) -> str:
+    """Search for papers and return detailed metadata."""
+    query = args.get("query")
+    num = _as_int(args.get("num"), 10)
+    end_date = args.get("end_date")
+
+    if not query:
+        return "search_paper failed: query is required"
+
+    return await asyncio.to_thread(_search_paper_sync, query, num, end_date)
+
+
+async def evaluate_paper_relevance(args: dict) -> str:
+    """Placeholder tool for paper relevance evaluation. The agent should use its own judgment."""
     title = args.get("title", "")
     abstract = args.get("abstract", "")
     user_query = args.get("user_query", "")
 
-    return {
-        "content": [{
-            "type": "text",
-            "text": f"Paper evaluation request received.\nTitle: {title}\nAbstract: {abstract[:500]}...\nQuery: {user_query}\n\nPlease use your judgment to evaluate this paper's relevance."
-        }]
-    }
+    return (
+        f"Paper evaluation request received.\nTitle: {title}\nAbstract: {abstract[:500]}...\n"
+        f"Query: {user_query}\n\nPlease use your judgment to evaluate this paper's relevance."
+    )
 
-@tool(
-    "test_migration",
-    "Run the LibCity benchmark with the provided model and dataset (supports GPU acceleration)",
-    {"model_name": str, "dataset": str, "task": str, "paper_title": str, "gpu": str},
-)
-async def test_migration(args):
+
+async def _run_subprocess(cmd: List[str], cwd: Path, timeout: int) -> tuple[int, str, str]:
+    """Run a subprocess without blocking the event loop."""
+    proc = await asyncio.create_subprocess_exec(
+        *cmd,
+        cwd=str(cwd),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    try:
+        stdout_b, stderr_b = await asyncio.wait_for(proc.communicate(), timeout=timeout)
+    except asyncio.TimeoutError:
+        proc.kill()
+        await proc.wait()
+        return -1, "", f"process killed after {timeout}s timeout"
+    return proc.returncode, stdout_b.decode(errors="replace"), stderr_b.decode(errors="replace")
+
+
+async def test_migration(args: dict) -> str:
     model_name = args.get("model_name")
     dataset = args.get("dataset", "METR_LA")
     task = args.get("task", "traffic_state_pred")
     gpu = args.get("gpu", "0")  # Default to cuda:0
     if not model_name:
-        return {
-            "content": [
-                {
-                    "type": "text",
-                    "text": "test_migration failed: provide model_name",
-                }
-            ]
-        }
+        return "test_migration failed: provide model_name"
 
-    repo_dir = Path("Bigscity-LibCity")
+    repo_dir = paths.root / "Bigscity-LibCity"
     cmd = [
-        "python",
+        libcity_python(),
         "run_model.py",
         "--task",
         task,
@@ -323,22 +288,16 @@ async def test_migration(args):
     stdout = ""
     stderr = ""
     status = "success"
-    try:
-        result = subprocess.run(
-            cmd, cwd=repo_dir, capture_output=True, text=True, check=True
-        )
-        stdout = result.stdout or ""
-        stderr = result.stderr or ""
+    returncode, stdout, stderr = await _run_subprocess(cmd, cwd=repo_dir, timeout=TEST_MIGRATION_TIMEOUT)
+    if returncode == 0:
         output = stdout or "LibCity run completed without stdout output."
-    except subprocess.CalledProcessError as exc:
+    else:
         status = "error"
-        stdout = exc.stdout or ""
-        stderr = exc.stderr or ""
         output = "\n".join(
             [
                 "LibCity execution failed.",
                 f"Command: {' '.join(cmd)}",
-                f"Return code: {exc.returncode}",
+                f"Return code: {returncode}",
                 stdout,
                 stderr,
             ]
@@ -366,46 +325,13 @@ async def test_migration(args):
             "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         },
     )
-    return {
-        "content": [
-            {
-                "type": "text",
-                "text": _truncate_text(output),
-            }
-        ]
-    }
+    return _truncate_text(output)
 
 
-@tool(
-    "tune_migration_model",
-    "Hyperparameter tuning for migrated LibCity models (supports GPU acceleration)",
-    {
-        "model_name": str,
-        "dataset": str,
-        "config_file": str,
-        "task": str,
-        "params_file": str,
-        "search_space": dict,
-        "hyper_algo": str,
-        "max_evals": int,
-        "max_trials": int,
-        "saved_model": bool,
-        "train": bool,
-        "gpu": str,
-        "extra_cli_args": dict,
-    },
-)
-async def tune_migration_model(args):
+async def tune_migration_model(args: dict) -> str:
     model_name = args.get("model_name")
     if not model_name:
-        return {
-            "content": [
-                {
-                    "type": "text",
-                    "text": "tune_migration_model failed: provide model_name",
-                }
-            ]
-        }
+        return "tune_migration_model failed: provide model_name"
 
     dataset = args.get("dataset", "PEMSD8")
     task = args.get("task", "traffic_state_pred")
@@ -427,7 +353,7 @@ async def tune_migration_model(args):
     train_flag = _as_bool(args.get("train"))
     extra_cli_args = args.get("extra_cli_args")
     cli_args: Dict[str, Any] = extra_cli_args if isinstance(extra_cli_args, dict) else {}
-    repo_dir = Path("Bigscity-LibCity")
+    repo_dir = paths.root / "Bigscity-LibCity"
 
     libcity_env_enabled = is_libcity_tuning_allowed()
     result: Dict[str, Any] | None = None
@@ -441,20 +367,24 @@ async def tune_migration_model(args):
             params_file = (
                 params_file_arg if params_file_arg and params_file_arg.exists() else write_params_file(paths.run_dir, search_space)
             )
-            libcity_result = run_libcity_tuning(
-                repo_dir=repo_dir,
-                run_dir=paths.run_dir,
-                model_name=model_name,
-                dataset_name=dataset,
-                params_file=params_file,
-                task=task,
-                config_file=config_file,
-                hyper_algo=hyper_algo,
-                max_evals=max_evals,
-                saved_model=saved_model,
-                train=train_flag,
-                gpu_id=gpu,
-                extra_cli_args=cli_args,
+            libcity_result = await asyncio.wait_for(
+                asyncio.to_thread(
+                    run_libcity_tuning,
+                    repo_dir=repo_dir,
+                    run_dir=paths.run_dir,
+                    model_name=model_name,
+                    dataset_name=dataset,
+                    params_file=params_file,
+                    task=task,
+                    config_file=config_file,
+                    hyper_algo=hyper_algo,
+                    max_evals=max_evals,
+                    saved_model=saved_model,
+                    train=train_flag,
+                    gpu_id=gpu,
+                    extra_cli_args=cli_args,
+                ),
+                timeout=TUNE_MIGRATION_TIMEOUT,
             )
             if libcity_result.get("status") == "success":
                 result = libcity_result
@@ -465,25 +395,22 @@ async def tune_migration_model(args):
 
     if result is None:
         try:
-            result = run_custom_grid_search(
-                repo_dir=repo_dir,
-                model_name=model_name,
-                dataset_name=dataset,
-                search_space=search_space,
-                task=task,
-                config_file=config_file,
-                max_trials=max_trials,
-                gpu_id=gpu,
+            result = await asyncio.wait_for(
+                asyncio.to_thread(
+                    run_custom_grid_search,
+                    repo_dir=repo_dir,
+                    model_name=model_name,
+                    dataset_name=dataset,
+                    search_space=search_space,
+                    task=task,
+                    config_file=config_file,
+                    max_trials=max_trials,
+                    gpu_id=gpu,
+                ),
+                timeout=TUNE_MIGRATION_TIMEOUT,
             )
         except Exception as exc:
-            return {
-                "content": [
-                    {
-                        "type": "text",
-                        "text": f"tune_migration_model encountered an error: {exc}",
-                    }
-                ]
-            }
+            return f"tune_migration_model encountered an error: {exc}"
 
     metrics = result.get("best_metrics") or {}
     paper = get_active_paper() or {}
@@ -539,25 +466,108 @@ async def tune_migration_model(args):
         summary_lines.append(f"Hyper-result saved to: {artifacts['hyper_result']}")
     if result.get("trials"):
         summary_lines.append(f"Trials run: {len(result['trials'])}")
-    return {
-        "content": [
-            {
-                "type": "text",
-                "text": _truncate_text("\n".join(summary_lines)),
-            }
-        ]
+    return _truncate_text("\n".join(summary_lines))
+
+
+def _web_search_sync(query: str, num: int) -> str:
+    url = "https://google.serper.dev/search"
+    payload = json.dumps({
+        "q": query,
+        "num": num,
+        "page": 1,
+    })
+
+    headers = {
+        'X-API-KEY': SERPER_API_KEY,
+        'Content-Type': 'application/json'
     }
 
+    response = requests.request("POST", url, headers=headers, data=payload, timeout=30)
+    if response.status_code != 200:
+        return f"web_search failed: HTTP {response.status_code}: {response.text[:500]}"
 
-async def main():
-    logger = setup_logger(paths.log_file)
-    orchestrator = AgentOrchestrator(
-        paths=paths,
-        logger=logger,
-        stage_callback=stage_callback,
-    )
-    await orchestrator.run_full_pipeline()
+    results = json.loads(response.text)
+    organic = [
+        {
+            "title": item.get("title", ""),
+            "link": item.get("link", ""),
+            "snippet": item.get("snippet", ""),
+        }
+        for item in results.get("organic", [])
+    ]
+    return json.dumps(organic, ensure_ascii=False, indent=2)
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+async def web_search(args: dict) -> str:
+    """Search the web via the Serper Google Search API."""
+    query = args.get("query")
+    num = _as_int(args.get("num"), 10)
+
+    if not query:
+        return "web_search failed: query is required"
+
+    return await asyncio.to_thread(_web_search_sync, query, num)
+
+
+def _web_fetch_sync(url: str, max_chars: int) -> str:
+    response = requests.get(url, timeout=30)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "html.parser")
+    for element in soup(["script", "style"]):
+        element.decompose()
+    text = soup.get_text(separator="\n")
+    text = re.sub(r"\n\s*\n+", "\n\n", text).strip()
+    return _truncate_text(text, limit=max_chars)
+
+
+async def web_fetch(args: dict) -> str:
+    """Fetch a URL and return its plain-text content, truncated to max_chars."""
+    url = args.get("url")
+    max_chars = _as_int(args.get("max_chars"), 20000)
+
+    if not url:
+        return "web_fetch failed: url is required"
+
+    try:
+        return await asyncio.to_thread(_web_fetch_sync, url, max_chars)
+    except Exception as exc:
+        return f"web_fetch failed: {exc}"
+
+
+def _read_pdf_text_sync(pdf_path: Path, max_pages: int, max_chars: int) -> str:
+    import pdfplumber
+
+    chunks: List[str] = []
+    total = 0
+    with pdfplumber.open(str(pdf_path)) as pdf:
+        for index, page in enumerate(pdf.pages):
+            if index >= max_pages:
+                chunks.append(f"...[truncated after {max_pages} pages]")
+                break
+            text = page.extract_text() or ""
+            remaining = max_chars - total
+            if remaining <= 0:
+                chunks.append("...[truncated by max_chars]")
+                break
+            chunks.append(text[:remaining])
+            total += len(text[:remaining])
+    return "\n\n".join(chunks).strip()
+
+
+async def read_pdf_text(args: dict) -> str:
+    """Extract plain text from a PDF file (replaces Claude's native PDF reading)."""
+    raw_path = args.get("pdf_path") or args.get("path")
+    max_pages = _as_int(args.get("max_pages"), 40)
+    max_chars = _as_int(args.get("max_chars"), 60000)
+
+    pdf_path = _resolve_project_path(raw_path)
+    if pdf_path is None or not pdf_path.exists():
+        return f"read_pdf_text failed: file not found: {raw_path}"
+
+    try:
+        text = await asyncio.to_thread(_read_pdf_text_sync, pdf_path, max_pages, max_chars)
+    except Exception as exc:
+        return f"read_pdf_text failed: {exc}"
+    if not text:
+        return f"read_pdf_text: no extractable text in {pdf_path}"
+    return text

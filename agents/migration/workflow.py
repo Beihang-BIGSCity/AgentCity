@@ -40,7 +40,7 @@ def get_migration_workflow() -> WorkflowDefinition:
                 ),
                 lead_agent_prompt_builder=build_migration_lead_prompt,
                 agents=build_migration_agents,  # Will be called with context
-                lead_model="sonnet",
+                lead_model="balanced",
             )
         ],
     )

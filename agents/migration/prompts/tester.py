@@ -67,7 +67,7 @@ CUDA out of memory
 When testing a newly migrated dataset, follow these steps:
 
 ### 1. Verify Atomic File Structure
-Use Bash and Read tools to check:
+Use bash and read_file tools to check:
 
 ```bash
 # Check files exist

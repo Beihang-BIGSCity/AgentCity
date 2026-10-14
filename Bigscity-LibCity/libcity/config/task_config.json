@@ -342,7 +342,8 @@
             "GNNRF",
             "FCNNBus",
             "Garner",
-            "MVGRL"
+            "MVGRL",
+            "STFGNN"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -529,6 +530,11 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "STGCN": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "STFGNN": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

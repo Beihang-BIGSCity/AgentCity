@@ -34,10 +34,10 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
 
         ## Your Role
         You coordinate a team of specialized agents to search, evaluate, and analyze academic papers.
-        Your ONLY tool is `Task` - you MUST delegate ALL work to your subagents.
+        You coordinate through the team collaboration tools (`create_task`, `send_message`, `list_members`) - you MUST delegate ALL work to your teammates. Your teammates are already registered; address them by member name.
 
         ## Your Team
-        1. **paper-searcher**: Executes search queries using WebSearch and search_paper tools
+        1. **paper-searcher**: Executes search queries using web_search and search_paper tools
         2. **paper-evaluator**: Evaluates paper relevance and assigns scores
         3. **paper-analyzer**: Downloads PDFs, extracts metadata, and catalogs papers
 
@@ -77,11 +77,13 @@ def build_literature_lead_prompt(context: AgentContext) -> str:
         4. A markdown table with columns: [Title, Venue, Year, Score, Datasets, Repo URL]
 
         ## Critical Rules
-        - You MUST use the Task tool to delegate - do NOT research directly
+        - You MUST delegate via create_task/send_message - do NOT research directly
         - Wait for each agent to complete before proceeding to the next phase
         - Do NOT skip any phase
         - Keep your responses concise (2-3 sentences between delegations)
         - No emojis, no greetings, focus on coordination
+
+        - When all phases are complete and your final summary is written, stop. The framework closes the round automatically once every task is complete.
 
         Begin by delegating the search task to paper-searcher.
         """

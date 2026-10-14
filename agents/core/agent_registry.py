@@ -26,24 +26,24 @@ def build_literature_agents(context: AgentContext) -> Dict[str, AgentDefinition]
             name="paper-searcher",
             description=(
                 "Searches academic databases for relevant papers using configured "
-                "keywords and filters. Uses WebSearch and search_paper tools to find "
+                "keywords and filters. Uses web_search and search_paper tools to find "
                 "papers from arXiv and other sources. Returns raw paper metadata "
                 "(title, abstract, arxiv_id, URLs) without evaluating relevance."
             ),
             tools=["WebSearch", "search_paper"],
             prompt=SEARCHER_SYSTEM_PROMPT,
-            model="haiku",
+            model="fast",
         ),
         "paper-analyzer": AgentDefinition(
             name="paper-analyzer",
             description=(
                 "Reads PDF papers, extracts metadata, datasets, and repository information. "
-                "Uses Read tool to read PDFs directly (Claude Code supports PDF natively). "
-                f"Saves paper metadata to {context.article_dir}/catalog.json using Write tool."
+                "Uses the read_pdf_text MCP tool to extract PDF text, and Read for other files. "
+                f"Saves paper metadata to {context.article_dir}/catalog.json using write_file tool."
             ),
-            tools=["Read", "Write", "Glob"],
+            tools=["Read", "Write", "Glob", "read_pdf_text"],
             prompt=ANALYZER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
         "paper-evaluator": AgentDefinition(
             name="paper-evaluator",
@@ -54,7 +54,7 @@ def build_literature_agents(context: AgentContext) -> Dict[str, AgentDefinition]
             ),
             tools=["Read", "evaluate_paper_relevance"],
             prompt=EVALUATOR_SYSTEM_PROMPT,
-            model="sonnet",
+            model="balanced",
         ),
     }
 
@@ -82,7 +82,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Bash", "Glob", "Read"],
             prompt=CLONER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="balanced",
         ),
         "model-adapter": AgentDefinition(
             name="model-adapter",
@@ -93,7 +93,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Edit", "Glob", "Grep"],
             prompt=ADAPTER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
         "config-migrator": AgentDefinition(
             name="config-migrator",
@@ -104,7 +104,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Edit", "Glob"],
             prompt=CONFIG_SYSTEM_PROMPT,
-            model="sonnet",
+            model="balanced",
         ),
         "migration-tester": AgentDefinition(
             name="migration-tester",
@@ -115,7 +115,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["test_migration", "Bash", "Read"],
             prompt=TESTER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
         "dataset-downloader": AgentDefinition(
             name="dataset-downloader",
@@ -126,7 +126,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Bash", "Glob", "Read", "WebFetch"],
             prompt=DATASET_DOWNLOADER_SYSTEM_PROMPT,
-            model="sonnet",
+            model="balanced",
         ),
         "dataset-converter": AgentDefinition(
             name="dataset-converter",
@@ -137,7 +137,7 @@ def build_migration_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
             prompt=DATASET_CONVERTER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
     }
 
@@ -161,7 +161,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Glob", "Grep"],
             prompt=PLANNER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
         "tuning-executor": AgentDefinition(
             name="tuning-executor",
@@ -172,7 +172,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["tune_migration_model", "Bash", "Read"],
             prompt=EXECUTOR_SYSTEM_PROMPT,
-            model="sonnet",
+            model="balanced",
         ),
         "result-analyzer": AgentDefinition(
             name="result-analyzer",
@@ -183,7 +183,7 @@ def build_tuning_agents(context: AgentContext) -> Dict[str, AgentDefinition]:
             ),
             tools=["Read", "Write", "Glob"],
             prompt=ANALYZER_SYSTEM_PROMPT,
-            model="opus",
+            model="strong",
         ),
     }
 

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "model": "STFGNN",
+    "task": "traffic_state_pred",
+    "dataset": "PEMSD7",
+    "hyper_algo": "grid_search",
+    "author": "tuning-planner",
+    "date": "2026-09-20",
+    "libcity_config": "libcity/config/model/traffic_state_pred/STFGNN.json",
+    "paper": "STFGNN, AAAI 2021 (arXiv:2012.09641) - Table 2"
+  },
+
+  "search_space": {
+    "learning_rate": [0.0005, 0.001, 0.002, 0.005],
+    "batch_size": [32, 64],
+    "first_layer_embedding_size": [32, 64, 128]
+  },
+
+  "per_trial_max_epoch": 5,
+  "estimated_trials": 24,
+  "trial_budget_limit": 50,
+  "trial_grid_shape": "4 (learning_rate) x 2 (batch_size) x 3 (first_layer_embedding_size) = 24",
+
+  "selection_metric": "best_valid_score = mean DE-NORMALIZED validation Huber loss (STFGNN.calculate_loss = huber_loss(delta=rho=1), lower is better); report test MAE/RMSE/masked-MAPE alongside",
+
+  "priority_params": ["learning_rate", "batch_size", "first_layer_embedding_size"],
+
+  "frozen_params": {
+    "input_window": 12,
+    "output_window": 12,
+    "filters": [[64, 64, 64], [64, 64, 64], [64, 64, 64]],
+    "act_type": "GLU",
+    "module_type": "individual",
+    "use_mask": true,
+    "temporal_emb": true,
+    "spatial_emb": true,
+    "strides": 4,
+    "rho": 1.0,
+    "out_layer_dim": 128,
+    "adj_dtw_default": "identity",
+    "scaler": "standard",
+    "load_external": false,
+    "normal_external": false,
+    "ext_scaler": "none",
+    "add_time_in_day": false,
+    "add_day_in_week": false,
+    "learner": "adam",
+    "weight_decay": 0,
+    "lr_decay": false,
+    "clip_grad_norm": false,
+    "use_early_stop": false,
+    "max_epoch": 5,
+    "train_rate": 0.7,
+    "eval_rate": 0.1
+  },
+
+  "run_hyper_params_file_lines": [
+    "learning_rate choice [0.0005, 0.001, 0.002, 0.005]",
+    "batch_size choice [32, 64]",
+    "first_layer_embedding_size choice [32, 64, 128]"
+  ],
+
+  "example_command": "python run_hyper.py --task traffic_state_pred --model STFGNN --dataset PEMSD7 --params_file documentation/STFGNN_search_space.run_hyper.txt --hyper_algo grid_search --max_epoch 5 --gpu True --gpu_id 1 --exp_id stfgnn_tune",
+
+  "paper_benchmark": {
+    "source": "STFGNN AAAI 2021, Table 2 (arXiv:2012.09641v2); verified by result-analyzer",
+    "PEMSD7_paper_avg_h1_12": {"MAE": 22.07, "RMSE": 35.80, "MAPE_pct": 9.21},
+    "PEMSD7_stop_target_5pct": {"MAE": 23.17, "RMSE": 37.59},
+    "current_smoke_2epoch_PEMSD7": {"MAE": 29.93, "RMSE": 43.95, "masked_MAPE_pct": 15.01},
+    "paper_training_recipe": "Adam lr=1e-3, batch=32, epochs=200, 3 STSGCL layers, filters 64, Huber delta=1"
+  },
+
+  "rationale": {
+    "learning_rate": "Top-leverage parameter. Paper anchor = 1e-3 (verified in the original repo configs). The paper uses an Adam + PolyScheduler(pwr=2, warmup=1 epoch) recipe; LibCity config runs a CONSTANT lr (lr_decay=false). Under a short per-trial budget (5 epochs) a constant lr is effectively more aggressive than the paper's warm-started schedule, so the grid brackets 1e-3 with one value below (0.0005, guards stability) and two above (0.002, 0.005, offset the short budget / underfit).",
+    "batch_size": "Paper uses 32; the migrated LibCity config default is 64. This is a genuine paper-vs-config divergence, and batch size strongly affects optimization dynamics and effective step count per epoch, so both are tested. (Note: batch_size is part of LibCity's dataset cache key, so switching it regenerates the cached dataset once.)",
+    "first_layer_embedding_size": "The input-projection width; paper and config both use 64. The migrated model already has ~13.4M params on PEMSD7 (883 nodes), so both a smaller (32, capacity/regularization probe) and a larger (128) value are informative around the verified 64 center."
+  },
+
+  "assumptions": [
+    "Paper hyperparameters (lr=1e-3, batch=32, epochs=200, filters [[64,64,64]]x3, Huber rho=1) are taken from the original repo configs config/*/individual_3layer_12T.json as recorded in documentation/STFGNN_repo_analysis.md; they were NOT re-read from a paper PDF in this task.",
+    "Paper benchmark metrics are those verified by result-analyzer from Table 2 (arXiv:2012.09641v2), not independently re-derived here.",
+    "Tuning is run at per_trial_max_epoch=5 (not the shipped max_epoch=100) purely to fit the trial budget; the winning configuration must be re-trained at the full epoch budget before the final paper comparison.",
+    "dropout is NOT tunable: the migrated STFGNN model contains no dropout anywhere (confirmed in documentation/STFGNN_config_notes.md and STFGNN.py).",
+    "strides and filters are frozen because strides=4 is hard-coupled to the (4N,4N) fusion-graph builder and filters define the paper architecture."
+  ]
+}

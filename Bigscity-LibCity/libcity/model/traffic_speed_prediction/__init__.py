@@ -78,6 +78,7 @@ from libcity.model.traffic_speed_prediction.GNNRF import GNNRF
 from libcity.model.traffic_speed_prediction.FCNNBus import FCNNBus
 from libcity.model.traffic_speed_prediction.Garner import Garner
 from libcity.model.traffic_speed_prediction.MVGRL import MVGRL
+from libcity.model.traffic_speed_prediction.STFGNN import STFGNN
 
 __all__ = [
     "DCRNN",
@@ -142,4 +143,5 @@ __all__ = [
     "FCNNBus",
     "Garner",
     "MVGRL",
+    "STFGNN",
 ]

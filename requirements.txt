@@ -190,3 +190,9 @@ xxhash==3.6.0
 yarl==1.22.0
 zipp==3.23.0
 zstandard==0.23.0
+# openJiuwen migration (jiuwen env, Python 3.11+)
+openjiuwen==0.1.18
+fastmcp>=2.14
+pdfplumber>=0.11
+opentelemetry-sdk>=1.44
+opentelemetry-exporter-otlp>=1.44

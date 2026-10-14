@@ -1,7 +1,20 @@
 from __future__ import annotations
 
+import os
 import re
 from typing import Dict, Mapping, MutableMapping
+
+LIBCITY_PYTHON_ENV = "AGENTCITY_LIBCITY_PYTHON"
+
+
+def libcity_python() -> str:
+    """Interpreter used to launch LibCity subprocesses (run_model.py / run_hyper.py).
+
+    The orchestrator runs under the openJiuwen env, which does not have torch;
+    point AGENTCITY_LIBCITY_PYTHON at the env that can actually run LibCity.
+    """
+
+    return os.environ.get(LIBCITY_PYTHON_ENV, "python")
 
 
 def build_paper_signature(article: Mapping[str, object] | None) -> str:
@@ -62,4 +75,5 @@ __all__ = [
     "sanitize_signature",
     "merge_article_metadata",
     "extract_standard_metrics",
+    "libcity_python",
 ]

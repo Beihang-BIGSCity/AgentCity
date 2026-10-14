@@ -57,7 +57,7 @@ class AgentDefinition:
     description: str
     tools: List[str]
     prompt: str
-    model: str = "sonnet"
+    model: str = "balanced"
 
 
 @dataclass
@@ -76,7 +76,7 @@ class MultiAgentStage:
     description: str
     lead_agent_prompt_builder: PromptBuilder
     agents: Union[Dict[str, AgentDefinition], AgentBuilder]
-    lead_model: str = "sonnet"
+    lead_model: str = "balanced"
 
 
 @dataclass

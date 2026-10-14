@@ -8,3 +8,6 @@ cache/
 /.claude/
 /batch_logs/
 /datasets/
+/logs/
+/pi_backend/
+/agents/core/harness_profiles/*.local.yaml

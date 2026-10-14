@@ -4,14 +4,17 @@ import asyncio
 import json
 from typing import Callable, Dict, Iterable, List, Optional
 
-from claude_agent_sdk import ClaudeAgentOptions, ClaudeSDKClient
-
 from agents.literature.workflow import get_literature_workflow
 from agents.migration.runtime import clear_active_paper, set_active_paper
 from agents.migration.workflow import get_migration_workflow
 from agents.tuning.workflow import get_tuning_workflow
 
 from .config import AppPaths, build_default_context, resolve_year_filter
+from .openjiuwen_backend import (
+    HarnessProfile,
+    ensure_runner_started,
+    shutdown_runner,
+)
 from .pipeline import AgentPipeline
 from .storage import StageStorage
 from .types import WorkflowDefinition
@@ -32,24 +35,7 @@ class AgentOrchestrator:
             "migration": get_migration_workflow,
             "tuning": get_tuning_workflow,
         }
-        self._options = ClaudeAgentOptions(
-            allowed_tools=[
-                "Read",
-                "Write",
-                "Edit",
-                "Bash",
-                "Grep",
-                "Glob",
-                "WebSearch",
-                "search_paper",
-                "evaluate_paper_relevance",
-                "catalog_article",
-                "test_migration",
-                "tune_migration_model",
-            ],
-            permission_mode="bypassPermissions",
-            setting_sources=["project"],  # Load skills (pdf) and plugins (ralph-wiggum) from .claude directory
-        )
+        self._profile = HarnessProfile.load()
 
     async def run_workflows(
         self,
@@ -95,9 +81,10 @@ class AgentOrchestrator:
             if not preserve_stage_log:
                 storage.reset()
 
-            async with ClaudeSDKClient(options=self._options) as client:
+            await ensure_runner_started()
+            try:
                 pipeline = AgentPipeline(
-                    client=client,
+                    profile=self._profile,
                     workflows=workflows,
                     storage=storage,
                     logger=self.logger,
@@ -105,6 +92,8 @@ class AgentOrchestrator:
                     stage_callback=self._stage_callback,
                 )
                 await pipeline.run()
+            finally:
+                await shutdown_runner()
 
     async def run_full_pipeline(self) -> None:
         await self.run_workflows(["literature", "migration"])

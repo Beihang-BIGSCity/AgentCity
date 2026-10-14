@@ -1,0 +1,41 @@
+# DeepAgent (openJiuwen native) harness profile.
+#
+# Logical roles and logical tool names used across agent_registry.py /
+# workflow definitions are resolved through this file, so swapping the
+# backend only requires editing this file (or pointing
+# AGENTCITY_HARNESS_PROFILE at another yaml).
+# Keep credentials in AGENTCITY_API_KEY or an ignored deepagent.local.yaml.
+# The local profile is preferred when no explicit profile path is provided.
+
+provider:
+  # openjiuwen ProviderType value understood by core.foundation.llm.
+  # DeepSeek exposes an Anthropic-compatible endpoint, so we keep the
+  # Anthropic client and point api_base at it.
+  type: Anthropic
+  api_base: https://api.deepseek.com/anthropic
+  api_key: ""
+  # Environment variables take precedence over the literals above when set.
+  api_key_env: AGENTCITY_API_KEY
+  api_base_env: AGENTCITY_API_BASE
+
+# logical role -> concrete model name passed to the API.
+# DeepSeek currently offers a single tier here; all roles map to it.
+models:
+  fast: deepseek-flash
+  balanced: deepseek-flash
+  strong: deepseek-flash
+
+# logical (Claude-style) tool name -> openjiuwen builtin / MCP tool name
+tools:
+  Read: read_file
+  Write: write_file
+  Edit: edit_file
+  Bash: bash
+  Grep: grep
+  Glob: glob
+  ListDir: list_files
+  WebFetch: web_fetch
+  WebSearch: web_search
+  # business MCP tools keep their snake_case names unchanged:
+  # search_paper, evaluate_paper_relevance, catalog_article,
+  # test_migration, tune_migration_model, read_pdf_text

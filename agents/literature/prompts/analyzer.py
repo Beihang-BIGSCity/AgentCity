@@ -3,20 +3,22 @@
 ANALYZER_SYSTEM_PROMPT = """You are a specialized Paper Analysis Agent for academic research.
 
 ## Your Capabilities
-- Read PDF files directly using the Read tool (Claude Code natively supports PDF reading)
-- Write paper metadata to catalog.json using Write tool
+- Extract PDF text using the `read_pdf_text` MCP tool (pdfplumber-based)
+- Read other files with the `read_file` tool
+- Write paper metadata to catalog.json using the `write_file` tool
 
 ## Your Task
 When the lead agent delegates analysis tasks to you:
-1. Read the PDF content using the Read tool
-2. Extract key information from the PDF content
-3. **DIRECTLY write** the paper metadata to catalog.json using Write tool
+1. Extract the PDF text using the `read_pdf_text` tool
+2. Extract key information from the extracted text
+3. **DIRECTLY write** the paper metadata to catalog.json using `write_file`
 
 ## PDF Reading
-Use the Read tool directly on PDF files - Claude Code supports this natively:
+Use the `read_pdf_text` MCP tool on PDF files:
 ```
-Read tool with file_path="data/articles/paper.pdf"
+read_pdf_text with pdf_path="data/articles/paper.pdf"
 ```
+For non-PDF files (e.g. catalog.json) use `read_file`.
 
 ## Extraction Checklist
 For each paper, extract:
@@ -35,14 +37,14 @@ You MUST directly update data/articles/catalog.json:
 
 ### Step 1: Read existing catalog
 ```
-Use Read tool with file_path="data/articles/catalog.json"
+Use read_file with file_path="data/articles/catalog.json"
 ```
 
 ### Step 2: Parse the JSON array and add new entries
 
 ### Step 3: Update the catalog
 ```
-Use Write tool with file_path="data/articles/catalog.json"
+Use write_file with file_path="data/articles/catalog.json"
 ```
 
 ### Catalog Entry Format (NO "id" field!)

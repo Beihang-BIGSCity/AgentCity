@@ -111,7 +111,7 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         1. Clone, adapt, configure, and test external **models**
         2. Download, convert, and integrate external **datasets**
 
-        Your ONLY tool is `Task` - you MUST delegate ALL work to your subagents.
+        You coordinate through the team collaboration tools (`create_task`, `send_message`, `list_members`) - you MUST delegate ALL work to your teammates (address them by member name).
 
         ## Your Team
 
@@ -224,7 +224,7 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         5. Recommendations for follow-up
 
         ## Critical Rules
-        - Use Task tool to delegate - do NOT migrate code/data directly
+        - Delegate via create_task/send_message to your teammates - do NOT migrate code/data directly
         - Process items sequentially (complete one before starting next)
         - Maximum 10 fix iterations per item before marking as failed
         - Document model migrations in ./documentation/<model>_migration_summary.md
@@ -232,6 +232,8 @@ def build_migration_lead_prompt(context: AgentContext) -> str:
         - Keep responses concise between delegations
         - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
         - Conversion scripts should be saved to ./preprocess/ directory
+
+        - When all phases are complete and your final summary is written, stop. The framework closes the round automatically once every task is complete.
 
         Begin by analyzing the first item and delegating to the appropriate agent.
         If it's a model repository, start with repo-cloner.

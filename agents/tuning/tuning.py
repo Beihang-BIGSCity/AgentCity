@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence
 
-from agents.migration.utils import extract_standard_metrics, sanitize_signature
+from agents.migration.utils import extract_standard_metrics, libcity_python, sanitize_signature
 
 LIBCITY_TUNING_ENV = "AGENTCITY_ALLOW_LIBCITY_TUNING"
 DEFAULT_TUNING_SPACE: Dict[str, List[Any]] = {
@@ -105,7 +105,7 @@ def run_libcity_tuning(
     """Run LibCity's run_hyper.py and parse its output."""
 
     cmd = [
-        "python",
+        libcity_python(),
         "run_hyper.py",
         "--task",
         task,
@@ -191,7 +191,7 @@ def run_custom_grid_search(
             break
         params = dict(zip(keys, combo))
         cmd = [
-            "python",
+            libcity_python(),
             "run_model.py",
             "--task",
             task,

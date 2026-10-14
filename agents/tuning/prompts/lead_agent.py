@@ -44,7 +44,7 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
 
         ## Your Role
         You coordinate a team of specialized agents to plan, execute, and analyze hyperparameter tuning.
-        Your ONLY tool is `Task` - you MUST delegate ALL work to your subagents.
+        You coordinate through the team collaboration tools (`create_task`, `send_message`, `list_members`) - you MUST delegate ALL work to your teammates (address them by member name).
 
         ## Your Team
         1. **tuning-planner**: Designs hyperparameter search spaces
@@ -107,12 +107,14 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
         4. Any models requiring further investigation
 
         ## Critical Rules
-        - Use Task tool to delegate - do NOT tune directly
+        - Delegate via create_task/send_message to your teammates - do NOT tune directly
         - Keep search spaces tractable (< 50 trials)
         - Document everything for reproducibility in ./documentation
         - Stop tuning if results are within 5% of paper
         - Keep responses concise between delegations
         - Do not create documents or test scripts out of the ./documents/ or ./tests/ directories
+
+        - When all phases are complete and your final summary is written, stop. The framework closes the round automatically once every task is complete.
 
         Begin by delegating the planning task for the first model to tuning-planner.
         """
