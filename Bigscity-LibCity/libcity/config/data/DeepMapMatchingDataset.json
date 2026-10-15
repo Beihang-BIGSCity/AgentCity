@@ -1,0 +1,16 @@
+{
+  "delta_time": true,
+  "grid_size": 50,
+  "train_rate": 0.7,
+  "eval_rate": 0.1,
+  "batch_size": 32,
+  "eval_batch_size": 64,
+  "downsample_rate": 0.5,
+  "max_road_len": 25,
+  "min_road_len": 15,
+  "layer": 2,
+  "gamma": 1.0,
+  "num_workers": 0,
+  "shuffle": true,
+  "cache_dataset": true
+}

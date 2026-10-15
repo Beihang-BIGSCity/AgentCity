@@ -1,0 +1,21 @@
+{
+    "batch_size": 64,
+    "num_workers": 0,
+    "seq_len": 512,
+    "add_cls": true,
+    "merge": true,
+    "min_freq": 1,
+    "max_train_size": null,
+    "vocab_path": null,
+    "baseline_bert": false,
+    "baseline_tf": false,
+    "roadnetwork": "bj_road_edge",
+    "geo_file": null,
+    "rel_file": null,
+    "bidir_adj_mx": false,
+    "append_degree2gcn": true,
+    "add_gat": true,
+    "gat_K": 1,
+    "load_trans_prob": true,
+    "normal_feature": false
+}

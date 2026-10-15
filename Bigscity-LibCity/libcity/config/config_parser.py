@@ -124,12 +124,11 @@ class ConfigParser(object):
                         self.config[key] = x[key]
 
     def _init_device(self):
-        use_gpu = self.config.get('gpu', True)
+        use_gpu = self.config.get('gpu', True) and torch.cuda.is_available()
         gpu_id = self.config.get('gpu_id', 0)
         if use_gpu:
             torch.cuda.set_device(gpu_id)
-        self.config['device'] = torch.device(
-            (f"cuda:{gpu_id}") if torch.cuda.is_available() and use_gpu else cpu)
+        self.config['device'] = torch.device(f"cuda:{gpu_id}" if use_gpu else "cpu")
 
     def get(self, key, default=None):
         return self.config.get(key, default)

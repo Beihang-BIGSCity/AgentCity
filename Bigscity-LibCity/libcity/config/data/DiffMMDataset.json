@@ -1,0 +1,14 @@
+{
+  "delta_time": true,
+  "train_rate": 0.7,
+  "eval_rate": 0.15,
+  "batch_size": 16,
+  "eval_batch_size": 8,
+  "num_cands": 10,
+  "cand_search_radius": 100,
+  "max_seq_len": 100,
+  "min_seq_len": 5,
+  "num_workers": 0,
+  "shuffle": true,
+  "cache_dataset": true
+}
