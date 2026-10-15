@@ -1,4 +1,4 @@
-"Agent control modules for the Claude automation workflow."
+"""Agent control modules for the spatio-temporal model adaptation pipeline."""
 
 from .core import (
     AgentBuilder,
@@ -8,43 +8,32 @@ from .core import (
     AgentPipeline,
     AppPaths,
     MultiAgentStage,
+    PromptBuilder,
     StageDefinition,
     StageRunner,
     StageStorage,
     WorkflowDefinition,
-    build_default_context,
-    build_literature_agents,
-    build_migration_agents,
-    build_tuning_agents,
+    build_context,
+    load_task_spec,
     setup_logger,
 )
-from .literature.workflow import get_literature_workflow
-from .migration.workflow import get_migration_workflow
-from .tuning.workflow import get_tuning_workflow
+from .adaptation.workflow import get_adaptation_workflow
 
 __all__ = [
-    # Core types
     "AgentBuilder",
     "AgentContext",
     "AgentDefinition",
+    "AgentOrchestrator",
     "AgentPipeline",
     "AppPaths",
     "MultiAgentStage",
+    "PromptBuilder",
     "StageDefinition",
     "StageRunner",
     "StageStorage",
     "WorkflowDefinition",
-    # Orchestrator
-    "AgentOrchestrator",
-    # Agent builders
-    "build_default_context",
-    "build_literature_agents",
-    "build_migration_agents",
-    "build_tuning_agents",
-    # Workflows
-    "get_literature_workflow",
-    "get_migration_workflow",
-    "get_tuning_workflow",
-    # Utilities
+    "build_context",
+    "get_adaptation_workflow",
+    "load_task_spec",
     "setup_logger",
 ]

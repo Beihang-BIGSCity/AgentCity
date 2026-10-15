@@ -1,23 +1,29 @@
 """AgentCity business tools package (FastMCP server + implementations)."""
 
 from agents.tools.impl import (
-    catalog_article,
-    evaluate_paper_relevance,
+    analyze_dataset,
+    get_module,
+    list_modules,
     read_pdf_text,
-    search_paper,
-    test_migration,
-    tune_migration_model,
+    record_experience,
+    register_module,
+    retrieve_knowledge,
+    run_adaptation,
+    tune_adaptation,
     web_fetch,
     web_search,
 )
 
 __all__ = [
-    "catalog_article",
-    "search_paper",
-    "evaluate_paper_relevance",
-    "test_migration",
-    "tune_migration_model",
-    "web_search",
-    "web_fetch",
+    "analyze_dataset",
+    "get_module",
+    "list_modules",
     "read_pdf_text",
+    "record_experience",
+    "register_module",
+    "retrieve_knowledge",
+    "run_adaptation",
+    "tune_adaptation",
+    "web_fetch",
+    "web_search",
 ]

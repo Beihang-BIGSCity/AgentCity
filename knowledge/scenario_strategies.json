@@ -1,0 +1,717 @@
+{
+  "version": 1,
+  "families": {
+    "environment": "环境态势特征",
+    "causality": "事件因果链路",
+    "constraint": "业务场景约束"
+  },
+  "updated_at": "2026-10-14T19:15:36Z",
+  "entries": [
+    {
+      "id": "env-metr-la-freeway-speed-moderate-volatility",
+      "family": "environment",
+      "title": "METR-LA 高速速度：中等波动 + 强持续性，有向扩散图优先",
+      "feature_profile": {
+        "cv_global": 0.2159,
+        "cv_node": 0.1763,
+        "spatial_heterogeneity": 0.1095,
+        "rho1": 0.7908,
+        "sampling_interval_min": 5.0,
+        "node_count": 207
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "diffusion_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "learning_rate 1e-3 -> 5e-4：STFGNN 在 PEMSD7 的 5-epoch 网格中 lr=5e-4 拿到最低 best_valid_score 27.10，高速数据同为 5 min 级采样，先降一档再观察",
+        "depth/layers 2 -> 3（上限 4）：ST-LEGO 的 METR-LA benchmark 条目用 DiffusionGCN layers=3 + GRU layers=3 + add 拿到 MAE 2.88",
+        "filter_type 保持 dual_random_walk、max_diffusion_step 2（DCRNN.json 默认）：METR-LA 邻接有向（207 节点 / 11753 条 rel 边），双向随机游走两跳扩散已覆盖上下游依赖，不必再加深传播",
+        "batch_size 64 与 lr_decay(multisteplr, lr_decay_ratio 0.1, steps [5,20,40,70]) 沿用 DCRNN.json 默认：rho1=0.791 序列平滑、梯度噪声小，先动 lr 与深度，再动 batch 与调度",
+        "clip_grad_norm=true / max_grad_norm=5 保持（DCRNN.json 默认）：速度序列约 8% 缺失，屏蔽项放大了有效梯度幅度，靠梯度裁剪而不是一味降 lr 维稳"
+      ],
+      "evidence": [
+        "LibCity raw_data/METR_LA 实测：207 节点 / 34272 时间步 / cv_global 0.216 / cv_node 0.176 / SH 0.109 / rho1 0.791 / 采样间隔 5 min / null_ratio 8.0%",
+        "ST-LEGO §3.2.4 Benchmark Updating Strategy：benchmark 先验 B 由历史上强的结构-性能记录构成，P(f) ∝ exp(Perf_B(f))，本条对应 METR-LA 条目（DiffusionGCN layers=3 + GRU layers=3 + add → MAE 2.88 / RMSE 5.91 / MAPE 7.83）",
+        "ST-LEGO §3.1：SH 越大越需要可学习邻接或注意力式空间编码器；本例 SH=0.109 属中低，固定图扩散卷积已足够；rho1=0.791 属高持续性，倾向 GRU 一类循环结构",
+        "ST-LEGO §App.F 表 6：METR-LA 207 objects、34272 timestamps、5 min（与 LibCity raw_data 实测一致）",
+        "LibCity config/model/traffic_state_pred/DCRNN.json：filter_type=dual_random_walk、max_diffusion_step=2、learning_rate=0.01、lr_decay=multisteplr(steps [5,20,40,70])、clip_grad_norm=true/max_grad_norm=5"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.4/§App.F 表 6；LibCity config/model/traffic_state_pred/DCRNN.json；LibCity raw_data/METR_LA 实测统计"
+    },
+    {
+      "id": "env-pems-bay-freeway-low-heterogeneity",
+      "family": "environment",
+      "title": "PeMS-Bay 高速速度：低空间异质性 + 极高持续性，固定邻接 + 循环时间分支",
+      "feature_profile": {
+        "cv_global": 0.1531,
+        "cv_node": 0.1381,
+        "spatial_heterogeneity": 0.0412,
+        "rho1": 0.9167,
+        "sampling_interval_min": 5.0,
+        "node_count": 325
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "lstm",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "cheb order Ks/K 3 -> 2：SH 仅 0.041，二阶邻域已覆盖主要依赖，省一阶传播算力（ASTGCN 默认 K=3、STGCN 默认 Ks=3，此处向 2 收敛）",
+        "learning_rate 1e-3 起步；若 valid 分数在 2 个 epoch 后仍陡降则提到 2e-3（STFGNN 网格中 lr=2e-3 拿到最低 test_MAE 27.39）",
+        "batch_size 64 -> 128：rho1=0.917 序列平滑、梯度噪声小，放大 batch 提升 CPU/GPU 吞吐",
+        "num_rnn_layers 2 / rnn_units 64 保持（DCRNN 默认）；lr_decay=false + max_epoch=100 与 DCRNN/GWNET 默认一致"
+      ],
+      "evidence": [
+        "LibCity raw_data/PEMS_BAY 实测：325 节点 / 17372 时间步 / cv_global 0.153 / cv_node 0.138 / SH 0.041 / rho1 0.917 / 采样间隔 5 min",
+        "ST-LEGO §3.1：SH 越大越需要可学习邻接或注意力式空间编码器；本例 SH=0.041，固定邻接谱卷积已足够",
+        "ST-LEGO §3.1：rho1 越高说明序列连续性越强，倾向 GRU 一类循环结构；本例 0.917 属最高组",
+        "ST-LEGO §App.F 表 6：PeMS-Bay 325 objects、52116 时间戳、5 min（本仓库 dyna 实测为 5 min 间隔）"
+      ],
+      "source": "ST-LEGO §3.1/§App.F 表 6；LibCity config/model/traffic_state_pred/STGCN.json（Ks=3、graph_conv_type=chebconv）"
+    },
+    {
+      "id": "env-pemsd4-urban-flow-smooth-multichannel",
+      "family": "environment",
+      "title": "PEMSD4 城市流量：极平滑 + 三通道输出，固定邻接 + 膨胀时序 + 加权融合",
+      "feature_profile": {
+        "cv_global": 0.1316,
+        "cv_node": 0.1085,
+        "spatial_heterogeneity": 0.0482,
+        "rho1": 0.9519,
+        "sampling_interval_min": 5.0,
+        "node_count": 307
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "dilated_tcn",
+        "fusion": "weighted",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "first_layer_embedding_size 64 保持（STSGCN/STFGNN 默认），input_dim=3 对应 traffic_flow/traffic_occupancy/traffic_speed 三通道",
+        "output_dim 1 -> 3：raw_data/PEMSD4/config.json 的 output_dim=3，输出头必须按 3 通道回归，否则 reshape 维度不匹配",
+        "dropout 0 -> 0.1：rho1=0.952 极易退化成「预测历史均值」，GWNET/MTGNN 默认 0.3 是上界，平滑流量从 0.1 起",
+        "learning_rate 1e-3 -> 3e-3（AGCRN 默认）在小 hidden_dim 下收敛更快；CPU 冒烟 max_epoch<=5"
+      ],
+      "evidence": [
+        "LibCity raw_data/PEMSD4 实测：307 节点 / 16992 时间步 / cv_global 0.132 / cv_node 0.108 / SH 0.048 / rho1 0.952 / 采样间隔 5 min / 无缺失",
+        "raw_data/PEMSD4/config.json：data_col=[traffic_flow, traffic_occupancy, traffic_speed]、output_dim=3、time_intervals=300",
+        "documentation/STFGNN_tune_results.csv：lr=0.002 + first_layer_embedding_size=32 得到最低 test_MAE=27.39，说明嵌入宽度与 lr 需联合搜索",
+        "ST-LEGO §App.F 表 6：PeMS04 307 objects、16992 时间戳、5 min"
+      ],
+      "source": "LibCity raw_data/PEMSD4/config.json；documentation/STFGNN_tune_results.csv；ST-LEGO §App.F 表 6"
+    },
+    {
+      "id": "env-pemsd7-large-heterogeneous-flow",
+      "family": "environment",
+      "title": "PEMSD7 大规模流量：高波动 + 高空间异质性，可学习邻接 + 门控膨胀时序",
+      "feature_profile": {
+        "cv_global": 0.6086,
+        "cv_node": 0.4862,
+        "spatial_heterogeneity": 0.3651,
+        "rho1": 0.9657,
+        "sampling_interval_min": 5.0,
+        "node_count": 883
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "concat",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "node embedding 维度 10 -> 40：AGCRN 默认 embed_dim=10、MTGNN 默认 node_dim=40；883 节点且 SH=0.365，先从 10 试到 40",
+        "batch_size 64 -> 32/16：全量模型 13,443,228 参数，CPU 冒烟必须缩小 batch 否则内存溢出（STSGCN 默认已是 32）",
+        "learning_rate 1e-3 -> 3e-3 并开 weight_decay 1e-4（MTGNN 默认），抑制大网络过拟合",
+        "clip_grad_norm true + max_grad_norm 5（DCRNN/GWNET/MTGNN 默认），并把 max_epoch 从 100 降到冒烟预算"
+      ],
+      "evidence": [
+        "LibCity raw_data/PEMSD7 实测：883 节点 / 14112 时间步 / cv_global 0.609 / cv_node 0.486 / SH 0.365 / rho1 0.966 / 采样间隔 5 min",
+        "ST-LEGO §3.1：SH 大 → 需要可学习邻接或注意力式空间编码器；§3.2.3：concat 融合适合异构输入",
+        "ST-LEGO §3.2.3：为避免显存溢出，模块最大深度被限制在 4",
+        "documentation/STFGNN_migration_summary.md：PEMSD7 全量 13,443,228 参数，2-epoch 冒烟 MAE 29.93 / RMSE 43.95 / masked-MAPE 15.01%；论文 Table 2 为 MAE 22.07 / RMSE 35.80 / MAPE 9.21%",
+        "documentation/STFGNN_tune_results.csv：test_MAPE 整列 inf（流量含真实 0），必须改用 masked_MAE/masked_MAPE"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.3；LibCity AGCRN.json(embed_dim=10)、MTGNN.json(node_dim=40)；documentation/STFGNN_migration_summary.md"
+    },
+    {
+      "id": "env-high-volatility-peak-periodic",
+      "family": "environment",
+      "title": "高波动多周期峰值：注意力空间 + Transformer 时间 + 分步输出",
+      "feature_profile": {
+        "cv_global": 0.45,
+        "cv_node": 0.38,
+        "spatial_heterogeneity": 0.3,
+        "rho1": 0.55,
+        "sampling_interval_min": 5.0,
+        "node_count": 640
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "spatial_attention",
+        "temporal": "temporal_transformer",
+        "fusion": "concat",
+        "head": "horizon_head"
+      },
+      "tuning_direction": [
+        "num_heads 4 -> 8，dropout 0.1 -> 0.2/0.3（GWNET/MTGNN 默认 0.3 为上界）：注意力在大波动数据上过拟合最快",
+        "learning_rate 1e-3 -> 5e-4：Transformer 分支对 lr 敏感；STFGNN 网格中 lr=5e-4 优于 5e-3",
+        "lr_scheduler=steplr + lr_decay_ratio 0.7 + step_size 5（STGCN 默认）作为小数据稳定训练模板",
+        "max_epoch 100 -> 30 并开 use_early_stop + patience 5（STNorm 默认）以省 CPU 时间"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：CVglobal 越大波动越强，鼓励使用更具表达力的时间编码器（TCN 或 Transformer）",
+        "ST-LEGO §4.6 图 4：表达力导向的 prompt 把模块选择推向 Transformer 与 GLU-TCN",
+        "ST-LEGO §4.8：去掉融合机制造成最差退化（GPT-3.5 MAE 3.63），印证时空融合的必要性",
+        "LibCity MTGNN.json：dropout=0.3、node_dim=40、layers=3，是大波动网络的容量参考"
+      ],
+      "source": "ST-LEGO §3.1/§4.6/§4.8；LibCity MTGNN.json / STGCN.json / STNorm.json"
+    },
+    {
+      "id": "env-sparse-observation-long-interval",
+      "family": "environment",
+      "title": "稀疏观测 + 长采样间隔：前向填充编码 + 可学习邻接 + LSTM",
+      "feature_profile": {
+        "cv_global": 0.28,
+        "cv_node": 0.33,
+        "spatial_heterogeneity": 0.22,
+        "rho1": 0.68,
+        "sampling_interval_min": 15.0,
+        "node_count": 400
+      },
+      "strategy": {
+        "encoder": "missing_fill_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "lstm",
+        "fusion": "weighted",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "缺失处理：LibCity 统一 nan_to_num(nan=0.0)，本场景改用沿时间轴前向填充（missing_fill_encoder），null_value 仍设 0.0 以复用 masked 损失",
+        "input_window 12 保持不要再缩短：5 min 采样下 12 步只有 3 小时历史，缩短会丢掉日周期信息",
+        "LSTM 优于 GRU（rho1=0.68，长间隔弱持续性）：num_rnn_layers 2、rnn_units 64（DCRNN 默认）",
+        "learning_rate 1e-2（DCRNN 默认）+ clip_grad_norm true / max_grad_norm 5：长间隔输入更易发散"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：交通数据历史窗口有限时统计量估计不稳，需 bootstrap 重采样 + 指数平滑做稳健估计",
+        "LibCity raw_data/METR_LA 实测 null_ratio=8.04%，说明把 0.0 当缺失是现实情形",
+        "ST-LEGO §App.B 模块库：LSTM 标注为「处理长序列更好，但更慢、更耗资源」，与长间隔场景匹配",
+        "LibCity DCRNN.json：learning_rate=1e-2、num_rnn_layers=2、rnn_units=64、clip_grad_norm=true(max_grad_norm=5)"
+      ],
+      "source": "ST-LEGO §3.1/§App.B；LibCity DCRNN.json；agents/adaptation/utils.py 实测 METR_LA 缺失率"
+    },
+    {
+      "id": "env-stationary-corridor-low-volatility-lightweight",
+      "family": "environment",
+      "title": "平稳低波动廊道：轻量固定邻接 + GRU，参数量优先",
+      "feature_profile": {
+        "cv_global": 0.09,
+        "cv_node": 0.07,
+        "spatial_heterogeneity": 0.035,
+        "rho1": 0.94,
+        "sampling_interval_min": 5.0,
+        "node_count": 180
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "filters 64 -> 32、first_layer_embedding_size 64 -> 32：把参数量压到 0.1M 量级以匹配效率型硬约束",
+        "depth 3 -> 1..2、Ks 3 -> 2：平稳数据低容量足够；另一极端是 STNorm 的 hidden_channels=16 + layers=4",
+        "learning_rate 1e-3 -> 1e-4（STNorm/ASTGCN 默认）并开 lr_decay steplr，平稳数据上更细的步长收敛更稳",
+        "max_epoch 保持任务规格；CPU 冒烟场景不做完整收敛，只看 pipeline 正确性"
+      ],
+      "evidence": [
+        "ST-LEGO §C.1：效率导向 prompt 要求参数紧凑、适配边缘实时部署，倾向 GRU/GCN/浅层",
+        "ST-LEGO §4.4：效率型 prompt 下模型参数约束为 <0.1M",
+        "LibCity STNorm.json：learning_rate=1e-4、hidden_channels=16、clip_grad_norm=true(max_grad_norm=10)",
+        "LibCity ASTGCN.json：learning_rate=1e-4、nb_block=2、K=3"
+      ],
+      "source": "ST-LEGO §C.1/§4.4；LibCity STNorm.json / ASTGCN.json"
+    },
+    {
+      "id": "cause-incident-shockwave-directed-propagation",
+      "family": "causality",
+      "title": "事故冲击波上下游传导：有向扩散 + 门控膨胀时序 + 跨注意力",
+      "feature_profile": {
+        "cv_global": 0.34,
+        "cv_node": 0.29,
+        "spatial_heterogeneity": 0.21,
+        "rho1": 0.62,
+        "sampling_interval_min": 5.0,
+        "node_count": 260
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "diffusion_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "cross_attention",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "max_diffusion_step 2 保持（DCRNN 默认）、filter_type=dual_random_walk：有向图上前后向随机游走各一套权重",
+        "dilation 1,2,4,8 -> 1,2,4：冲击波在 5–20 min 内衰减，过大的 dilation 会越过传播窗口",
+        "cross_attention 的 num_heads 4 -> 2：260 个节点上 2 头已够表达，省算力",
+        "loss 用 masked_mae 起步；若峰值误差主导则切 masked_mse（mlp_head 的 DEFAULT_LOSS）"
+      ],
+      "evidence": [
+        "ST-LEGO §App.B：DiffusionGCN 描述为「基于扩散过程、方向感知的传播」，正是冲击波上下游传导所需",
+        "ST-LEGO §3.2.3：空间建模捕捉低频模式、时间建模捕捉高频动态，融合方式由任务决定",
+        "ST-LEGO §3.2.2 桥接算子 Wbridge：两路表征宽度不一致时先投影再融合，跨注意力是更显式的对齐",
+        "LibCity DCRNN.json：filter_type=dual_random_walk、max_diffusion_step=2 证明有向扩散是该任务的现实配置"
+      ],
+      "source": "ST-LEGO §3.2.2/§3.2.3/§App.B；LibCity DCRNN.json"
+    },
+    {
+      "id": "cause-weather-fleet-wide-degradation",
+      "family": "causality",
+      "title": "天气导致全网性能退化：可学习邻接 + Transformer 全局时间建模",
+      "feature_profile": {
+        "cv_global": 0.52,
+        "cv_node": 0.44,
+        "spatial_heterogeneity": 0.26,
+        "rho1": 0.48,
+        "sampling_interval_min": 5.0,
+        "node_count": 512
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "temporal_transformer",
+        "fusion": "concat",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "邻接冷启：Graph WaveNet 默认 randomadj=true + aptonly=true，拓扑依赖随天气变化，先在随机支撑上冷启再学习",
+        "learning_rate 5e-4 -> 1e-3，并在 valid 分数出现平台期后启用 steplr（step_size 5、lr_decay_ratio 0.7）",
+        "depth 2 -> 3（上限 4）：天气是全局慢变量，需要更深的非线性堆叠",
+        "loss 由 masked_mae 切到 masked_mse：极端天气下大误差样本更关键（mlp_head DEFAULT_LOSS=masked_mse）"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：rho1 仅 0.48 且波动集中于天气事件，序列连续性弱，不应依赖循环结构",
+        "ST-LEGO §3.2.1 分布引导变异 P(m)=f(m)/Σf(m)：历史高频结构（AdaptiveGCN/MixHopGCN）可提高采样概率",
+        "ST-LEGO §4.6：PeMS03 上 GAT 与 GumbelGraph（可学习空间结构）主导选择",
+        "LibCity GWNET.json：dropout=0.3、blocks=4、layers=2、randomadj=true、aptonly=true"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.1/§4.6；LibCity GWNET.json"
+    },
+    {
+      "id": "cause-holiday-demand-shift-calendar-covariates",
+      "family": "causality",
+      "title": "节假日需求漂移：日历协变量 + 门控循环 + 加权融合",
+      "feature_profile": {
+        "cv_global": 0.24,
+        "cv_node": 0.31,
+        "spatial_heterogeneity": 0.19,
+        "rho1": 0.83,
+        "sampling_interval_min": 5.0,
+        "node_count": 307
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gru",
+        "fusion": "weighted",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "add_time_in_day true + add_day_in_week true：DCRNN/MTGNN/STSGCN 默认都开（STFGNN 默认关），节假日漂移必须显式喂入日历特征",
+        "load_external=true 时 normal_external=false、ext_scaler=none：先把协变量并入同尺度，再决定是否额外标准化",
+        "weighted 融合的 softmax 权重在节假日会偏向时间分支，把权重曲线作为可解释性输出",
+        "learning_rate 1e-3、batch_size 64；不要因样本变少就调低 eval_rate（基准 train 0.7 / eval 0.1）"
+      ],
+      "evidence": [
+        "LibCity DCRNN.json/MTGNN.json/STSGCN.json 默认 add_time_in_day=true，STFGNN.json 默认 false —— 该差异直接影响节假日场景",
+        "LibCity config/data/TrafficStateDataset.json：load_external=true、normal_external=true 为数据集层默认，模型层可覆写",
+        "ST-LEGO §3.1：rho1=0.83 表明序列连续性仍强，时间分支应保留门控循环结构",
+        "ST-LEGO §App.F 表 6：METR-LA/PeMS-Bay 覆盖 2012/2017 数月跨度，含节假日与季节漂移"
+      ],
+      "source": "LibCity config/data/TrafficStateDataset.json 与各模型 json；ST-LEGO §3.1/§App.F 表 6"
+    },
+    {
+      "id": "cause-multichannel-physical-coupling",
+      "family": "causality",
+      "title": "流量/占有率/速度多物理量耦合：三通道编码 + 膨胀时序",
+      "feature_profile": {
+        "cv_global": 0.19,
+        "cv_node": 0.15,
+        "spatial_heterogeneity": 0.06,
+        "rho1": 0.93,
+        "sampling_interval_min": 5.0,
+        "node_count": 307
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "dilated_tcn",
+        "fusion": "weighted",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "input_dim 1 -> 3 与 output_dim=3 成对设置（PEMSD4 config.json）：首层 Linear(3 -> 64) 之后主干按 hidden_dim 运行",
+        "逐通道损失：速度量纲小、占有率量纲大，先标准化（scaler=standard，STGCN/STSGCN/DCRNN 默认）再进模块，避免量纲支配",
+        "loss 用 masked_mape 或逐通道加权的 masked_mae，逐通道汇报指标",
+        "batch_size 64 -> 32：三通道显存/内存约为 3 倍，CPU 冒烟须降 batch"
+      ],
+      "evidence": [
+        "LibCity raw_data/PEMSD4/config.json：data_col=[traffic_flow, traffic_occupancy, traffic_speed]、output_dim=3",
+        "ST-LEGO §3.2.2 形态对齐桥接：异构通道先经 Wbridge 投影再融合，避免直接相加破坏语义",
+        "ST-LEGO §3.2.3：concat 融合适合异构输入，add 融合要求两路语义等价",
+        "LibCity STSGCN.json：first_layer_embedding_size=64、batch_size=32、scaler=standard"
+      ],
+      "source": "LibCity raw_data/PEMSD4/config.json 与 STSGCN.json；ST-LEGO §3.2.2/§3.2.3"
+    },
+    {
+      "id": "cause-congestion-spillback-fine-grained",
+      "family": "causality",
+      "title": "拥堵回流高频震荡：2 min 细粒度 + 有向扩散 + 分步输出头",
+      "feature_profile": {
+        "cv_global": 0.38,
+        "cv_node": 0.3,
+        "spatial_heterogeneity": 0.17,
+        "rho1": 0.71,
+        "sampling_interval_min": 2.0,
+        "node_count": 220
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "diffusion_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "cross_attention",
+        "head": "horizon_head"
+      },
+      "tuning_direction": [
+        "horizon_head：各预测步参数独立，用于峰值步与平台步差异明显的回流场景；参数量 H·T'·d·output_dim，随 H 线性增长",
+        "Δt=2 min 时 dilation 用 1,2,4,8 覆盖 4–32 min 回流周期，不要照搬 5 min 数据的配置",
+        "learning_rate 1e-3 -> 5e-4：H 步 loss 求和后梯度更大，先降步长",
+        "batch_size 32：细粒度长序列在 CPU 上内存压力大，配合 max_epoch<=5 冒烟"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：Δt 从时间戳提取，用于指导时间粒度与计算量取舍",
+        "ST-LEGO §3.2.3：时间建模负责高频动态、空间建模负责低频模式，回流震荡属高频，需细粒度时序模块",
+        "ST-LEGO §App.F 表 6：六个数据集统一 5 min 间隔，2 min 属更细粒度外推，必须显式调整 dilation 与 window",
+        "data/modlib/index.json：horizon_head 的 DEFAULT_LOSS=masked_mape，与分步输出配合"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.3/§App.F 表 6；data/modlib/index.json（horizon_head）"
+    },
+    {
+      "id": "cause-event-surge-at-endpoints",
+      "family": "causality",
+      "title": "场馆周边事件性激增：注意力空间 + Transformer，1 min 高分辨率",
+      "feature_profile": {
+        "cv_global": 0.41,
+        "cv_node": 0.33,
+        "spatial_heterogeneity": 0.33,
+        "rho1": 0.58,
+        "sampling_interval_min": 1.0,
+        "node_count": 150
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "spatial_attention",
+        "temporal": "temporal_transformer",
+        "fusion": "cross_attention",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "input_window 12 -> 24/48：事件激增的起跳时刻需要更长上下文，否则模型只看到单调上升段",
+        "num_heads 4 -> 8，并用 spatial_attention 的 mask 屏蔽无关联节点，避免 150 节点全连接引入噪声",
+        "dropout 0.1 -> 0.2/0.3（GWNET/MTGNN 默认 0.3）：事件样本稀少，必须压制过拟合",
+        "learning_rate 5e-4 + warmup：防止早期被大批平稳样本带偏"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：SH=0.33 偏高（事件只影响少数节点），需要注意力式空间编码器自适应聚焦",
+        "ST-LEGO §4.6：表达力导向的 prompt 引导选择 Transformer 与 GLU-TCN",
+        "ST-LEGO §3.2.2：跨注意力让每个时间步按需对齐空间上下文，适配事件突发的时空耦合",
+        "LibCity GWNET.json / MTGNN.json：dropout=0.3 是主流正则强度"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.2/§4.6；LibCity GWNET.json / MTGNN.json"
+    },
+    {
+      "id": "constraint-cpu-only-edge-deployment",
+      "family": "constraint",
+      "title": "CPU-only 边缘部署：参数 <0.1M、浅层、回避注意力",
+      "feature_profile": {
+        "cv_global": 0.31,
+        "cv_node": 0.26,
+        "spatial_heterogeneity": 0.12,
+        "rho1": 0.87,
+        "sampling_interval_min": 5.0,
+        "node_count": 300
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "depth 固定 1..2、filters 32、first_layer_embedding_size 32，把参数量压进 0.1M 硬约束",
+        "禁用 temporal_transformer 与 cross_attention / spatial_attention：O(T²)/O(N²) 在 CPU 上不可接受",
+        "batch_size 64 -> 16/32 且 max_epoch<=5：本仓库宿主无 GPU（torch.cuda.is_available()=False），所有 LibCity 执行必须 --gpu false",
+        "learning_rate 1e-3 -> 5e-4 配合较少 epoch，避免浅层网络在短预算下发散"
+      ],
+      "evidence": [
+        "本仓库实测：nvidia-smi 不可用、torch.cuda.is_available()=False，LibCity 执行必须传 --gpu false",
+        "ST-LEGO §C.1/§4.4：效率导向 prompt 要求参数紧凑、边缘实时部署，参数约束 <0.1M",
+        "ST-LEGO §App.B：GRU「紧凑、比 LSTM 快」、add 融合「快且无参数」，两者都是 CPU 友好默认",
+        "LibCity STGCN.json：max_epoch=20、learner=rmsprop、learning_rate=1e-3（小模型快速训练的现成配方）"
+      ],
+      "source": "ST-LEGO §C.1/§4.4/§App.B；LibCity STGCN.json；本仓库 CPU-only 环境实测"
+    },
+    {
+      "id": "constraint-missing-adjacency",
+      "family": "constraint",
+      "title": "无先验邻接矩阵：可学习邻接 + 循环时间分支",
+      "feature_profile": {
+        "cv_global": 0.3,
+        "cv_node": 0.26,
+        "spatial_heterogeneity": 0.24,
+        "rho1": 0.75,
+        "sampling_interval_min": 5.0,
+        "node_count": 350
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "邻接来源：Graph WaveNet 默认 randomadj=true + aptonly=true + adjtype=doubletransition，无先验图时先随机初始化再学习",
+        "node embedding 维度从 10（AGCRN embed_dim）起，节点多时提到 40（MTGNN node_dim）",
+        "learning_rate 1e-3 -> 3e-3（AGCRN 默认）：可学习邻接需要更大步长才能从随机初始化走出来",
+        "cheb_order/Neumann 阶数 2 保持：阶数过大在无约束邻接上会放大量纲"
+      ],
+      "evidence": [
+        "ST-LEGO §App.B：AdaptiveGCN「学习邻接、无可预定义支撑、适合动态结构、灵活性更高」",
+        "ST-LEGO §3.1：SH=0.24 且无邻接时，必须用可学习邻接或注意力替代固定支撑",
+        "ST-LEGO §3.2.1：分布引导变异会把采样概率 P(m) 推向历史高频空间模块（PeMS03 上 GumbelGraph/GAT 主导）",
+        "LibCity GWNET.json：adjtype=doubletransition、randomadj=true、aptonly=true；AGCRN.json：embed_dim=10、cheb_order=2"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.1/§App.B；LibCity GWNET.json / AGCRN.json"
+    },
+    {
+      "id": "constraint-large-network-memory-budget",
+      "family": "constraint",
+      "title": "超千节点大网络：稀疏谱卷积 + 小 batch，回避 N² 注意力",
+      "feature_profile": {
+        "cv_global": 0.33,
+        "cv_node": 0.28,
+        "spatial_heterogeneity": 0.25,
+        "rho1": 0.88,
+        "sampling_interval_min": 5.0,
+        "node_count": 1700
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "禁用 spatial_attention / cross_attention：注意力在 (B,N,N)/(B,N,T²) 上是 N² 级显存，1700 节点不可行，改用 cheb_gcn 的 K 阶稀疏传播",
+        "batch_size 64 -> 8/16：STSGCN 默认 32 已偏大，大 N 必须进一步降 batch",
+        "Ks/K 3 -> 2：省一阶邻域传播算力，同时保留主要依赖",
+        "use_early_stop + patience（STFGNN 默认关，大网络必须开），max_epoch 按冒烟预算下调"
+      ],
+      "evidence": [
+        "ST-LEGO §3.2.3：为避免显存溢出，模块最大深度被限制在 4；大 N 场景同理必须限制空间模块类型",
+        "data/modlib/index.json：spatial_attention 与 cross_attention 的实现复杂度为 O(B·N·T²·d)，N=1700 时不可接受",
+        "ST-LEGO §App.F 表 6：PEMS07 有 883 objects（本仓库实测最大真实网络 883 节点），1700 节点属更大规模外推",
+        "LibCity STSGCN.json：batch_size=32、四层 filters、use_mask=false"
+      ],
+      "source": "ST-LEGO §3.2.3/§App.F 表 6；data/modlib/index.json（cheb_gcn / spatial_attention）；LibCity STSGCN.json"
+    },
+    {
+      "id": "constraint-long-horizon-12-step",
+      "family": "constraint",
+      "title": "12 步长视界：直接多步头 + 加长输入窗",
+      "feature_profile": {
+        "cv_global": 0.27,
+        "cv_node": 0.23,
+        "spatial_heterogeneity": 0.14,
+        "rho1": 0.82,
+        "sampling_interval_min": 5.0,
+        "node_count": 340
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "weighted",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "input_window 12 -> 24：LibCity 数据集默认 input_window=12/output_window=12，长视界需更长历史支撑",
+        "dilation 序列必须覆盖 H：T'=24、H=12 时用 1,2,4,8 才能让末端步看到足够远的历史",
+        "loss 保持 masked_mae 起步（STFGNN DEFAULT_LOSS、linear_head DEFAULT_LOSS），并逐 horizon 汇报 MAE 定位末端退化",
+        "learning_rate 1e-3；若末端步误差显著偏大，改用 horizon_head 的分步参数"
+      ],
+      "evidence": [
+        "ST-LEGO §3.2.2 benchmark 先验条目固定 horizon=12，说明 12 步是主流评测设定",
+        "LibCity config/data/TrafficStateDataset.json：input_window=12、output_window=12；模型层 STFGNN.json 同为 12/12",
+        "data/modlib/index.json：linear_head 用一次 Linear(T'·d -> H·output_dim) 直接回归全部步，非自回归，适合固定 H",
+        "documentation/STFGNN_migration_summary.md：按 horizon 分步输出 MAE/RMSE/masked_MAPE/R² 便于诊断末端退化"
+      ],
+      "source": "ST-LEGO §3.2.2；LibCity config/data/TrafficStateDataset.json；data/modlib/index.json（linear_head）"
+    },
+    {
+      "id": "constraint-very-short-history-window",
+      "family": "constraint",
+      "title": "极短历史窗（6 步）：小 dilation 时序或退回循环结构",
+      "feature_profile": {
+        "cv_global": 0.29,
+        "cv_node": 0.24,
+        "spatial_heterogeneity": 0.16,
+        "rho1": 0.79,
+        "sampling_interval_min": 5.0,
+        "node_count": 290
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "gru",
+        "fusion": "weighted",
+        "head": "linear_head"
+      },
+      "tuning_direction": [
+        "禁用大 dilation：T'=6 时 dilation 4/8 的有效感受野会超出窗口（补零主导），只用 1,2 或退回循环结构",
+        "kernel_size 2 保持（STGCN/STNorm 默认）：窗口本身很短，加宽卷积核只会增加参数不增加有效信息",
+        "若必须用 dilated_tcn，保持其内置恒等残差路径，避免 6 步输入下梯度消失",
+        "learning_rate 5e-4：短窗有效样本信息少，大步长容易过拟合噪声"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：数据集只提供有限历史窗口时统计量估计不稳，与本场景一致",
+        "ST-LEGO §3.2.3：模块深度上限 4，深堆叠无法弥补窗口本身的信息缺失",
+        "LibCity STGCN.json：Kt=3、kernel_size=2、blocks=[[1,32,64],[64,32,128]]，是短窗口 TCN 的现实参照",
+        "data/modlib/index.json：dilated_tcn 为因果 padding + trimming，dilation 超出窗口时靠补零，必须避免"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.3；LibCity STGCN.json / STNorm.json；data/modlib/index.json（dilated_tcn）"
+    },
+    {
+      "id": "constraint-cold-start-unseen-nodes",
+      "family": "constraint",
+      "title": "冷启动与新装节点：共享节点嵌入 + 可学习邻接",
+      "feature_profile": {
+        "cv_global": 0.36,
+        "cv_node": 0.27,
+        "spatial_heterogeneity": 0.31,
+        "rho1": 0.74,
+        "sampling_interval_min": 5.0,
+        "node_count": 1200
+      },
+      "strategy": {
+        "encoder": "zscore_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "gru",
+        "fusion": "add",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "node embedding 维度 10 -> 40：新节点没有历史，必须靠嵌入共享统计规律；AGCRN embed_dim=10，MTGNN node_dim=40",
+        "避免按节点独立 z-score：新节点 warmup 期统计量极不稳，改用全局长窗统计或可共享 buffer",
+        "learning_rate 3e-3（AGCRN 默认）：让新节点嵌入快速对齐到旧节点",
+        "batch_size 32 且 max_epoch<=5：1200 节点 CPU 冒烟必须缩 batch"
+      ],
+      "evidence": [
+        "ST-LEGO §3.1：CVnode 高说明节点间个体动态差异大，需要更个性化建模以避免过度共享表征",
+        "ST-LEGO §App.B：AdaptiveGCN 的可学习邻接不依赖预定义支撑，新节点接入后仍能参与传播",
+        "ST-LEGO §3.2.2 benchmark 先验条目的 conditions 含 has_adjacency，说明邻接可得性会改变模块选择",
+        "LibCity AGCRN.json：embed_dim=10、rnn_units=64、num_layers=2"
+      ],
+      "source": "ST-LEGO §3.1/§3.2.2/§App.B；LibCity AGCRN.json"
+    },
+    {
+      "id": "constraint-high-null-sensor-outage",
+      "family": "constraint",
+      "title": "高缺失率传感器掉线：前向填充编码 + 掩码损失",
+      "feature_profile": {
+        "cv_global": 0.31,
+        "cv_node": 0.35,
+        "spatial_heterogeneity": 0.23,
+        "rho1": 0.66,
+        "sampling_interval_min": 5.0,
+        "node_count": 250
+      },
+      "strategy": {
+        "encoder": "missing_fill_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "lstm",
+        "fusion": "weighted",
+        "head": "mlp_head"
+      },
+      "tuning_direction": [
+        "先做前向填充再进主干（missing_fill_encoder）：LibCity 本体只在数据/邻接层用 nan_to_num(nan=0.0) 兜底",
+        "null_value 保持 0.0（LibCity 默认）以复用 libcity/model/loss.py 的 masked_mae/masked_mse/masked_mape 实现",
+        "loss 用 masked_mse：掉线恢复期误差大，MSE 让模型优先修正高缺失时段（mlp_head DEFAULT_LOSS=masked_mse）",
+        "learning_rate 1e-2（DCRNN 默认）+ clip_grad_norm true / max_grad_norm 5：缺失造成的离群梯度必须裁剪"
+      ],
+      "evidence": [
+        "data/modlib/index.json：LibCity 本体无独立缺失值模块，数据/邻接层统一 nan_to_num(..., nan=0.0)",
+        "LibCity raw_data/METR_LA 实测 null_ratio=8.04%，作为掉线率量级的现实校准点",
+        "ST-LEGO §3.1：稳健统计需 bootstrap 重采样 + 指数平滑，正是应对缺失/离群的估计手段",
+        "documentation/STFGNN_tune_results.csv：test_MAPE 为 inf 而 masked_MAPE=0.1251，证明掩码损失是该类数据的必要选择"
+      ],
+      "source": "data/modlib/index.json（missing_fill_encoder）；agents/adaptation/utils.py 实测 METR_LA；ST-LEGO §3.1"
+    },
+    {
+      "title": "METR_LA speed smoke: shallow diffusion-GCN+GRU concat model passes masked_mae&lt;35 at hidden_dim=32, lr=0.005",
+      "feature_profile": {
+        "cv_global": 0.21588565575666047,
+        "cv_node": 0.17629988621669912,
+        "spatial_heterogeneity": 0.10945428458618764,
+        "rho1": 0.7907617056752304,
+        "sampling_interval_min": 5.0,
+        "node_count": 207.0
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "diffusion_gcn",
+        "temporal": "gru",
+        "fusion": "concat",
+        "head": "linear_head"
+      },
+      "evidence": [
+        {
+          "best_trial_id": "t1_lr0.005_h32",
+          "masked_mae": 3.8778148094813027,
+          "threshold": 35.0,
+          "maximize": false,
+          "passed": true,
+          "r2": 0.3054652796568308,
+          "evar": 0.37231869002183277,
+          "masked_mse": 59.56190554300944,
+          "masked_rmse": 7.58664337793986,
+          "mae": 7.98515538374583,
+          "trial_masked_mae": {
+            "t0_lr0.01_h32": 3.901829024155935,
+            "t1_lr0.005_h32": 3.8778148094813027,
+            "t2_lr0.01_h64": 3.9528136054674783
+          }
+        }
+      ],
+      "source": "run:metr_la_speed_smoke#r1",
+      "family": "environment",
+      "id": "evolved-metr-la-speed-smoke-r1",
+      "tuning_direction": [],
+      "status": "evolved",
+      "recorded_at": "2026-10-14T19:15:36Z"
+    }
+  ]
+}

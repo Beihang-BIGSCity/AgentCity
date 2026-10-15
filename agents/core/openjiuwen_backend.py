@@ -8,7 +8,7 @@ layer programs against ``AgentDefinition``/``MultiAgentStage`` only:
 - team construction: lead prompt -> LeaderSpec, AgentDefinition dict ->
   predefined TeamMemberSpec entries, business tools -> stdio MCP server;
 - event translation: team stream chunks -> the stage-message schema consumed
-  by StageStorage / server.py ({"role", "type", "content"|"tool_name", ...}).
+  by StageStorage ({"role", "type", "content"|"tool_name", ...}).
 
 Runner lifecycle is managed by the orchestrator via ``ensure_runner_started``
 / ``shutdown_runner``.
@@ -135,6 +135,13 @@ def _team_model_config(profile: HarnessProfile, role: str) -> "TeamModelConfig":
 def _business_mcp_config() -> "McpServerConfig":
     from openjiuwen.core.foundation.tool import McpServerConfig
 
+    # The MCP stdio client hands ``env=None`` to ``mcp.client.stdio``, which
+    # substitutes a *minimal* default environment instead of inheriting ours.
+    # The tool layer then loses AGENTCITY_LIBCITY_PYTHON and launches LibCity
+    # with a bare ``python`` (observed live: "ModuleNotFoundError: No module
+    # named 'ray'" from the wrong interpreter), so forward the environment.
+    env = dict(os.environ)
+    env.setdefault("PYTHONUNBUFFERED", "1")
     return McpServerConfig(
         server_name="agentcity",
         client_type="stdio",
@@ -143,6 +150,7 @@ def _business_mcp_config() -> "McpServerConfig":
             "command": sys.executable,
             "args": ["-m", "agents.tools.server"],
             "cwd": str(PROJECT_ROOT),
+            "env": env,
         },
     )
 
@@ -477,11 +485,17 @@ async def run_single_prompt(
 ) -> Dict[str, Any]:
     """Run a single-agent stage as one DeepAgent (no team)."""
     from openjiuwen.harness import create_deep_agent
+    from openjiuwen.harness.rails.sys_operation_rail import SysOperationRail
 
     agent = create_deep_agent(
         _team_model_config(profile, model_role).build(),
         system_prompt=prompt,
         mcps=[_business_mcp_config()],
+        # Without this rail the stage only gets the business MCP tools: no
+        # read_file / write_file / bash, so a stage that must persist an
+        # artifact (e.g. plan.json) cannot do it. The multi-agent stages mount
+        # the same rail indirectly through the team worktree shell guard.
+        rails=[SysOperationRail(with_code_tool=True)],
         workspace=str(PROJECT_ROOT),
         language="en",
     )

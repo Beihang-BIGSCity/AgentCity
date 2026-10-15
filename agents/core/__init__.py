@@ -1,40 +1,35 @@
-"Core primitives shared across all agent workflows."
+"""Core primitives shared by the adaptation pipeline."""
 
-from .agent_registry import (
-    build_literature_agents,
-    build_migration_agents,
-    build_tuning_agents,
-)
-from .config import AppPaths, build_default_context
-from .logging_utils import setup_logger
-from .orchestrator import AgentOrchestrator
-from .pipeline import AgentPipeline
-from .storage import StageStorage
 from .types import (
     AgentBuilder,
     AgentContext,
     AgentDefinition,
     MultiAgentStage,
+    PromptBuilder,
     StageDefinition,
     StageRunner,
     WorkflowDefinition,
 )
+from .config import AppPaths, build_context, load_task_spec
+from .logging_utils import setup_logger
+from .storage import StageStorage
+from .pipeline import AgentPipeline
+from .orchestrator import AgentOrchestrator
 
 __all__ = [
     "AgentBuilder",
     "AgentContext",
     "AgentDefinition",
+    "AgentOrchestrator",
     "AgentPipeline",
     "AppPaths",
     "MultiAgentStage",
+    "PromptBuilder",
     "StageDefinition",
     "StageRunner",
     "StageStorage",
     "WorkflowDefinition",
-    "AgentOrchestrator",
-    "build_default_context",
-    "build_literature_agents",
-    "build_migration_agents",
-    "build_tuning_agents",
+    "build_context",
+    "load_task_spec",
     "setup_logger",
 ]

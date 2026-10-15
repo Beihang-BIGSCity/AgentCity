@@ -1,1 +1,0 @@
-python batch_migration.py --concurrency 3 --catalog migration_mm.json

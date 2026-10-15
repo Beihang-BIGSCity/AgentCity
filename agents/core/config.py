@@ -1,141 +1,177 @@
+"""Paths, task-spec loading and context construction for the pipeline."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import datetime
+import json
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Tuple
+from typing import Any, Dict
 
 from .types import AgentContext
 
-DEFAULT_CONFERENCES: List[str] = ["ICLR", "ICML", "NeurIPS", "KDD", "ICDE", "WWW", "AAAI", "IJCAI"]
-TARGET_YEAR = 2025
-YEAR_FILTER_CHOICES = {
-    "this_year": {"label": "今年", "offset": 0},
-    "last_year": {"label": "去年", "offset": -1},
-    "all": {"label": "全部", "offset": None},
-}
+DEFAULT_TARGET = {"metric": "masked_mae", "threshold": None, "maximize": False}
+DEFAULT_TRAIN = {"max_epoch": 2, "batch_size": 16, "gpu": False}
+DEFAULT_MAX_ROUNDS = 3
+EFFICIENCY_CHOICES = ("lightweight", "balanced", "accuracy")
 
 
 @dataclass
 class AppPaths:
-    """Centralizes important repository paths for the agent."""
+    """Centralizes important repository paths for the agents."""
 
     root: Path = Path(__file__).resolve().parents[2]
-    repo_path: Path = Path("./Bigscity-LibCity")
+    # Absolute on purpose: team members run in their own isolated workspaces,
+    # so a cwd-relative checkout path does not resolve for them.
+    repo_path: Path = root / "Bigscity-LibCity"
     data_dir: Path = root / "data"
-    article_dir: Path = data_dir / "articles"
-    article_catalog: Path = article_dir / "catalog.json"
-    migration_dir: Path = data_dir / "migrations"
-    migration_catalog: Path = migration_dir / "catalog.json"
     run_dir: Path = data_dir / "runs"
     stage_log: Path = run_dir / "latest_stage_log.json"
-    log_file: Path = root / "claude_code.log"
-    benchmark_doc: Path = root / "libcity_document.md"
+    adaptation_dir: Path = data_dir / "adaptation"
+    adaptation_index: Path = adaptation_dir / "index.json"
+    modlib_dir: Path = data_dir / "modlib"
+    knowledge_dir: Path = root / "knowledge"
+    skills_dir: Path = root / "skills"
     documentation_dir: Path = root / "documentation"
+    log_file: Path = root / "logs" / "adaptation.log"
 
     def ensure(self) -> None:
         for folder in (
+            self.log_file.parent,
             self.data_dir,
-            self.article_dir,
-            self.migration_dir,
             self.run_dir,
+            self.adaptation_dir,
+            self.modlib_dir,
+            self.knowledge_dir,
+            self.skills_dir,
             self.documentation_dir,
         ):
             folder.mkdir(parents=True, exist_ok=True)
-        if not self.article_catalog.exists():
-            self.article_catalog.write_text("[]\n", encoding="utf-8")
-        if not self.migration_catalog.exists():
-            self.migration_catalog.write_text("[]\n", encoding="utf-8")
         if not self.stage_log.exists():
             self.stage_log.write_text('{"stages": []}\n', encoding="utf-8")
+        if not self.adaptation_index.exists():
+            self.adaptation_index.write_text("[]\n", encoding="utf-8")
+
+    def task_dir(self, task_id: str) -> Path:
+        from agents.adaptation.utils import sanitize_slug
+
+        return self.adaptation_dir / sanitize_slug(task_id)
 
 
-def build_default_context(paths: AppPaths) -> AgentContext:
+def load_task_spec(path: Path) -> Dict[str, Any]:
+    """Load and normalize an adaptation task specification."""
+
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("task specification must be a JSON object")
+
+    missing = [key for key in ("task_id", "dataset", "task") if not payload.get(key)]
+    if missing:
+        raise ValueError(f"task specification is missing required keys: {', '.join(missing)}")
+
+    target = dict(DEFAULT_TARGET)
+    target.update(payload.get("target") or {})
+    if target.get("threshold") is not None:
+        target["threshold"] = float(target["threshold"])
+    target["maximize"] = bool(target.get("maximize", False))
+
+    train = dict(DEFAULT_TRAIN)
+    train.update(payload.get("train") or {})
+    train["max_epoch"] = int(train.get("max_epoch") or DEFAULT_TRAIN["max_epoch"])
+    train["batch_size"] = int(train.get("batch_size") or DEFAULT_TRAIN["batch_size"])
+    train["gpu"] = bool(train.get("gpu", False))
+    extra_args = {
+        str(key): value
+        for key, value in dict(train.get("extra_args") or {}).items()
+        if key not in {"gpu", "gpu_id"} and value is not None
+    }
+    train["extra_args"] = extra_args
+
+    efficiency = str(payload.get("efficiency") or "balanced").strip().lower()
+    if efficiency not in EFFICIENCY_CHOICES:
+        efficiency = "balanced"
+
+    max_rounds = int(payload.get("max_rounds") or DEFAULT_MAX_ROUNDS)
+    max_rounds = max(1, min(max_rounds, 10))
+
+    tuning_payload = dict(payload.get("tuning") or {})
+    tuning: Dict[str, Any] = {
+        "max_trials": _positive_int(tuning_payload.get("max_trials")),
+        "max_evals": _positive_int(tuning_payload.get("max_evals")),
+        "hyper_algo": tuning_payload.get("hyper_algo") or None,
+        "search_space": dict(tuning_payload.get("search_space") or {}) or None,
+    }
+
+    scope = payload.get("candidate_scope") or {}
+    normalized = {
+        "task_id": str(payload["task_id"]),
+        "dataset": str(payload["dataset"]),
+        "task": str(payload["task"]),
+        "model_name": payload.get("model_name") or None,
+        "target": target,
+        "efficiency": efficiency,
+        "train": train,
+        "max_rounds": max_rounds,
+        "tuning": tuning,
+        "candidate_scope": {
+            "models": [str(item) for item in (scope.get("models") or [])],
+            "categories": [str(item) for item in (scope.get("categories") or [])],
+        },
+        "notes": str(payload.get("notes") or ""),
+    }
+    return normalized
+
+
+def _positive_int(value: Any) -> int | None:
+    """Coerce a positive integer budget, returning None when unset."""
+
+    if value is None:
+        return None
     try:
-        benchmark_document = paths.benchmark_doc.read_text(encoding="utf-8")
-    except FileNotFoundError:
-        benchmark_document = ""
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number > 0 else None
 
-    mode, label, value, year_start, year_end = resolve_year_filter()
+
+def build_context(
+    paths: AppPaths,
+    task_spec: Dict[str, Any],
+    *,
+    round_index: int = 1,
+    max_rounds: int = DEFAULT_MAX_ROUNDS,
+    feedback: str = "",
+    dataset_profile: Dict[str, Any] | None = None,
+    stage_notes: Dict[str, str] | None = None,
+) -> AgentContext:
+    """Build the agent context for one round of one adaptation task."""
+
+    from agents.adaptation.utils import sanitize_slug
+
+    task_id = str(task_spec.get("task_id") or "task")
     return AgentContext(
         repo_path=str(paths.repo_path),
-        benchmark_document=benchmark_document,
-        article_dir=str(paths.article_dir),
-        article_catalog=str(paths.article_catalog),
-        migration_catalog=str(paths.migration_catalog),
-        conferences=DEFAULT_CONFERENCES,
-        target_year=TARGET_YEAR,
-        search_terms=[],
-        selected_papers=[],
-        search_year_mode=mode,
-        search_year_label=label,
-        search_year_value=value,
-        search_year_start=year_start,
-        search_year_end=year_end,
-        search_conference_filters=[],
+        task_id=task_id,
+        task_slug=sanitize_slug(task_id),
+        task_dir=str(paths.task_dir(task_id)),
+        task_spec=dict(task_spec),
+        round_index=round_index,
+        max_rounds=max_rounds,
+        modlib_dir=str(paths.modlib_dir),
+        knowledge_dir=str(paths.knowledge_dir),
+        skills_dir=str(paths.skills_dir),
+        documentation_dir=str(paths.documentation_dir),
+        feedback=feedback,
+        dataset_profile=dict(dataset_profile or {}),
+        stage_notes=dict(stage_notes or {}),
     )
-
-
-def resolve_year_filter(mode: str | None = None) -> Tuple[str, str, int | None, int | None, int | None]:
-    """Resolve year filter mode to (normalized_mode, label, year_value, year_start, year_end).
-
-    Supports:
-    - "this_year": Current year
-    - "last_year": Previous year
-    - "all": No year filter
-    - Direct year number (e.g., "2024", "2025"): Specific year
-    - Year range (e.g., "2024-2025"): Range of years
-    """
-    if not mode:
-        return "all", "全部", None, None, None
-
-    normalized = mode.strip()
-
-    # Check for year range input (e.g., "2024-2025")
-    if "-" in normalized:
-        parts = normalized.split("-")
-        if len(parts) == 2:
-            try:
-                start_year = int(parts[0].strip())
-                end_year = int(parts[1].strip())
-                if 2000 <= start_year <= 2030 and 2000 <= end_year <= 2030:
-                    # Ensure start <= end
-                    if start_year > end_year:
-                        start_year, end_year = end_year, start_year
-                    label = f"{start_year}-{end_year}"
-                    return "range", label, None, start_year, end_year
-            except ValueError:
-                pass
-
-    normalized_lower = normalized.lower()
-
-    # Check for direct year input (numeric string)
-    if normalized_lower.isdigit():
-        year = int(normalized_lower)
-        if 2000 <= year <= 2030:  # Reasonable year range
-            return "specific", str(year), year, year, year
-        # Fall back to all if year is out of range
-        return "all", "全部", None, None, None
-
-    # Check predefined choices
-    if normalized_lower not in YEAR_FILTER_CHOICES:
-        normalized_lower = "all"
-
-    choice = YEAR_FILTER_CHOICES[normalized_lower]
-    label = choice["label"]
-    offset = choice["offset"]
-    if offset is None:
-        return normalized_lower, label, None, None, None
-    else:
-        value = datetime.utcnow().year + offset
-        return normalized_lower, label, value, value, value
 
 
 __all__ = [
     "AppPaths",
-    "build_default_context",
-    "DEFAULT_CONFERENCES",
-    "TARGET_YEAR",
-    "resolve_year_filter",
-    "YEAR_FILTER_CHOICES",
+    "DEFAULT_MAX_ROUNDS",
+    "DEFAULT_TARGET",
+    "DEFAULT_TRAIN",
+    "EFFICIENCY_CHOICES",
+    "build_context",
+    "load_task_spec",
 ]

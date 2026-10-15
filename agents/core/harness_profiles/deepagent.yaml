@@ -1,7 +1,7 @@
 # DeepAgent (openJiuwen native) harness profile.
 #
-# Logical roles and logical tool names used across agent_registry.py /
-# workflow definitions are resolved through this file, so swapping the
+# Logical roles and logical tool names used by the adaptation agents
+# (agents/adaptation/registry.py) are resolved through this file, so swapping the
 # backend only requires editing this file (or pointing
 # AGENTCITY_HARNESS_PROFILE at another yaml).
 # Keep credentials in AGENTCITY_API_KEY or an ignored deepagent.local.yaml.

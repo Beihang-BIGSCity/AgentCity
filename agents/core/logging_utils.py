@@ -2,14 +2,17 @@ import logging
 from pathlib import Path
 
 
-def setup_logger(log_file: Path) -> logging.Logger:
-    """Configure a dual (file + console) logger for the agent."""
+def setup_logger(log_file: Path, level: "int | str" = logging.INFO) -> logging.Logger:
+    """Configure a dual (file + console) logger for the pipeline."""
 
-    logger = logging.getLogger("claude_agent")
+    logger = logging.getLogger("agentcity")
+    if isinstance(level, str):
+        level = getattr(logging, level.upper(), logging.INFO)
     if logger.handlers:
+        logger.setLevel(level)
         return logger
 
-    logger.setLevel(logging.INFO)
+    logger.setLevel(level)
     formatter = logging.Formatter(
         "%(asctime)s | %(levelname)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )

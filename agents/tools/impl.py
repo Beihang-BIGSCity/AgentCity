@@ -1,8 +1,10 @@
 """Business tool implementations for the AgentCity MCP server.
 
-Adapted from the pi-agent-migration branch's agents/tools/impl.py. Every
-entry point is ``async def tool(args: dict) -> str`` so the FastMCP server
-(server.py) can delegate without blocking openjiuwen's async engine.
+Every entry point is ``async def tool(args: dict) -> str`` so the FastMCP
+server (server.py) can delegate without blocking openjiuwen's async engine.
+Tools that belong to one adaptation run resolve the active task through
+``agents.adaptation.runtime`` and write their structured output into that
+task's shared execution context directory.
 """
 
 from __future__ import annotations
@@ -11,7 +13,8 @@ import asyncio
 import json
 import os
 import re
-import warnings
+import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -20,30 +23,43 @@ import requests
 from bs4 import BeautifulSoup
 
 from agents import AppPaths
-from agents.migration.runtime import get_active_paper
-from agents.migration.storage import MigrationResultStore
-from agents.migration.utils import extract_standard_metrics, libcity_python
-from agents.tuning.tuning import (
+from agents.adaptation import knowledge as knowledge_store
+from agents.adaptation import modlib as module_library
+from agents.adaptation.runtime import get_active_task
+from agents.adaptation.storage import AdaptationResultStore
+from agents.adaptation.tuning import (
+    RUN_MODEL_CLI_FLAGS,
     ensure_search_space,
     is_libcity_tuning_allowed,
     run_custom_grid_search,
     run_libcity_tuning,
     write_params_file,
 )
+from agents.adaptation.utils import (
+    collect_run_metrics,
+    compute_dataset_profile,
+    libcity_python,
+    sanitize_slug,
+)
 
 paths = AppPaths()
 paths.ensure()
 
-ARTICLE_CATALOG_PATH = paths.article_catalog
-MIGRATION_RESULTS_PATH = paths.run_dir / "migration_results.json"
-migration_store = MigrationResultStore(
-    root=paths.root, base_dir=paths.run_dir / "migrations", index_path=MIGRATION_RESULTS_PATH
+result_store = AdaptationResultStore(
+    root=paths.root,
+    base_dir=paths.adaptation_dir,
+    index_path=paths.adaptation_index,
 )
 
 SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "")
 
-TEST_MIGRATION_TIMEOUT = 3600
-TUNE_MIGRATION_TIMEOUT = 7200
+RUN_TIMEOUT = 3600
+TUNE_TIMEOUT = 7200
+
+
+# ---------------------------------------------------------------------------
+# argument coercion helpers
+# ---------------------------------------------------------------------------
 
 
 def _as_bool(value, default: bool | None = None) -> bool | None:
@@ -78,29 +94,6 @@ def _resolve_project_path(path_value: str | None) -> Path | None:
     return candidate
 
 
-def _append_article_record(record: dict) -> None:
-    ARTICLE_CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        existing: List[dict] = json.loads(ARTICLE_CATALOG_PATH.read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError):
-        existing = []
-
-    # Avoid duplicates by title + conference
-    signature = (record.get("title"), record.get("conference"))
-    for item in existing:
-        if (item.get("title"), item.get("conference")) == signature:
-            item.update(record)
-            ARTICLE_CATALOG_PATH.write_text(
-                json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
-            )
-            return
-
-    existing.append(record)
-    ARTICLE_CATALOG_PATH.write_text(
-        json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
-
-
 def _truncate_text(value: str, limit: int = 12000) -> str:
     text = (value or "").strip()
     if len(text) > limit:
@@ -108,147 +101,287 @@ def _truncate_text(value: str, limit: int = 12000) -> str:
     return text
 
 
-def _fetch_arxiv_metadata(arxiv_id: str) -> Dict[str, Any] | None:
-    """Fetch paper metadata from arXiv API."""
-    try:
-        api_url = f"http://export.arxiv.org/api/query?id_list={arxiv_id}"
-        resp = requests.get(api_url, timeout=10)
-        if resp.status_code != 200:
-            return None
-        import xml.etree.ElementTree as ET
-        root = ET.fromstring(resp.text)
-        ns = {"atom": "http://www.w3.org/2005/Atom"}
-        entry = root.find("atom:entry", ns)
-        if entry is None:
-            return None
-        title_el = entry.find("atom:title", ns)
-        abstract_el = entry.find("atom:summary", ns)
-        published_el = entry.find("atom:published", ns)
-        title = title_el.text.strip().replace("\n", " ") if title_el is not None else ""
-        abstract = abstract_el.text.strip().replace("\n", " ") if abstract_el is not None else ""
-        published = published_el.text.strip() if published_el is not None else ""
-        year = None
-        if published:
-            year_match = re.match(r"(\d{4})", published)
-            if year_match:
-                year = int(year_match.group(1))
-        return {
-            "arxiv_id": arxiv_id,
-            "title": title,
-            "abstract": abstract,
-            "year": year,
-            "abs_url": f"https://arxiv.org/abs/{arxiv_id}",
-            "pdf_url": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
-        }
-    except Exception:
-        return None
+def _libcity_root() -> Path:
+    """Resolve the LibCity checkout the pipeline adapts into."""
+
+    repo = paths.repo_path
+    return repo if repo.is_absolute() else (paths.root / repo).resolve()
 
 
-async def catalog_article(args: dict) -> str:
-    record = {
-        "title": args.get("title", "").strip(),
-        "conference": args.get("conference", "").strip(),
-        "datasets": args.get("datasets", ""),
-        "repo_url": args.get("repo_url", ""),
-        "repo_path": args.get("repo_path", ""),
-        "pdf_path": args.get("pdf_path", ""),
-        "notes": args.get("notes", ""),
-        "model_name": args.get("model_name", ""),
-    }
-    if not record["title"]:
-        return "catalog_article failed: title is required."
-
-    _append_article_record(record)
-    return f"Catalog updated for {record['title']}"
+NO_ACTIVE_TASK = (
+    "the tool server could not resolve the active adaptation task "
+    "(the active-task pointer is missing and no environment snapshot is available)"
+)
 
 
-def _search_paper_sync(query: str, num: int, end_date: str | None) -> str:
-    url = "https://google.serper.dev/search"
-    search_query = f"{query} site:arxiv.org"
-    if end_date:
-        try:
-            parsed_date = datetime.strptime(end_date, '%Y%m%d').strftime('%Y-%m-%d')
-            search_query = f"{query} before:{parsed_date} site:arxiv.org"
-        except Exception:
-            pass
-
-    payload = json.dumps({
-        "q": search_query,
-        "num": num,
-        "page": 1,
-    })
-
-    headers = {
-        'X-API-KEY': SERPER_API_KEY,
-        'Content-Type': 'application/json'
-    }
-
-    papers = []
-    seen_ids = set()
-
-    for _ in range(3):
-        try:
-            response = requests.request("POST", url, headers=headers, data=payload, timeout=30)
-            if response.status_code == 200:
-                results = json.loads(response.text)
-                for paper in results.get('organic', []):
-                    link = paper.get("link", "")
-                    match = re.search(r'arxiv\.org/(?:abs|pdf|html)/(\d{4}\.\d+)', link)
-                    if match:
-                        arxiv_id = match.group(1)
-                        if arxiv_id in seen_ids:
-                            continue
-                        seen_ids.add(arxiv_id)
-                        metadata = _fetch_arxiv_metadata(arxiv_id)
-                        if metadata:
-                            papers.append(metadata)
-                        else:
-                            papers.append({
-                                "arxiv_id": arxiv_id,
-                                "title": paper.get("title", ""),
-                                "abstract": paper.get("snippet", ""),
-                                "year": None,
-                                "abs_url": f"https://arxiv.org/abs/{arxiv_id}",
-                                "pdf_url": f"https://arxiv.org/pdf/{arxiv_id}.pdf",
-                            })
-                break
-        except Exception as exc:
-            warnings.warn(f"search_paper failed: {exc}")
-            continue
-
-    if not papers:
-        return f"No papers found for query: {query}"
-
-    result_text = json.dumps(papers, ensure_ascii=False, indent=2)
-    return f"Found {len(papers)} papers:\n{result_text}"
+def _active_task() -> Dict[str, Any]:
+    return dict(get_active_task() or {})
 
 
-async def search_paper(args: dict) -> str:
-    """Search for papers and return detailed metadata."""
-    query = args.get("query")
-    num = _as_int(args.get("num"), 10)
-    end_date = args.get("end_date")
+def _resolve_task_id(args: Dict[str, Any], task_spec: Dict[str, Any]) -> str:
+    """Pick the adaptation task a tool call belongs to.
 
-    if not query:
-        return "search_paper failed: query is required"
+    Run records and the round artifacts are filed under this id, so it must come
+    from the pipeline's active task (or an explicit argument). Falling back to
+    the model name - the previous behaviour - scattered records into
+    ``data/adaptation/<model>/`` and left the real task directory stale.
+    """
 
-    return await asyncio.to_thread(_search_paper_sync, query, num, end_date)
+    for candidate in (args.get("task_id"), task_spec.get("task_id")):
+        resolved = str(candidate or "").strip()
+        if resolved:
+            return resolved
+    return ""
 
 
-async def evaluate_paper_relevance(args: dict) -> str:
-    """Placeholder tool for paper relevance evaluation. The agent should use its own judgment."""
-    title = args.get("title", "")
-    abstract = args.get("abstract", "")
-    user_query = args.get("user_query", "")
-
+def _unresolved_task_error(action: str) -> str:
     return (
-        f"Paper evaluation request received.\nTitle: {title}\nAbstract: {abstract[:500]}...\n"
-        f"Query: {user_query}\n\nPlease use your judgment to evaluate this paper's relevance."
+        f"{action} failed: {NO_ACTIVE_TASK}, so the result cannot be filed under a task. "
+        "Re-run through `python main.py --task <spec>` (or point AGENTCITY_ACTIVE_TASK_FILE at the "
+        "pointer) instead of filing the record under the model name."
     )
+
+
+def _require_task_dir() -> Path | None:
+    task = _active_task()
+    task_id = str(task.get("task_id") or "").strip()
+    if not task_id:
+        return None
+    task_dir = paths.task_dir(task_id)
+    task_dir.mkdir(parents=True, exist_ok=True)
+    return task_dir
+
+
+def _write_artifact(name: str, payload: Any) -> Path | None:
+    task_dir = _require_task_dir()
+    if task_dir is None:
+        print(
+            f"warning: {NO_ACTIVE_TASK}; {name} was not written to disk",
+            file=sys.stderr,
+            flush=True,
+        )
+        return None
+    target = task_dir / name
+    target.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    return target
+
+
+def _update_context(section: str, payload: Any) -> None:
+    """Mirror a structured result into the shared execution context."""
+
+    task = _active_task()
+    task_id = str(task.get("task_id") or "").strip()
+    if not task_id:
+        return
+    from agents.adaptation.context import ExecutionContext
+
+    store = ExecutionContext.load(task_id, base_dir=paths.adaptation_dir)
+    store.update(section, payload)
+
+
+def _append_context(section: str, payload: Any) -> None:
+    """Append a structured result to a growing list in the shared context."""
+
+    task = _active_task()
+    task_id = str(task.get("task_id") or "").strip()
+    if not task_id:
+        return
+    from agents.adaptation.context import ExecutionContext
+
+    store = ExecutionContext.load(task_id, base_dir=paths.adaptation_dir)
+    store.append(section, payload)
+
+
+# ---------------------------------------------------------------------------
+# data integration
+# ---------------------------------------------------------------------------
+
+
+async def analyze_dataset(args: dict) -> str:
+    """Compute the task-level statistical signals for one LibCity dataset."""
+
+    task_spec = _active_task()
+    dataset = args.get("dataset") or task_spec.get("dataset")
+    task = args.get("task") or task_spec.get("task") or "traffic_state_pred"
+    windows = _as_int(args.get("windows"), 10) or 10
+    max_timesteps = _as_int(args.get("max_timesteps"), 20000) or 20000
+    if not dataset:
+        return "analyze_dataset failed: provide dataset"
+    # dataset_profile.json is part of the round's artifact contract, so resolve the
+    # task before spending the scan: an unresolvable task is a broken run, not a
+    # reason to silently skip the file (the caller cannot see it was not written).
+    if not _resolve_task_id(args, task_spec):
+        return _unresolved_task_error("analyze_dataset")
+
+    raw_data_dir = _libcity_root() / "raw_data"
+    try:
+        profile = await asyncio.to_thread(
+            compute_dataset_profile,
+            dataset=str(dataset),
+            raw_data_dir=raw_data_dir,
+            task=str(task),
+            windows=windows,
+            max_timesteps=max_timesteps,
+        )
+    except Exception as exc:
+        return f"analyze_dataset failed: {exc}"
+
+    _write_artifact("dataset_profile.json", profile)
+    _update_context("dataset_profile", profile)
+    summary = {
+        key: profile.get(key)
+        for key in (
+            "dataset",
+            "data_col",
+            "node_count",
+            "timesteps",
+            "sampling_interval_min",
+            "has_graph",
+            "null_ratio",
+            "cv_global",
+            "cv_node",
+            "spatial_heterogeneity",
+            "rho1",
+        )
+    }
+    return json.dumps(summary, ensure_ascii=False, indent=2)
+
+
+# ---------------------------------------------------------------------------
+# knowledge base / skills
+# ---------------------------------------------------------------------------
+
+
+async def retrieve_knowledge(args: dict) -> str:
+    """Retrieve the closest knowledge entries and skills for a feature profile."""
+
+    features = args.get("features")
+    if not isinstance(features, dict):
+        features = {}
+    if not features:
+        task_dir = _require_task_dir()
+        profile_path = (task_dir / "dataset_profile.json") if task_dir else None
+        if profile_path and profile_path.exists():
+            features = json.loads(profile_path.read_text(encoding="utf-8"))
+    if not features:
+        return "retrieve_knowledge failed: provide features (or run analyze_dataset first)"
+
+    kinds = args.get("kinds")
+    if isinstance(kinds, str):
+        kinds = [kinds]
+    if not isinstance(kinds, list) or not kinds:
+        kinds = ["knowledge", "skill"]
+
+    try:
+        payload = knowledge_store.retrieve(
+            knowledge_dir=paths.knowledge_dir,
+            skills_dir=paths.skills_dir,
+            features=features,
+            top_k=_as_int(args.get("top_k"), 3) or 3,
+            kinds=kinds,
+            include_documents=bool(_as_bool(args.get("include_documents"), False)),
+        )
+    except Exception as exc:
+        return f"retrieve_knowledge failed: {exc}"
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+async def record_experience(args: dict) -> str:
+    """Feed a finished round back into the expert knowledge base or the skills."""
+
+    kind = args.get("kind")
+    entry = args.get("entry")
+    if not isinstance(entry, dict):
+        entry = {key: value for key, value in args.items() if key != "kind"}
+    task = _active_task()
+    if task.get("task_id") and not entry.get("source"):
+        entry["source"] = f"run:{task.get('task_id')}"
+    try:
+        recorded = knowledge_store.record_experience(
+            knowledge_dir=paths.knowledge_dir,
+            skills_dir=paths.skills_dir,
+            kind=str(kind or ""),
+            entry=entry,
+        )
+    except Exception as exc:
+        return f"record_experience failed: {exc}"
+    return f"Experience recorded as {recorded.get('id')} (kind={kind})."
+
+
+# ---------------------------------------------------------------------------
+# atomic module library
+# ---------------------------------------------------------------------------
+
+
+async def list_modules(args: dict) -> str:
+    """List atomic modules, optionally filtered by category and tags."""
+
+    tags = args.get("tags")
+    if isinstance(tags, str):
+        tags = [tags]
+    try:
+        modules = module_library.list_modules(
+            paths.modlib_dir,
+            category=args.get("category"),
+            tags=tags if isinstance(tags, list) else None,
+            include_code=bool(_as_bool(args.get("include_code"), False)),
+        )
+    except Exception as exc:
+        return f"list_modules failed: {exc}"
+    if not modules:
+        return "list_modules: no module matched the filter."
+    return json.dumps(modules, ensure_ascii=False, indent=2)
+
+
+async def get_module(args: dict) -> str:
+    """Return one module entry together with its source code."""
+
+    module_id = str(args.get("module_id") or "").strip()
+    if not module_id:
+        return "get_module failed: provide module_id"
+    try:
+        entry = module_library.get_module(
+            paths.modlib_dir,
+            module_id,
+            include_code=bool(_as_bool(args.get("include_code"), True)),
+        )
+    except KeyError as exc:
+        return f"get_module failed: {exc}"
+    except Exception as exc:
+        return f"get_module failed: {exc}"
+    return json.dumps(entry, ensure_ascii=False, indent=2)
+
+
+async def register_module(args: dict) -> str:
+    """Add a newly extracted atomic module to the library (idempotent by id)."""
+
+    try:
+        entry = module_library.register_module(
+            paths.modlib_dir,
+            module_id=str(args.get("module_id") or ""),
+            category=str(args.get("category") or ""),
+            class_name=str(args.get("class_name") or args.get("class") or ""),
+            code=str(args.get("code") or ""),
+            name=args.get("name"),
+            desc=str(args.get("desc") or ""),
+            ctr_args=args.get("ctr_args") if isinstance(args.get("ctr_args"), dict) else None,
+            io=str(args.get("io") or ""),
+            tags=args.get("tags") if isinstance(args.get("tags"), list) else None,
+            source=args.get("source") if isinstance(args.get("source"), dict) else None,
+        )
+    except Exception as exc:
+        return f"register_module failed: {exc}"
+    return f"Module {entry['id']} registered under {entry['category']} ({entry['file']})."
+
+
+# ---------------------------------------------------------------------------
+# LibCity execution
+# ---------------------------------------------------------------------------
 
 
 async def _run_subprocess(cmd: List[str], cwd: Path, timeout: int) -> tuple[int, str, str]:
     """Run a subprocess without blocking the event loop."""
+
     proc = await asyncio.create_subprocess_exec(
         *cmd,
         cwd=str(cwd),
@@ -264,132 +397,271 @@ async def _run_subprocess(cmd: List[str], cwd: Path, timeout: int) -> tuple[int,
     return proc.returncode, stdout_b.decode(errors="replace"), stderr_b.decode(errors="replace")
 
 
-async def test_migration(args: dict) -> str:
-    model_name = args.get("model_name")
-    dataset = args.get("dataset", "METR_LA")
-    task = args.get("task", "traffic_state_pred")
-    gpu = args.get("gpu", "0")  # Default to cuda:0
-    if not model_name:
-        return "test_migration failed: provide model_name"
-
-    repo_dir = paths.root / "Bigscity-LibCity"
+def _libcity_cmd(
+    *,
+    script: str,
+    model_name: str,
+    dataset: str,
+    task: str,
+    gpu: bool,
+    gpu_id: str,
+    config_file: str | None = None,
+    overrides: Dict[str, Any] | None = None,
+) -> List[str]:
     cmd = [
         libcity_python(),
-        "run_model.py",
+        script,
         "--task",
         task,
         "--model",
         model_name,
         "--dataset",
         dataset,
-        "--gpu_id",
-        gpu,
+        "--gpu",
+        "true" if gpu else "false",
     ]
-    stdout = ""
-    stderr = ""
-    status = "success"
-    returncode, stdout, stderr = await _run_subprocess(cmd, cwd=repo_dir, timeout=TEST_MIGRATION_TIMEOUT)
-    if returncode == 0:
-        output = stdout or "LibCity run completed without stdout output."
-    else:
-        status = "error"
-        output = "\n".join(
-            [
-                "LibCity execution failed.",
-                f"Command: {' '.join(cmd)}",
-                f"Return code: {returncode}",
-                stdout,
-                stderr,
-            ]
+    if gpu:
+        cmd.extend(["--gpu_id", str(gpu_id)])
+    if config_file:
+        cmd.extend(["--config_file", config_file])
+    for key, value in (overrides or {}).items():
+        if value is None or key in {"gpu", "gpu_id", "task", "model", "dataset", "config_file"}:
+            continue
+        cmd.extend([f"--{key}", str(value)])
+    return cmd
+
+
+def _unsupported_override_keys(overrides: Dict[str, Any]) -> List[str]:
+    """Flag override keys that ``run_model.py`` cannot accept as command-line flags.
+
+    ``run_model.py`` declares a fixed set of flags; anything else is a model
+    config key (``hidden_dim``, ``num_layers``, ``dropout``, ...). argparse
+    rejects the whole command with "unrecognized arguments", so the run dies
+    before training instead of reporting a usable error. Those knobs belong in a
+    ``--config_file``.
+    """
+
+    return sorted(
+        str(key)
+        for key, value in (overrides or {}).items()
+        if value is not None and str(key) not in RUN_MODEL_CLI_FLAGS
+    )
+
+
+def _interpreter_hint(interpreter: str, output: str) -> str:
+    """Explain the classic wrong-interpreter failure instead of leaving a bare ModuleNotFoundError."""
+
+    missing = re.search(r"No module named '([^']+)'", output or "")
+    if not missing:
+        return ""
+    module = missing.group(1)
+    if module not in {"torch", "ray", "libcity", "tensorflow"}:
+        return ""
+    if interpreter != "python":
+        return (
+            f"{interpreter!r} cannot import {module!r}; point AGENTCITY_LIBCITY_PYTHON at an "
+            f"interpreter that has LibCity's dependencies installed."
         )
-    metrics = extract_standard_metrics(stdout)
-    active_paper = get_active_paper() or {}
-    paper_info = {
-        "title": active_paper.get("title") or args.get("paper_title") or model_name,
-        "conference": active_paper.get("conference") or args.get("conference") or "N/A",
-        "repo_url": active_paper.get("repo_url") or "",
-        "pdf_path": active_paper.get("pdf_path") or "",
-        "model_name": active_paper.get("model_name") or model_name,
+    return (
+        f"LibCity was launched with a bare 'python' from PATH and cannot import {module!r}. Set "
+        f"AGENTCITY_LIBCITY_PYTHON (or pass --libcity-python) to the interpreter that has LibCity installed; "
+        f"the MCP tool server only sees it when the harness forwards its environment."
+    )
+
+
+async def run_adaptation(args: dict) -> str:
+    """Train/evaluate the composed model on the scenario dataset."""
+
+    model_name = args.get("model_name")
+    task_spec = _active_task()
+    train_budget = task_spec.get("train") or {}
+    dataset = args.get("dataset") or task_spec.get("dataset") or "METR_LA"
+    task = args.get("task") or task_spec.get("task") or "traffic_state_pred"
+    gpu = bool(_as_bool(args.get("gpu"), bool(train_budget.get("gpu", False))))
+    gpu_id = str(args.get("gpu_id", "0"))
+    max_epoch = _as_int(args.get("max_epoch"), _as_int(train_budget.get("max_epoch"), 2))
+    batch_size = _as_int(args.get("batch_size"), _as_int(train_budget.get("batch_size"), 16))
+    config_file = args.get("config_file")
+    seed = _as_int(args.get("seed"))
+    saved_model = _as_bool(args.get("saved_model"))
+    train_flag = _as_bool(args.get("train"))
+    extra_cli_args = args.get("extra_cli_args")
+    overrides: Dict[str, Any] = dict(train_budget.get("extra_args") or {})
+    if isinstance(extra_cli_args, dict):
+        overrides.update(extra_cli_args)
+    overrides.setdefault("max_epoch", max_epoch)
+    overrides.setdefault("batch_size", batch_size)
+    if seed is not None:
+        overrides.setdefault("seed", seed)
+    if saved_model is not None:
+        overrides.setdefault("saved_model", "true" if saved_model else "false")
+    if train_flag is not None:
+        overrides.setdefault("train", "true" if train_flag else "false")
+    if not model_name:
+        return "run_adaptation failed: provide model_name"
+    unsupported = _unsupported_override_keys(overrides)
+    if unsupported:
+        return (
+            "run_adaptation failed: run_model.py has no flag for "
+            + ", ".join(f"--{key}" for key in unsupported)
+            + "; pass model hyperparameters through a config_file "
+            "(libcity/config/model/<task>/<name>.json) instead of extra_cli_args."
+        )
+    task_id = _resolve_task_id(args, task_spec)
+    if not task_id:
+        return _unresolved_task_error("run_adaptation")
+
+    repo_dir = _libcity_root()
+    # Deterministic experiment id: it is the cache directory the metrics are
+    # read back from, so the run and the metric reader must agree on it.
+    exp_id = str(args.get("exp_id") or f"{sanitize_slug(task_id)}_{sanitize_slug(str(model_name))}")
+    overrides.setdefault("exp_id", exp_id)
+    cmd = _libcity_cmd(
+        script="run_model.py",
+        model_name=str(model_name),
+        dataset=str(dataset),
+        task=str(task),
+        gpu=gpu,
+        gpu_id=gpu_id,
+        config_file=str(config_file) if config_file else None,
+        overrides=overrides,
+    )
+    started_at = time.time()
+    returncode, stdout, stderr = await _run_subprocess(cmd, repo_dir, RUN_TIMEOUT)
+    status = "success" if returncode == 0 else "error"
+    metrics, metrics_detail = collect_run_metrics(
+        repo_dir, model_name=str(model_name), dataset=str(dataset), stdout=stdout, since=started_at
+    )
+    error_signature = _error_signature(stdout, stderr) if status == "error" else ""
+
+    interpreter = libcity_python()
+    report = {
+        "model_name": str(model_name),
+        "dataset": str(dataset),
+        "task": str(task),
+        "status": status,
+        "metrics": metrics,
+        "metrics_source": metrics_detail.get("source_kind", "none"),
+        "metrics_detail": metrics_detail,
+        "exp_id": exp_id,
+        "interpreter": interpreter,
+        "command": " ".join(cmd),
+        "returncode": returncode,
+        "stdout_excerpt": _truncate_text(stdout, 4000),
+        "error_signature": error_signature,
+        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
     }
-    migration_store.record_run(
-        paper_info,
+    if status == "error":
+        report["interpreter_hint"] = _interpreter_hint(interpreter, stdout + stderr)
+    _write_artifact("run_report.json", report)
+
+    result_store.record_run(
+        task_id,
         {
-            "model_name": model_name,
-            "dataset": dataset,
-            "paper_title": paper_info["title"],
-            "conference": paper_info["conference"],
+            "model_name": str(model_name),
+            "dataset": str(dataset),
+            "task": str(task),
             "status": status,
+            "metrics": metrics,
+            "metrics_detail": metrics_detail,
             "stdout": stdout.strip(),
             "stderr": stderr.strip(),
-            "metrics": metrics,
-            "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+            "command": " ".join(cmd),
         },
     )
-    return _truncate_text(output)
+    _append_context("runs", report)
+
+    lines = [f"Status: {status}", f"Command: {' '.join(cmd)}"]
+    if metrics:
+        lines.append(
+            f"Metrics ({metrics_detail.get('source_kind')}): "
+            + ", ".join(f"{key}={value:.4f}" for key, value in metrics.items())
+        )
+    else:
+        lines.append("Metrics: none reported by LibCity")
+    if error_signature:
+        lines.append(f"Error signature: {error_signature}")
+    lines.append(_truncate_text(stdout or stderr, 2000))
+    return "\n".join(lines)
 
 
-async def tune_migration_model(args: dict) -> str:
+async def tune_adaptation(args: dict) -> str:
+    """Run hyperparameter search for the composed model."""
+
     model_name = args.get("model_name")
     if not model_name:
-        return "tune_migration_model failed: provide model_name"
+        return "tune_adaptation failed: provide model_name"
 
-    dataset = args.get("dataset", "PEMSD8")
-    task = args.get("task", "traffic_state_pred")
-    gpu = args.get("gpu", "0")  # Default to cuda:0
+    task_spec = _active_task()
+    task_id = _resolve_task_id(args, task_spec)
+    if not task_id:
+        return _unresolved_task_error("tune_adaptation")
+    train_budget = task_spec.get("train") or {}
+    dataset = args.get("dataset") or task_spec.get("dataset") or "METR_LA"
+    task = args.get("task") or task_spec.get("task") or "traffic_state_pred"
+    gpu = bool(_as_bool(args.get("gpu"), bool(train_budget.get("gpu", False))))
+    gpu_id = str(args.get("gpu_id", "0"))
+    max_epoch = _as_int(args.get("max_epoch"), _as_int(train_budget.get("max_epoch"), 2))
+    batch_size = _as_int(args.get("batch_size"), _as_int(train_budget.get("batch_size"), 16))
     config_file = args.get("config_file")
     hyper_algo = args.get("hyper_algo")
-    raw_search_space = args.get("search_space")
-    if not isinstance(raw_search_space, dict):
-        raw_search_space = None
-    search_space = ensure_search_space(raw_search_space)
+    tuning_budget = task_spec.get("tuning") or {}
+    raw_search_space = args.get("search_space") or tuning_budget.get("search_space")
+    search_space = ensure_search_space(raw_search_space if isinstance(raw_search_space, dict) else None)
     params_file_arg = _resolve_project_path(args.get("params_file"))
-    max_evals = _as_int(args.get("max_evals"))
-    max_trials = _as_int(args.get("max_trials"))
+    if not hyper_algo:
+        hyper_algo = tuning_budget.get("hyper_algo")
+    max_evals = _as_int(args.get("max_evals"), _as_int(tuning_budget.get("max_evals")))
+    max_trials = _as_int(args.get("max_trials"), _as_int(tuning_budget.get("max_trials")))
     if max_evals is not None and max_evals <= 0:
         max_evals = None
     if max_trials is not None and max_trials <= 0:
         max_trials = None
-    saved_model = _as_bool(args.get("saved_model"))
-    train_flag = _as_bool(args.get("train"))
-    extra_cli_args = args.get("extra_cli_args")
-    cli_args: Dict[str, Any] = extra_cli_args if isinstance(extra_cli_args, dict) else {}
-    repo_dir = paths.root / "Bigscity-LibCity"
+    repo_dir = _libcity_root()
+    extra_cli_args: Dict[str, Any] = dict(train_budget.get("extra_args") or {})
+    forwarded = args.get("extra_cli_args")
+    if isinstance(forwarded, dict):
+        extra_cli_args.update(forwarded)
+    extra_cli_args.setdefault("max_epoch", max_epoch)
+    if batch_size:
+        extra_cli_args.setdefault("batch_size", batch_size)
 
-    libcity_env_enabled = is_libcity_tuning_allowed()
     result: Dict[str, Any] | None = None
-    libcity_attempted = False
     libcity_failure = ""
-    libcity_result: Dict[str, Any] | None = None
-
-    if libcity_env_enabled:
-        libcity_attempted = True
+    libcity_attempted = is_libcity_tuning_allowed()
+    # LibCity's run_hyper.py defaults to 100 evaluations. On this CPU host one
+    # evaluation is a full training run, so an unbounded default would never
+    # finish: the trial budget also caps the LibCity tuner.
+    libcity_max_evals = max_evals if max_evals is not None else max_trials
+    if libcity_attempted:
         try:
             params_file = (
-                params_file_arg if params_file_arg and params_file_arg.exists() else write_params_file(paths.run_dir, search_space)
+                params_file_arg
+                if params_file_arg and params_file_arg.exists()
+                else write_params_file(paths.run_dir, search_space)
             )
-            libcity_result = await asyncio.wait_for(
+            candidate = await asyncio.wait_for(
                 asyncio.to_thread(
                     run_libcity_tuning,
                     repo_dir=repo_dir,
                     run_dir=paths.run_dir,
-                    model_name=model_name,
-                    dataset_name=dataset,
+                    model_name=str(model_name),
+                    dataset_name=str(dataset),
                     params_file=params_file,
-                    task=task,
-                    config_file=config_file,
+                    task=str(task),
+                    config_file=str(config_file) if config_file else None,
                     hyper_algo=hyper_algo,
-                    max_evals=max_evals,
-                    saved_model=saved_model,
-                    train=train_flag,
-                    gpu_id=gpu,
-                    extra_cli_args=cli_args,
+                    max_evals=libcity_max_evals,
+                    gpu=gpu,
+                    gpu_id=gpu_id,
+                    extra_cli_args=extra_cli_args,
                 ),
-                timeout=TUNE_MIGRATION_TIMEOUT,
+                timeout=TUNE_TIMEOUT,
             )
-            if libcity_result.get("status") == "success":
-                result = libcity_result
+            if candidate.get("status") == "success":
+                result = candidate
             else:
-                libcity_failure = f"LibCity tuner returned {libcity_result.get('status')}"
+                libcity_failure = f"LibCity tuner returned {candidate.get('status')}"
         except Exception as exc:
             libcity_failure = f"LibCity tuner failed: {exc}"
 
@@ -399,88 +671,93 @@ async def tune_migration_model(args: dict) -> str:
                 asyncio.to_thread(
                     run_custom_grid_search,
                     repo_dir=repo_dir,
-                    model_name=model_name,
-                    dataset_name=dataset,
+                    model_name=str(model_name),
+                    dataset_name=str(dataset),
                     search_space=search_space,
-                    task=task,
-                    config_file=config_file,
+                    task=str(task),
+                    config_file=str(config_file) if config_file else None,
                     max_trials=max_trials,
-                    gpu_id=gpu,
+                    gpu=gpu,
+                    gpu_id=gpu_id,
+                    extra_cli_args=extra_cli_args,
                 ),
-                timeout=TUNE_MIGRATION_TIMEOUT,
+                timeout=TUNE_TIMEOUT,
             )
         except Exception as exc:
-            return f"tune_migration_model encountered an error: {exc}"
+            return f"tune_adaptation encountered an error: {exc}"
 
     metrics = result.get("best_metrics") or {}
-    paper = get_active_paper() or {}
-    paper_info = {
-        "title": paper.get("title") or args.get("paper_title") or model_name,
-        "conference": paper.get("conference") or args.get("conference") or "N/A",
-        "repo_url": paper.get("repo_url") or "",
-        "pdf_path": paper.get("pdf_path") or "",
-        "model_name": paper.get("model_name") or model_name,
-    }
-    tuning_payload: Dict[str, Any] = {
+    payload: Dict[str, Any] = {
         "strategy": result.get("strategy"),
-        "best_params": result.get("best_params", {}),
+        "status": result.get("status"),
+        "search_space": search_space,
+        "best_params": result.get("best_params") or {},
+        "best_metrics": metrics,
         "artifacts": result.get("artifacts") or {},
+        "libcity_failure": libcity_failure,
+        "interpreter": libcity_python(),
+        "debug_log": [],
+        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
     }
     if result.get("trials"):
-        tuning_payload["trials"] = result["trials"]
+        payload["trials"] = result["trials"]
+    _write_artifact("tuning.json", payload)
+    _update_context("tuning", payload)
 
-    migration_store.record_run(
-        paper_info,
+    result_store.record_run(
+        task_id,
         {
-            "model_name": model_name,
-            "dataset": dataset,
-            "paper_title": paper_info["title"],
-            "conference": paper_info["conference"],
-            "status": result.get("status", "error"),
+            "model_name": str(model_name),
+            "dataset": str(dataset),
+            "task": str(task),
+            "status": str(result.get("status") or "error"),
+            "kind": "tuning",
+            "metrics": metrics,
+            "best_params": payload["best_params"],
             "stdout": (result.get("stdout") or "").strip(),
             "stderr": (result.get("stderr") or "").strip(),
-            "metrics": metrics,
-            "tuning": tuning_payload,
-            "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         },
     )
 
-    summary_lines = [
-        f"Tuning strategy: {result.get('strategy')}",
-        f"Status: {result.get('status')}",
-    ]
-    if result.get("strategy") == "libcity":
-        summary_lines.append("LibCity run_hyper.py executed successfully.")
-    elif libcity_attempted:
-        if libcity_failure:
-            summary_lines.append(f"LibCity run_hyper.py skipped: {libcity_failure}. Used custom grid search instead.")
-    elif not libcity_env_enabled:
-        summary_lines.append("LibCity run_hyper.py disabled by environment; used custom grid search.")
-    if result.get("best_params"):
-        summary_lines.append(f"Best parameters: {json.dumps(result['best_params'], ensure_ascii=False)}")
+    lines = [f"Tuning strategy: {payload['strategy']}", f"Status: {payload['status']}"]
+    if libcity_failure:
+        lines.append(f"LibCity tuner skipped: {libcity_failure}")
+    if payload["best_params"]:
+        lines.append(f"Best parameters: {json.dumps(payload['best_params'], ensure_ascii=False)}")
     if metrics:
-        metric_text = ", ".join(f"{key}: {value:.4f}" for key, value in metrics.items())
-        summary_lines.append(f"Best metrics: {metric_text}")
-    artifacts = result.get("artifacts") or {}
-    if artifacts.get("hyper_result"):
-        summary_lines.append(f"Hyper-result saved to: {artifacts['hyper_result']}")
-    if result.get("trials"):
-        summary_lines.append(f"Trials run: {len(result['trials'])}")
-    return _truncate_text("\n".join(summary_lines))
+        lines.append("Best metrics: " + ", ".join(f"{key}={value:.4f}" for key, value in metrics.items()))
+    if payload.get("trials"):
+        lines.append(f"Trials run: {len(payload['trials'])}")
+    return _truncate_text("\n".join(lines))
+
+
+def _error_signature(stdout: str, stderr: str) -> str:
+    """Extract the shortest distinctive failure line from LibCity output."""
+
+    candidates: List[str] = []
+    for line in (stderr or "").splitlines() + (stdout or "").splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith(("Error", "Traceback", "RuntimeError", "ValueError", "KeyError", "AssertionError")):
+            candidates.append(stripped)
+        elif "Error:" in stripped and len(stripped) < 300:
+            candidates.append(stripped)
+    if candidates:
+        return candidates[-1][:500]
+    tail = (stderr or stdout or "").strip().splitlines()
+    return tail[-1][:500] if tail else "unknown failure"
+
+
+# ---------------------------------------------------------------------------
+# generic web / document tools (kept for module research)
+# ---------------------------------------------------------------------------
 
 
 def _web_search_sync(query: str, num: int) -> str:
     url = "https://google.serper.dev/search"
-    payload = json.dumps({
-        "q": query,
-        "num": num,
-        "page": 1,
-    })
-
-    headers = {
-        'X-API-KEY': SERPER_API_KEY,
-        'Content-Type': 'application/json'
-    }
+    payload = json.dumps({"q": query, "num": num, "page": 1})
+    headers = {"X-API-KEY": SERPER_API_KEY, "Content-Type": "application/json"}
 
     response = requests.request("POST", url, headers=headers, data=payload, timeout=30)
     if response.status_code != 200:
@@ -555,7 +832,7 @@ def _read_pdf_text_sync(pdf_path: Path, max_pages: int, max_chars: int) -> str:
 
 
 async def read_pdf_text(args: dict) -> str:
-    """Extract plain text from a PDF file (replaces Claude's native PDF reading)."""
+    """Extract plain text from a PDF file (kept for module research)."""
     raw_path = args.get("pdf_path") or args.get("path")
     max_pages = _as_int(args.get("max_pages"), 40)
     max_chars = _as_int(args.get("max_chars"), 60000)

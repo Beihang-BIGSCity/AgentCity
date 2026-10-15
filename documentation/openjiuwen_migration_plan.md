@@ -5,6 +5,13 @@
 > **已按 openjiuwen 0.1.18 实际安装源码核对并修正**（2026-09-20）。原文档基于 develop
 > 分支调研的若干假设与 0.1.18 不符，修正点见 §0.1。
 
+> **后续变更（2026-10-14，分支 `jiuwen-agent`）**：仓库已收敛为单一「模型适配」流水线，`agents/{literature,migration,tuning}`
+> 三个 workflow 及 `agents/core/agent_registry.py`、`server.py`、`frontend/`、`batch_migration.py`、`batch_runner.py` 均已删除。
+> 当前的 workflow / 角色 / 阶段定义见 `agents/adaptation/`（决策层 task-planner、执行层 data-integrator/model-composer/run-tester、
+> 调参层 hyper-searcher/perf-debugger/effect-evaluator），CLI 入口见 `main.py`，框架对照见 `readme.md`。
+> 本文档以下内容保留为「Claude Code SDK → openJiuwen」平台迁移的历史记录：其中关于 openjiuwen 0.1.18 源码、
+> runner/team API、storage、model init 的结论**仍然有效**；仅 §"现状/工作流定义"这类目录结构描述已过时。
+
 ## 0. 背景结论（调研已确认的事实）
 
 - openJiuwen 是华为开源的 Agent 平台（Apache 2.0），核心 SDK 为 `agent-core`（PyPI 包名 `openjiuwen`，Python 3.11–3.13）。本仓运行环境：conda env `jiuwen`（Python 3.11.4），已装 `openjiuwen==0.1.18` + `claude-agent-sdk==0.2.154` + `fastmcp 2.14.7` + `pdfplumber`。

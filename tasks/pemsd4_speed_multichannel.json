@@ -1,0 +1,23 @@
+{
+  "task_id": "pemsd4_speed_multichannel",
+  "dataset": "PEMSD4",
+  "task": "traffic_state_pred",
+  "model_name": null,
+  "efficiency": "balanced",
+  "target": {
+    "metric": "masked_mae",
+    "threshold": 32.0,
+    "maximize": false
+  },
+  "train": {
+    "max_epoch": 3,
+    "batch_size": 16,
+    "gpu": false
+  },
+  "max_rounds": 2,
+  "candidate_scope": {
+    "models": [],
+    "categories": ["encoder", "spatial", "temporal", "fusion", "head"]
+  },
+  "notes": "多通道场景：PEMSD4 同时含 flow/occupancy/speed(output_dim=3, 307 节点)，考察编码器对多通道输入的适配与输出头维度处理。"
+}

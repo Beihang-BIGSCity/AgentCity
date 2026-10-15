@@ -75,6 +75,7 @@ class AgentPipeline:
             prompt=prompt,
             profile=self.profile,
             logger=self.logger,
+            model_role=stage.model,
         )
         summary = result["summary"]
         if summary:

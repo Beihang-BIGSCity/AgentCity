@@ -1,0 +1,36 @@
+{
+  "task_id": "metr_la_speed_smoke",
+  "dataset": "METR_LA",
+  "task": "traffic_state_pred",
+  "model_name": null,
+  "efficiency": "lightweight",
+  "target": {
+    "metric": "masked_mae",
+    "threshold": 35.0,
+    "maximize": false
+  },
+  "train": {
+    "max_epoch": 15,
+    "batch_size": 32,
+    "gpu": false,
+    "extra_args": {
+      "train_rate": 0.1,
+      "eval_rate": 0.05
+    }
+  },
+  "max_rounds": 2,
+  "candidate_scope": {
+    "models": [],
+    "categories": [
+      "encoder",
+      "spatial",
+      "temporal",
+      "fusion",
+      "head"
+    ]
+  },
+  "notes": "CPU 小规模适配任务：METR_LA(207 节点/5 分钟采样) 速度预测，15 epoch 验证 数据集成-模型组合-运行测试-调参-评估 整条链路；阈值宽松(35.0)，单轮即可达标。实测本机(CPU, batch 32, 15 epoch, STDiffGRU 组合模型)单次运行约 8-12 分钟(15 个 epoch 训练 ~5-7 分钟 + 验证/测试前向 ~2 分钟，受同机负载影响)；消融实验(单分支变体)与原生单模块基线同样按 15 epoch 运行，预算请按每次运行 ~10 分钟估。",
+  "tuning": {
+    "max_trials": 2
+  }
+}

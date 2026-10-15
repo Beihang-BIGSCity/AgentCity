@@ -1,0 +1,23 @@
+{
+  "task_id": "pems_bay_flow_event",
+  "dataset": "PEMS_BAY",
+  "task": "traffic_state_pred",
+  "model_name": null,
+  "efficiency": "balanced",
+  "target": {
+    "metric": "masked_mae",
+    "threshold": 30.0,
+    "maximize": false
+  },
+  "train": {
+    "max_epoch": 3,
+    "batch_size": 16,
+    "gpu": false
+  },
+  "max_rounds": 3,
+  "candidate_scope": {
+    "models": [],
+    "categories": ["encoder", "spatial", "temporal", "fusion", "head"]
+  },
+  "notes": "事件因果链路场景：PEMS_BAY(325 节点) 流量型数据，期望检索到 causality 家族策略(突发事件/拥堵传播)，并在未达标时触发反馈回边重新规划。"
+}

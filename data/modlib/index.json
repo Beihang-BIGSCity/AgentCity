@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-14T00:00:00Z",
+  "categories": {
+    "encoder": "数据编码器：Embedding / 数据归一化 / 缺失值补全",
+    "spatial": "空间依赖模块",
+    "temporal": "时间依赖模块",
+    "fusion": "时空融合模块",
+    "head": "输出头：预测层 + 损失函数"
+  },
+  "modules": [
+    {
+      "id": "zscore_encoder",
+      "category": "encoder",
+      "name": "Z-Score Encoder",
+      "desc": "对每个节点、每个通道做 z-score 标准化：均值/方差以滑动 buffer 保存，训练时用当前 batch 统计量更新 buffer，推理时直接复用 buffer（形状不匹配则回退到 batch 统计量）。适合把量纲差异很大的原始流量/速度特征先归一化再送入时空主干。无参数、零额外显存开销，时间复杂度 O(B·T·N·C)，buffer 仅 O(N·C)。",
+      "file": "code/encoder/zscore_encoder.py",
+      "class": "ZScoreEncoder",
+      "ctr_args": {
+        "num_nodes": 207,
+        "input_dim": 3
+      },
+      "io": "forward(x: (B,T,N,C)) -> (B,T,N,C)",
+      "tags": [
+        "normalization",
+        "zscore",
+        "running_stats",
+        "no_params"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/STNorm.py",
+        "class": "STNorm",
+        "note": "STNorm 在模型内部维护 running 均值/方差做 z-score 归一化，本模块把该统计逻辑抽成独立编码器；归一化工具族另见 libcity/model/utils.py。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "missing_fill_encoder",
+      "category": "encoder",
+      "name": "Missing-Value Forward Fill",
+      "desc": "把 0.0 与 NaN 都视为缺失，沿时间轴前向填充上一个有效观测，若整段都没有有效值则回填 0（不改变通道数 C）。适合传感器掉线、或用 0 伪装缺失值的数据清洗环节。无参数，单次 O(B·T·N·C) 时间扫描；注意它是确定性算子，不含可学习权重。",
+      "file": "code/encoder/missing_fill_encoder.py",
+      "class": "MissingFillEncoder",
+      "ctr_args": {
+        "input_dim": 3
+      },
+      "io": "forward(x: (B,T,N,C)) -> (B,T,N,C)",
+      "tags": [
+        "missing_value",
+        "imputation",
+        "forward_fill",
+        "no_params"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/data/dataset/dataset_subclass/dstagnn_dataset.py",
+        "class": "DSTAGNNDataset",
+        "note": "LibCity 本体没有独立的缺失值填充模块，其数据/邻接层面统一用 nan_to_num(..., nan=0.0) 兜底，本模块把这一预处理约定显式化并升级为沿时间轴前向填充。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "feature_embedding_encoder",
+      "category": "encoder",
+      "name": "Feature Embedding (Linear+ReLU)",
+      "desc": "单层 Linear(C -> hidden_dim) 加 ReLU，把原始特征通道提升到主干使用的隐层宽度 d，等价于 STSGCN/STFGNN 的 first_layer_embedding。适合作为任意图/注意力时空模型的第一层输入嵌入。参数量 C×d，计算量 O(B·T·N·C·d)，相对于主干可忽略；输入通道与 input_dim 不一致时会自动重建投影层。",
+      "file": "code/encoder/feature_embedding_encoder.py",
+      "class": "FeatureEmbeddingEncoder",
+      "ctr_args": {
+        "input_dim": 3,
+        "hidden_dim": 64
+      },
+      "io": "forward(x: (B,T,N,C)) -> (B,T,N,d)",
+      "tags": [
+        "embedding",
+        "linear",
+        "relu"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/STSGCN.py",
+        "class": "STSGCN",
+        "note": "STSGCN.first_layer_embedding = nn.Linear(num_of_features, 64)，STFGNN 同款；参考实现仅有线性层，本模块按接口要求补了 ReLU。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "cheb_gcn",
+      "category": "spatial",
+      "name": "Chebyshev GCN",
+      "desc": "切比雪夫多项式图卷积：用 T_0=I、T_1=L̃、T_k=2L̃T_{k-1}-L̃T_{k-2} 展开近似谱域图卷积（L̃ 为按 λ_max 缩放的对称拉普拉斯），每个阶数一套 d×d 权重。适合路网拓扑已知且固定的场景（ASTGCN 一脉）。参数量 K×d×d，多项式传播开销 O(K·N²·d)/时间步；adj 为 None 时退化为 T_0=I 的逐节点线性映射，不会崩溃。",
+      "file": "code/spatial/cheb_gcn.py",
+      "class": "ChebGCN",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_nodes": 207,
+        "ks": 2
+      },
+      "io": "forward(x: (B,T,N,d), adj: (N,N)|None) -> (B,T,N,d)",
+      "tags": [
+        "graph",
+        "fixed_adjacency",
+        "chebyshev"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/ASTGCN.py",
+        "class": "ChebConvWithSAt",
+        "note": "任务书中给出的 traffic_speed_prediction/ASTGCN.py 在仓库中不存在，ASTGCN 实际位于 traffic_flow_prediction/ 下。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "diffusion_gcn",
+      "category": "spatial",
+      "name": "Diffusion GCN (bidirectional random walk)",
+      "desc": "双向随机游走扩散卷积：分别构造前向 P_f=D⁻¹A 与后向 P_b=D⁻¹Aᵀ 两个转移矩阵，各扩散 K 跳得到 x、Px、P²x…，与自身拼接后由单层线性融合。适合有向路网、需要显式区分上下游传播方向的场景（DCRNN 风格）。参数量 (1+2K)×d×d，扩散开销 O(K·N²·d)/时间步；adj 为 None 时两个 support 退化为单位阵。",
+      "file": "code/spatial/diffusion_gcn.py",
+      "class": "DiffusionGCN",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_nodes": 207,
+        "num_diffusion_steps": 2
+      },
+      "io": "forward(x: (B,T,N,d), adj: (N,N)|None) -> (B,T,N,d)",
+      "tags": [
+        "graph",
+        "random_walk",
+        "diffusion",
+        "directed"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/DCRNN.py",
+        "class": "GCONV",
+        "note": "GCONV 使用 filter_type='dual_random_walk'；随机游走矩阵构造参考 libcity/model/utils.py 的 calculate_random_walk_matrix（本模块用纯 torch 复现）。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "adaptive_gcn",
+      "category": "spatial",
+      "name": "Adaptive GCN (node embedding adjacency)",
+      "desc": "为每个节点学习 embedding E，用 S=softmax(ReLU(E·Eᵀ)) 生成自适应邻接矩阵，再在图上做 Neumann 幂级数卷积（I、S、S²…共 ks 项），每阶一套 d×d 权重。适合邻接矩阵缺失/不可靠、希望端到端学习隐式图结构的场景（AGCRN 思路）。参数量 N×embed_dim + ks×d×d，幂级数开销 O(ks·N²·d)/时间步。优先级：显式传入 adj > 学习到的 embedding 图 > 节点数不匹配时的单位阵退化。",
+      "file": "code/spatial/adaptive_gcn.py",
+      "class": "AdaptiveGCN",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_nodes": 207,
+        "embed_dim": 10,
+        "ks": 2
+      },
+      "io": "forward(x: (B,T,N,d), adj: (N,N)|None) -> (B,T,N,d)",
+      "tags": [
+        "graph",
+        "adaptive_adjacency",
+        "node_embedding",
+        "neumann"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/AGCRN.py",
+        "class": "AVWGCN",
+        "note": "AVWGCN 用 softmax(relu(E·Eᵀ)) 构造自适应图并做 K 阶多项式；本模块改用 Neumann 幂级数，并把 AVWGCN 的按节点权重池换成按阶共享权重，从而对任意 N 都可用。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "spatial_attention",
+      "category": "spatial",
+      "name": "Spatial Multi-Head Attention",
+      "desc": "在每个时间步对 N 个节点向量做多头点积注意力，得到 N×N 空间注意力图；传入 adj 时用作掩码（保留自环，图外节点对用大负数压制），不传 adj 则退化为全连接注意力自行学习图结构。适合长距离/非局部空间相关性强的场景。注意力分数占 O(B·T·heads·N²) 显存，参数量为 4 个 d×d 投影。",
+      "file": "code/spatial/spatial_attention.py",
+      "class": "SpatialAttention",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_nodes": 207,
+        "num_heads": 4
+      },
+      "io": "forward(x: (B,T,N,d), adj: (N,N)|None) -> (B,T,N,d)",
+      "tags": [
+        "attention",
+        "multi_head",
+        "node_attention",
+        "masked"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/ASTGCN.py",
+        "class": "SpatialAttentionLayer",
+        "note": "无邻接的节点注意力参考 ASTGCN 的 SpatialAttentionLayer；多头版本对应 DSTAGNN 的 SMultiHeadAttention 与 GMAN 的 SpatialAttention。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "gru",
+      "category": "temporal",
+      "name": "GRU Encoder",
+      "desc": "把每个节点当作独立序列：把 (B,T,N,d) 折叠成 T×(B·N)×d 后送入（可选双向）nn.GRU，再把隐状态展开回 (B,T,N,d)，隐层宽度即 hidden_dim，因此 T'=T。适合中短期时间依赖的通用基线，也是 DCRNN 编码器的非图版本。参数量约 O(num_layers·d²)，沿时间串行推进。",
+      "file": "code/temporal/gru.py",
+      "class": "GRUEncoder",
+      "ctr_args": {
+        "hidden_dim": 64
+      },
+      "io": "forward(x: (B,T,N,d)) -> (B,T',N,d); T'=T",
+      "tags": [
+        "rnn",
+        "recurrent",
+        "gate"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/DCRNN.py",
+        "class": "DCGRUCell",
+        "note": "DCGRUCell 是带图卷积的 GRU（gate/update 全用 GCONV），RNN.py 的 rnn_type='GRU' 分支是同一思路的非图版本。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "lstm",
+      "category": "temporal",
+      "name": "LSTM Encoder",
+      "desc": "与 GRU 编码器相同的折叠/展开策略，但使用带独立细胞状态的 LSTM，输入门/遗忘门/输出门配合 cell state 缓解长序列梯度消失；输入与隐层宽度均为 hidden_dim，T'=T。适合时间跨度更长、需要更强记忆能力的场景。参数量约 O(4·num_layers·d²)，沿时间串行。",
+      "file": "code/temporal/lstm.py",
+      "class": "LSTMEncoder",
+      "ctr_args": {
+        "hidden_dim": 64
+      },
+      "io": "forward(x: (B,T,N,d)) -> (B,T',N,d); T'=T",
+      "tags": [
+        "rnn",
+        "recurrent",
+        "lstm"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/RNN.py",
+        "class": "RNN",
+        "note": "RNN.py 的 rnn_type='LSTM' 分支构建 nn.LSTM；任务书提到的 traffic_speed_prediction/LSTM.py 在本仓库中不存在，LibCity 把 RNN/GRU/LSTM 统一放在 RNN.py 内。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "dilated_tcn",
+      "category": "temporal",
+      "name": "Dilated TCN (gated, exponential dilation)",
+      "desc": "WaveNet 风格的门控膨胀卷积：第 i 层膨胀率按 base·2^i 指数增长，同时计算 tanh(filter) 与 sigmoid(gate) 并逐元素相乘，使感受野随层数指数扩张。卷积为因果形式（左侧填充 dilation×(k-1) 后再裁剪多余部分），因此输出长度与输入相同，T'=T。适合有界感受野即可满足、且要求并行低延迟的场景。参数量 O(L·d²·k)，计算量 O(L·d²·k·T·N)。",
+      "file": "code/temporal/dilated_tcn.py",
+      "class": "DilatedTCN",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_layers": 3
+      },
+      "io": "forward(x: (B,T,N,d)) -> (B,T',N,d); T'=T (causal padding + trimming)",
+      "tags": [
+        "convolution",
+        "dilated",
+        "causal",
+        "gated"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/GWNET.py",
+        "class": "GWNET",
+        "note": "GWNET 的 WaveNet 循环中 filter_convs/gate_convs 成对使用 tanh 与 sigmoid 门控并沿时间膨胀；本模块剥离图卷积后独立成层。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "gated_dilated_tcn",
+      "category": "temporal",
+      "name": "Gated Dilated TCN (GLU)",
+      "desc": "GLU 门控膨胀因果卷积：一次卷积输出 2d 通道，沿通道对半拆分为 a、b 后做 a⊙σ(b)，膨胀率按 base·2^i 指数增长（STSGCN/STFGNN 的时间分支）。与 graph 模块交替堆叠即可构成联合时空块；因果左填充后裁剪，保证 T'=T。参数量 O(2·L·d²·k)，计算量 O(L·d²·k·T·N)。",
+      "file": "code/temporal/gated_dilated_tcn.py",
+      "class": "GatedDilatedTCN",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_layers": 2
+      },
+      "io": "forward(x: (B,T,N,d)) -> (B,T',N,d); T'=T (causal padding + trimming)",
+      "tags": [
+        "convolution",
+        "dilated",
+        "glu",
+        "causal"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/STSGCN.py",
+        "class": "STSGCL",
+        "note": "STSGCL 的时间分支为时序卷积 + GLU（a×sigmoid(b)）；STFGNN 的同名 STSGCL 时间分支一致。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "temporal_transformer",
+      "category": "temporal",
+      "name": "Temporal Transformer",
+      "desc": "把每个节点当作长度为 T 的序列，叠加正弦位置编码后送入 num_layers 层 Transformer 编码器（多头自注意力 + 前馈 + LayerNorm + 残差），注意力只在时间轴上做，节点轴作为独立 batch，T'=T。适合长程、突发式时间依赖（STAEformer/PDFormer 的时间编码器）。显存与计算量 O(B·N·T²·d)，随输入窗口平方增长。",
+      "file": "code/temporal/temporal_transformer.py",
+      "class": "TemporalTransformer",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_layers": 2,
+        "num_heads": 4
+      },
+      "io": "forward(x: (B,T,N,d)) -> (B,T',N,d); T'=T",
+      "tags": [
+        "attention",
+        "transformer",
+        "positional_encoding"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/STAEformer.py",
+        "class": "SelfAttentionLayer",
+        "note": "SelfAttentionLayer 为 注意力+前馈+两层 LayerNorm 的时间注意力块；PDFormer 的时间注意力沿用同一配方，本模块用 nn.TransformerEncoder 堆叠并补上正弦位置编码。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "add",
+      "category": "fusion",
+      "name": "Add Fusion",
+      "desc": "两路时空表征逐元素相加；当两路最后一维不同（或不等于 hidden_dim）时，先用各自的 Linear 把两路都投影到 hidden_dim，保证形状永远对齐。适合两路分支尺度相近、希望以零额外参数完成融合的场景。维度一致时模块没有任何参数；否则为两个 d×hidden_dim 投影。",
+      "file": "code/fusion/add.py",
+      "class": "AddFusion",
+      "ctr_args": {
+        "hidden_dim": 64
+      },
+      "io": "forward(h_sp: (B,T,N,d), h_tm: (B,T,N,d)) -> (B,T,N,d)",
+      "tags": [
+        "fusion",
+        "elementwise",
+        "no_params"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/ASTGCN.py",
+        "class": "FusionLayer",
+        "note": "ASTGCN 的 FusionLayer 用矩阵形状的可学习权重把注意力分支加权后再合并，是 LibCity 内最接近的加权/逐元素融合实现。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "concat",
+      "category": "fusion",
+      "name": "Concat Fusion",
+      "desc": "两路表征沿特征维拼接后经单层 Linear(2×hidden_dim -> hidden_dim) 投影回主干宽度，信息不丢失，由线性层学习组合方式。适合两路表示互补、可接受少量额外容量的场景。参数量 2×hidden_dim²；两路宽度不一致时先投影到 hidden_dim。",
+      "file": "code/fusion/concat.py",
+      "class": "ConcatFusion",
+      "ctr_args": {
+        "hidden_dim": 64
+      },
+      "io": "forward(h_sp: (B,T,N,d), h_tm: (B,T,N,d)) -> (B,T,N,d)",
+      "tags": [
+        "fusion",
+        "concat",
+        "projection"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/GWNET.py",
+        "class": "GWNET",
+        "note": "GWNET 沿通道堆叠残差/跳连特征后由 end_conv 线性层融合；STSGCN 的 OutputLayer 同样是展平后线性投影的融合思路。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "weighted",
+      "category": "fusion",
+      "name": "Weighted Fusion (softmax gate)",
+      "desc": "对两路分支学习两个标量权重并做 softmax 归一化，形成凸组合 w0·h_sp + w1·h_tm，权重在样本间共享。适合希望模型自适应调节空间/时间贡献比例、又不想引入逐位置开销的场景。参数量仅 2 个标量（加上可选的宽度投影），计算代价可忽略。",
+      "file": "code/fusion/weighted.py",
+      "class": "WeightedFusion",
+      "ctr_args": {
+        "hidden_dim": 64
+      },
+      "io": "forward(h_sp: (B,T,N,d), h_tm: (B,T,N,d)) -> (B,T,N,d)",
+      "tags": [
+        "fusion",
+        "learned_weights",
+        "softmax"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/GMAN.py",
+        "class": "GatedFusion",
+        "note": "GMAN 的 GatedFusion 用 sigmoid 门控把空间 HS 与时间 HT 混合；本模块给出 softmax 归一化的双权重凸组合形式（更廉价、可解释）。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "cross_attention",
+      "category": "fusion",
+      "name": "Cross-Attention Fusion",
+      "desc": "以时间分支为 Query、空间分支为 Key/Value 做多头交叉注意力（两路都折叠成 B·N 条独立序列），让每个时间步按需对齐空间上下文，最后经输出投影回到 hidden_dim。适合两路表征必须显式交互而非简单平均的场景。计算/显存 O(B·N·T²·d)，投影参数量 4×d²；两路宽度不一致时先投影到 hidden_dim。",
+      "file": "code/fusion/cross_attention.py",
+      "class": "CrossAttentionFusion",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "num_heads": 4
+      },
+      "io": "forward(h_sp: (B,T,N,d), h_tm: (B,T,N,d)) -> (B,T,N,d)",
+      "tags": [
+        "fusion",
+        "attention",
+        "cross_attention"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/GMAN.py",
+        "class": "TransformAttention",
+        "note": "TransformAttention 先分别投影 query/key/value 再做缩放点积注意力，是最贴近跨表征注意力的实现；DSTAGNN 的 MultiHeadAttention 是同类结构。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "linear_head",
+      "category": "head",
+      "name": "Linear Head",
+      "desc": "把每个节点的 (T',d) 历史展平后由单层 Linear(T'·d -> H·output_dim) 一次性回归全部预测步，再 reshape 成 (B,H,N,output_dim)（直接多步、非自回归），对应 STFGNN 的输出层。适合预测步数固定、追求最简结构的多步预测。参数量 T'·d·H·output_dim；loss 支持 masked_mae/masked_mse/masked_mape，DEFAULT_LOSS=masked_mae。",
+      "file": "code/head/linear_head.py",
+      "class": "LinearHead",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "input_len": 12,
+        "horizon": 12,
+        "output_dim": 1
+      },
+      "io": "forward(x: (B,T',N,d)) -> (B,H,N,output_dim); loss(pred,target,null_val=0.0,loss_type=None)",
+      "tags": [
+        "head",
+        "linear",
+        "multi_step"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/STFGNN.py",
+        "class": "OutputLayer",
+        "note": "OutputLayer 把 (B,N,T,C) 展平后接 nn.Linear(num_of_filters, predict_length*output_dim)；masked 损失对齐 libcity/model/loss.py 的 masked_mae_torch 等实现。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "mlp_head",
+      "category": "head",
+      "name": "MLP Head",
+      "desc": "展平历史后先过一层隐藏 Linear+ReLU（默认宽度 2×hidden_dim）再过输出层，输出结构与线性头一致。多一层非线性用于拟合历史到未来之间的复杂映射。适合历史-未来关系明显非线性、可接受更多参数的场景。参数量 T'·d·mlp_hidden + mlp_hidden·H·output_dim；loss 支持三种 masked 形式，DEFAULT_LOSS=masked_mse。",
+      "file": "code/head/mlp_head.py",
+      "class": "MLPHead",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "input_len": 12,
+        "horizon": 12,
+        "output_dim": 1
+      },
+      "io": "forward(x: (B,T',N,d)) -> (B,H,N,output_dim); loss(pred,target,null_val=0.0,loss_type=None)",
+      "tags": [
+        "head",
+        "mlp",
+        "nonlinear"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_speed_prediction/GMAN.py",
+        "class": "GMAN",
+        "note": "GMAN 与 AGCRN 都在主干末端用多层 Linear 输出块生成预测；本模块把该结构抽象为独立的多步预测头，masked 损失对齐 libcity/model/loss.py。"
+      },
+      "status": "curated"
+    },
+    {
+      "id": "horizon_head",
+      "category": "head",
+      "name": "Horizon Head (direct multi-output)",
+      "desc": "每个预测步各配一个独立的 Linear(T'·d -> output_dim)，沿新的 horizon 轴堆叠，实现 direct multi-output 的多步预测；不同预测步的参数互不共享、互不干扰。适合各预测步模式差异明显（某些步是峰值、某些步是平台）的场景。参数量 H·T'·d·output_dim；loss 支持三种 masked 形式，DEFAULT_LOSS=masked_mape。",
+      "file": "code/head/horizon_head.py",
+      "class": "HorizonHead",
+      "ctr_args": {
+        "hidden_dim": 64,
+        "input_len": 12,
+        "horizon": 12,
+        "output_dim": 1
+      },
+      "io": "forward(x: (B,T',N,d)) -> (B,H,N,output_dim); loss(pred,target,null_val=0.0,loss_type=None)",
+      "tags": [
+        "head",
+        "multi_step",
+        "direct_multi_output"
+      ],
+      "source": {
+        "libcity": "Bigscity-LibCity/libcity/model/traffic_flow_prediction/STSGCN.py",
+        "class": "STSGCN",
+        "note": "STSGCN（及 STFGNN）的 self.outputs 是按预测步组织的 ModuleList，每步一个 OutputLayer 后沿 horizon 拼接；masked 损失对齐 libcity/model/loss.py 的 masked_mape_torch。"
+      },
+      "status": "curated"
+    }
+  ]
+}
