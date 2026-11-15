@@ -611,7 +611,7 @@ def check_task_specs(paths: AppPaths) -> None:
             bool(spec["task_id"]) and bool(spec["dataset"]) and bool(spec["task"]),
             f"{spec_path.name}: required keys present",
         )
-        check(spec["train"]["gpu"] is False, f"{spec_path.name}: CPU-only (gpu=false)")
+        check(isinstance(spec["train"]["gpu"], bool), f"{spec_path.name}: explicit CPU/GPU budget")
         check(
             spec["target"]["threshold"] is not None,
             f"{spec_path.name}: numeric target threshold set",

@@ -201,10 +201,21 @@ async def analyze_dataset(args: dict) -> str:
     """Compute the task-level statistical signals for one LibCity dataset."""
 
     task_spec = _active_task()
+    train_budget = task_spec.get("train") or {}
     dataset = args.get("dataset") or task_spec.get("dataset")
     task = args.get("task") or task_spec.get("task") or "traffic_state_pred"
     windows = _as_int(args.get("windows"), 10) or 10
-    max_timesteps = _as_int(args.get("max_timesteps"), 20000) or 20000
+    max_timesteps = _as_int(args.get("max_timesteps"), train_budget.get("profile_max_timesteps", 20000)) or 20000
+    data_col = args.get("data_col") or train_budget.get("data_col")
+    if isinstance(data_col, list):
+        if len(data_col) != 1:
+            return "analyze_dataset failed: profiling requires one explicit target column"
+        data_col = data_col[0]
+    profile_train_rate = args.get("train_rate")
+    if profile_train_rate is None and train_budget.get("profile_train_only"):
+        profile_train_rate = (train_budget.get("extra_args") or {}).get("train_rate")
+    if profile_train_rate is None:
+        profile_train_rate = 1.0
     if not dataset:
         return "analyze_dataset failed: provide dataset"
     # dataset_profile.json is part of the round's artifact contract, so resolve the
@@ -222,6 +233,8 @@ async def analyze_dataset(args: dict) -> str:
             task=str(task),
             windows=windows,
             max_timesteps=max_timesteps,
+            data_col=data_col,
+            train_rate=float(profile_train_rate),
         )
     except Exception as exc:
         return f"analyze_dataset failed: {exc}"

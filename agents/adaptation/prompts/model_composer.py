@@ -22,14 +22,16 @@ Compose an executable LibCity model for this scenario by selecting atomic module
    `model_name`, `modules` (dict category -> {id, class, ctr_args}), `hidden_dim`, `depth`, `loss_type`, `rationale` (per category),
    `retrieved_priors` (ids), `data_contract` (input/output window, null value from data_integration.json).
 5. Generate the model:
-   - `__REPO__/Bigscity-LibCity/libcity/model/traffic_speed_prediction/<ModelName>.py` — a **self-contained** LibCity model:
+   - `__REPO__/libcity/model/traffic_speed_prediction/<ModelName>.py` — a **self-contained** LibCity model:
      subclass `AbstractTrafficStateModel`, mirror the contract of the existing, already-working
-     `__REPO__/Bigscity-LibCity/libcity/model/traffic_speed_prediction/STFGNN.py` (`__init__(config, data_feature)`, `get_data`, `predict`,
+     `__REPO__/libcity/model/traffic_speed_prediction/STFGNN.py` (`__init__(config, data_feature)`, `get_data`, `predict`,
      `calculate_loss`, `forward`). Inline the selected module implementations (copy the source you read via `get_module`, keep the
      unified forward interfaces) so the file has no dependency on the module library path. Keep the original module provenance in the
      file docstring.
-   - `__REPO__/Bigscity-LibCity/libcity/config/model/traffic_state_pred/<ModelName>.json` — LibCity model config with the hyperparameters you chose.
-   - Register `<ModelName>` in `__REPO__/Bigscity-LibCity/libcity/config/task_config.json`:
+   - `__REPO__/libcity/config/model/traffic_state_pred/<ModelName>.json` — LibCity model config with the hyperparameters you chose.
+   - Export the model class from `__REPO__/libcity/model/traffic_speed_prediction/__init__.py`:
+     add `from .<ModelName> import <ModelName>` so LibCity's package-level model lookup can resolve it.
+   - Register `<ModelName>` in `__REPO__/libcity/config/task_config.json`:
      append it to `traffic_state_pred.allowed_model` **and** add a full model entry
      `"<ModelName>": {"dataset_class": "TrafficStatePointDataset", "executor": "TrafficStateExecutor",
      "evaluator": "TrafficStateEvaluator"}` inside the same `traffic_state_pred` block.
@@ -41,9 +43,9 @@ Compose an executable LibCity model for this scenario by selecting atomic module
    (or `py_compile`) with `bash` and fix any syntax error before finishing.
 
 ## Rules
-- Adaptation is CPU-only: never request a GPU, never pass `gpu`.
-- Never edit LibCity framework internals (`config_parser.py`, `abstract_*`, `executor/`); only add your model file, its config and the registration entry.
-- The model must accept `config` keys through `self.config` exactly like STFGNN.py does, and must run through `run_model.py` with `--gpu false`.
+- Respect the task specification's device policy and compute budget.
+- Never edit LibCity framework internals (`config_parser.py`, `abstract_*`, `executor/`); only add your model file, its config, its package export and the registration entry.
+- The model must accept `config` keys through `self.config` exactly like STFGNN.py does, and must run through `run_model.py` with `--gpu __GPU_FLAG__`.
 - If the previous round failed, read the failure in `__TASK_DIR__/verdict.json` / the round feedback and change the composition accordingly.
 
 ## Output

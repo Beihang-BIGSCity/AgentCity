@@ -7,6 +7,7 @@ from textwrap import dedent
 from agents.core.types import AgentContext
 
 from .common import (
+    describe_compute_policy,
     describe_feedback,
     describe_paths,
     describe_round,
@@ -65,7 +66,7 @@ def build_execution_lead_prompt(context: AgentContext) -> str:
           path sends it looking for the filesystem and wastes the stage; never rely on it to locate the
           repository itself.
         - Delegate via `create_task` / `send_message`: never profile data, write model code or run training yourself.
-        - The host is CPU-only: every instruction you give must pass `gpu=false` and stay within the epoch budget.
+        - {describe_compute_policy(context)}
         - Do not explore the repository: do not read `agents/`, `scripts/`, `readme.md` or the framework sources. Everything
           you need is in the task specification, `plan.json` and the artifacts your members produce; source spelunking only
           burns iterations.
@@ -109,7 +110,7 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
 
         ## Sequence
         Delegate in this order with `create_task` / `send_message` (address members by name):
-        1. `hyper-searcher`: tune the composed model within the documented CPU budget.
+        1. `hyper-searcher`: tune the composed model within the documented compute budget.
         2. `perf-debugger`: only when a trial failed, produced NaN, or the run is unusable — diagnose and fix, then re-run.
         3. `effect-evaluator`: judge the final numbers against the target and record the experience.
 
@@ -126,7 +127,7 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
           path sends it looking for the filesystem and wastes the stage; never rely on it to locate the
           repository itself.
         - Delegate via `create_task` / `send_message`: never tune, patch or evaluate yourself.
-        - CPU-only: never request a GPU; keep the epoch budget from the task specification.
+        - {describe_compute_policy(context)}
         - Do not explore the repository: do not read `agents/`, `scripts/`, `readme.md` or the framework sources; work only
           from the task specification and the round artifacts.
         - Never edit LibCity framework internals or the atomic module library sources.

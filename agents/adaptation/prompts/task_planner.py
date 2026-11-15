@@ -6,7 +6,7 @@ from textwrap import dedent
 
 from agents.core.types import AgentContext
 
-from .common import describe_feedback, describe_paths, describe_round, describe_task
+from .common import describe_compute_policy, describe_feedback, describe_paths, describe_round, describe_task
 
 TASK_PLANNER_SYSTEM_PROMPT = """You are the Task Planning Agent (任务规划智能体), the decision layer of a spatio-temporal model adaptation framework.
 
@@ -47,7 +47,7 @@ def build_task_planning_prompt(context: AgentContext) -> str:
           composition agent, phrased as module families rather than guarantees.
         - `tuning_direction`: list of directions the tuning layer should prioritise ("data feature profile -> tuning direction").
         - `success_criteria`: one sentence stating the numeric condition for success.
-        - `risks`: list of the concrete failure modes you expect on a CPU-only host.
+        - `risks`: list of the concrete failure modes you expect within the task's compute budget.
         - `corrections`: on rounds after the first, the concrete changes to make versus the previous attempt; `[]` on round 1.
 
         ## Rules
@@ -56,7 +56,7 @@ def build_task_planning_prompt(context: AgentContext) -> str:
         - Persist the plan with the `write_file` tool. Answering in chat is not enough: the execution layer reads the file.
         - Do not explore the repository (`agents/`, `scripts/`, `readme.md`, framework sources); the task specification and the
           dataset profile are the inputs. At most, call `retrieve_knowledge` once to align the tuning directions.
-        - The host is CPU-only: every plan must be feasible with a few epochs on CPU.
+        - {describe_compute_policy(context)}
         - Keep the plan concrete enough that the execution layer needs no further decisions.
 
         Finish by replying with the plan in short bullet form and the absolute path of the file you wrote.

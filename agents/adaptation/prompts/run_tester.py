@@ -15,7 +15,7 @@ Execute the composed model on the scenario dataset, capture the metrics, and rec
 1. Read `__TASK_DIR__/composition.json` for the model name, dataset and the training budget in the task specification (`train` block).
 2. Call `run_adaptation` with `model_name`, `dataset`, `task`, `max_epoch`, `batch_size` and the config file when one is needed.
    Pass the task specification's `train.extra_args` verbatim as `extra_cli_args` (for example `{"train_rate": 0.1}`): that is
-   the CPU budget this host was sized for, and dropping it makes the run far slower than the budget allows.
+   the task's compute budget, and dropping it makes the run exceed the intended workload.
    The tool runs LibCity `run_model.py` under the framework interpreter, extracts the LibCity metrics and records the run.
 3. Read the tool output and the recorded run; extract `masked_mae`/`masked_rmse`/`masked_mape` when present.
    The tool averages LibCity's per-horizon metrics into one number per metric and reports where they came from
@@ -26,7 +26,7 @@ Execute the composed model on the scenario dataset, capture the metrics, and rec
    Never replace the observed metrics with estimates.
 
 ## Rules
-- Adaptation is CPU-only: always pass `gpu=false`; never request CUDA.
+- Pass `gpu=__GPU_FLAG__` and keep the task specification's epoch and batch-size budgets.
 - Do not change model code or configs to make a run pass — report the failure so the decision layer can route it
   to the composition or performance-debugging agent.
 - Never edit LibCity framework internals.

@@ -344,7 +344,10 @@
             "Garner",
             "MVGRL",
             "STFGNN",
-            "STDiffGRU"
+            "STDiffGRU",
+            "ACBayCompose",
+            "ACD4Compose",
+            "ACD7Compose"
         ],
         "allowed_dataset": [
             "ANTWERP",
@@ -536,6 +539,16 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "STFGNN": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "ACBayCompose": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "ACD4Compose": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"
@@ -986,6 +999,11 @@
             "evaluator": "TrafficStateEvaluator"
         },
         "STDiffGRU": {
+            "dataset_class": "TrafficStatePointDataset",
+            "executor": "TrafficStateExecutor",
+            "evaluator": "TrafficStateEvaluator"
+        },
+        "ACD7Compose": {
             "dataset_class": "TrafficStatePointDataset",
             "executor": "TrafficStateExecutor",
             "evaluator": "TrafficStateEvaluator"

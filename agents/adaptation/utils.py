@@ -247,6 +247,7 @@ def read_dyna_series(
     dataset: str,
     data_col: str,
     max_timesteps: int = DEFAULT_MAX_TIMESTEPS,
+    train_rate: float = 1.0,
 ) -> Tuple[List[str], "Any", Dict[str, Any]]:
     """Read the LibCity ``.dyna`` file into a ``(T, N)`` float32 matrix.
 
@@ -280,17 +281,26 @@ def read_dyna_series(
     matrix = np.full((num_steps, num_nodes), np.nan, dtype="float32")
     matrix[time_codes, node_codes] = frame[data_col].to_numpy(dtype="float32")
 
+    if not 0 < train_rate <= 1:
+        raise ValueError("profile train_rate must be in (0, 1]")
     timestamps = [str(item) for item in time_values]
     full_timestamps = timestamps
-    if num_steps > max_timesteps:
-        stride = int(math.ceil(num_steps / max_timesteps))
-        keep = np.arange(0, num_steps, stride)
+    profile_steps = int(num_steps * train_rate)
+    if profile_steps < 2:
+        raise ValueError("training profile needs at least two timestamps")
+    matrix = matrix[:profile_steps]
+    timestamps = timestamps[:profile_steps]
+    if profile_steps > max_timesteps:
+        stride = int(math.ceil(profile_steps / max_timesteps))
+        keep = np.arange(0, profile_steps, stride)
         matrix = matrix[keep]
         timestamps = [timestamps[int(index)] for index in keep]
     meta = {
         "total_timesteps": int(num_steps),
         "sampled_timesteps": int(len(timestamps)),
         "sampling_interval_min": infer_sampling_interval(full_timestamps),
+        "training_timesteps": profile_steps,
+        "profile_train_rate": train_rate,
     }
     return timestamps, matrix, meta
 
@@ -378,12 +388,18 @@ def compute_dataset_profile(
     task: str = "traffic_state_pred",
     windows: int = 10,
     max_timesteps: int = DEFAULT_MAX_TIMESTEPS,
+    data_col: str | None = None,
+    train_rate: float = 1.0,
 ) -> Dict[str, Any]:
     """Compute the task-level statistical signals for one LibCity dataset."""
 
     config = load_dataset_config(raw_data_dir, dataset)
-    data_col = dataset_data_col(config, task)
+    explicit_target = data_col is not None
+    if data_col is None:
+        data_col = dataset_data_col(config, task)
     info = config.get("info") or {}
+    if data_col not in (info.get("data_col") or []):
+        raise ValueError(f"profile column {data_col!r} is absent from dataset config")
     dataset_dir = raw_data_dir / dataset
     has_graph = any((dataset_dir / f"{dataset}.{suffix}").exists() for suffix in ("rel",))
 
@@ -392,6 +408,7 @@ def compute_dataset_profile(
         dataset=dataset,
         data_col=data_col,
         max_timesteps=max_timesteps,
+        train_rate=train_rate,
     )
     sanitized = _sanitize_matrix(matrix)
     profile: Dict[str, Any] = {
@@ -401,12 +418,15 @@ def compute_dataset_profile(
         "node_count": int(sanitized.shape[1]),
         "timesteps": int(series_meta["total_timesteps"]),
         "profiled_timesteps": int(series_meta["sampled_timesteps"]),
+        "training_timesteps": int(series_meta["training_timesteps"]),
+        "profile_train_rate": train_rate,
+        "profile_partition": "training" if train_rate < 1 else "full",
         "sampling_interval_min": series_meta["sampling_interval_min"],
         "has_graph": bool(has_graph),
         "time_start": timestamps[0] if timestamps else None,
         "time_end": timestamps[-1] if timestamps else None,
         "null_ratio": _null_ratio(matrix),
-        "output_dim": info.get("output_dim", 1),
+        "output_dim": 1 if explicit_target else info.get("output_dim", 1),
         "time_intervals": info.get("time_intervals"),
         "cv_global": _population_cv(sanitized),
         "cv_node": _node_cv(sanitized),

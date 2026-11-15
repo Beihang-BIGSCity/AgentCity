@@ -5,7 +5,7 @@
     "causality": "事件因果链路",
     "constraint": "业务场景约束"
   },
-  "updated_at": "2026-10-14T19:15:36Z",
+  "updated_at": "2026-10-27T14:28:17Z",
   "entries": [
     {
       "id": "env-metr-la-freeway-speed-moderate-volatility",
@@ -712,6 +712,212 @@
       "tuning_direction": [],
       "status": "evolved",
       "recorded_at": "2026-10-14T19:15:36Z"
+    },
+    {
+      "id": "kb-pems-bay-acbaycompose-chebgcn-lstm-add-linear-r1",
+      "title": "PEMS_BAY (low spatial heterogeneity, rho1=0.9735): feature_embedding_encoder + cheb_gcn(ks=2) + lstm + add + linear_head runs end-to-end and reports masked_mae 2.0775 at 1 epoch (verified on the 13:46Z re-execution)",
+      "family": "environment",
+      "dimension": "composition (encoder/spatial/temporal/fusion/head) conditioned on measured dataset profile",
+      "feature_profile": {
+        "cv_global": 0.14923154268507874,
+        "cv_node": 0.13369922253347344,
+        "spatial_heterogeneity": 0.041481823815304464,
+        "rho1": 0.9734767212972786,
+        "sampling_interval_min": 5.0,
+        "node_count": 325.0
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "cheb_gcn",
+        "temporal": "lstm",
+        "fusion": "add",
+        "head": "linear_head"
+      },
+      "evidence": [
+        {
+          "audited_run": "exp_id compose_pems_bay_20261027_acbaycompose_r2, executed 2026-10-27T13:46:35Z..13:47:28Z, returncode 0, 52.941 s, verifier=effect-evaluator",
+          "metric": "masked_mae",
+          "value": 2.0774722496668496,
+          "threshold": 10.0,
+          "maximize": false,
+          "passed": true,
+          "split": "test",
+          "horizons_averaged": 12,
+          "metrics_source": "evaluate_cache",
+          "csv": "/home/wangwenrui/shk/AgentCity/Bigscity-LibCity/libcity/cache/compose_pems_bay_20261027_acbaycompose_r2/evaluate_cache/2026_10_27_13_47_28_ACBayCompose_PEMS_BAY.csv",
+          "csv_re_average": "12 masked_MAE rows, sum 24.929666996002197/12 = 2.0774722496668496 (MAE sum 24.979076981544495/12 = 2.0815897484620414)"
+        },
+        {
+          "metrics_full_dict": {
+            "mae": 2.0815897484620414,
+            "mse": 24.39969340960185,
+            "rmse": 4.750599106152852,
+            "masked_mae": 2.0774722496668496,
+            "masked_mape": 0.046138226985931396,
+            "masked_mse": 24.116914371649425,
+            "masked_rmse": 4.716960201660792,
+            "r2": 0.7370443508574701,
+            "evar": 0.737513025601705
+          },
+          "budget": "1 epoch, lr=0.01, batch_size=128, 245 batches, seed=0, cuda:0, single trial, hyper_algo=null",
+          "training_stability": {
+            "train_loss_epoch0": 2.2556,
+            "val_loss_epoch0": 2.2266,
+            "nan_or_inf": false,
+            "param_count": 15212,
+            "adjacency_nonzero": 4129
+          }
+        },
+        {
+          "reproducibility": "two independent executions (13:38Z ..._ACBayCompose and 13:46Z ..._acbaycompose_r2) produced bit-identical masked_mae under seed 0 / same config / same source / same GPU: determinism confirmed, not an independent quality measurement",
+          "artifacts": [
+            "/home/wangwenrui/shk/AgentCity/data/adaptation/compose_pems_bay_20261027/verdict.json",
+            "/home/wangwenrui/shk/AgentCity/data/adaptation/compose_pems_bay_20261027/run_report.json",
+            "/home/wangwenrui/shk/AgentCity/data/adaptation/compose_pems_bay_20261027/tuning.json"
+          ]
+        },
+        {
+          "scope_limit": "one-epoch pilot => plumbing evidence only: NOT convergence, NOT a tuned optimum, NOT architectural superiority. Untested: 15-epoch x seeds {0,1,2} benchmark, spatial_module='none' / temporal_module='none' ablation deltas, raw-time-disjoint split"
+        },
+        {
+          "what_the_profile_implied": "spatial_heterogeneity=0.0415 (near-homogeneous 325 nodes) => fixed-adjacency spectral branch cheb_gcn ks=2 suffices, learned/attention adjacency unnecessary; rho1=0.9735 with cv_window_std=0.0101 (near-persistence) => gated recurrent lstm; feature_dim=1 forced a 1->32 lift (feature_embedding_encoder) and forbade a second in-model normaliser since the framework already applies one global standard scaler (mean 62.7492, std 9.3653)"
+        }
+      ],
+      "source": "run:compose_pems_bay_20261027#r1",
+      "tuning_direction": [],
+      "status": "evolved",
+      "recorded_at": "2026-10-27T13:51:05Z"
+    },
+    {
+      "id": "env-pemsd4-persistent-flow-lift-aggcn-gdtcn-concat-linear-r1",
+      "title": "PEMSD4 persistent stationary flow: Linear-lift encoder + adaptive_gcn + gated_dilated_tcn + concat + linear_head trains and inverse-scales correctly in a 1-epoch lr=0.01 pilot",
+      "family": "environment",
+      "dimension": "composition",
+      "feature_profile": {
+        "cv_global": 0.7354061706481732,
+        "cv_node": 0.5702572721697724,
+        "spatial_heterogeneity": 0.42876025424875913,
+        "rho1": 0.9450765919052162,
+        "sampling_interval_min": 5.0,
+        "node_count": 307.0
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "concat",
+        "head": "linear_head"
+      },
+      "strategies": [
+        "Do not add a second internal z-score/normalisation encoder when LibCity already applies one global StandardScaler (scaler='standard'): a Linear(C->hidden_dim)+ReLU feature-embedding lift is the correct encoder for a single modelled channel, because double normalisation inflates the inverse-scaled error.",
+        "For rho1=0.945 with input_window=12, a bounded causal gated dilated TCN with dilations 2/4/8 (receptive field 15 >= 12) covers every input step; temporal attention/transformer is ruled out (retrieved prior: unsuitable at rho1 >= 0.6 and short windows, O(T^2) with 307 nodes).",
+        "For spatial_heterogeneity=0.429 over 307 nodes whose shipped .rel graph is very sparse (~340 directed edges, ~1.1 neighbours/node), adaptive_gcn with per-node embeddings (ks=2, embed_dim=10) learns the mixing instead of relying on the prior graph; cheb_gcn on the prior adjacency stays the fallback via spatial_use_prior_adj=true.",
+        "Keep concat (Linear 2*hidden_dim -> hidden_dim) fusion rather than a fixed average: the spatial and temporal branches have different scales under cv_global=0.735, and concat degrades gracefully to a valid projection when a branch is replaced by torch.zeros_like for ablations.",
+        "Choose a head whose DEFAULT_LOSS matches the frozen objective (linear_head -> masked_mae) so head and loss cannot disagree; reject heads defaulting to masked_mse/masked_mape when the contract is masked_mae.",
+        "Report masked_mae / masked_rmse / masked_mape only: plain MAPE is inf on PEMSD4's real zero-flow cells. masked_mape is a fraction (0.2099 = 20.99%), not a percentage.",
+        "Always unit-check the evaluation: with the train-split StandardScaler mean ~207.2 vehicles/5min, a test masked_mae far below ~10 means the metric was computed on scaled values (inverse_transform bug), i.e. a false PASS, not a good model."
+      ],
+      "evidence": [
+        {
+          "phase": "pilot",
+          "budget": "max_epoch=1, batch_size=128, max_trials=1, learning_rate=0.01, clip_grad_norm=true, max_grad_norm=5, GPU cuda:0",
+          "num_parameters": 27562,
+          "test_masked_mae": 25.876700560251873,
+          "test_masked_rmse": 39.497310638427734,
+          "test_masked_mape": 0.20991763100028038,
+          "test_mae": 25.812832514444988,
+          "test_r2": 0.935802820915567,
+          "train_masked_mae_epoch0": 39.6693,
+          "valid_masked_mae_epoch0": 27.2101,
+          "threshold": 60.0,
+          "maximize": false,
+          "passed": true,
+          "margin": 34.12329943974812,
+          "masked_mae_by_horizon": [
+            18.915922164916992,
+            20.57389259338379,
+            23.366512298583984,
+            22.740766525268555,
+            24.266530990600586,
+            24.847814559936523,
+            26.103153228759766,
+            27.320459365844727,
+            28.15607452392578,
+            29.250774383544922,
+            30.493879318237305,
+            34.48462677001953
+          ],
+          "artifact_audit": "PASS",
+          "retries": 0,
+          "agreement": "run_report/tuning.json/independent CSV recomputation identical at float64 precision",
+          "scope_caveat": "one epoch x one fixed trial = plumbing evidence only; NOT a superiority claim; 15-epoch x 3-seed benchmark and the spatial_module='none'/temporal_module='none' ablations remain a separate frozen downstream phase"
+        }
+      ],
+      "source": "run:compose_pemsd4_20261027#r1",
+      "tuning_direction": [],
+      "status": "evolved",
+      "recorded_at": "2026-10-27T14:07:40Z"
+    },
+    {
+      "id": "env-pemsd7-flow-led-learned-adj-gdtcn-concat-linear-plumbing-r1",
+      "title": "PEMSD7 (traffic_flow, 883 nodes, 5-min, rho1=0.973, SH=0.366): feature_embedding_encoder + adaptive_gcn + gated_dilated_tcn + concat + linear_head composes and clears the masked_mae<=60 pilot gate in one epoch",
+      "family": "environment",
+      "dimension": "composition",
+      "feature_profile": {
+        "cv_global": 0.6107947014908958,
+        "cv_node": 0.4878813905274595,
+        "spatial_heterogeneity": 0.365950351953815,
+        "rho1": 0.9733188683816887,
+        "sampling_interval_min": 5.0,
+        "node_count": 883.0
+      },
+      "strategy": {
+        "encoder": "feature_embedding_encoder",
+        "spatial": "adaptive_gcn",
+        "temporal": "gated_dilated_tcn",
+        "fusion": "concat",
+        "head": "linear_head"
+      },
+      "strategies": [
+        "encoder=feature_embedding_encoder: pure C->hidden_dim lift whose C is read from the ACTUAL batch tensor (LibCity already applies one train-fitted StandardScaler, so no second z-score); the executed pilot resolved C=1 because add_time_in_day is inert while load_external=false",
+        "spatial=adaptive_gcn (embed_dim=10, ks=2): SH=0.3659 >= 0.25 over 883 nodes with a geometry-free, nearly empty .rel graph (866 directed edges, mean out-degree 0.98) -> learned softmax(ReLU(E E^T)) adjacency; no N*N attention family at N=883",
+        "temporal=gated_dilated_tcn (GLU, kernel 2, dilations 2/4/8, receptive field 15 >= 12): rho1=0.9733 means short-lag persistence inside a bounded causal filter, T'=T preserved for the frozen 12->12 contract",
+        "fusion=concat (Linear 2d->d): the graph branch and the temporal branch are complementary and must be merged with per-channel weights; a zeros_like branch keeps ablations shape-identical",
+        "head=linear_head: its DEFAULT_LOSS is masked_mae, exactly the acceptance objective, so no loss override is needed; null_value=0 masking excludes genuine night-time zeros"
+      ],
+      "evidence": [
+        {
+          "source": "run:compose_pemsd7_20261027#r1",
+          "verdict": "passed",
+          "masked_mae": 33.755228678385414,
+          "masked_rmse": 46.32299836476644,
+          "mae": 33.72786029179891,
+          "rmse": 46.30280844370524,
+          "r2": 0.935719053774075,
+          "masked_mape": 0.28119150052467984,
+          "masked_mape_reliable": false,
+          "threshold": 60.0,
+          "maximize": false,
+          "margin": 26.244771321614586,
+          "horizons_averaged": 12,
+          "split": "LibCity native sample-window split (pilot, 0.6/0.2/0.2)",
+          "run": "1 epoch, batch_size=128, learning_rate=0.01, adam, clip_grad_norm=5, seed=0, GPU cuda:0",
+          "num_parameters": 33322,
+          "observed_input_channels": 1,
+          "train_split_masked_mae": 46.1258,
+          "valid_split_masked_mae": 33.8348,
+          "per_horizon_masked_mae_h1_h12": [
+            23.45393943786621,
+            52.75962448120117
+          ],
+          "verdict_path": "/home/wangwenrui/shk/AgentCity/data/adaptation/compose_pemsd7_20261027/verdict.json",
+          "note": "plumbing evidence only: one under-trained epoch proves wiring and a finite, unit-consistent error; it is not a comparative result"
+        }
+      ],
+      "source": "run:compose_pemsd7_20261027#r1",
+      "tuning_direction": [],
+      "status": "evolved",
+      "recorded_at": "2026-10-27T14:28:17Z"
     }
   ]
 }

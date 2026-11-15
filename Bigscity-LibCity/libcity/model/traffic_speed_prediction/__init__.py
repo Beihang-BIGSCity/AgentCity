@@ -80,6 +80,9 @@ from libcity.model.traffic_speed_prediction.Garner import Garner
 from libcity.model.traffic_speed_prediction.MVGRL import MVGRL
 from libcity.model.traffic_speed_prediction.STFGNN import STFGNN
 from libcity.model.traffic_speed_prediction.STDiffGRU import STDiffGRU
+from libcity.model.traffic_speed_prediction.ACBayCompose import ACBayCompose
+from libcity.model.traffic_speed_prediction.ACD4Compose import ACD4Compose
+from libcity.model.traffic_speed_prediction.ACD7Compose import ACD7Compose
 
 __all__ = [
     "DCRNN",
@@ -146,4 +149,7 @@ __all__ = [
     "MVGRL",
     "STFGNN",
     "STDiffGRU",
+    "ACBayCompose",
+    "ACD4Compose",
+    "ACD7Compose",
 ]

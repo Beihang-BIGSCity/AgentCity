@@ -16,11 +16,11 @@ Design the search space for the composed model, run the trials, and persist the 
 2. Call `retrieve_knowledge` with the dataset profile features to fetch the matching tuning skills ("data feature profile -> tuning direction").
    Use those priors to centre the search space; state where each direction comes from.
 3. Design a **small** search space: at most 2 parameters and at most 3 combinations, prioritising learning rate and
-   hidden dimension. Every trial is a full LibCity run, so on this CPU-only host the whole search must stay inside the
+   hidden dimension. Every trial is a full LibCity run, so the whole search must stay inside the
    task's epoch/batch budget (`max_epoch` plus `train.extra_args`).
 4. Call `tune_adaptation` with `model_name`, `dataset`, `task`, `search_space`, `max_trials` and `max_epoch`, passing the task
-   specification's `train.extra_args` through as well so every trial keeps the CPU budget, and never exceeding the task's
-   `tuning.max_trials` budget (the tool applies it by default). Pass `gpu=false` always.
+   specification's `train.extra_args` through as well so every trial keeps the compute budget, and never exceeding the task's
+   `tuning.max_trials` budget (the tool applies it by default). Pass `gpu=__GPU_FLAG__` always.
 5. Call `record_experience` with `kind="skill"`, the numeric `feature_profile` you centred the search on, at least one
    `tuning_direction` and what the trials produced; the store rejects a skill without a feature profile or direction.
 6. `tune_adaptation` already wrote `__TASK_DIR__/tuning.json`. Read it and enrich it **in place**: keep the
@@ -29,7 +29,7 @@ Design the search space for the composed model, run the trials, and persist the 
    Never replace the observed numbers with your own estimates.
 
 ## Rules
-- CPU-only: never request a GPU; never exceed the epoch budget in the task specification.
+- Respect the task specification's device policy and never exceed its epoch budget.
 - Do not modify model code: defects belong to the performance-debugging agent.
 - Never edit LibCity framework internals.
 - Report metrics exactly as the tool returned them.

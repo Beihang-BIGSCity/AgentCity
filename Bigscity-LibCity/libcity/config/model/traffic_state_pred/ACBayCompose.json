@@ -1,0 +1,43 @@
+{
+  "model_name": "ACBayCompose",
+  "data_col": [
+    "traffic_speed"
+  ],
+  "output_dim": 1,
+
+  "input_window": 12,
+  "output_window": 12,
+  "batch_size": 128,
+
+  "hidden_dim": 32,
+  "depth": 1,
+  "cheb_ks": 2,
+  "rnn_layers": 1,
+  "dropout": 0.0,
+
+  "spatial_module": "cheb_gcn",
+  "temporal_module": "lstm",
+  "loss_type": "masked_mae",
+  "train_loss": "masked_mae",
+
+  "scaler": "standard",
+  "load_external": false,
+  "normal_external": false,
+  "ext_scaler": "none",
+  "add_time_in_day": true,
+  "add_day_in_week": false,
+  "cache_dataset": false,
+  "null_value": 0,
+  "bidir_adj_mx": true,
+
+  "max_epoch": 1,
+  "learner": "adam",
+  "learning_rate": 0.01,
+  "lr_decay": false,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": false,
+
+  "gpu": true,
+  "gpu_id": "0"
+}

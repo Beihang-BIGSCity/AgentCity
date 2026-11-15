@@ -1,0 +1,59 @@
+{
+  "hidden_dim": 32,
+  "depth": 1,
+  "input_channels": "auto",
+  "input_channels_note": "'auto' -> the encoder channel count is taken from the ACTUAL batch tensor; for data_col=['traffic_flow'] + add_time_in_day=true LibCity yields X (B, 12, 883, 2), so C=2 (verified by a real forward pass, see composition.json verification).",
+  "encoder_module": "feature_embedding_encoder",
+  "spatial_module": "adaptive_gcn",
+  "temporal_module": "gated_dilated_tcn",
+  "fusion_module": "concat",
+  "head_module": "linear_head",
+  "spatial_embed_dim": 10,
+  "spatial_ks": 2,
+  "spatial_use_prior_adj": false,
+  "temporal_layers": 3,
+  "temporal_kernel_size": 2,
+  "temporal_base_dilation": 2,
+  "dropout": 0.0,
+  "input_window": 12,
+  "output_window": 12,
+  "output_dim": 1,
+  "loss_type": "masked_mae",
+  "null_value": 0,
+  "dataset": "PEMSD7",
+  "task": "traffic_state_pred",
+  "data_col": [
+    "traffic_flow"
+  ],
+  "add_time_in_day": true,
+  "add_day_in_week": false,
+  "load_external": false,
+  "cache_dataset": false,
+  "scaler": "standard",
+  "train_rate": 0.6,
+  "eval_rate": 0.2,
+  "learning_rate": 0.01,
+  "learner": "adam",
+  "max_epoch": 1,
+  "batch_size": 128,
+  "clip_grad_norm": true,
+  "max_grad_norm": 5,
+  "use_early_stop": false,
+  "lr_decay": false,
+  "lr_scheduler": "none",
+  "gpu": true,
+  "gpu_id": 0,
+  "gpu_id_note": "int 0, NOT the string '0': libcity/config/config_parser.py::_init_device feeds gpu_id straight into torch.cuda.set_device(gpu_id) and torch.device(f'cuda:{gpu_id}'), and torch.cuda.set_device('0') raises RuntimeError: Invalid device string: '0'. run_model.py's --gpu_id argument is type=int too. Same physical GPU index as the requested '0'.",
+  "tuning": {
+    "budget": "exactly one fixed trial",
+    "max_trials": 1,
+    "max_evals": 1,
+    "hyper_algo": "grid",
+    "search_space": {
+      "learning_rate": [
+        0.01
+      ]
+    },
+    "note": "No other hyper-parameter may be searched in this round; the single trial exists to prove the plumbing (max_rounds=1, architecture frozen)."
+  }
+}

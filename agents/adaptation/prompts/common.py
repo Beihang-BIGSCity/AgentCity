@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 
 from agents.core.types import AgentContext
 
@@ -11,6 +12,31 @@ def describe_task(context: AgentContext) -> str:
     """Render the task specification handed in by the CLI."""
 
     return json.dumps(context.task_spec or {}, ensure_ascii=False, indent=2)
+
+
+def gpu_flag(context: AgentContext) -> str:
+    """Render the normalized task's device setting as a tool/CLI boolean."""
+
+    train = (context.task_spec or {}).get("train") or {}
+    return "true" if train.get("gpu", False) else "false"
+
+
+def describe_compute_policy(context: AgentContext) -> str:
+    """Keep every role aligned with the task's device and numeric budgets."""
+
+    flag = gpu_flag(context)
+    device = "GPU" if flag == "true" else "CPU"
+    interpreter = os.environ.get("AGENTCITY_LIBCITY_PYTHON", "").strip()
+    runtime = (
+        f" The verified LibCity interpreter is `{interpreter}`; use it for torch/LibCity shell checks. "
+        "The orchestration interpreter can intentionally lack torch; do not discover other environments."
+        if interpreter else ""
+    )
+    return (
+        f"Use {device} for this task: pass `gpu={flag}` to every training/tuning tool call "
+        f"and `--gpu {flag}` to LibCity commands. "
+        "Keep the task specification's epoch, batch-size and trial budgets, and preserve `train.extra_args`." + runtime
+    )
 
 
 def describe_paths(context: AgentContext) -> str:
@@ -88,6 +114,9 @@ def member_workspace_brief(context: AgentContext) -> str:
             f"- Agent Skills: {context.skills_dir}",
             f"- Summary documents: {context.documentation_dir}",
             "",
+            "## Device and Budget Policy",
+            describe_compute_policy(context),
+            "",
             "## Filesystem Rules",
             "- Your shell starts inside your own isolated workspace, NOT inside the repository, so relative project",
             "  paths do not resolve.",
@@ -105,16 +134,19 @@ def render_member_prompt(template: str, context: AgentContext) -> str:
     rendered = template
     for token, attribute in MEMBER_PATH_TOKENS.items():
         rendered = rendered.replace(token, str(getattr(context, attribute, "")))
+    rendered = rendered.replace("__GPU_FLAG__", gpu_flag(context))
     return rendered.rstrip() + "\n\n" + member_workspace_brief(context) + "\n"
 
 
 __all__ = [
     "MEMBER_PATH_TOKENS",
+    "describe_compute_policy",
     "describe_feedback",
     "describe_paths",
     "describe_round",
     "describe_round_state",
     "describe_task",
+    "gpu_flag",
     "member_workspace_brief",
     "render_member_prompt",
 ]

@@ -13,3 +13,4 @@ cache/
 /pi_backend/
 /agents/core/harness_profiles/*.local.yaml
 *.bak
+/result/
