@@ -2,7 +2,13 @@ __pycache__/
 /data/*
 !/data/modlib/
 /repos/
-/tests/
+/tests/*
+!/tests/stfgnn_smoke.py
+!/tests/stfgnn_tune_runner.py
+!/tests/stfgnn_tune_summary.py
+!/tests/test_runtime_policy.py
+!/tests/test_validation_experiment.py
+!/tests/test_adaptation_compute_prompts.py
 raw_data/
 cache/
 /claude_code.log
@@ -34,11 +40,26 @@ cache/
 /nohup.out
 
 # Generated presentation drafts and exports in the repository root
-/技术点三*.pptx
-/技术点三*.pdf
+/*.pptx
+/*.pdf
 
 # Generated benchmark tables and figures in the repository root
 /benchmark_results.csv
 /benchmark_results.xlsx
 /pie_*.png
 /wordcloud_keywords.png
+
+# One-off experiment reporting helpers (keep reusable runtime scripts tracked)
+/scripts/append_agent_original_entries.py
+/scripts/build_agent_evolution_v2_deck.py
+/scripts/build_self_evolution_deck*.py
+/scripts/ppt_style.py
+/scripts/audit_self_evolution.py
+/scripts/collect_agent_trace.py
+/scripts/collect_self_evolution_results.py
+/scripts/evaluate_self_evolution_holdout.py
+/scripts/finalize_self_evolution.py
+/scripts/plot_self_evolution_data.py
+/scripts/write_self_evolution_report.py
+/todo/agent_8loops_ppt.md
+/Bigscity-LibCity/tuning_configs/
