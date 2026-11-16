@@ -6,17 +6,17 @@ AgentCity 是基于 openJiuwen 和 LibCity 的时空预测模型适配工具。�
 
 ## 环境准备
 
-需要 Python 3.12。以下命令均在项目根目录执行：
+默认使用线上已有的 **PyTorch / CUDA 训练环境**，沿用线上部署的 PyTorch 版本。编排环境需安装 openJiuwen 和 FastMCP；训练环境需具备 LibCity 所需依赖。
+
+激活编排环境后，在项目根目录执行，将解释器路径替换为线上 PyTorch 环境的实际路径：
 
 ```bash
-python3.12 -m venv .venv
-python3.12 -m venv .venv-libcity
-.venv/bin/python -m pip install -r requirements.local-agent.txt
-.venv-libcity/bin/python -m pip install -r requirements.local-libcity.txt
-source scripts/activate_local.sh
+python -m pip install -r requirements.local-agent.txt
+export AGENTCITY_LIBCITY_PYTHON=/path/to/pytorch-env/bin/python
+export AGENTCITY_DEVICE=cuda:0
 ```
 
-依赖清单以 macOS Apple Silicon 环境为基础；CUDA 等其他环境需调整对应的 PyTorch 版本。
+macOS 本机环境仅用于本地开发，配置方式见 [LOCAL_ENV.md](LOCAL_ENV.md)。
 
 运行前准备：
 
@@ -26,9 +26,7 @@ source scripts/activate_local.sh
 ## Quick Start
 
 ```bash
-source scripts/activate_local.sh
-
-# 查看可用任务
+# 完成上述环境配置后，查看可用任务
 python main.py --list-tasks
 
 # 使用 GPU 运行任务
