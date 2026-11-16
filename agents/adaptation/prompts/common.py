@@ -36,10 +36,13 @@ def describe_compute_policy(context: AgentContext) -> str:
         f"Use {device} for this task: pass `gpu={flag}` to every training/tuning tool call "
         f"and `--gpu {flag}` to LibCity commands. "
         f"Iteration training uses {(context.task_spec.get('train') or {}).get('max_epoch', 35)} epochs per baseline/trial; "
-        f"run {context.task_spec.get('tuning', {}).get('max_trials', 5)} tuning trials per round. "
+        f"The separate TUNING stage owns {context.task_spec.get('tuning', {}).get('max_trials', 5)} trials per round. "
+        "Stage ownership is strict: EXECUTION runs one baseline only; TUNING performs the search and verdict. "
+        "Never run tuning inside EXECUTION or repeat a successful baseline. "
         "Preserve the task's train.extra_args split in every run. Select models using validation only; "
-        "the test partition is reserved for final evaluation after all loops. Final training uses final_train, "
-        "not the iteration epoch budget. "
+        "the test partition is reserved for an external final-evaluation command after all loops. "
+        "final_train is reference metadata for that external command, NOT work for any adaptation agent. "
+        "Do not launch final training, test evaluation or shell-based tuning during this workflow. "
         "There is no default model parameter-count ceiling. The `lightweight` efficiency preference is not "
         "a numeric parameter limit. Do not import parameter caps from retrieved priors, skills, papers or "
         "previous-round feedback. Only an explicit parameter budget in the current task specification "
@@ -128,6 +131,9 @@ def member_workspace_brief(context: AgentContext) -> str:
             describe_compute_policy(context),
             "",
             "## Filesystem Rules",
+            "- Shell commands run in the foreground. Do not use run_in_background, nohup or '&' to detach work.",
+            "- Wait for tool completion, write the required artifact and mark your task complete before finishing.",
+            "- Do not end a turn merely promising to wait for a background result; no completion notification is available.",
             "- Your shell starts inside your own isolated workspace, NOT inside the repository, so relative project",
             "  paths do not resolve.",
             "- Use the absolute paths above verbatim, and pass `cwd` = the repository root for every shell command.",

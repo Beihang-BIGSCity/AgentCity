@@ -40,10 +40,18 @@ class AgentPipeline:
         for workflow in self.workflows:
             self.logger.info("=== Workflow: %s ===", workflow.name)
             for stage in workflow.stages:
-                if isinstance(stage, MultiAgentStage):
-                    await self._run_multi_agent_stage(stage, workflow.name)
-                else:
-                    await self._run_stage(stage, workflow.name)
+                previous_stage = os.environ.get("AGENTCITY_STAGE")
+                os.environ["AGENTCITY_STAGE"] = stage.key
+                try:
+                    if isinstance(stage, MultiAgentStage):
+                        await self._run_multi_agent_stage(stage, workflow.name)
+                    else:
+                        await self._run_stage(stage, workflow.name)
+                finally:
+                    if previous_stage is None:
+                        os.environ.pop("AGENTCITY_STAGE", None)
+                    else:
+                        os.environ["AGENTCITY_STAGE"] = previous_stage
             self.logger.info("=== Completed workflow: %s ===", workflow.name)
 
     async def _run_stage(self, stage: StageDefinition, workflow_name: str) -> None:

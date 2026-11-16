@@ -193,7 +193,10 @@ def build_team_spec(
         TeamAgentSpec,
     )
     from openjiuwen.agent_teams.schema.team import TeamMemberSpec
-    from openjiuwen.harness.schema.deep_agent_spec import DeepAgentSpec
+    from openjiuwen.harness.schema.deep_agent_spec import DeepAgentSpec, RailSpec, register_rail_provider
+    from .foreground_shell import ForegroundShellRail
+
+    register_rail_provider("agentcity_foreground_shell", lambda params, context: ForegroundShellRail())
 
     business_mcp = _business_mcp_config()
 
@@ -225,11 +228,13 @@ def build_team_spec(
             "leader": DeepAgentSpec(
                 model=_team_model_config(profile, stage.lead_model),
                 max_iterations=25,
+                rails=[RailSpec(type="agentcity_foreground_shell")],
             ),
             "teammate": DeepAgentSpec(
                 model=_team_model_config(profile, "balanced"),
                 mcps=[business_mcp],
                 max_iterations=25,
+                rails=[RailSpec(type="agentcity_foreground_shell")],
             ),
         },
         team_name=f"agentcity_{stage.key}",
@@ -486,6 +491,7 @@ async def run_single_prompt(
     """Run a single-agent stage as one DeepAgent (no team)."""
     from openjiuwen.harness import create_deep_agent
     from openjiuwen.harness.rails.sys_operation_rail import SysOperationRail
+    from .foreground_shell import ForegroundShellRail
 
     from openjiuwen.core.runner.runner import Runner
     from openjiuwen.core.sys_operation import SysOperationCard, OperationMode, LocalWorkConfig
@@ -511,7 +517,7 @@ async def run_single_prompt(
         # read_file / write_file / bash, so a stage that must persist an
         # artifact (e.g. plan.json) cannot do it. The multi-agent stages mount
         # the same rail indirectly through the team worktree shell guard.
-        rails=[SysOperationRail(with_code_tool=True)],
+        rails=[SysOperationRail(with_code_tool=True), ForegroundShellRail()],
         workspace=str(PROJECT_ROOT),
         language="en",
     )

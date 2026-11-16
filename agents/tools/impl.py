@@ -492,6 +492,18 @@ def _interpreter_hint(interpreter: str, output: str) -> str:
 async def run_adaptation(args: dict) -> str:
     """Train/evaluate the composed model on the scenario dataset."""
 
+    stage = os.environ.get("AGENTCITY_STAGE")
+    if stage == "task_planning":
+        return "run_adaptation failed: planning cannot run training"
+    if stage == "execution":
+        task_dir = _require_task_dir()
+        report_path = task_dir / "run_report.json" if task_dir else None
+        if report_path and report_path.exists():
+            previous = json.loads(report_path.read_text(encoding="utf-8"))
+            if previous.get("status") == "success":
+                return ("Execution baseline already completed; no new training was started. "
+                        "Finish the execution task. The separate tuning stage owns trials. "
+                        + json.dumps(previous, ensure_ascii=False))
     model_name = args.get("model_name")
     task_spec = _active_task()
     train_budget = task_spec.get("train") or {}
@@ -611,6 +623,17 @@ async def run_adaptation(args: dict) -> str:
 async def tune_adaptation(args: dict) -> str:
     """Run hyperparameter search for the composed model."""
 
+    stage = os.environ.get("AGENTCITY_STAGE")
+    if stage and stage != "tuning":
+        return "tune_adaptation failed: only the tuning stage may start hyperparameter trials"
+    if stage == "tuning":
+        task_dir = _require_task_dir()
+        tuning_path = task_dir / "tuning.json" if task_dir else None
+        if tuning_path and tuning_path.exists():
+            previous = json.loads(tuning_path.read_text(encoding="utf-8"))
+            if previous.get("trials"):
+                return ("This round's tuning trials already ran; no new search was started. "
+                        + json.dumps(previous, ensure_ascii=False))
     model_name = args.get("model_name")
     if not model_name:
         return "tune_adaptation failed: provide model_name"

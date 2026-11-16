@@ -14,6 +14,7 @@ from agents.adaptation.catalog import AdaptationCatalog
 from agents.adaptation.context import ExecutionContext
 from agents.adaptation.runtime import clear_active_task, set_active_task
 from agents.adaptation.workflow import get_adaptation_workflow
+from agents.adaptation.verdict import normalize_verdict
 
 from .config import AppPaths, build_context, load_task_spec
 from .openjiuwen_backend import HarnessProfile, ensure_runner_started, shutdown_runner
@@ -58,7 +59,8 @@ class AgentOrchestrator:
         fixed_rounds = bool(task_spec.get("fixed_rounds", True))
         store = ExecutionContext.load(task_id, base_dir=self.paths.adaptation_dir)
         storage = StageStorage(self.paths.stage_log)
-        storage.reset()
+        if os.environ.get("AGENTCITY_RESUME") != "1":
+            storage.reset()
         catalog = AdaptationCatalog(
             index_path=self.paths.adaptation_index,
             documentation_dir=self.paths.documentation_dir,
@@ -84,6 +86,12 @@ class AgentOrchestrator:
                 completed = store.get("history") or []
                 first_round = len(completed) + 1 if resume else 1
                 if resume:
+                    for previous_round in completed:
+                        previous_round["verdict"] = normalize_verdict(previous_round, task_spec)
+                    if completed:
+                        store.update("history", completed)
+                        store.update("verdict", completed[-1]["verdict"])
+                        (store.dir / "verdict.json").write_text(json.dumps(completed[-1]["verdict"], ensure_ascii=False, indent=2))
                     result["rounds"] = [{"round": r["round"], "verdict": r.get("verdict")} for r in completed]
                     result["passed"] = any((r.get("verdict") or {}).get("passed", False) for r in completed)
                     result["verdict"] = completed[-1].get("verdict") if completed else None
@@ -217,6 +225,9 @@ class AgentOrchestrator:
             "verdict": artifacts["verdict.json"],
             "artifacts": {name: str(store.dir / name) for name in ROUND_ARTIFACTS},
         }
+        payload["verdict"] = normalize_verdict(payload, context.task_spec)
+        if payload["verdict"]:
+            (store.dir / "verdict.json").write_text(json.dumps(payload["verdict"], ensure_ascii=False, indent=2))
         recorded_runs = self._read_json(store.dir / "runs.json")
         if recorded_runs:
             payload["recorded_runs"] = recorded_runs

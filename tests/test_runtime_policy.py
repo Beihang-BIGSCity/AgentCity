@@ -118,3 +118,74 @@ def test_tuned_cli_parameter_is_not_overwritten_by_base_budget(tmp_path):
                            extra_cli_args={'batch_size': 32, 'max_epoch': 35})
     assert cmd.count('--batch_size') == 1
     assert cmd[cmd.index('--batch_size') + 1] == '64'
+
+
+def test_execution_cannot_repeat_successful_baseline_or_start_tuning(tmp_path, monkeypatch):
+    monkeypatch.setenv('AGENTCITY_STAGE', 'execution')
+    (tmp_path / 'run_report.json').write_text(json.dumps({'status': 'success', 'metrics': {'masked_mae': 3.4}}))
+    with patch.object(impl, '_require_task_dir', return_value=tmp_path), \
+         patch.object(impl, '_run_subprocess', new_callable=AsyncMock) as train:
+        result = asyncio.run(impl.run_adaptation({'model_name': 'M'}))
+        assert 'no new training' in result
+        result = asyncio.run(impl.tune_adaptation({'model_name': 'M'}))
+        assert 'only the tuning stage' in result
+        train.assert_not_awaited()
+
+
+def test_completed_search_cannot_spend_another_trial_budget(tmp_path, monkeypatch):
+    monkeypatch.setenv('AGENTCITY_STAGE', 'tuning')
+    (tmp_path / 'tuning.json').write_text(json.dumps({'trials': [{'status': 'success'}] * 5}))
+    with patch.object(impl, '_require_task_dir', return_value=tmp_path), \
+         patch.object(impl, 'run_custom_grid_search') as search:
+        result = asyncio.run(impl.tune_adaptation({'model_name': 'M'}))
+        assert 'no new search' in result
+        search.assert_not_called()
+
+
+def test_pipeline_scopes_stage_for_tool_subprocesses(monkeypatch):
+    from agents.core.pipeline import AgentPipeline
+    monkeypatch.setenv('AGENTCITY_STAGE', 'caller')
+    workflow = SimpleNamespace(name='probe', stages=[SimpleNamespace(key='task_planning')])
+    pipeline = AgentPipeline(profile=None, workflows=[workflow], storage=None,
+                             logger=logging.getLogger('test'), context=None)
+    async def fail(*args):
+        assert os.environ['AGENTCITY_STAGE'] == 'task_planning'
+        raise RuntimeError('probe')
+    with patch.object(pipeline, '_run_stage', side_effect=fail):
+        with pytest.raises(RuntimeError, match='probe'):
+            asyncio.run(pipeline.run())
+    assert os.environ['AGENTCITY_STAGE'] == 'caller'
+
+
+@pytest.mark.parametrize('encoded', [False, True])
+def test_shell_background_request_runs_in_foreground(encoded):
+    from agents.core.foreground_shell import ForegroundShellRail
+    arguments = {'command': 'python check_model.py', 'run_in_background': True, 'timeout': 90}
+    inputs = SimpleNamespace(tool_name='bash', tool_args=json.dumps(arguments) if encoded else arguments)
+    asyncio.run(ForegroundShellRail().before_tool_call(SimpleNamespace(inputs=inputs)))
+    actual = json.loads(inputs.tool_args) if encoded else inputs.tool_args
+    assert actual == {'command': 'python check_model.py', 'run_in_background': False, 'timeout': 90}
+
+
+def test_verdict_uses_real_metric_instead_of_agent_flag_or_alias():
+    from agents.adaptation.verdict import normalize_verdict
+    payload = {'verdict': {'pass': True, 'metric': {'name': 'masked_mae'}, 'reason': 'agent prose'},
+               'tuning': {'status': 'success', 'best_metrics': {'masked_mae': 3.4}}}
+    spec = {'target': {'metric': 'masked_mae', 'threshold': 35, 'maximize': False}}
+    result = normalize_verdict(payload, spec)
+    assert result['passed'] is True and result['value'] == 3.4
+    assert result['metric'] == 'masked_mae' and 'pass' not in result
+    payload['tuning']['best_metrics']['masked_mae'] = 40
+    assert normalize_verdict(payload, spec)['passed'] is False
+    payload['tuning']['best_metrics']['masked_mae'] = float('nan')
+    assert normalize_verdict(payload, spec)['passed'] is False
+    assert normalize_verdict({'tuning': payload['tuning']}, spec) == {}
+
+
+def test_verdict_respects_maximize_and_failed_run_status():
+    from agents.adaptation.verdict import normalize_verdict
+    payload = {'verdict': {'passed': False}, 'run_report': {'status': 'success', 'metrics': {'score': .9}}}
+    spec = {'target': {'metric': 'score', 'threshold': .8, 'maximize': True}}
+    assert normalize_verdict(payload, spec)['passed'] is True
+    payload['run_report']['status'] = 'error'
+    assert normalize_verdict(payload, spec)['passed'] is False

@@ -49,7 +49,9 @@ def build_execution_lead_prompt(context: AgentContext) -> str:
         Delegate in this order with `create_task` / `send_message` (address members by name), one step at a time:
         1. `data-integrator`: produce the dataset profile and the data integration contract.
         2. `model-composer`: compose and generate the model, using the profile, the plan and the expert knowledge base.
-        3. `run-tester`: execute the model and record the run.
+        3. `run-tester`: execute ONE baseline using train.max_epoch and record run_report.json.
+        This stage ends after accepting run_report.json. Do not assign tuning trials or final_train to anyone.
+        The orchestrator launches a separate tuning team next; final evaluation is an external command.
 
         ## Validate Each Artifact (this is your main job)
         After every member reports, open the artifact it produced and check it before continuing:
@@ -117,7 +119,8 @@ def build_tuning_lead_prompt(context: AgentContext) -> str:
         ## Validate Each Artifact
         {describe_round_state(context)}
         - `tuning.json` must contain the search space, the trials and the best parameters/metrics actually observed.
-        - `verdict.json` must contain a real metric comparison and a strict pass/fail flag.
+        - `verdict.json` must contain top-level `passed` (boolean), `metric` (string), `value`, `threshold`,
+          `maximize`, `reason`, `evidence`, and `next_direction`. `pass` or nested verdict objects are not substitutes.
         Re-delegate with a concrete correction when an artifact is missing or inconsistent (at most 2 re-delegations per member).
         Stop early when the evaluator confirms the target is met.
 

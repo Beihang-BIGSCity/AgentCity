@@ -41,6 +41,9 @@ Compose an executable LibCity model for this scenario by selecting atomic module
      `TrafficStateGridDataset` and cannot load point data.
 6. Sanity-check the generated file compiles: run the framework interpreter on `python -c "import ast;ast.parse(open(<file>).read())"`
    (or `py_compile`) with `bash` and fix any syntax error before finishing.
+   This stage only needs lightweight syntax/registration checks. Do not construct full datasets/dataloaders,
+   perform training, or launch background self-checks. The run-tester validates actual data/model execution.
+   Persist composition.json and mark the composition task complete before your final reply.
 
 ## Rules
 - Respect the task specification's device policy and compute budget.
