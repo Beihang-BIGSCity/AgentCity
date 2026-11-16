@@ -1,0 +1,16 @@
+# Python 3.12; orchestration environment (.venv).
+# The original requirements.txt contains an exported Conda environment.
+openjiuwen==0.1.18
+fastmcp>=2.14,<3
+pyyaml==6.0.2
+pdfplumber>=0.11
+opentelemetry-sdk>=1.44
+opentelemetry-exporter-otlp>=1.44
+httpx[socks]
+requests
+beautifulsoup4
+pytest
+
+filelock>=3.25,<4
+
+aiosqlite>=0.22,<1

@@ -35,7 +35,17 @@ def describe_compute_policy(context: AgentContext) -> str:
     return (
         f"Use {device} for this task: pass `gpu={flag}` to every training/tuning tool call "
         f"and `--gpu {flag}` to LibCity commands. "
-        "Keep the task specification's epoch, batch-size and trial budgets, and preserve `train.extra_args`." + runtime
+        f"Iteration training uses {(context.task_spec.get('train') or {}).get('max_epoch', 35)} epochs per baseline/trial; "
+        f"run {context.task_spec.get('tuning', {}).get('max_trials', 5)} tuning trials per round. "
+        "Preserve the task's train.extra_args split in every run. Select models using validation only; "
+        "the test partition is reserved for final evaluation after all loops. Final training uses final_train, "
+        "not the iteration epoch budget. "
+        "There is no default model parameter-count ceiling. The `lightweight` efficiency preference is not "
+        "a numeric parameter limit. Do not import parameter caps from retrieved priors, skills, papers or "
+        "previous-round feedback. Only an explicit parameter budget in the current task specification "
+        "may impose such a cap. Report parameter counts and select capacity using validation results and "
+        "actual device memory/runtime constraints; do not reject or shrink a model solely because it "
+        "exceeds a historical parameter count." + runtime
     )
 
 
@@ -57,7 +67,7 @@ def describe_paths(context: AgentContext) -> str:
 def describe_round(context: AgentContext) -> str:
     """Render the current round within the closed self-correction loop."""
 
-    return f"Round {context.round_index} of at most {context.max_rounds}."
+    return f"Round {context.round_index} of {context.max_rounds}. Fixed loops: {context.task_spec.get('fixed_rounds', True)}."
 
 
 def describe_feedback(context: AgentContext) -> str:

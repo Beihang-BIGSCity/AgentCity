@@ -1,0 +1,35 @@
+# Python 3.12 / macOS Apple Silicon; training environment (.venv-libcity).
+torch==2.6.0
+numpy==2.2.6
+pandas==2.2.3
+scipy==1.15.3
+scikit-learn==1.6.1
+ray[tune]==2.40.0
+hyperopt==0.2.7
+bayesian-optimization==1.4.3
+# Hyperopt 0.2.7 imports pkg_resources, removed in newer setuptools releases.
+setuptools==75.1.0
+tensorboard
+tensorboardx
+tabulate
+tqdm
+geopy
+networkx
+fastdtw
+gensim
+nltk
+statsmodels
+torchdiffeq
+h5py
+tables
+pyyaml
+requests
+beautifulsoup4
+pytest
+python-pptx
+# Dataset loader dependencies discovered after restoring the full source tree.
+tslearn==0.6.3
+numba==0.61.2
+einops==0.8.2
+
+matplotlib==3.11.2

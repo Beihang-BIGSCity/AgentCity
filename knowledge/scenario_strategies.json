@@ -228,14 +228,14 @@
         "head": "linear_head"
       },
       "tuning_direction": [
-        "filters 64 -> 32、first_layer_embedding_size 64 -> 32：把参数量压到 0.1M 量级以匹配效率型硬约束",
+        "filters、first_layer_embedding_size 根据验证效果和实际显存/耗时选择；轻量偏好不设置默认参数量上限",
         "depth 3 -> 1..2、Ks 3 -> 2：平稳数据低容量足够；另一极端是 STNorm 的 hidden_channels=16 + layers=4",
         "learning_rate 1e-3 -> 1e-4（STNorm/ASTGCN 默认）并开 lr_decay steplr，平稳数据上更细的步长收敛更稳",
         "max_epoch 保持任务规格；CPU 冒烟场景不做完整收敛，只看 pipeline 正确性"
       ],
       "evidence": [
         "ST-LEGO §C.1：效率导向 prompt 要求参数紧凑、适配边缘实时部署，倾向 GRU/GCN/浅层",
-        "ST-LEGO §4.4：效率型 prompt 下模型参数约束为 <0.1M",
+        "ST-LEGO §4.4 的参数约束属于原论文特定实验设置，不作为本框架默认约束",
         "LibCity STNorm.json：learning_rate=1e-4、hidden_channels=16、clip_grad_norm=true(max_grad_norm=10)",
         "LibCity ASTGCN.json：learning_rate=1e-4、nb_block=2、K=3"
       ],
@@ -442,7 +442,7 @@
     {
       "id": "constraint-cpu-only-edge-deployment",
       "family": "constraint",
-      "title": "CPU-only 边缘部署：参数 <0.1M、浅层、回避注意力",
+      "title": "CPU-only 边缘部署：按实际内存和延迟选择容量",
       "feature_profile": {
         "cv_global": 0.31,
         "cv_node": 0.26,
@@ -459,14 +459,14 @@
         "head": "linear_head"
       },
       "tuning_direction": [
-        "depth 固定 1..2、filters 32、first_layer_embedding_size 32，把参数量压进 0.1M 硬约束",
+        "仅在当前任务确为 CPU 边缘部署时，按实测延迟/内存选择 depth、filters 和 first_layer_embedding_size；不设置默认参数量上限",
         "禁用 temporal_transformer 与 cross_attention / spatial_attention：O(T²)/O(N²) 在 CPU 上不可接受",
         "batch_size 64 -> 16/32 且 max_epoch<=5：本仓库宿主无 GPU（torch.cuda.is_available()=False），所有 LibCity 执行必须 --gpu false",
         "learning_rate 1e-3 -> 5e-4 配合较少 epoch，避免浅层网络在短预算下发散"
       ],
       "evidence": [
         "本仓库实测：nvidia-smi 不可用、torch.cuda.is_available()=False，LibCity 执行必须传 --gpu false",
-        "ST-LEGO §C.1/§4.4：效率导向 prompt 要求参数紧凑、边缘实时部署，参数约束 <0.1M",
+        "ST-LEGO §C.1/§4.4 的紧凑模型要求针对原论文的边缘部署实验，不作为本框架默认参数约束",
         "ST-LEGO §App.B：GRU「紧凑、比 LSTM 快」、add 融合「快且无参数」，两者都是 CPU 友好默认",
         "LibCity STGCN.json：max_epoch=20、learner=rmsprop、learning_rate=1e-3（小模型快速训练的现成配方）"
       ],

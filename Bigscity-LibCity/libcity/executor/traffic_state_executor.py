@@ -1,4 +1,5 @@
 import os
+import json
 import time
 import numpy as np
 import torch
@@ -27,6 +28,9 @@ class TrafficStateExecutor(AbstractExecutor):
         ensure_dir(self.evaluate_res_dir)
         ensure_dir(self.summary_writer_dir)
 
+        if os.environ.get('AGENTCITY_VALIDATION_ONLY') == '1':
+            import inspect, shutil
+            shutil.copy2(inspect.getfile(type(model)), os.path.join(self.summary_writer_dir, 'model_source.py'))
         self._writer = SummaryWriter(self.summary_writer_dir)
         self._logger = getLogger()
         self._scaler = self.data_feature.get('scaler')
@@ -288,6 +292,7 @@ class TrafficStateExecutor(AbstractExecutor):
         wait = 0
         best_epoch = 0
         train_time = []
+        history = []
         eval_time = []
         num_batches = len(train_dataloader)
         self._logger.info("num_batches:{}".format(num_batches))
@@ -305,6 +310,18 @@ class TrafficStateExecutor(AbstractExecutor):
             val_loss = self._valid_epoch(eval_dataloader, epoch_idx, self.loss_func)
             end_time = time.time()
             eval_time.append(end_time - t2)
+
+            history.append({'epoch': epoch_idx + 1, 'train_loss': float(np.mean(losses)),
+                            'val_loss': float(val_loss), 'train_seconds': t1-start_time,
+                            'validation_seconds': end_time-t2,
+                            'learning_rate': self.optimizer.param_groups[0]['lr']})
+            if os.environ.get('AGENTCITY_VALIDATION_ONLY') == '1':
+                evidence = {'model': self.config.get('model'), 'dataset': self.config.get('dataset'),
+                            'device': str(self.device), 'parameters': sum(p.numel() for p in self.model.parameters()),
+                            'config': self.config.config, 'history': history,
+                            'best_validation_mae': min(row['val_loss'] for row in history)}
+                with open(os.path.join(self.summary_writer_dir, 'training_evidence.json'), 'w') as handle:
+                    json.dump(evidence, handle, default=str, indent=2, allow_nan=False)
 
             if self.lr_scheduler is not None:
                 if self.lr_scheduler_type.lower() == 'reducelronplateau':

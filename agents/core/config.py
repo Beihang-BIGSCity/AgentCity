@@ -10,8 +10,12 @@ from typing import Any, Dict
 from .types import AgentContext
 
 DEFAULT_TARGET = {"metric": "masked_mae", "threshold": None, "maximize": False}
-DEFAULT_TRAIN = {"max_epoch": 2, "batch_size": 16, "gpu": False}
-DEFAULT_MAX_ROUNDS = 3
+LIBCITY_CONFIG = Path(__file__).resolve().parents[2] / "Bigscity-LibCity/libcity/config"
+LIBCITY_DATA_DEFAULTS = json.loads((LIBCITY_CONFIG / "data/TrafficStatePointDataset.json").read_text())
+LIBCITY_EXECUTOR_DEFAULTS = json.loads((LIBCITY_CONFIG / "executor/TrafficStateExecutor.json").read_text())
+DEFAULT_TRAIN = {"max_epoch": 35, "batch_size": 16, "gpu": False}
+DEFAULT_MAX_ROUNDS = 6
+DEFAULT_MAX_TRIALS = 5
 EFFICIENCY_CHOICES = ("lightweight", "balanced", "accuracy")
 
 
@@ -84,6 +88,13 @@ def load_task_spec(path: Path) -> Dict[str, Any]:
         for key, value in dict(train.get("extra_args") or {}).items()
         if key not in {"gpu", "gpu_id"} and value is not None
     }
+    for key in ("train_rate", "eval_rate"):
+        extra_args.setdefault(key, LIBCITY_DATA_DEFAULTS[key])
+    if not (0 < float(extra_args["train_rate"]) < 1 and
+            0 < float(extra_args["eval_rate"]) < 1 - float(extra_args["train_rate"])):
+        raise ValueError("train_rate and eval_rate must leave nonempty train/validation/test partitions")
+    if train["max_epoch"] < 1 or train["batch_size"] < 1:
+        raise ValueError("training epoch and batch size must be positive")
     train["extra_args"] = extra_args
 
     efficiency = str(payload.get("efficiency") or "balanced").strip().lower()
@@ -95,7 +106,8 @@ def load_task_spec(path: Path) -> Dict[str, Any]:
 
     tuning_payload = dict(payload.get("tuning") or {})
     tuning: Dict[str, Any] = {
-        "max_trials": _positive_int(tuning_payload.get("max_trials")),
+        "max_trials": _positive_int(tuning_payload.get("max_trials")) or DEFAULT_MAX_TRIALS,
+        "backend": tuning_payload.get("backend", "custom_grid"),
         "max_evals": _positive_int(tuning_payload.get("max_evals")),
         "hyper_algo": tuning_payload.get("hyper_algo") or None,
         "search_space": dict(tuning_payload.get("search_space") or {}) or None,
@@ -111,6 +123,9 @@ def load_task_spec(path: Path) -> Dict[str, Any]:
         "efficiency": efficiency,
         "train": train,
         "max_rounds": max_rounds,
+        "fixed_rounds": bool(payload.get("fixed_rounds", True)),
+        "final_train": {"max_epoch": LIBCITY_EXECUTOR_DEFAULTS["max_epoch"],
+                        "use_early_stop": LIBCITY_EXECUTOR_DEFAULTS["use_early_stop"]},
         "tuning": tuning,
         "candidate_scope": {
             "models": [str(item) for item in (scope.get("models") or [])],

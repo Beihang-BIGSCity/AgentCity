@@ -57,7 +57,7 @@
 - `hidden_dim 64 -> 32` 同时保留 MLP 隐藏层：总参数降到线性头量级而保住非线性，是 CPU 友好折中。
 - `dropout 0 -> 0.2/0.3`：额外隐藏层最易过拟合（GWNET / MTGNN 默认 `0.3`）。
 - `loss_type` 默认 `masked_mse`；若验收指标是 MAE 则显式改为 `masked_mae`。
-- CPU-only：额外隐藏层的开销相对主干可忽略，但会吃掉效率型任务的 0.1M 参数预算。
+- CPU-only：根据实测内存和延迟评估额外隐藏层；效率型任务不设默认参数量上限。
 
 **依据/证据**
 - `data/modlib/index.json`：`mlp_head` 用一层隐藏 `Linear+ReLU` 拟合历史到未来的复杂映射，`DEFAULT_LOSS=masked_mse`。

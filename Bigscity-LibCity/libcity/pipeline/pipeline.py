@@ -46,6 +46,10 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
         # Make a new experiment ID
         exp_id = int(random.SystemRandom().random() * 100000)
         config['exp_id'] = exp_id
+    if os.environ.get('AGENTCITY_VALIDATION_ONLY') == '1':
+        import uuid
+        exp_id = f'{exp_id}_{uuid.uuid4().hex[:10]}'
+        config['exp_id'] = exp_id
     # logger
     logger = get_logger(config)
     logger.info('Begin pipeline, task={}, model_name={}, dataset_name={}, exp_id={}'.
@@ -92,7 +96,10 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
         except FileNotFoundError:
             print('No saved model found at {}.'.format(model_cache_file))
     # 评估，评估结果将会放在 cache/evaluate_cache 下
-    executor.evaluate(test_data)
+    if os.environ.get('AGENTCITY_VALIDATION_ONLY') != '1':
+        executor.evaluate(test_data)
+    else:
+        logger.info('Held-out test evaluation deferred until all adaptation rounds finish.')
 
 
 def parse_search_space(space_file):

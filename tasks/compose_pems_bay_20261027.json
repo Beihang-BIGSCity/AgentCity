@@ -10,7 +10,7 @@
     "maximize": false
   },
   "train": {
-    "max_epoch": 1,
+    "max_epoch": 35,
     "batch_size": 128,
     "gpu": true,
     "data_col": [
@@ -19,11 +19,11 @@
     "profile_train_only": true,
     "profile_max_timesteps": 60000,
     "extra_args": {
-      "train_rate": 0.6,
-      "eval_rate": 0.2
+      "train_rate": 0.7,
+      "eval_rate": 0.1
     }
   },
-  "max_rounds": 1,
+  "max_rounds": 6,
   "candidate_scope": {
     "models": [],
     "categories": [
@@ -35,12 +35,9 @@
     ]
   },
   "tuning": {
-    "max_trials": 1,
-    "search_space": {
-      "learning_rate": [
-        0.01
-      ]
-    }
+    "max_trials": 5,
+    "backend": "custom_grid"
   },
-  "notes": "This is a REAL dataset-conditioned composition study for PEMS_BAY, not a transfer run of the previous STDiffGRU. Before planning a training-only profile and full knowledge retrieval have been saved at /home/wangwenrui/shk/AgentCity/data/adaptation/compose_pems_bay_20261027/dataset_profile.json and retrieval_before_planning.json. Read those artifacts; use the actual profile and retrieve_knowledge/list_modules/get_module to choose modules independently. You may choose the same module as an earlier dataset if justified by measured training features; never force artificial differences or copy the old STDiffGRU composition without fresh analysis. Use unique class/model name ACBayCompose. Select exactly one module from each of encoder/spatial/temporal/fusion/head, inline actual chosen implementations, preserve their provenance, and register and export the new class. Macro contract is encoder -> parallel spatial and temporal branches -> selected fusion -> selected head. For fair downstream ablation, implement config spatial_module='none' and temporal_module='none' to disable that branch and substitute torch.zeros_like(encoded_hidden) in the same fusion/head. Active values must be the actual chosen module ids; do not hardcode diffusion_gcn/gru. Expose encoder, spatial, temporal, fusion and head as named attributes. Input 12 -> output 12, hidden_dim=32 and output_dim=1; use loss.masked_mae_torch after inverse scaling, null_value=0. Dataset target is ONLY traffic_speed; model JSON MUST set data_col=['traffic_speed'], output_dim=1, add_time_in_day=true, add_day_in_week=false, cache_dataset=false, scaler='standard', learning_rate=0.01, clip_grad_norm=true, max_grad_norm=5. Device is authorized GPU; use gpu=true, gpu_id='0'. This flow has only a one-epoch PILOT to validate that the generated composition runs; final 15-epoch three-seed training and all ablations are a separate frozen-architecture benchmark. max_rounds=1: no test-driven structure revisions. Tuning budget is exactly one fixed trial with search_space={'learning_rate':[0.01]} and max_trials=1; do not search any other parameter, do not select architectures using test results. The test threshold here only reports pilot plumbing success; do not claim scientific superiority from passing it. Preserve original composition and complete generated source before final benchmarking. Both phases must leave actual artifact files and exact run commands. Do not read the old multi-dataset benchmark results to choose modules. Keep shell and code commands inside the project, use absolute paths, and do not modify framework internals. Runtime is already validated: the framework interpreter is /home/wangwenrui/opt/miniconda3/envs/autogen/bin/python; use it for all torch/LibCity checks. The jiuwen orchestrator interpreter has no torch by design. Do not probe other environments. Data integrator: call analyze_dataset, verify existing raw files/config and write the data contract, then mark its task complete; do not repeatedly construct get_dataset/dataloaders or audit framework internals. StandardScaler is global; speed units are unverified original units. Pipeline pilot uses native LibCity sample-window splitting; only final benchmark uses disjoint raw-time splitting. Actual generated input channel/graph contract will be preserved for the final benchmark and its controls."
+  "notes": "每轮根据训练数据画像与检索依据，从 encoder/spatial/temporal/fusion/head 各选一个模块重新组合；结构为 encoder -> 并行 spatial/temporal -> fusion -> head。每轮 baseline 和 5 次调参均采用 35 epoch，固定执行 6 轮，只使用验证集选择结构和超参数。最终冻结最佳结构与参数，按 LibCity 默认 epoch 重新训练后进行测试集评估。训练/验证/测试比例采用 LibCity 默认值。",
+  "fixed_rounds": true
 }

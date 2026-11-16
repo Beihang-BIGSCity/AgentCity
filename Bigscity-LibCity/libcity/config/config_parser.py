@@ -124,11 +124,29 @@ class ConfigParser(object):
                         self.config[key] = x[key]
 
     def _init_device(self):
-        use_gpu = self.config.get('gpu', True) and torch.cuda.is_available()
-        gpu_id = self.config.get('gpu_id', 0)
-        if use_gpu:
-            torch.cuda.set_device(gpu_id)
-        self.config['device'] = torch.device(f"cuda:{gpu_id}" if use_gpu else "cpu")
+        requested = os.environ.get('AGENTCITY_DEVICE') if self.config.get('gpu', True) else 'cpu'
+        if requested:
+            device = torch.device(requested)
+            if device.type == 'mps' and not torch.backends.mps.is_available():
+                raise RuntimeError('MPS requested but unavailable; refusing CPU fallback')
+            if device.type == 'cuda':
+                if not torch.cuda.is_available():
+                    raise RuntimeError('CUDA requested but unavailable')
+                torch.cuda.set_device(device)
+            self.config['device'] = device
+            self.config['gpu'] = device.type != 'cpu'
+        else:
+            gpu_id = self.config.get('gpu_id', 0)
+            if self.config.get('gpu', True) and torch.cuda.is_available():
+                torch.cuda.set_device(gpu_id)
+                self.config['device'] = torch.device(f'cuda:{gpu_id}')
+            elif self.config.get('gpu', True) and torch.backends.mps.is_available():
+                self.config['device'] = torch.device('mps')
+            else:
+                self.config['device'] = torch.device('cpu')
+        # An explicit local experiment budget also applies to tuning subprocesses.
+        if os.environ.get('AGENTCITY_VALIDATION_ONLY') == '1':
+            self.config.update(use_early_stop=False, cache_dataset=False, train_loss='masked_mae', log_every=1, load_best_epoch=True, saved_model=True, seed=0)
 
     def get(self, key, default=None):
         return self.config.get(key, default)

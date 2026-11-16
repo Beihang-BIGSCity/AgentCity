@@ -487,9 +487,25 @@ async def run_single_prompt(
     from openjiuwen.harness import create_deep_agent
     from openjiuwen.harness.rails.sys_operation_rail import SysOperationRail
 
+    from openjiuwen.core.runner.runner import Runner
+    from openjiuwen.core.sys_operation import SysOperationCard, OperationMode, LocalWorkConfig
+    import uuid
+    runtime_python = Path(os.environ.get("AGENTCITY_LIBCITY_PYTHON", sys.executable))
+    roots = [str(PROJECT_ROOT), str(runtime_python.parent.parent),
+             str(runtime_python.resolve().parent.parent),
+             str((PROJECT_ROOT / "Bigscity-LibCity/raw_data").resolve())]
+    sysop_id = "agentcity_serial_" + uuid.uuid4().hex
+    card = SysOperationCard(id=sysop_id, mode=OperationMode.LOCAL,
+                            work_config=LocalWorkConfig(shell_allowlist=None,
+                                                        restrict_to_sandbox=True, sandbox_root=roots))
+    Runner.resource_mgr.add_sys_operation(card)
+    sysop = Runner.resource_mgr.get_sys_operation(sysop_id)
+
     agent = create_deep_agent(
         _team_model_config(profile, model_role).build(),
         system_prompt=prompt,
+        max_iterations=50,
+        sys_operation=sysop,
         mcps=[_business_mcp_config()],
         # Without this rail the stage only gets the business MCP tools: no
         # read_file / write_file / bash, so a stage that must persist an

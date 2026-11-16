@@ -78,6 +78,13 @@ def _normalise_proxy_env() -> None:
 def _cuda_available() -> bool:
     """Cheap GPU probe so ``--gpu auto`` never asks LibCity for a missing device."""
 
+    if os.environ.get("AGENTCITY_DEVICE", "").startswith("mps"):
+        probe_python = os.environ.get("AGENTCITY_LIBCITY_PYTHON", sys.executable)
+        try:
+            probe = subprocess.run([probe_python, "-c", "import torch; raise SystemExit(0 if torch.backends.mps.is_available() else 1)"], timeout=15, capture_output=True)
+            return probe.returncode == 0
+        except (OSError, subprocess.SubprocessError):
+            return False
     executable = shutil.which("nvidia-smi")
     if not executable:
         return False

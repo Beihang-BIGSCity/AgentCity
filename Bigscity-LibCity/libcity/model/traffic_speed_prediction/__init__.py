@@ -1,155 +1,153 @@
-from libcity.model.traffic_speed_prediction.DCRNN import DCRNN
-from libcity.model.traffic_speed_prediction.STGCN import STGCN
-from libcity.model.traffic_speed_prediction.GWNET import GWNET
-from libcity.model.traffic_speed_prediction.MTGNN import MTGNN
-from libcity.model.traffic_speed_prediction.TGCLSTM import TGCLSTM
-from libcity.model.traffic_speed_prediction.TGCN import TGCN
-from libcity.model.traffic_speed_prediction.RNN import RNN
-from libcity.model.traffic_speed_prediction.Seq2Seq import Seq2Seq
-from libcity.model.traffic_speed_prediction.AutoEncoder import AutoEncoder
-from libcity.model.traffic_speed_prediction.TemplateTSP import TemplateTSP
-from libcity.model.traffic_speed_prediction.ATDM import ATDM
-from libcity.model.traffic_speed_prediction.GMAN import GMAN
-from libcity.model.traffic_speed_prediction.STAGGCN import STAGGCN
-from libcity.model.traffic_speed_prediction.GTS import GTS
-from libcity.model.traffic_speed_prediction.HGCN import HGCN
-#from libcity.model.traffic_speed_prediction.STMGAT import STMGAT
-from libcity.model.traffic_speed_prediction.DKFN import DKFN
-from libcity.model.traffic_speed_prediction.STTN import STTN
-from libcity.model.traffic_speed_prediction.D2STGNN import D2STGNN
-from libcity.model.traffic_speed_prediction.FNN import FNN
-from libcity.model.traffic_speed_prediction.STID import STID
-from libcity.model.traffic_speed_prediction.DMSTGCN import DMSTGCN
-from libcity.model.traffic_speed_prediction.HIEST import HIEST
-from libcity.model.traffic_speed_prediction.STAEformer import STAEformer
-from libcity.model.traffic_speed_prediction.TESTAM import TESTAM
-from libcity.model.traffic_speed_prediction.MegaCRN import MegaCRN
-from libcity.model.traffic_speed_prediction.Trafformer import Trafformer
-from libcity.model.traffic_speed_prediction.LSTGAN import LSTGAN
-from libcity.model.traffic_speed_prediction.MLCAFormer import MLCAFormer
-from libcity.model.traffic_speed_prediction.RSTIB import RSTIB
-from libcity.model.traffic_speed_prediction.GriddedTNP import GriddedTNP
-from libcity.model.traffic_speed_prediction.EAC import EAC
-from libcity.model.traffic_speed_prediction.SRSNet import SRSNet
-from libcity.model.traffic_speed_prediction.STDMAE import STDMAE
-from libcity.model.traffic_speed_prediction.AutoSTF import AutoSTF
-from libcity.model.traffic_speed_prediction.STSSDL import STSSDL
-from libcity.model.traffic_speed_prediction.LightST import LightST
-from libcity.model.traffic_speed_prediction.BigST import BigST
-from libcity.model.traffic_speed_prediction.STWave import STWave
-from libcity.model.traffic_speed_prediction.DCST import DCST
-from libcity.model.traffic_speed_prediction.CKGGNN import CKGGNN
-from libcity.model.traffic_speed_prediction.EasyST import EasyST
-from libcity.model.traffic_speed_prediction.FlashST import FlashST
-from libcity.model.eta.MTSTAN import MTSTAN
-try:
-    from libcity.model.traffic_speed_prediction.DSTMamba import DSTMamba
-except ImportError:
-    DSTMamba = None  # mamba_ssm not installed
-try:
-    from libcity.model.traffic_speed_prediction.UrbanDiT import UrbanDiT
-except ImportError:
-    UrbanDiT = None  # einops not installed
-try:
-    from libcity.model.traffic_speed_prediction.UniST import UniST
-except ImportError:
-    UniST = None  # timm not installed
-try:
-    from libcity.model.traffic_speed_prediction.STLLM import STLLM
-except ImportError:
-    STLLM = None  # transformers not installed
-from libcity.model.traffic_speed_prediction.TGraphormer import TGraphormer
-from libcity.model.traffic_speed_prediction.LEAF import LEAF
-from libcity.model.traffic_speed_prediction.TRACK import TRACK
-from libcity.model.traffic_speed_prediction.TimeMixerPP import TimeMixerPP
-from libcity.model.traffic_speed_prediction.TimeMixer import TimeMixer
-from libcity.model.traffic_speed_prediction.PatchTST import PatchTST
-from libcity.model.traffic_speed_prediction.ConvTimeNet import ConvTimeNet
-from libcity.model.traffic_speed_prediction.Pathformer import Pathformer
-try:
-    from libcity.model.traffic_speed_prediction.Fredformer import Fredformer
-except ImportError:
-    Fredformer = None  # einops not installed
-try:
-    from libcity.model.traffic_speed_prediction.PatchSTG import PatchSTG
-except ImportError:
-    PatchSTG = None  # timm not installed
-from libcity.model.traffic_speed_prediction.GNNRF import GNNRF
-from libcity.model.traffic_speed_prediction.FCNNBus import FCNNBus
-from libcity.model.traffic_speed_prediction.Garner import Garner
-from libcity.model.traffic_speed_prediction.MVGRL import MVGRL
-from libcity.model.traffic_speed_prediction.STFGNN import STFGNN
-from libcity.model.traffic_speed_prediction.STDiffGRU import STDiffGRU
-from libcity.model.traffic_speed_prediction.ACBayCompose import ACBayCompose
-from libcity.model.traffic_speed_prediction.ACD4Compose import ACD4Compose
-from libcity.model.traffic_speed_prediction.ACD7Compose import ACD7Compose
+"""Load only the selected model/executor and its optional dependencies.
 
-__all__ = [
-    "DCRNN",
-    "STGCN",
-    "GWNET",
-    "TGCLSTM",
-    "TGCN",
-    "TemplateTSP",
-    "RNN",
-    "Seq2Seq",
-    "AutoEncoder",
-    "MTGNN",
-    "ATDM",
-    "GMAN",
-    "GTS",
-    "HGCN",
-    "STAGGCN",
-    "STMGAT",
-    "DKFN",
-    "STTN",
-    "D2STGNN",
-    "FNN",
-    "STID",
-    "DMSTGCN",
-    "HIEST",
-    "STAEformer",
-    "TESTAM",
-    "MegaCRN",
-    "Trafformer",
-    "LSTGAN",
-    "MLCAFormer",
-    "RSTIB",
-    "GriddedTNP",
-    "EAC",
-    "SRSNet",
-    "STDMAE",
-    "AutoSTF",
-    "STSSDL",
-    "LightST",
-    "BigST",
-    "STWave",
-    "MTSTAN",
-    "DSTMamba",
-    "UrbanDiT",
-    "UniST",
-    "STLLM",
-    "TGraphormer",
-    "DCST",
-    "CKGGNN",
-    "EasyST",
-    "FlashST",
-    "LEAF",
-    "TRACK",
-    "TimeMixerPP",
-    "TimeMixer",
-    "PatchTST",
-    "ConvTimeNet",
-    "Fredformer",
-    "PatchSTG",
-    "Pathformer",
-    "GNNRF",
-    "FCNNBus",
-    "Garner",
-    "MVGRL",
-    "STFGNN",
-    "STDiffGRU",
-    "ACBayCompose",
-    "ACD4Compose",
-    "ACD7Compose",
-]
+Unrelated CUDA/vision/graph packages must not block CPU traffic prediction.
+Public exports are preserved; a selected component still raises its real import error.
+"""
+from importlib import import_module
+
+__all__ = ['DCRNN',
+ 'STGCN',
+ 'GWNET',
+ 'TGCLSTM',
+ 'TGCN',
+ 'TemplateTSP',
+ 'RNN',
+ 'Seq2Seq',
+ 'AutoEncoder',
+ 'MTGNN',
+ 'ATDM',
+ 'GMAN',
+ 'GTS',
+ 'HGCN',
+ 'STAGGCN',
+ 'STMGAT',
+ 'DKFN',
+ 'STTN',
+ 'D2STGNN',
+ 'FNN',
+ 'STID',
+ 'DMSTGCN',
+ 'HIEST',
+ 'STAEformer',
+ 'TESTAM',
+ 'MegaCRN',
+ 'Trafformer',
+ 'LSTGAN',
+ 'MLCAFormer',
+ 'RSTIB',
+ 'GriddedTNP',
+ 'EAC',
+ 'SRSNet',
+ 'STDMAE',
+ 'AutoSTF',
+ 'STSSDL',
+ 'LightST',
+ 'BigST',
+ 'STWave',
+ 'MTSTAN',
+ 'DSTMamba',
+ 'UrbanDiT',
+ 'UniST',
+ 'STLLM',
+ 'TGraphormer',
+ 'DCST',
+ 'CKGGNN',
+ 'EasyST',
+ 'FlashST',
+ 'LEAF',
+ 'TRACK',
+ 'TimeMixerPP',
+ 'TimeMixer',
+ 'PatchTST',
+ 'ConvTimeNet',
+ 'Fredformer',
+ 'PatchSTG',
+ 'Pathformer',
+ 'GNNRF',
+ 'FCNNBus',
+ 'Garner',
+ 'MVGRL',
+ 'STFGNN',
+ 'STDiffGRU',
+ 'ACBayCompose',
+ 'ACD4Compose',
+ 'ACD7Compose']
+
+_COMPONENTS = {'DCRNN': ('libcity.model.traffic_speed_prediction.DCRNN', 'DCRNN'),
+ 'STGCN': ('libcity.model.traffic_speed_prediction.STGCN', 'STGCN'),
+ 'GWNET': ('libcity.model.traffic_speed_prediction.GWNET', 'GWNET'),
+ 'MTGNN': ('libcity.model.traffic_speed_prediction.MTGNN', 'MTGNN'),
+ 'TGCLSTM': ('libcity.model.traffic_speed_prediction.TGCLSTM', 'TGCLSTM'),
+ 'TGCN': ('libcity.model.traffic_speed_prediction.TGCN', 'TGCN'),
+ 'RNN': ('libcity.model.traffic_speed_prediction.RNN', 'RNN'),
+ 'Seq2Seq': ('libcity.model.traffic_speed_prediction.Seq2Seq', 'Seq2Seq'),
+ 'AutoEncoder': ('libcity.model.traffic_speed_prediction.AutoEncoder', 'AutoEncoder'),
+ 'TemplateTSP': ('libcity.model.traffic_speed_prediction.TemplateTSP', 'TemplateTSP'),
+ 'ATDM': ('libcity.model.traffic_speed_prediction.ATDM', 'ATDM'),
+ 'GMAN': ('libcity.model.traffic_speed_prediction.GMAN', 'GMAN'),
+ 'STAGGCN': ('libcity.model.traffic_speed_prediction.STAGGCN', 'STAGGCN'),
+ 'GTS': ('libcity.model.traffic_speed_prediction.GTS', 'GTS'),
+ 'HGCN': ('libcity.model.traffic_speed_prediction.HGCN', 'HGCN'),
+ 'DKFN': ('libcity.model.traffic_speed_prediction.DKFN', 'DKFN'),
+ 'STTN': ('libcity.model.traffic_speed_prediction.STTN', 'STTN'),
+ 'D2STGNN': ('libcity.model.traffic_speed_prediction.D2STGNN', 'D2STGNN'),
+ 'FNN': ('libcity.model.traffic_speed_prediction.FNN', 'FNN'),
+ 'STID': ('libcity.model.traffic_speed_prediction.STID', 'STID'),
+ 'DMSTGCN': ('libcity.model.traffic_speed_prediction.DMSTGCN', 'DMSTGCN'),
+ 'HIEST': ('libcity.model.traffic_speed_prediction.HIEST', 'HIEST'),
+ 'STAEformer': ('libcity.model.traffic_speed_prediction.STAEformer', 'STAEformer'),
+ 'TESTAM': ('libcity.model.traffic_speed_prediction.TESTAM', 'TESTAM'),
+ 'MegaCRN': ('libcity.model.traffic_speed_prediction.MegaCRN', 'MegaCRN'),
+ 'Trafformer': ('libcity.model.traffic_speed_prediction.Trafformer', 'Trafformer'),
+ 'LSTGAN': ('libcity.model.traffic_speed_prediction.LSTGAN', 'LSTGAN'),
+ 'MLCAFormer': ('libcity.model.traffic_speed_prediction.MLCAFormer', 'MLCAFormer'),
+ 'RSTIB': ('libcity.model.traffic_speed_prediction.RSTIB', 'RSTIB'),
+ 'GriddedTNP': ('libcity.model.traffic_speed_prediction.GriddedTNP', 'GriddedTNP'),
+ 'EAC': ('libcity.model.traffic_speed_prediction.EAC', 'EAC'),
+ 'SRSNet': ('libcity.model.traffic_speed_prediction.SRSNet', 'SRSNet'),
+ 'STDMAE': ('libcity.model.traffic_speed_prediction.STDMAE', 'STDMAE'),
+ 'AutoSTF': ('libcity.model.traffic_speed_prediction.AutoSTF', 'AutoSTF'),
+ 'STSSDL': ('libcity.model.traffic_speed_prediction.STSSDL', 'STSSDL'),
+ 'LightST': ('libcity.model.traffic_speed_prediction.LightST', 'LightST'),
+ 'BigST': ('libcity.model.traffic_speed_prediction.BigST', 'BigST'),
+ 'STWave': ('libcity.model.traffic_speed_prediction.STWave', 'STWave'),
+ 'DCST': ('libcity.model.traffic_speed_prediction.DCST', 'DCST'),
+ 'CKGGNN': ('libcity.model.traffic_speed_prediction.CKGGNN', 'CKGGNN'),
+ 'EasyST': ('libcity.model.traffic_speed_prediction.EasyST', 'EasyST'),
+ 'FlashST': ('libcity.model.traffic_speed_prediction.FlashST', 'FlashST'),
+ 'MTSTAN': ('libcity.model.eta.MTSTAN', 'MTSTAN'),
+ 'TGraphormer': ('libcity.model.traffic_speed_prediction.TGraphormer', 'TGraphormer'),
+ 'LEAF': ('libcity.model.traffic_speed_prediction.LEAF', 'LEAF'),
+ 'TRACK': ('libcity.model.traffic_speed_prediction.TRACK', 'TRACK'),
+ 'TimeMixerPP': ('libcity.model.traffic_speed_prediction.TimeMixerPP', 'TimeMixerPP'),
+ 'TimeMixer': ('libcity.model.traffic_speed_prediction.TimeMixer', 'TimeMixer'),
+ 'PatchTST': ('libcity.model.traffic_speed_prediction.PatchTST', 'PatchTST'),
+ 'ConvTimeNet': ('libcity.model.traffic_speed_prediction.ConvTimeNet', 'ConvTimeNet'),
+ 'Pathformer': ('libcity.model.traffic_speed_prediction.Pathformer', 'Pathformer'),
+ 'GNNRF': ('libcity.model.traffic_speed_prediction.GNNRF', 'GNNRF'),
+ 'FCNNBus': ('libcity.model.traffic_speed_prediction.FCNNBus', 'FCNNBus'),
+ 'Garner': ('libcity.model.traffic_speed_prediction.Garner', 'Garner'),
+ 'MVGRL': ('libcity.model.traffic_speed_prediction.MVGRL', 'MVGRL'),
+ 'STFGNN': ('libcity.model.traffic_speed_prediction.STFGNN', 'STFGNN'),
+ 'STDiffGRU': ('libcity.model.traffic_speed_prediction.STDiffGRU', 'STDiffGRU'),
+ 'ACBayCompose': ('libcity.model.traffic_speed_prediction.ACBayCompose', 'ACBayCompose'),
+ 'ACD4Compose': ('libcity.model.traffic_speed_prediction.ACD4Compose', 'ACD4Compose'),
+ 'ACD7Compose': ('libcity.model.traffic_speed_prediction.ACD7Compose', 'ACD7Compose'),
+ 'DSTMamba': ('libcity.model.traffic_speed_prediction.DSTMamba', 'DSTMamba'),
+ 'UrbanDiT': ('libcity.model.traffic_speed_prediction.UrbanDiT', 'UrbanDiT'),
+ 'UniST': ('libcity.model.traffic_speed_prediction.UniST', 'UniST'),
+ 'STLLM': ('libcity.model.traffic_speed_prediction.STLLM', 'STLLM'),
+ 'Fredformer': ('libcity.model.traffic_speed_prediction.Fredformer', 'Fredformer'),
+ 'PatchSTG': ('libcity.model.traffic_speed_prediction.PatchSTG', 'PatchSTG')}
+
+def __getattr__(name):
+    if name not in _COMPONENTS:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    module, symbol = _COMPONENTS[name]
+    value = getattr(import_module(module), symbol)
+    globals()[name] = value
+    return value
+
+
+def __dir__():
+    return sorted(set(globals()) | set(_COMPONENTS))

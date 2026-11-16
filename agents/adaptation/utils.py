@@ -196,6 +196,24 @@ def collect_run_metrics(
     fallback because ``run_model.py`` prints a truncated pandas frame.
     """
 
+    if os.environ.get("AGENTCITY_VALIDATION_ONLY") == "1":
+        candidates = []
+        for path in (repo_dir / "libcity/cache").glob("*/training_evidence.json"):
+            if since is not None and path.stat().st_mtime < since:
+                continue
+            if exp_id and path.parent.name != str(exp_id):
+                continue
+            evidence = json.loads(path.read_text())
+            if evidence.get("model") == model_name and evidence.get("dataset") == dataset:
+                candidates.append((path.stat().st_mtime, path, evidence))
+        if not candidates:
+            return {}, {"source_kind": "validation_missing"}
+        _, path, evidence = max(candidates, key=lambda item: item[0])
+        return {"masked_mae": evidence["best_validation_mae"]}, {
+            "source_kind": "validation_training_evidence", "source": str(path),
+            "partition": "validation", "aggregation": "mean batch masked MAE; best validation epoch",
+            "completed_epochs": len(evidence["history"]), "device": evidence["device"]}
+
     from_stdout = extract_standard_metrics(stdout)
     cache = evaluate_cache_metrics(
         repo_dir, model_name=model_name, dataset=dataset, since=since, exp_id=exp_id

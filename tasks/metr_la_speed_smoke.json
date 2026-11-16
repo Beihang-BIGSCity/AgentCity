@@ -10,15 +10,16 @@
     "maximize": false
   },
   "train": {
-    "max_epoch": 15,
+    "max_epoch": 35,
     "batch_size": 32,
     "gpu": false,
     "extra_args": {
-      "train_rate": 0.1,
-      "eval_rate": 0.05
-    }
+      "train_rate": 0.7,
+      "eval_rate": 0.1
+    },
+    "profile_train_only": true
   },
-  "max_rounds": 2,
+  "max_rounds": 6,
   "candidate_scope": {
     "models": [],
     "categories": [
@@ -29,8 +30,10 @@
       "head"
     ]
   },
-  "notes": "CPU 小规模适配任务：METR_LA(207 节点/5 分钟采样) 速度预测，15 epoch 验证 数据集成-模型组合-运行测试-调参-评估 整条链路；阈值宽松(35.0)，单轮即可达标。实测本机(CPU, batch 32, 15 epoch, STDiffGRU 组合模型)单次运行约 8-12 分钟(15 个 epoch 训练 ~5-7 分钟 + 验证/测试前向 ~2 分钟，受同机负载影响)；消融实验(单分支变体)与原生单模块基线同样按 15 epoch 运行，预算请按每次运行 ~10 分钟估。",
+  "notes": "每轮根据训练数据画像与检索依据，从 encoder/spatial/temporal/fusion/head 各选一个模块重新组合；结构为 encoder -> 并行 spatial/temporal -> fusion -> head。每轮 baseline 和 5 次调参均采用 35 epoch，固定执行 6 轮，只使用验证集选择结构和超参数。最终冻结最佳结构与参数，按 LibCity 默认 epoch 重新训练后进行测试集评估。训练/验证/测试比例采用 LibCity 默认值。",
   "tuning": {
-    "max_trials": 2
-  }
+    "max_trials": 5,
+    "backend": "custom_grid"
+  },
+  "fixed_rounds": true
 }

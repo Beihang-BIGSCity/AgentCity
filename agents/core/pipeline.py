@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import inspect
+import os
+import json
+from pathlib import Path
 from typing import Awaitable, Callable, List, Optional, Union
 
 from .openjiuwen_backend import HarnessProfile, run_single_prompt, run_team_stage
@@ -45,6 +48,13 @@ class AgentPipeline:
 
     async def _run_stage(self, stage: StageDefinition, workflow_name: str) -> None:
         self.logger.info("Starting stage: %s (%s)", stage.title, workflow_name)
+        if os.environ.get("AGENTCITY_RESUME_PARTIAL") == "1" and stage.key == "task_planning":
+            existing = Path(self.context.task_dir) / "plan.json"
+            if existing.exists():
+                json.loads(existing.read_text())
+                self.context.stage_notes[stage.key] = "Resumed existing plan.json; original artifact preserved."
+                self.logger.info("Resume: preserved existing plan.json")
+                return
         if stage.runner:
             prompt = (
                 stage.prompt_builder(self.context)
@@ -106,13 +116,50 @@ class AgentPipeline:
         else:
             agent_definitions = stage.agents
 
-        result = await run_team_stage(
-            stage=stage,
-            agent_definitions=agent_definitions,
-            lead_prompt=lead_prompt,
-            profile=self.profile,
-            logger=self.logger,
-        )
+        if os.environ.get("AGENTCITY_SERIAL_ROLES") == "1":
+            messages, summaries = [], []
+            required = {"data-integrator": "data_integration.json", "model-composer": "composition.json",
+                        "run-tester": "run_report.json", "hyper-searcher": "tuning.json",
+                        "effect-evaluator": "verdict.json"}
+            for name, definition in agent_definitions.items():
+                self.logger.info("Serial role start: %s", name)
+                artifact = required.get(name)
+                if os.environ.get("AGENTCITY_RESUME_PARTIAL") == "1" and artifact:
+                    existing = Path(self.context.task_dir) / artifact
+                    if existing.exists():
+                        json.loads(existing.read_text())
+                        summaries.append(name + ": resumed existing " + artifact)
+                        self.logger.info("Resume: preserved %s", artifact)
+                        continue
+                instruction = (definition.prompt + "\n\nExecution mode: you are invoked directly and sequentially. "
+                    "Do not create teams, send team messages, claim tasks, wait for colleagues, or delegate. "
+                    "Complete your own artifact with the file tools and then finish. "
+                    "All predecessor roles have already returned. Use only validation evidence for decisions. "
+                    "Do not inspect unrelated repository files or change infrastructure. "
+                    "Never run additional training merely to verify a successful run. "
+                    "For perf-debugger: if run_report and tuning both succeeded, append a short audit to tuning.json "
+                    "without training. On failures, record diagnosis and stop; extra training would violate this experiment budget.")
+                if name == "effect-evaluator" and os.environ.get("AGENTCITY_FREEZE_EXPERIENCE") == "1":
+                    instruction += " Frozen-memory control: do not modify knowledge/ or skills/ by any means. record_experience may return skipped; this is expected."
+                result_one = await run_single_prompt(prompt=instruction, profile=self.profile,
+                                                    logger=self.logger, model_role=definition.model)
+                artifact = required.get(name)
+                if artifact:
+                    path = Path(self.context.task_dir) / artifact
+                    if not path.exists():
+                        repair = instruction + f"\nYour required output {path} is missing. Write it from existing evidence now. Do not repeat training or invent results."
+                        result_one = await run_single_prompt(prompt=repair, profile=self.profile,
+                                                            logger=self.logger, model_role=definition.model)
+                    json.loads(path.read_text())  # fail explicitly instead of deadlocking on a missing contract
+                summaries.append(name + ": " + result_one["summary"])
+                messages.extend(result_one["messages"])
+                self.logger.info("Serial role complete: %s", name)
+            result = {"summary": "\n".join(summaries), "messages": messages}
+        else:
+            result = await run_team_stage(
+                stage=stage, agent_definitions=agent_definitions, lead_prompt=lead_prompt,
+                profile=self.profile, logger=self.logger,
+            )
         summary = result["summary"]
         if summary:
             self.context.stage_notes[stage.key] = summary

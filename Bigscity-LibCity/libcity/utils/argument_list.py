@@ -4,6 +4,7 @@ store the arguments can be modified by the user
 import argparse
 
 general_arguments = {
+    "num_workers": {"type": "int", "default": None, "help": "data loader workers"},
     "gpu": {
         "type": "bool",
         "default": None,

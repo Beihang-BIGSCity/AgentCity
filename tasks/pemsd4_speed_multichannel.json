@@ -10,14 +10,30 @@
     "maximize": false
   },
   "train": {
-    "max_epoch": 3,
+    "max_epoch": 35,
     "batch_size": 16,
-    "gpu": false
+    "gpu": false,
+    "extra_args": {
+      "train_rate": 0.7,
+      "eval_rate": 0.1
+    },
+    "profile_train_only": true
   },
-  "max_rounds": 2,
+  "max_rounds": 6,
   "candidate_scope": {
     "models": [],
-    "categories": ["encoder", "spatial", "temporal", "fusion", "head"]
+    "categories": [
+      "encoder",
+      "spatial",
+      "temporal",
+      "fusion",
+      "head"
+    ]
   },
-  "notes": "多通道场景：PEMSD4 同时含 flow/occupancy/speed(output_dim=3, 307 节点)，考察编码器对多通道输入的适配与输出头维度处理。"
+  "notes": "每轮根据训练数据画像与检索依据，从 encoder/spatial/temporal/fusion/head 各选一个模块重新组合；结构为 encoder -> 并行 spatial/temporal -> fusion -> head。每轮 baseline 和 5 次调参均采用 35 epoch，固定执行 6 轮，只使用验证集选择结构和超参数。最终冻结最佳结构与参数，按 LibCity 默认 epoch 重新训练后进行测试集评估。训练/验证/测试比例采用 LibCity 默认值。",
+  "fixed_rounds": true,
+  "tuning": {
+    "max_trials": 5,
+    "backend": "custom_grid"
+  }
 }

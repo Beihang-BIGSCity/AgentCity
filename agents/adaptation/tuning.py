@@ -29,7 +29,7 @@ TUNING_CONFIG_DIR = "tuning_configs"
 RUN_MODEL_CLI_FLAGS = frozenset({
     "task", "model", "dataset", "config_file", "saved_model", "train", "exp_id", "seed",
     "gpu", "gpu_id", "train_rate", "eval_rate", "batch_size", "learning_rate",
-    "max_epoch", "dataset_class", "executor", "evaluator",
+    "max_epoch", "dataset_class", "executor", "evaluator", "num_workers",
 })
 DEFAULT_TUNING_SPACE: Dict[str, List[Any]] = {
     "learning_rate": [0.01, 0.005, 0.001],
@@ -167,7 +167,7 @@ def trial_command(
         if str(key) in RUN_MODEL_CLI_FLAGS:
             cmd.extend([f"--{key}", str(value)])
     for key, value in (extra_cli_args or {}).items():
-        if value is None or str(key) in {"gpu", "gpu_id"} or str(key) not in RUN_MODEL_CLI_FLAGS:
+        if value is None or key in (params or {}) or str(key) in {"gpu", "gpu_id"} or str(key) not in RUN_MODEL_CLI_FLAGS:
             continue
         cmd.extend([f"--{key}", str(value)])
     return cmd, effective_config
@@ -330,7 +330,7 @@ def run_custom_grid_search(
             stdout=completed.stdout or "",
             since=started_at,
         )
-        score = _score_metrics(metrics)
+        score = _score_metrics(metrics) if completed.returncode == 0 else None
         trial_entry = {
             "params": params,
             "config_file": trial_config,

@@ -60,7 +60,7 @@ export AGENTCITY_LIBCITY_PYTHON=/path/to/env/bin/python        # interpreter tha
 # 2. list the available task specifications
 python main.py --list-tasks
 
-# 3. adapt one scenario (CPU smoke task: 1 epoch, 10% train / 10% eval)
+# 3. adapt one scenario (6 loops; 35 epochs/run; 5 tuning trials/loop)
 python main.py --task tasks/metr_la_speed_smoke.json
 
 # 4. override the loop / budget from the CLI
@@ -86,7 +86,7 @@ missing task file or a LibCity interpreter that cannot import LibCity (`--skip-p
   no `socksio` installed, every LLM call fails; `main.py` drops that variable for the run (keeping `HTTP(S)_PROXY`) and
   prints a note. Install `httpx[socks]` if you actually need the SOCKS proxy.
 - **Wall clock.** A full round is one planning call, a team stage that composes the model, one LibCity run
-  (~10–20 min CPU, see the task-spec section) plus up to `tuning.max_trials` trial runs, then the tuning team. Budget
+  (35 epochs, see the task-spec section) plus up to `tuning.max_trials` trial runs, then the tuning team. Budget
   ~30–60 minutes per round on this host.
 - **Absolute paths.** Delegated team members run in their own isolated workspace
   (`~/.openjiuwen/.agent_teams/...`), not in the repository, so every member prompt is rendered with the absolute
@@ -112,29 +112,24 @@ missing task file or a LibCity interpreter that cannot import LibCity (`--skip-p
   "model_name": null,
   "efficiency": "lightweight",
   "target": { "metric": "masked_mae", "threshold": 35.0, "maximize": false },
-  "train": { "max_epoch": 1, "batch_size": 32, "gpu": false, "extra_args": { "train_rate": 0.1, "eval_rate": 0.05 } },
-  "max_rounds": 2,
+  "train": { "max_epoch": 35, "batch_size": 32, "gpu": false, "extra_args": { "train_rate": 0.7, "eval_rate": 0.1 } },
+  "max_rounds": 6,
+  "fixed_rounds": true,
+  "tuning": { "max_trials": 5, "backend": "custom_grid" },
   "candidate_scope": { "models": [], "categories": ["encoder", "spatial", "temporal", "fusion", "head"] },
   "notes": "..."
 }
 ```
 
 - `target` — the acceptance criterion of the closed loop (`maximize: false` means "lower is better").
-- `train` — the CPU budget handed to every LibCity subprocess. `gpu` defaults to `false`; `--gpu auto` keeps it off unless
-  `nvidia-smi` reports a device. `train.extra_args` is forwarded verbatim as extra LibCity CLI flags, so a smoke run can
-  shrink the workload (`"extra_args": {"train_rate": 0.1, "eval_rate": 0.05}`) without touching the framework. LibCity
-  splits samples as `train_rate` / `eval_rate` / `1 - train_rate - eval_rate`, and one epoch always walks the whole
-  dataset once, so the split mostly decides *which phase* gets the samples, not the total cost. Measured on this
-  CPU-only host (METR_LA, small recurrent model, batch 32, one epoch): a single model run takes ~12 minutes, of which
-  training is ~3 and the validation/test passes make up the rest. Budget ~10–20 minutes per model per round, and check
-  `data/adaptation/<task_id>/run_report.json` for what actually ran.
-- `tuning` — optional budget for the search stage: `max_trials` / `max_evals` cap every trial and
-  `search_space` pre-seeds the space (the hyperparameter agent may still narrow it).
-- `max_rounds` — the self-correction budget (1–10).
+- `train` — 35 epochs per baseline and tuning trial; train/validation/test = 70%/10%/20% using native LibCity splitting. Use `--gpu on` or `--gpu off` to select the execution policy.
+- `tuning` — five trials per loop, using a custom grid with at least five combinations. Training epoch and split ratios are fixed across trials.
+- `max_rounds` / `fixed_rounds` — six loops, continuing even after the target is reached.
+- Final retraining uses LibCity's default max 100 epochs and early stopping, followed by test evaluation. Iteration uses validation metrics only. See [runtime configuration](documentation/runtime_configuration.md) for the final-evaluation command and configuration precedence.
 - Sample specs: `tasks/metr_la_speed_smoke.json`, `tasks/pemsd4_speed_multichannel.json`, `tasks/pems_bay_flow_event.json`.
 
 Each round writes `plan.json`, `data_integration.json`, `composition.json`, `run_report.json`, `tuning.json` and
-`verdict.json` into `data/adaptation/<task_id>/`. When a round fails the target, those files are archived to
+`verdict.json` into `data/adaptation/<task_id>/`. Before the next round, those files are archived to
 `data/adaptation/<task_id>/rounds/round_<n>/` before the next round starts, and whatever an earlier CLI run left behind
 is stashed under `data/adaptation/<task_id>/rounds/previous_run/` before round 1. A round therefore never inherits a
 stale verdict; the dataset profile is a data asset and is deliberately kept.
@@ -149,7 +144,7 @@ Exposed as a FastMCP stdio server (`python -m agents.tools.server`) and mounted 
 | `retrieve_knowledge` | deterministic nearest-neighbour retrieval over the knowledge base + skills |
 | `record_experience` | write a round's lesson back into the knowledge base / skills; the store keeps only the six retrieval features, requires all five module families (knowledge) or a tuning direction (skill), and never overwrites a hand-authored entry |
 | `list_modules`, `get_module`, `register_module` | read and extend the atomic module library |
-| `run_adaptation` | run LibCity `run_model.py` on CPU and extract the metrics → `run_report.json` |
+| `run_adaptation` | run LibCity `run_model.py` on the configured device and extract validation metrics → `run_report.json` |
 | `tune_adaptation` | LibCity `run_hyper.py` search with a deterministic grid-search fallback → `tuning.json` |
 | `web_search`, `web_fetch`, `read_pdf_text` | optional external references |
 

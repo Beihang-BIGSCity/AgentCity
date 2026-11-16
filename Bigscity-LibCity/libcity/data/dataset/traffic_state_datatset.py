@@ -23,6 +23,8 @@ class TrafficStateDataset(AbstractDataset):
         self.dataset = self.config.get('dataset', '')
         self.batch_size = self.config.get('batch_size', 64)
         self.cache_dataset = self.config.get('cache_dataset', True)
+        if os.environ.get('AGENTCITY_STRICT_SPLIT') == '1':
+            self.cache_dataset = False
         self.num_workers = self.config.get('num_workers', 0)
         self.pad_with_last_sample = self.config.get('pad_with_last_sample', True)
         self.train_rate = self.config.get('train_rate', 0.7)
@@ -863,6 +865,17 @@ class TrafficStateDataset(AbstractDataset):
                 x_test: (num_samples, input_length, ..., feature_dim) \n
                 y_test: (num_samples, input_length, ..., feature_dim)
         """
+        if os.environ.get('AGENTCITY_STRICT_SPLIT') == '1':
+            files = self.data_files if isinstance(self.data_files, list) else [self.data_files]
+            if len(files) != 1:
+                raise ValueError('Strict experiment split requires a single data file')
+            raw = self._load_dyna(files[0])
+            ext = self._load_ext() if self.load_external and os.path.exists(self.data_path + self.ext_file + '.ext') else None
+            data = self._add_external_information(raw, ext) if self.load_external else raw
+            n = len(data)
+            cuts = [0, int(n*self.train_rate), int(n*(self.train_rate+self.eval_rate)), n]
+            partitions = [self._generate_input_data(data[a:b]) for a,b in zip(cuts[:-1],cuts[1:])]
+            return tuple(array for pair in partitions for array in pair)
         x, y = self._generate_data()
         return self._split_train_val_test(x, y)
 

@@ -14,8 +14,9 @@ Judge whether the adaptation met the task target, write the verdict, and feed th
 ## Steps
 1. Read the success criteria from the task specification (`target.metric`, `target.threshold`, `target.maximize`)
    and the achieved numbers from `__TASK_DIR__/run_report.json` and `__TASK_DIR__/tuning.json` (prefer the tuned result).
-   The tool averaged LibCity's per-horizon metrics into `metrics` and recorded their provenance in
-   `metrics_source`/`metrics_detail`; quote that number and say how many horizons it averages.
+   Read `metrics_source`/`metrics_detail` for the partition and aggregation. In validation-only experiments,
+   `metrics` is validation MAE (best validation epoch), NOT test MAE or a mean of per-horizon test metrics.
+   Test evaluation is deferred until all rounds finish. Quote the actual provenance exactly.
 2. Decide pass/fail strictly by comparing the achieved value with the threshold in the direction given by `maximize`.
    Never soften the comparison: a missing metric means "not passed", and you must say so.
 3. Write `__TASK_DIR__/verdict.json` with keys:

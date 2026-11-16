@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import shutil
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -52,6 +55,7 @@ class AgentOrchestrator:
 
         task_id = str(task_spec.get("task_id") or "task")
         max_rounds = int(task_spec.get("max_rounds") or 1)
+        fixed_rounds = bool(task_spec.get("fixed_rounds", True))
         store = ExecutionContext.load(task_id, base_dir=self.paths.adaptation_dir)
         storage = StageStorage(self.paths.stage_log)
         storage.reset()
@@ -66,14 +70,29 @@ class AgentOrchestrator:
             "rounds": [],
             "passed": False,
             "verdict": None,
+            "fixed_rounds": fixed_rounds,
         }
 
         async with self._lock:
+            controlled_env = {"AGENTCITY_VALIDATION_ONLY": "1", "AGENTCITY_STRICT_SPLIT": "0"}
+            previous_env = {key: os.environ.get(key) for key in (*controlled_env, "AGENTCITY_RESUME_PARTIAL")}
+            os.environ.update(controlled_env)
             set_active_task(task_spec)
-            await ensure_runner_started()
             try:
-                for round_index in range(1, max_rounds + 1):
-                    self._archive_previous_round(store, round_index)
+                await ensure_runner_started()
+                resume = os.environ.get("AGENTCITY_RESUME") == "1"
+                completed = store.get("history") or []
+                first_round = len(completed) + 1 if resume else 1
+                if resume:
+                    result["rounds"] = [{"round": r["round"], "verdict": r.get("verdict")} for r in completed]
+                    result["passed"] = any((r.get("verdict") or {}).get("passed", False) for r in completed)
+                    result["verdict"] = completed[-1].get("verdict") if completed else None
+                for round_index in range(first_round, max_rounds + 1):
+                    resuming_partial = resume and round_index == first_round and store.get("in_progress_round") == round_index
+                    os.environ["AGENTCITY_RESUME_PARTIAL"] = "1" if resuming_partial else "0"
+                    if not resuming_partial:
+                        self._archive_previous_round(store, round_index)
+                    store.update("in_progress_round", round_index)
                     context = build_context(
                         self.paths,
                         task_spec,
@@ -92,11 +111,20 @@ class AgentOrchestrator:
                         logger=self.logger,
                         context=context,
                     )
+                    snapshot = store.dir / "memory_audit" / f"round_{round_index}" / "before" / "sha256.json"
+                    memory_before = json.loads(snapshot.read_text()) if resuming_partial and snapshot.exists() else self._memory_snapshot(store, round_index, "before")
                     await pipeline.run()
+                    memory_after = self._memory_snapshot(store, round_index, "after")
+                    memory_changes = sorted(k for k in memory_before.keys() | memory_after.keys()
+                                            if memory_before.get(k) != memory_after.get(k))
+                    if os.environ.get("AGENTCITY_FREEZE_EXPERIENCE") == "1" and memory_changes:
+                        raise RuntimeError(f"Frozen memory modified: {memory_changes}; experiment invalid")
                     self._last_notes = dict(context.stage_notes)
 
                     payload = self._collect_round(store, round_index, context)
+                    payload["memory_changes"] = memory_changes
                     store.record_round(payload)
+                    store.update("in_progress_round", None)
                     verdict = payload.get("verdict") or {}
                     result["rounds"].append({"round": round_index, "verdict": verdict or None})
                     if verdict:
@@ -104,12 +132,18 @@ class AgentOrchestrator:
                     if verdict.get("passed"):
                         result["passed"] = True
                         self.logger.info("Adaptation target met on round %s", round_index)
-                        break
+                        if not fixed_rounds:
+                            break
                     if round_index < max_rounds:
                         self.logger.info(
-                            "Round %s did not meet the target; feeding back into planning", round_index
+                            "Round %s finished; feeding back into the next planning round", round_index
                         )
             finally:
+                for key, value in previous_env.items():
+                    if value is None:
+                        os.environ.pop(key, None)
+                    else:
+                        os.environ[key] = value
                 await shutdown_runner()
                 clear_active_task()
 
@@ -118,6 +152,23 @@ class AgentOrchestrator:
         result["context_path"] = str(store.path)
         result["artifact_dir"] = str(store.dir)
         return result
+
+    def _memory_snapshot(self, store, round_index: int, phase: str) -> Dict[str, str]:
+        """Persist actual memory inputs/outputs, including direct file edits."""
+        destination = store.dir / "memory_audit" / f"round_{round_index}" / phase
+        hashes = {}
+        for label, directory in (("knowledge", self.paths.knowledge_dir), ("skills", self.paths.skills_dir)):
+            for path in sorted(directory.rglob("*")):
+                if not path.is_file() or "__pycache__" in path.parts:
+                    continue
+                relative = Path(label) / path.relative_to(directory)
+                target = destination / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(path, target)
+                hashes[str(relative)] = hashlib.sha256(path.read_bytes()).hexdigest()
+        destination.mkdir(parents=True, exist_ok=True)
+        (destination / "sha256.json").write_text(json.dumps(hashes, indent=2))
+        return hashes
 
     @staticmethod
     def _archive_previous_round(store: ExecutionContext, round_index: int) -> None:

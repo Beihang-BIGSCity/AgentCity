@@ -302,6 +302,13 @@ async def retrieve_knowledge(args: dict) -> str:
 async def record_experience(args: dict) -> str:
     """Feed a finished round back into the expert knowledge base or the skills."""
 
+    if os.environ.get("AGENTCITY_FREEZE_EXPERIENCE") == "1":
+        return json.dumps({
+            "status": "skipped",
+            "reason": "frozen-memory experimental control; no knowledge or skill was changed",
+            "kind": args.get("kind"),
+        })
+
     kind = args.get("kind")
     entry = args.get("entry")
     if not isinstance(entry, dict):
@@ -502,7 +509,10 @@ async def run_adaptation(args: dict) -> str:
     overrides: Dict[str, Any] = dict(train_budget.get("extra_args") or {})
     if isinstance(extra_cli_args, dict):
         overrides.update(extra_cli_args)
-    overrides.setdefault("max_epoch", max_epoch)
+    overrides["max_epoch"] = train_budget.get("max_epoch", max_epoch)
+    for key in ("train_rate", "eval_rate"):
+        if key in (train_budget.get("extra_args") or {}):
+            overrides[key] = train_budget["extra_args"][key]
     overrides.setdefault("batch_size", batch_size)
     if seed is not None:
         overrides.setdefault("seed", seed)
@@ -635,13 +645,25 @@ async def tune_adaptation(args: dict) -> str:
     forwarded = args.get("extra_cli_args")
     if isinstance(forwarded, dict):
         extra_cli_args.update(forwarded)
-    extra_cli_args.setdefault("max_epoch", max_epoch)
+    extra_cli_args["max_epoch"] = train_budget.get("max_epoch", max_epoch)
+    for key in ("train_rate", "eval_rate"):
+        if key in (train_budget.get("extra_args") or {}):
+            extra_cli_args[key] = train_budget["extra_args"][key]
+    protected = {"max_epoch", "train_rate", "eval_rate"} & search_space.keys()
+    if protected:
+        return "tune_adaptation failed: epoch and dataset split are fixed by the task, not search parameters"
+    max_trials = int(tuning_budget.get("max_trials") or max_trials or 5)
+    max_evals = max_trials
+    if tuning_budget.get("backend", "custom_grid") == "custom_grid":
+        import math
+        if math.prod(len(values) for values in search_space.values()) < max_trials:
+            return f"tune_adaptation failed: provide at least {max_trials} parameter combinations"
     if batch_size:
         extra_cli_args.setdefault("batch_size", batch_size)
 
     result: Dict[str, Any] | None = None
     libcity_failure = ""
-    libcity_attempted = is_libcity_tuning_allowed()
+    libcity_attempted = tuning_budget.get("backend", "custom_grid") == "libcity" and is_libcity_tuning_allowed()
     # LibCity's run_hyper.py defaults to 100 evaluations. On this CPU host one
     # evaluation is a full training run, so an unbounded default would never
     # finish: the trial budget also caps the LibCity tuner.
