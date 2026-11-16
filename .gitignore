@@ -14,3 +14,31 @@ cache/
 /agents/core/harness_profiles/*.local.yaml
 *.bak
 /result/
+
+# Local macOS Python environments
+/.venv/
+/.venv-libcity/
+/.pytest_cache/
+
+# Local experiment outputs, downloads, backups and review artifacts
+/local-env/
+
+# OS metadata, Python bytecode and Office temporary files
+.DS_Store
+._*
+*.py[cod]
+~$*
+
+# Runtime logs
+*.log
+/nohup.out
+
+# Generated presentation drafts and exports in the repository root
+/技术点三*.pptx
+/技术点三*.pdf
+
+# Generated benchmark tables and figures in the repository root
+/benchmark_results.csv
+/benchmark_results.xlsx
+/pie_*.png
+/wordcloud_keywords.png
